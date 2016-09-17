@@ -9,5 +9,5 @@
 void
 test_hello (void) 
 {
-  printf("hello, world!")
+  printf("hello, world!");
 }
