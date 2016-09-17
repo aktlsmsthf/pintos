@@ -6,6 +6,8 @@
 #include "threads/thread.h"
 #include "devices/timer.h"
 
-int main(void){
-	printf("hello world!");
+void
+test_hello (void) 
+{
+  printf("hello, world!")
 }
