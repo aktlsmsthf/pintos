@@ -236,8 +236,25 @@ thread_unblock (struct thread *t)
   old_level = intr_disable ();
   ASSERT (t->status == THREAD_BLOCKED);
   list_push_back (&ready_list, &t->elem);
+  sort_ready_list(&ready_list);
+  
   t->status = THREAD_READY;
   intr_set_level (old_level);
+  
+}
+
+void
+sort_ready_list (struct list *list){
+   list_less_func *less = &our_order;
+   
+   list_sort(list, less);
+}
+
+bool
+our_order(struct list_elem *a, struct list_elem *b){
+   int a_p = list_entry(a, struct thread, elem)->priority;
+   int b_p = list_entry(b, struct thread, elem)->priority;
+   return a_p<b_p;
 }
 
 /* Returns the name of the running thread. */
@@ -468,6 +485,7 @@ next_thread_to_run (void)
   else
     return list_entry (list_pop_front (&ready_list), struct thread, elem);
 }
+
 
 /* Completes a thread switch by activating the new thread's page
    tables, and, if the previous thread is dying, destroying it.
