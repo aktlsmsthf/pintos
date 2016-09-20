@@ -201,7 +201,6 @@ lock_acquire (struct lock *lock)
   
   if(lock->holder != NULL){
      lock->holder->priority[++lock->holder->priority_pointer]=p;
-     printf("%d\n", lock->holder->priority_pointer);
      thread_block();
      sema_down (&lock->semaphore);
      thread_unblock(thread_current());
