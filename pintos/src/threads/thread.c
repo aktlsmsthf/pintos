@@ -198,11 +198,8 @@ thread_create (const char *name, int priority,
  
 
   /* Add to run queue. */
-  int cp = thread_get_priority();
+
   thread_unblock (t);
-  if(cp<priority){
-     schedule();
-  }
 
   return tid;
 }
