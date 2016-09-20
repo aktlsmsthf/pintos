@@ -249,8 +249,8 @@ thread_unblock (struct thread *t)
 
 bool
 our_order(struct list_elem *a, struct list_elem *b){
-   int a_p = list_entry(a, struct thread, elem)->priority[priority_pointer];
-   int b_p = list_entry(b, struct thread, elem)->priority[priority_pointer];
+   int a_p = list_entry(a, struct thread, elem)->priority[list_entry(a, struct thread, elem)->priority_pointer];
+   int b_p = list_entry(b, struct thread, elem)->priority[list_entry(b, struct thread, elem)->priority_pointer];
    return a_p<b_p;
 }
 
