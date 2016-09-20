@@ -208,6 +208,7 @@ lock_acquire (struct lock *lock)
      lock->holder = thread_current ();
   }
   else{
+     printf("a");
      sema_down (&lock->semaphore);
      lock->holder = thread_current ();
   }
