@@ -236,7 +236,6 @@ thread_unblock (struct thread *t)
   old_level = intr_disable ();
   ASSERT (t->status == THREAD_BLOCKED);
   list_push_back (&ready_list, &t->elem);
-  sort_ready_list(&ready_list);
   
   t->status = THREAD_READY;
   intr_set_level (old_level);
@@ -482,8 +481,10 @@ next_thread_to_run (void)
 {
   if (list_empty (&ready_list))
     return idle_thread;
-  else
+  else{
+   sort_ready_list(&ready_list);
     return list_entry (list_pop_front (&ready_list), struct thread, elem);
+  }
 }
 
 
