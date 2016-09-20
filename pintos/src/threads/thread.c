@@ -255,7 +255,7 @@ void
 sort_ready_list (struct list *list){
    list_less_func *less = &our_order;
    
-   list_sort(list, less,NULL);
+   list_sort(list, less,0);
 }
 
 
