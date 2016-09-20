@@ -247,6 +247,13 @@ thread_unblock (struct thread *t)
   
 }
 
+bool
+our_order(struct list_elem *a, struct list_elem *b){
+   int a_p = list_entry(a, struct thread, elem)->priority[priority_pointer];
+   int b_p = list_entry(b, struct thread, elem)->priority[priority_pointer];
+   return a_p<b_p;
+}
+
 void
 sort_ready_list (struct list *list){
    list_less_func *less = &our_order;
@@ -254,12 +261,7 @@ sort_ready_list (struct list *list){
    list_sort(list, less);
 }
 
-bool
-our_order(struct list_elem *a, struct list_elem *b){
-   int a_p = list_entry(a, struct thread, elem)->priority[priority_pointer];
-   int b_p = list_entry(b, struct thread, elem)->priority[priority_pointer];
-   return a_p<b_p;
-}
+
 
 /* Returns the name of the running thread. */
 const char *
