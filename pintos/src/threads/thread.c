@@ -195,9 +195,14 @@ thread_create (const char *name, int priority,
   /* Stack frame for switch_threads(). */
   sf = alloc_frame (t, sizeof *sf);
   sf->eip = switch_entry;
+ 
 
   /* Add to run queue. */
+  int cp = thread_get_priority();
   thread_unblock (t);
+  if(cp<priority){
+     schedule();
+  }
 
   return tid;
 }
