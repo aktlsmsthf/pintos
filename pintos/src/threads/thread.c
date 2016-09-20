@@ -337,14 +337,14 @@ thread_yield (void)
 void
 thread_set_priority (int new_priority) 
 {
-  thread_current ()->priority[++priority_pointer] = new_priority;
+  thread_current ()->priority[++thread_current ()->priority_pointer] = new_priority;
 }
 
 /* Returns the current thread's priority. */
 int
 thread_get_priority (void) 
 {
-  return thread_current ()->priority[priority_pointer];
+  return thread_current ()->priority[thread_current ()->priority_pointer];
 }
 
 /* Sets the current thread's nice value to NICE. */
