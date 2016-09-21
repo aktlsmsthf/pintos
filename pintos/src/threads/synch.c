@@ -209,7 +209,7 @@ lock_acquire (struct lock *lock)
       lock->holder->donated = thread_current();
       struct thread **d;
       *d=thread_current()->donating;
-      while(d!=NULL){
+      while((*d)!=NULL){
          (*d)->priority=thread_current()->priority;
          *d = (*d)->donating;
       }
