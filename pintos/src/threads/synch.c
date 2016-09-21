@@ -213,6 +213,12 @@ lock_acquire (struct lock *lock)
       printf("%s\n",thread_current()->name);
       lock->default_priority=lock->holder->priority;
       printf("%s\n",lock->holder->name);
+      if(lock->holder->donating!=NULL){
+         printf("%s\n", lock->holder->donating->name);
+      }
+      else{
+         printf("NULL\n");
+      }
       thread_current()->donating = lock->holder;
       printf("%s\n",thread_current()->donating->name);
       lock->holder->donated = thread_current();
