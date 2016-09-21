@@ -212,8 +212,6 @@ lock_acquire (struct lock *lock)
          d->priority=thread_current()->priority;
          d = d->donating;
       }
-      intr_disable();
-      thread_block();
       sema_down(&lock->semaphore);
       lock->holder=thread_current();
    }
@@ -255,13 +253,13 @@ lock_release (struct lock *lock)
   ASSERT (lock_held_by_current_thread (lock));
   
   if(thread_current()->donated!=NULL){
-      thread_unblock(thread_current()->donated);
       thread_current()->donated=NULL;
       thread_current()->priority = lock->default_priority;
       lock->default_priority=0;
   }
   lock->holder=NULL;
   sema_up(&lock->semaphore);
+  
 }
 
 /* Returns true if the current thread holds LOCK, false
