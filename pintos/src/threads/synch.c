@@ -222,7 +222,9 @@ lock_acquire (struct lock *lock)
          d->priority=thread_current()->priority;
          printf("%s\n",d->name);
          d = d->donating;
-         printf("%s\n",d->name);
+         if(d!=NULL){
+            printf("%s\n",d->name);
+         }
       }
    }
    sema_down(&lock->semaphore);
