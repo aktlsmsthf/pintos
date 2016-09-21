@@ -88,8 +88,8 @@ struct thread
     char name[16];                      /* Name (for debugging purposes). */
     uint8_t *stack;                     /* Saved stack pointer. */
     int priority;                       /* Priority. */      
-    struct thread *donating;            /* Pointer of thread which this thread donates priority */
-    struct thread *donated;              /* Pointer of thread which this thread donated by */
+    struct thread **donating;            /* Pointer of thread which this thread donates priority */
+    struct thread **donated;              /* Pointer of thread which this thread donated by */
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
 
