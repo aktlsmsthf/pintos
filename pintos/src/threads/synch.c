@@ -29,6 +29,7 @@
 #include "threads/synch.h"
 #include <stdio.h>
 #include <string.h>
+#include <list.h>
 #include "threads/interrupt.h"
 #include "threads/thread.h"
 
@@ -180,6 +181,7 @@ lock_init (struct lock *lock)
 
   lock->holder = NULL;
   sema_init (&lock->semaphore, 1);
+  lock->default_priority=0;
 }
 
 /* Acquires LOCK, sleeping until it becomes available if
@@ -197,22 +199,27 @@ lock_acquire (struct lock *lock)
   ASSERT (!intr_context ());
   ASSERT (!lock_held_by_current_thread (lock));
 
-  int p = thread_get_priority();
-  
-  if(lock->holder != NULL){
-     lock->holder->priority[++lock->holder->priority_pointer]=p;
-     printf("%d\n", lock->holder->priority_pointer);
-     intr_disable();
-     schedule();
-     sema_down (&lock->semaphore);
-     lock->holder = thread_current ();
-  }
-  else{
-
-     sema_down (&lock->semaphore);
-     lock->holder = thread_current ();
+   if(lock->holder==NULL){
+      sema_down (&lock->semaphore);
+      lock->holder = thread_current ();
+   }
+   else{
+      lock->default_priority=lock->holder->priority;
+      thread_current()->donating = lock->holder;
+      lock->holder->donated = thread_current();
+      struct thread *d = thread_current()->donate;
+      while(d!=NULL){
+         d->priority=thread_current()->priority;
+         d = d->donating;
+      }
+      thread_block();
+      sema_down(&lock->semaphore);
+      lock->holder=thread_current();
+   }
   }
 }
+
+
 
 /* Tries to acquires LOCK and returns true if successful or false
    on failure.  The lock must not already be held by the current
@@ -245,12 +252,15 @@ lock_release (struct lock *lock)
 {
   ASSERT (lock != NULL);
   ASSERT (lock_held_by_current_thread (lock));
-
-  lock->holder = NULL;
-  sema_up (&lock->semaphore);
-  if(thread_current()->priority_pointer>0){
-     thread_current()->priority_pointer--;
+  
+  if(thread_current()->donated!=NULL){
+      thread_unblock(thread_currnet()->donated);
+      thread_current()->donated=NULL;
+      thread_current()->prioirty = lock->default_priority;
+      lock->default_priority=0;
   }
+  lock->holder=NULL;
+  sema_up(&lock->sema);
 }
 
 /* Returns true if the current thread holds LOCK, false
