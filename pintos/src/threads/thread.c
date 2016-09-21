@@ -216,19 +216,6 @@ thread_block (void)
   ASSERT (!intr_context ());
   ASSERT (intr_get_level () == INTR_OFF);
 
-  if(thread_current()->donating!=NULL) {
-     printf("A%s\n", thread_current()->donating);
-  }
-   else{
-      printf("NULL1\n");
-   }
-  
-  if(thread_current()->donated!=NULL) {
-     printf("B%s\n", thread_current()->donating);
-  }
-  else{
-     printf("NULL2\n")
-  }
   thread_current ()->status = THREAD_BLOCKED;
   schedule ();
 }
