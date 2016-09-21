@@ -184,6 +184,14 @@ lock_init (struct lock *lock)
   lock->default_priority=0;
 }
 
+void
+nested_donation(struct thread *thread){
+   if(thread->donating!=NULL){
+      thread->donating->priority = thread->priority;
+      nested_donation(thread->donating);
+   }
+}
+
 /* Acquires LOCK, sleeping until it becomes available if
    necessary.  The lock must not already be held by the current
    thread.
@@ -213,14 +221,6 @@ lock_acquire (struct lock *lock)
    }
 }
 
-/* Donate priority nested */
-void
-nested_donation(struct thread *thread){
-   if(thread!=NULL){
-      thread->donating->priority = thread->priority;
-      nested_donation(thread->donating);
-   }
-}
 
 /* Tries to acquires LOCK and returns true if successful or false
    on failure.  The lock must not already be held by the current
