@@ -204,7 +204,6 @@ lock_acquire (struct lock *lock)
       lock->holder = thread_current ();
    }
    else{
-      msg("A");
       lock->default_priority=lock->holder->priority;
       thread_current()->donating = lock->holder;
       lock->holder->donated = thread_current();
@@ -254,7 +253,7 @@ lock_release (struct lock *lock)
   ASSERT (lock_held_by_current_thread (lock));
   
   if(thread_current()->donated!=NULL){
-      msg("R");
+      thread_current()->donated->donating=NULL;
       thread_current()->donated=NULL;
       thread_current()->priority = lock->default_priority;
       lock->default_priority=0;
