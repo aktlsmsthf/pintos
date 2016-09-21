@@ -216,8 +216,8 @@ lock_acquire (struct lock *lock)
       sema_down(&lock->semaphore);
       lock->holder=thread_current();
    }
-  }
 }
+
 
 
 
@@ -254,13 +254,13 @@ lock_release (struct lock *lock)
   ASSERT (lock_held_by_current_thread (lock));
   
   if(thread_current()->donated!=NULL){
-      thread_unblock(thread_currnet()->donated);
+      thread_unblock(thread_current()->donated);
       thread_current()->donated=NULL;
-      thread_current()->prioirty = lock->default_priority;
+      thread_current()->priority = lock->default_priority;
       lock->default_priority=0;
   }
   lock->holder=NULL;
-  sema_up(&lock->sema);
+  sema_up(&lock->semaphore);
 }
 
 /* Returns true if the current thread holds LOCK, false
