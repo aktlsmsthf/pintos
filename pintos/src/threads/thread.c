@@ -489,6 +489,7 @@ next_thread_to_run (void)
     return idle_thread;
   else{
    sort_ready_list(&ready_list);
+   printf("%s\n",list_entry (list_pop_back (&ready_list), struct thread, elem)->name);
     return list_entry (list_pop_back (&ready_list), struct thread, elem);
   }
 }
