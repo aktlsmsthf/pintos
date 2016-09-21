@@ -270,9 +270,9 @@ lock_release (struct lock *lock)
   ASSERT (lock != NULL);
   ASSERT (lock_held_by_current_thread (lock));
   
-  if(thread_current()->donated!=NULL){
-      thread_current()->donated->donating=NULL;
-      thread_current()->donated=NULL;
+  if(*(thread_current()->donated)!=NULL){
+      *(*(thread_current()->donated)->donating)=NULL;
+      *(thread_current()->donated)=NULL;
       thread_current()->priority = lock->default_priority;
       lock->default_priority=10;
   }
