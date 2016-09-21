@@ -181,7 +181,7 @@ lock_init (struct lock *lock)
 
   lock->holder = NULL;
   sema_init (&lock->semaphore, 1);
-  lock->default_priority=0;
+  lock->default_priority=10;
 }
 
 void
@@ -258,7 +258,7 @@ lock_release (struct lock *lock)
       thread_current()->donated->donating=NULL;
       thread_current()->donated=NULL;
       thread_current()->priority = lock->default_priority;
-      lock->default_priority=0;
+      lock->default_priority=10;
   }
   lock->holder=NULL;
   sema_up(&lock->semaphore);
