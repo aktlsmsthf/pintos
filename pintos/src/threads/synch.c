@@ -212,16 +212,17 @@ lock_acquire (struct lock *lock)
    if(lock->holder!=NULL){
       printf("%s\n",thread_current()->name);
       lock->default_priority=lock->holder->priority;
-      printf("%d\n",lock->holder->priority);
+      printf("%s\n",lock->holder->name);
       thread_current()->donating = lock->holder;
-      printf("%d\n",thread_current()->donating->priority);
+      printf("%s\n",thread_current()->donating->name);
       lock->holder->donated = thread_current();
-      printf("%d\n",lock->holder->donated->priority);
+      printf("%s\n",lock->holder->donated->name);
       struct thread *d = thread_current()->donating;
       while(d!=NULL){
          d->priority=thread_current()->priority;
-         printf("%d\n",d->priority);
+         printf("%s\n",d->name);
          d = d->donating;
+         printf("%s\n",d->name);
       }
    }
    sema_down(&lock->semaphore);
