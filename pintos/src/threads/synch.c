@@ -210,7 +210,7 @@ lock_acquire (struct lock *lock)
       struct thread **d = &(thread_current()->donating);
       while(d!=NULL){
          (*d)->priority=thread_current()->priority;
-         *d = d->donating;
+         *d = (*d)->donating;
       }
       sema_down(&lock->semaphore);
       lock->holder=thread_current();
