@@ -189,6 +189,7 @@ nested_donation(struct thread *thread){
       thread->donating->priority = thread->priority;
       nested_donation(thread->donating);
    }
+   else return;
 }
 
 /* Acquires LOCK, sleeping until it becomes available if
