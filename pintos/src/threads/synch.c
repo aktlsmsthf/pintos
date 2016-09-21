@@ -217,7 +217,11 @@ lock_acquire (struct lock *lock)
       printf("%d\n",thread_current()->donating->priority);
       lock->holder->donated = thread_current();
       printf("%d\n",lock->holder->donated->priority);
-      nested_donation(thread_current());
+      struct thread *d = thread_current()->donating;
+      while(d!=NULL){
+         d->priority=thread_current()->priority;
+         d = d->donating;
+      }
    }
    sema_down(&lock->semaphore);
    lock->holder=thread_current();
