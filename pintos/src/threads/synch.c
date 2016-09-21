@@ -220,6 +220,7 @@ lock_acquire (struct lock *lock)
       struct thread *d = thread_current()->donating;
       while(d!=NULL){
          d->priority=thread_current()->priority;
+         printf("%d\n",d->priority);
          d = d->donating;
       }
    }
