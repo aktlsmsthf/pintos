@@ -207,19 +207,20 @@ lock_acquire (struct lock *lock)
       lock->default_priority=lock->holder->priority;
       thread_current()->donating = lock->holder;
       lock->holder->donated = thread_current();
-      struct thread **d;
-      *d=thread_current()->donating;
-      while((*d)!=NULL){
-         (*d)->priority=thread_current()->priority;
-         *d = (*d)->donating;
-      }
+      nested_donation(thread_current());
       sema_down(&lock->semaphore);
       lock->holder=thread_current();
    }
 }
 
-
-
+/* Donate priority nested */
+void
+nested_donation(struct thread *thread){
+   if(thread!=NULL){
+      thread->donating->priority = thread->priority;
+      nested_donation(thread->donating);
+   }
+}
 
 /* Tries to acquires LOCK and returns true if successful or false
    on failure.  The lock must not already be held by the current
