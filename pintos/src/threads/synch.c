@@ -186,6 +186,7 @@ lock_init (struct lock *lock)
 void
 nested_donation(struct thread *thread){
    if(thread->donating!=NULL){
+      printf("%d\n",thread->priority);
       thread->donating->priority = thread->priority;
       nested_donation(thread->donating);
    }
@@ -209,6 +210,7 @@ lock_acquire (struct lock *lock)
 
    
    if(lock->holder!=NULL){
+      printf("A");
       lock->default_priority=lock->holder->priority;
       thread_current()->donating = lock->holder;
       lock->holder->donated = thread_current();
