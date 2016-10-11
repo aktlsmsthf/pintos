@@ -87,9 +87,8 @@ struct thread
     enum thread_status status;          /* Thread state. */
     char name[16];                      /* Name (for debugging purposes). */
     uint8_t *stack;                     /* Saved stack pointer. */
-    int priority;                       /* Priority. */      
-    struct thread **donating;            /* Pointer of thread which this thread donates priority */
-    struct thread **donated;              /* Pointer of thread which this thread donated by */
+    int priority;                       /* Priority. */
+
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
 
