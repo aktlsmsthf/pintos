@@ -58,22 +58,63 @@ start_process (void *f_name)
   char *file_name = f_name;
   struct intr_frame if_;
   bool success;
-
+  char *save;
+  char *now; 
+  char *fncopy; 
+  int i;
+  int argc;
+  int word_lengths[10];
+  int length;
+  void *initial_esp;
+  length=strlen(file_name);
+  strlcpy(fncopy,file_name,length+1);
   /* Initialize interrupt frame and load executable. */   
    
   memset (&if_, 0, sizeof if_);
   if_.gs = if_.fs = if_.es = if_.ds = if_.ss = SEL_UDSEG;
   if_.cs = SEL_UCSEG;
   if_.eflags = FLAG_IF | FLAG_MBS;
-  
-  success = load (file)name, &if_.eip, &if_.esp);
+  now = strtok_r(file_name," ",&save);
+  success = load (now, &if_.eip, &if_.esp);
    
   /* If load failed, quit. */
   palloc_free_page (file_name);
   if (!success) 
     thread_exit ();
+  i=0;
+  for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
+     word_lengths[i]=strlen(now);
+     i++;}
+  argc=i;
+  word_lengths[i]=0;
   
+  initial_esp=if_.esp;
    
+  if_.esp-=length+1;
+  memcpy(if_.esp,fncopy,length+1);
+    
+  if_.esp-=4-((length+1)%4);
+  *((int *)if_.esp)=0;
+   
+  for(;i>=0;i--){
+     if_.esp-=4;
+     if(word_lengths[i]==0){
+      *((char *)if_.esp)=0;}
+     else{
+        initial_esp-=word_lengths[i]+1;
+        *((char *)if_.esp)=initial_esp;
+         printf("%s",if_.esp);}}
+   
+  if_.esp-=4;
+  *((char **)if_.esp)=if_.esp+4;
+  
+  if_.esp-=4;
+  *((int *)if_.esp)=argc;
+  
+  if_.esp-=4;
+  *((int *)if_.esp)=0;
+   
+   hex_dump();
   /* Start the user process by simulating a return from an
      interrupt, implemented by intr_exit (in
      threads/intr-stubs.S).  Because intr_exit takes all of its
@@ -223,18 +264,6 @@ load (const char *file_name, void (**eip) (void), void **esp)
   off_t file_ofs;
   bool success = false;
   int i;
-  char *save;
-  char *now; 
-  char *fncopy; 
-  int j;
-  int argc;
-  int word_lengths[10];
-  int length;
-  void *initial_esp;
-  length=strlen(file_name);
-  strlcpy(fncopy,file_name,length+1);
-   
-  now = strtok_r(file_name," ",&save);
 
   /* Allocate and activate page directory. */
   t->pagedir = pagedir_create ();
@@ -243,10 +272,10 @@ load (const char *file_name, void (**eip) (void), void **esp)
   process_activate ();
 
   /* Open executable file. */
-  file = filesys_open (now);
+  file = filesys_open (file_name);
   if (file == NULL) 
     {
-      printf ("load: %s: open failed\n", now);
+      printf ("load: %s: open failed\n", file_name);
       goto done; 
     }
 
@@ -259,7 +288,7 @@ load (const char *file_name, void (**eip) (void), void **esp)
       || ehdr.e_phentsize != sizeof (struct Elf32_Phdr)
       || ehdr.e_phnum > 1024) 
     {
-      printf ("load: %s: error loading executable\n", now);
+      printf ("load: %s: error loading executable\n", file_name);
       goto done; 
     }
 
@@ -326,37 +355,6 @@ load (const char *file_name, void (**eip) (void), void **esp)
   if (!setup_stack (esp))
     goto done;
 
-   j=0;
-  for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
-     word_lengths[j]=strlen(now);
-     j++;}
-  argc=j;
-  word_lengths[j]=0;
-  
-  initial_esp=if_.esp;
-   
-  if_.esp-=length+1;
-  memcpy(if_.esp,fncopy,length+1);
-    
-  if_.esp-=4-((length+1)%4);
-  *((int *)if_.esp)=0;
-   
-  for(;j>=0;j--){
-     if_.esp-=4;
-     if(word_lengths[j]==0){
-      *((char *)if_.esp)=0;}
-     else{
-        initial_esp-=word_lengths[j]+1;
-        *((char *)if_.esp)=initial_esp;}}
-   
-  if_.esp-=4;
-  *((char **)if_.esp)=if_.esp+4;
-  
-  if_.esp-=4;
-  *((int *)if_.esp)=argc;
-  
-  if_.esp-=4;
-  *((int *)if_.esp)=0;
   /* Start address. */
   *eip = (void (*) (void)) ehdr.e_entry;
 
