@@ -30,16 +30,21 @@ process_execute (const char *file_name)
 {
   char *fn_copy;
   tid_t tid;
-
+  char *real_file_name;
+  char *save;
+   
   /* Make a copy of FILE_NAME.
      Otherwise there's a race between the caller and load(). */
   fn_copy = palloc_get_page (0);
   if (fn_copy == NULL)
     return TID_ERROR;
   strlcpy (fn_copy, file_name, PGSIZE);
-
+  real_file_name=strtok_r(file_name," ",&save);
+   
   /* Create a new thread to execute FILE_NAME. */
-  tid = thread_create (file_name, PRI_DEFAULT, start_process, fn_copy);
+  tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
+   
+   
   if (tid == TID_ERROR)
     palloc_free_page (fn_copy); 
   return tid;
@@ -53,19 +58,61 @@ start_process (void *f_name)
   char *file_name = f_name;
   struct intr_frame if_;
   bool success;
-
-  /* Initialize interrupt frame and load executable. */
+  char *save;
+  char *now; 
+  char *fncopy; 
+  int i;
+  int argc;
+  int word_lengths[10];
+  int length;
+  void *initial_esp;
+  length=strlen(file_name);
+  strlcpy(fncopy,file_name,length+1);
+  /* Initialize interrupt frame and load executable. */   
+   
   memset (&if_, 0, sizeof if_);
   if_.gs = if_.fs = if_.es = if_.ds = if_.ss = SEL_UDSEG;
   if_.cs = SEL_UCSEG;
   if_.eflags = FLAG_IF | FLAG_MBS;
-  success = load (file_name, &if_.eip, &if_.esp);
-
+  now = strtok_r(file_name," ",&save);
+  success = load (now, &if_.eip, &if_.esp);
+   
   /* If load failed, quit. */
   palloc_free_page (file_name);
   if (!success) 
     thread_exit ();
-
+  i=0;
+  for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
+     word_lengths[i]=strlen(now);
+     i++;}
+  argc=i;
+  word_lengths[i]=0;
+  
+  initial_esp=if_.esp;
+   
+  if_.esp-=length+1;
+  memcpy(if_.esp,fncopy,length+1);
+    
+  if_.esp-=4-((length+1)%4);
+  *((int *)if_.esp)=0;
+   
+  for(;i>=0;i--){
+     if_.esp-=4;
+     if(word_lengths[i]==0){
+      *((char *)if_.esp)=0;}
+     else{
+        initial_esp-=word_lengths[i]+1;
+        *((char *)if_.esp)=initial_esp;}}
+   
+  if_.esp-=4;
+  *((char **)if_.esp)=if_.esp+4;
+  
+  if_.esp-=4;
+  *((int *)if_.esp)=argc;
+  
+  if_.esp-=4;
+  *((int *)if_.esp)=0;
+   
   /* Start the user process by simulating a return from an
      interrupt, implemented by intr_exit (in
      threads/intr-stubs.S).  Because intr_exit takes all of its
@@ -88,7 +135,7 @@ start_process (void *f_name)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
-  return -1;
+   return -1;
 }
 
 /* Free the current process's resources. */
