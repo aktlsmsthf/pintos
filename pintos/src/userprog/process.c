@@ -114,7 +114,6 @@ start_process (void *f_name)
   if_.esp-=4;
   *((int *)if_.esp)=0;
    
-   hex_dump();
   /* Start the user process by simulating a return from an
      interrupt, implemented by intr_exit (in
      threads/intr-stubs.S).  Because intr_exit takes all of its
