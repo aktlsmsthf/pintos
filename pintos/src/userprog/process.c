@@ -95,9 +95,8 @@ start_process (void *f_name)
   i=0;
   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
      word_lengths[i]=strlen(now);
-     printf("%s\n",now);
-          
      i++;}
+  printf("%s\n",fncopy[0]);
   argc=i;
   word_lengths[i]=0;
   initial_esp=if_.esp;
@@ -119,6 +118,7 @@ start_process (void *f_name)
   *(int *)if_.esp=argc;
   if_.esp-=4;
   *(int *)if_.esp=0;
+   palloc_free_page (fn_copy);
    sema_up(&sema);
    /**intr_set_level (old_level);**/
   
