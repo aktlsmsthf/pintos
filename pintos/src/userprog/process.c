@@ -81,8 +81,8 @@ start_process (void *f_name)
    fncopy = palloc_get_page (0);
   if (fncopy == NULL)
     return TID_ERROR;
-  strlcpy (fncopy, file_name, PGSIZE);
-  /**strlcpy(fncopy,file_name,length+1);**/
+  /**strlcpy (fncopy, file_name, PGSIZE);**/
+  strlcpy(fncopy,file_name,length+1);
    printf("2\n");
   /* Initialize interrupt frame and load executable. */   
    
