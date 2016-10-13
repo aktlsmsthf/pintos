@@ -101,7 +101,7 @@ start_process (void *f_name)
           word_lengths[i]=word_lengths[i-1]+strlen(now)+1;}
      if_.esp-=strlen(now)+1;
      memcpy(if_.esp,now,strlen(now)+1);
-     printf("%s\n",(char*)now);
+     printf("%s\n",(char*)if_.esp);
      i++;}
   argc=i;
   word_lengths[i]=0;
