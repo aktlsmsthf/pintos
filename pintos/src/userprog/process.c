@@ -72,8 +72,7 @@ start_process (void *f_name)
   char *fncopy; 
   int i;
   int argc;
-  /**int word_lengths[10];**/
-  char * word_lengths[10]
+  int word_lengths[10];
   int length;
   void *initial_esp;
   length=strlen(file_name);
@@ -83,8 +82,7 @@ start_process (void *f_name)
    fncopy = palloc_get_page (0);
   if (fncopy == NULL)
     return TID_ERROR;
-  /**strlcpy (fncopy, file_name, PGSIZE);**/
-  strlcpy(fncopy,file_name,length+1);
+  strlcpy (fncopy, file_name, PGSIZE);
    printf("2\n");
   /* Initialize interrupt frame and load executable. */   
    
@@ -101,11 +99,11 @@ start_process (void *f_name)
   if (!success) 
     thread_exit ();
   i=0;
-  /**for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
+  for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
      word_lengths[i]=strlen(now);
      i++;}
   argc=i;
-  word_lengths[i]=0;**/
+  word_lengths[i]=0;
   
   initial_esp=if_.esp;
    
@@ -113,10 +111,6 @@ start_process (void *f_name)
    printf("%x\n", if_.esp);
   memcpy(if_.esp,fncopy,length+1);
    
-   save = if_.esp
-   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
-     word_lengths[i]=save;
-     i++;}
    
   argc=i;
   word_lengths[i]=0;
@@ -132,8 +126,7 @@ start_process (void *f_name)
       *((char *)if_.esp)=0;}
      else{
         initial_esp-=word_lengths[i]+1;
-        /** *(char *)if_.esp=initial_esp;**/
-        *if._esp = word_lengths[i];
+        *((char *)if_.esp)=(char *)initial_esp;
          printf("%s\n",*if_.esp);}}
   if_.esp-=4;
   *((char **)if_.esp)=if_.esp+4;
