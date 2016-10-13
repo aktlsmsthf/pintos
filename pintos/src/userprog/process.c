@@ -96,7 +96,7 @@ start_process (void *f_name)
   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
      printf("%d\n",(int)save);
      printf("%d\n",(int)now);
-     word_lengths[i]=(int)save-(int)now;
+     word_lengths[i]=(int)(save-now);
      i++;}
   argc=i;
   word_lengths[i]=0;
