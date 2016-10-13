@@ -74,7 +74,7 @@ start_process (void *f_name)
   int argc;
   int word_lengths[10];
   int length;
-  char *initial_esp;
+  void *initial_esp;
   length=strlen(file_name);
    printf("%s",file_name);
    printf("%d",length);
@@ -115,7 +115,7 @@ start_process (void *f_name)
   argc=i;
   word_lengths[i]=0;
    
-   printf("%s\n",*if_.esp);
+   printf("%s\n",*(char*)if_.esp);
   if_.esp-=4-((length+1)%4);
    printf("%x\n", if_.esp);
   *((int *)if_.esp)=0;
@@ -127,7 +127,7 @@ start_process (void *f_name)
      else{
         initial_esp-=word_lengths[i]+1;
         *((char *)if_.esp)=initial_esp;
-         printf("%s\n",*if_.esp);}}
+         printf("%s\n",*(char*)if_.esp);}}
   if_.esp-=4;
   *((char **)if_.esp)=if_.esp+4;
   
