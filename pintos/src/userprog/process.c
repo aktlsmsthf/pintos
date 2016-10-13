@@ -122,7 +122,7 @@ start_process (void *f_name)
       *((char *)if_.esp)=0;}
      else{
         *(initial_esp)-=word_lengths[i]+1;
-        *(if_.esp)=(char *)(*initial_esp);
+        (char *)(*if_.esp)=(char *)(*initial_esp);
          printf("%s\n",*if_.esp);}}
   if_.esp-=4;
   *((char **)if_.esp)=(char **)(if_.esp+4);
