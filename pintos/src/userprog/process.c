@@ -74,7 +74,7 @@ start_process (void *f_name)
    
   fncopy = palloc_get_page (0);
   if (fncopy == NULL){
-    return TID_ERROR;
+    thread_exit ();
   }
   strlcpy (fncopy, file_name, PGSIZE);
   /* Initialize interrupt frame and load executable. */   
