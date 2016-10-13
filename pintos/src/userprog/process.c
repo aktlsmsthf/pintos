@@ -93,7 +93,7 @@ start_process (void *f_name)
   i=0;
   initial_esp=if_.esp; 
   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
-     if(i=0){
+     if(i==0){
          word_lengths[i]=strlen(now)+1;}
      else{
           word_lengths[i]=word_lengths[i-1]+strlen(now)+1;}
