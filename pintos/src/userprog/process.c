@@ -114,12 +114,12 @@ start_process (void *f_name)
    
   argc=i;
   word_lengths[i]=0;
-   
+   printf("%x\n", if_.esp);
    printf("%s\n",*(char*)if_.esp);
   if_.esp-=4-((length+1)%4);
    printf("%x\n", if_.esp);
   *((int *)if_.esp)=0;
-   
+   printf("%x\n", if_.esp);
   for(;i>=0;i--){
      if_.esp-=4;
      if(word_lengths[i]==0){
@@ -130,10 +130,10 @@ start_process (void *f_name)
          printf("%s\n",*(char*)if_.esp);}}
   if_.esp-=4;
   *((char **)if_.esp)=if_.esp+4;
-  
+  printf("%x\n", if_.esp);
   if_.esp-=4;
   *((int *)if_.esp)=argc;
-  
+  printf("%x\n", if_.esp);
   if_.esp-=4;
   *((int *)if_.esp)=0;
    printf("%x\n", if_.esp);
