@@ -60,6 +60,8 @@ process_execute (const char *file_name)
 static void
 start_process (void *f_name)
 {
+   enum intr_level old_level;
+   old_level=intr_disable();
   char *file_name = f_name;
   struct intr_frame if_;
   bool success;
@@ -119,6 +121,7 @@ start_process (void *f_name)
   if_.esp-=4;
   *((int *)if_.esp)=0;
    
+   intr_set_level (old_level);
   sema_up(&sema);
   /* Start the user process by simulating a return from an
      interrupt, implemented by intr_exit (in
