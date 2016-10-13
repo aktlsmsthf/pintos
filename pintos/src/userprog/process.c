@@ -99,7 +99,6 @@ start_process (void *f_name)
           word_lengths[i]=word_lengths[i-1]+strlen(now)+1;}
      if_.esp-=strlen(now)+1;
      memcpy(if_.esp,now,strlen(now)+1);
-     printf("%s\n",(char*)if_.esp);
      i++;}
   argc=i;
   word_lengths[i]=0;
@@ -111,7 +110,6 @@ start_process (void *f_name)
       *(int *)if_.esp=0;}
      else{
         *(char **)if_.esp=(char *)(initial_esp-word_lengths[i]);
-        printf("%x\n",if_.esp);
          }}
   if_.esp-=4;
   *(void **)if_.esp=if_.esp+4;
