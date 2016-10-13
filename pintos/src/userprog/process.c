@@ -131,7 +131,8 @@ start_process (void *f_name)
   
   if_.esp-=4;
   *((int *)if_.esp)=0;
-   printf("4\n");
+   printf("%d\n", esp);
+   sema_up(&sema);
    /**intr_set_level (old_level);**/
   
   /* Start the user process by simulating a return from an
@@ -141,11 +142,7 @@ start_process (void *f_name)
      we just point the stack pointer (%esp) to our stack frame
      and jump to it. */
   asm volatile ("movl %0, %%esp; jmp intr_exit" : : "g" (&if_) : "memory");
-   sema_up(&sema);
-     printf("4.1\n");
   NOT_REACHED ();
-   printf("4.2\n");
-   
 }
 
 /* Waits for thread TID to die and returns its exit status.  If
@@ -160,7 +157,9 @@ start_process (void *f_name)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
-   while(1)
+   while(1){
+      barrier();
+   }
    return -1;
 }
 
