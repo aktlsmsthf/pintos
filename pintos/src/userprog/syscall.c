@@ -34,7 +34,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;
     }
     case SYS_WAIT:{
-      pid_t pid = *((pid_t *)(f->esp)+1);
+      /**pid_t pid = *((pid_t *)(f->esp)+1);**/
       break;}
     case SYS_CREATE:{
       const char *file = *((char **)(f->esp)+1);
