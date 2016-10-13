@@ -122,10 +122,10 @@ start_process (void *f_name)
   *if_.esp=if_.esp+4;
   printf("%x\n", if_.esp);
   if_.esp-=4;
-  *if_.esp=(int)argc;
+  *(int *)if_.esp=argc;
   printf("%x\n", if_.esp);
   if_.esp-=4;
-  *if_.esp=(int)0;
+  *(int *)if_.esp=0;
    printf("%x\n", if_.esp);
    sema_up(&sema);
    /**intr_set_level (old_level);**/
