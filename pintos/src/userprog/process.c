@@ -60,6 +60,7 @@ process_execute (const char *file_name)
 static void
 start_process (void *f_name)
 {
+   printf("1\n");
    /**enum intr_level old_level;
    old_level=intr_disable();**/
   char *file_name = f_name;
@@ -75,6 +76,7 @@ start_process (void *f_name)
   void *initial_esp;
   length=strlen(file_name);
   strlcpy(fncopy,file_name,length+1);
+   printf("2\n");
   /* Initialize interrupt frame and load executable. */   
    
   memset (&if_, 0, sizeof if_);
@@ -83,6 +85,7 @@ start_process (void *f_name)
   if_.eflags = FLAG_IF | FLAG_MBS;
   now = strtok_r(file_name," ",&save);
   success = load (now, &if_.eip, &if_.esp);
+   printf("3\n");
    
   /* If load failed, quit. */
   palloc_free_page (file_name);
@@ -120,7 +123,7 @@ start_process (void *f_name)
   
   if_.esp-=4;
   *((int *)if_.esp)=0;
-   
+   printf("4\n");
    /**intr_set_level (old_level);**/
   sema_up(&sema);
   /* Start the user process by simulating a return from an
