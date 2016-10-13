@@ -75,6 +75,8 @@ start_process (void *f_name)
   int length;
   void *initial_esp;
   length=strlen(file_name);
+   printf("%s",file_name);
+   printf("%d",length);
   strlcpy(fncopy,file_name,length+1);
    printf("2\n");
   /* Initialize interrupt frame and load executable. */   
