@@ -44,6 +44,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       printf("%d\n",fd);
       const void *buffer = *((void **)(f->esp+2));
       unsigned size = *((unsigned *)(f->esp+3));
+      printf("%d\n", size);
       if(fd==1){
         printf("6\n");
         putbuf(buffer, size);
