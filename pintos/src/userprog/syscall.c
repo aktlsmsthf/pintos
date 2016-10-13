@@ -42,7 +42,6 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
-      printf("%d\n", size);
       if(fd==STDOUT_FILENO){
         putbuf(buffer, size);
         return size;
