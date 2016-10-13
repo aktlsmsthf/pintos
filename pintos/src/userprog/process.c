@@ -109,9 +109,11 @@ start_process (void *f_name)
   initial_esp=if_.esp;
    
   if_.esp-=length+1;
+   printf("%x\n", if_.esp);
   memcpy(if_.esp,fncopy,length+1);
     
   if_.esp-=4-((length+1)%4);
+   printf("%x\n", if_.esp);
   *((int *)if_.esp)=0;
    
   for(;i>=0;i--){
@@ -122,7 +124,7 @@ start_process (void *f_name)
         initial_esp-=word_lengths[i]+1;
         *((char *)if_.esp)=initial_esp;
          printf("%s",if_.esp);}}
-   
+   printf("%x\n", if_.esp);
   if_.esp-=4;
   *((char **)if_.esp)=if_.esp+4;
   
@@ -157,9 +159,7 @@ start_process (void *f_name)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
-   while(1){
-      barrier();
-   }
+   while(1)
    return -1;
 }
 
