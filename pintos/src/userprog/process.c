@@ -101,9 +101,7 @@ start_process (void *f_name)
   initial_esp=if_.esp;
   if_.esp-=length+1;
   memcpy(if_.esp,fncopy,length+1);
-  printf("%x\n", if_.esp);
   if_.esp-=4-((length+1)%4);
-  printf("%x\n", if_.esp);
   *((int *)if_.esp)=0;
   for(;i>=0;i--){
      if_.esp-=4;
@@ -112,16 +110,14 @@ start_process (void *f_name)
      else{
         initial_esp-=word_lengths[i]+1;
         *(char **)if_.esp=(char *)initial_esp;
+        printf("%s\n",(char*)initial_esp);
          }}
   if_.esp-=4;
   *(void **)if_.esp=if_.esp+4;
-  printf("%x\n", if_.esp);
   if_.esp-=4;
   *(int *)if_.esp=argc;
-  printf("%x\n", if_.esp);
   if_.esp-=4;
   *(int *)if_.esp=0;
-   printf("%x\n", if_.esp);
    sema_up(&sema);
    /**intr_set_level (old_level);**/
   
