@@ -18,7 +18,7 @@ static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
   printf ("system call!\n");
-  thread_exit ();
+ 
   
   switch(*((int *)(f->esp))){
     case SYS_HALT:
@@ -57,5 +57,6 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_CLOSE:
       break;
   }
+   thread_exit ();
 }
 
