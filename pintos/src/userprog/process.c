@@ -111,7 +111,7 @@ start_process (void *f_name)
       *(int *)if_.esp=0;}
      else{
         initial_esp-=word_lengths[i]+1;
-        *(char ***)if_.esp=(char **)initial_esp;
+        *(char **)if_.esp=(char *)initial_esp;
          }}
   if_.esp-=4;
   *(void **)if_.esp=if_.esp+4;
