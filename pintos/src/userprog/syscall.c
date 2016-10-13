@@ -39,16 +39,12 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_READ:
       break;
     case SYS_WRITE:{
-      printf("5\n");
       int fd = *((int *)(f->esp)+1);
-      printf("%d\n",fd);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       printf("%d\n", size);
       if(fd==STDOUT_FILENO){
-        printf("6\n");
         putbuf(buffer, size);
-        printf("7\n");
         return size;
       }
       break;}
