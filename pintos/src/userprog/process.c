@@ -133,7 +133,7 @@ start_process (void *f_name)
   *((int *)if_.esp)=0;
    printf("4\n");
    /**intr_set_level (old_level);**/
-  
+  sema_up(&sema);
   /* Start the user process by simulating a return from an
      interrupt, implemented by intr_exit (in
      threads/intr-stubs.S).  Because intr_exit takes all of its
@@ -144,7 +144,7 @@ start_process (void *f_name)
      printf("4.1\n");
   NOT_REACHED ();
    printf("4.2\n");
-   sema_up(&sema);
+   
 }
 
 /* Waits for thread TID to die and returns its exit status.  If
