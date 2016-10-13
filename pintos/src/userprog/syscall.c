@@ -44,6 +44,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       unsigned size = *((unsigned *)(f->esp+3));
       if(fd==1){
         putbuf(buffer, size);
+        return size;
       }
       break;}
     case SYS_SEEK:
