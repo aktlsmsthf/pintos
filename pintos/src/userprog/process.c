@@ -77,7 +77,12 @@ start_process (void *f_name)
   length=strlen(file_name);
    printf("%s",file_name);
    printf("%d",length);
-  strlcpy(fncopy,file_name,length+1);
+   
+   fncopy = palloc_get_page (0);
+  if (fncopy == NULL)
+    return TID_ERROR;
+  strlcpy (fncopy, file_name, PGSIZE);
+  /**strlcpy(fncopy,file_name,length+1);**/
    printf("2\n");
   /* Initialize interrupt frame and load executable. */   
    
