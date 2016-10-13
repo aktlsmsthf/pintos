@@ -113,13 +113,13 @@ start_process (void *f_name)
   for(;i>=0;i--){
      if_.esp-=4;
      if(word_lengths[i]==0){
-      *if_.esp=0;}
+      *(int *)if_.esp=0;}
      else{
         *initial_esp-=word_lengths[i]+1;
-        *if_.esp=(char *)(*initial_esp);
+        *(char **)if_.esp=(char *)(*initial_esp);
          }}
   if_.esp-=4;
-  *if_.esp=if_.esp+4;
+  *(void **)if_.esp=if_.esp+4;
   printf("%x\n", if_.esp);
   if_.esp-=4;
   *(int *)if_.esp=argc;
