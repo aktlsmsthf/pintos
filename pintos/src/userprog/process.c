@@ -18,8 +18,12 @@
 #include "threads/thread.h"
 #include "threads/vaddr.h"
 
+#include "threads/synch.h"
+
 static thread_func start_process NO_RETURN;
 static bool load (const char *cmdline, void (**eip) (void), void **esp);
+
+static struct semaphore sema;
 
 /* Starts a new thread running a user program loaded from
    FILENAME.  The new thread may be scheduled (and may even exit)
@@ -33,6 +37,7 @@ process_execute (const char *file_name)
   char *real_file_name;
   char *save;
    
+  sema_init(&sema,0);
   /* Make a copy of FILE_NAME.
      Otherwise there's a race between the caller and load(). */
   fn_copy = palloc_get_page (0);
@@ -43,7 +48,7 @@ process_execute (const char *file_name)
    
   /* Create a new thread to execute FILE_NAME. */
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
-   
+  sema_down(&sema);
    
   if (tid == TID_ERROR)
     palloc_free_page (fn_copy); 
@@ -114,6 +119,7 @@ start_process (void *f_name)
   if_.esp-=4;
   *((int *)if_.esp)=0;
    
+  sema_up(&sema);
   /* Start the user process by simulating a return from an
      interrupt, implemented by intr_exit (in
      threads/intr-stubs.S).  Because intr_exit takes all of its
