@@ -131,7 +131,7 @@ start_process (void *f_name)
   
   if_.esp-=4;
   *((int *)if_.esp)=0;
-   printf("%d\n", if_.esp);
+   printf("%x\n", if_.esp);
    sema_up(&sema);
    /**intr_set_level (old_level);**/
   
