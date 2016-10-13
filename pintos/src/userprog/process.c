@@ -49,10 +49,8 @@ process_execute (const char *file_name)
   /* Create a new thread to execute FILE_NAME. */
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
   sema_down(&sema);
-   printf("9\n");
   if (tid == TID_ERROR)
     palloc_free_page (fn_copy); 
-   printf("10\n");
   return tid;
 }
 
@@ -61,7 +59,6 @@ process_execute (const char *file_name)
 static void
 start_process (void *f_name)
 {
-   printf("1\n");
    /**enum intr_level old_level;
    old_level=intr_disable();**/
   char *file_name = f_name;
@@ -76,14 +73,12 @@ start_process (void *f_name)
   int length;
   void **initial_esp;
   length=strlen(file_name);
-   printf("%s",file_name);
-   printf("%d",length);
    
-   fncopy = palloc_get_page (0);
-  if (fncopy == NULL)
+  fncopy = palloc_get_page (0);
+  if (fncopy == NULL){
     return TID_ERROR;
+  }
   strlcpy (fncopy, file_name, PGSIZE);
-   printf("2\n");
   /* Initialize interrupt frame and load executable. */   
    
   memset (&if_, 0, sizeof if_);
@@ -92,7 +87,6 @@ start_process (void *f_name)
   if_.eflags = FLAG_IF | FLAG_MBS;
   now = strtok_r(file_name," ",&save);
   success = load (now, &if_.eip, &if_.esp);
-   printf("3\n");
    
   /* If load failed, quit. */
   palloc_free_page (file_name);
@@ -108,25 +102,25 @@ start_process (void *f_name)
   *initial_esp=if_.esp;
    
   if_.esp-=length+1;
-   printf("%x\n", if_.esp);
+  printf("%x\n", if_.esp);
   memcpy(if_.esp,fncopy,length+1);
    
   word_lengths[i]=0;
-   printf("%x\n", if_.esp);
+  printf("%x\n", if_.esp);
   if_.esp-=4-((length+1)%4);
-   printf("%x\n", if_.esp);
+  printf("%x\n", if_.esp);
   *((int *)if_.esp)=0;
   for(;i>=0;i--){
      if_.esp-=4;
      if(word_lengths[i]==0){
-      *(char *)(if_.esp)=0;}
+      *(char **)(if_.esp)=0;}
      else{
         *(initial_esp)-=word_lengths[i]+1;
-        *(void **)(if_.esp)=(char *)(*initial_esp);
+        *(char **)(if_.esp)=(char **)(*initial_esp);
          }}
   if_.esp-=4;
   *(char **)(if_.esp)=if_.esp+4;
-   printf("%s\n",**(char **)(if_.esp));
+   printf("%s\n",*(char **)(if_.esp));
   printf("%x\n", if_.esp);
   if_.esp-=4;
   *((int *)if_.esp)=argc;
