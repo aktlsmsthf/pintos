@@ -72,7 +72,6 @@ start_process (void *f_name)
   int word_lengths[10];
   int length;
   void *initial_esp;
-  length=strlen(file_name);
    
   fncopy = palloc_get_page (0);
   if (fncopy == NULL){
@@ -105,7 +104,7 @@ start_process (void *f_name)
      i++;}
   argc=i;
   word_lengths[i]=0;
-  if_.esp-=4-((length+1)%4);
+  if_.esp-=4-((word_lengths[i-1])%4);
   *((uint8_t *)if_.esp)=0;
   for(;i>=0;i--){
      if_.esp-=4;
@@ -113,7 +112,7 @@ start_process (void *f_name)
       *(int *)if_.esp=0;}
      else{
         *(char **)if_.esp=(char *)(initial_esp-word_lengths[i]);
-        printf("%s\n",*(char **)if_.esp);
+        printf("%s\n",**(char **)if_.esp);
          }}
   if_.esp-=4;
   *(void **)if_.esp=if_.esp+4;
