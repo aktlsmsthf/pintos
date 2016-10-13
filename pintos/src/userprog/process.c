@@ -102,7 +102,7 @@ start_process (void *f_name)
   if_.esp-=length+1;
   memcpy(if_.esp,fncopy,length+1);
   if_.esp-=4-((length+1)%4);
-  *((int *)if_.esp)=0;
+  *((uint8_t *)if_.esp)=0;
   for(;i>=0;i--){
      if_.esp-=4;
      if(word_lengths[i]==0){
