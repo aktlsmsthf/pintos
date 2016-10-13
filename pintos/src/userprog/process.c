@@ -96,7 +96,7 @@ start_process (void *f_name)
   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
      word_lengths[i]=strlen(now);
      i++;}
-  printf("%s\n",fncopy[0]);
+  printf("%s\n",fncopy);
   argc=i;
   word_lengths[i]=0;
   initial_esp=if_.esp;
