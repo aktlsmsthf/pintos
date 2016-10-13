@@ -23,9 +23,9 @@ syscall_handler (struct intr_frame *f UNUSED)
   switch(*((int *)(f->esp))){
     case SYS_HALT:
       break;
-    case SYS_EXIT:
+    case SYS_EXIT:{
       thread_exit();
-      break;
+      break;}
     case SYS_WAIT:
       break;
     case SYS_CREATE:
@@ -38,14 +38,14 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;
     case SYS_READ:
       break;
-    case SYS_WRITE:
+    case SYS_WRITE:{
       int fd = *((int *)(f->esp+1));
       const void *buffer = *((void **)(f->esp+2));
       unsigned size = *((unsigned *)(f->esp+3));
       if(fd==1){
         putbuf(buffer, size);
       }
-      break;
+      break;}
     case SYS_SEEK:
       break;
     case SYS_TELL:
