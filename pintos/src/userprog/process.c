@@ -72,7 +72,8 @@ start_process (void *f_name)
   char *fncopy; 
   int i;
   int argc;
-  int word_lengths[10];
+  /**int word_lengths[10];**/
+  char * word_lengths[10]
   int length;
   void *initial_esp;
   length=strlen(file_name);
@@ -100,17 +101,25 @@ start_process (void *f_name)
   if (!success) 
     thread_exit ();
   i=0;
-  for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
+  /**for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
      word_lengths[i]=strlen(now);
      i++;}
   argc=i;
-  word_lengths[i]=0;
+  word_lengths[i]=0;**/
   
   initial_esp=if_.esp;
    
   if_.esp-=length+1;
    printf("%x\n", if_.esp);
   memcpy(if_.esp,fncopy,length+1);
+   
+   save = if_.esp
+   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
+     word_lengths[i]=save;
+     i++;}
+   
+  argc=i;
+  word_lengths[i]=0;
    
    printf("%s\n",*if_.esp);
   if_.esp-=4-((length+1)%4);
@@ -123,7 +132,8 @@ start_process (void *f_name)
       *((char *)if_.esp)=0;}
      else{
         initial_esp-=word_lengths[i]+1;
-        *if_.esp=(char *)initial_esp;
+        /** *(char *)if_.esp=initial_esp;**/
+        *if._esp = word_lengths[i];
          printf("%s\n",*if_.esp);}}
   if_.esp-=4;
   *((char **)if_.esp)=if_.esp+4;
