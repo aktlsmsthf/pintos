@@ -94,7 +94,7 @@ start_process (void *f_name)
     thread_exit ();
   i=0;
   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
-     word_lengths[i]=strlen(now);
+     word_lengths[i]=(int)save-(int)now;
      i++;}
   argc=i;
   word_lengths[i]=0;
