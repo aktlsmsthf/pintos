@@ -111,7 +111,8 @@ start_process (void *f_name)
   if_.esp-=length+1;
    printf("%x\n", if_.esp);
   memcpy(if_.esp,fncopy,length+1);
-    
+   
+   printf("%s\n",*if_.esp);
   if_.esp-=4-((length+1)%4);
    printf("%x\n", if_.esp);
   *((int *)if_.esp)=0;
@@ -123,7 +124,7 @@ start_process (void *f_name)
      else{
         initial_esp-=word_lengths[i]+1;
         *((char *)if_.esp)=initial_esp;
-         printf("%s\n",*if_.esp);}}
+         printf("%x\n",*if_.esp);}}
   if_.esp-=4;
   *((char **)if_.esp)=if_.esp+4;
   
