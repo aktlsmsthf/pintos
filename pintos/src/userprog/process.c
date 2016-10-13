@@ -94,12 +94,10 @@ start_process (void *f_name)
     thread_exit ();
   i=0;
   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
-     if(i=0){word_lengths[i]=(int)now;}
-     else{word_lengths[i]=(int)now;
-          word_lengths[i-1]=(int)now-word_lengths[i-1];}
+     word_lengths[i]=strlen(now);
+     printf("%s\n",now);
           
      i++;}
-  word_lengths[i]=(int)now-word_lengths[i];
   argc=i;
   word_lengths[i]=0;
   initial_esp=if_.esp;
