@@ -93,13 +93,17 @@ start_process (void *f_name)
   if (!success) 
     thread_exit ();
   i=0;
+  initial_esp=if_.esp; 
   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
-     word_lengths[i]=strlen(now);
+     if(i=0){
+         word_lengths[i]=strlen(now)+1;}
+     else{
+          word_lengths[i]=word_lengths[i-1]+strlen(now)+1;}
+     if_.esp-=strlen(now)+1;
+     (char**)if_.esp=now;
      i++;}
-  printf("%s\n",fncopy);
   argc=i;
   word_lengths[i]=0;
-  initial_esp=if_.esp;
   if_.esp-=length+1;
   memcpy(if_.esp,fncopy,length+1);
   if_.esp-=4-((length+1)%4);
@@ -109,8 +113,7 @@ start_process (void *f_name)
      if(word_lengths[i]==0){
       *(int *)if_.esp=0;}
      else{
-        initial_esp-=word_lengths[i]+1;
-        *(char **)if_.esp=(char *)initial_esp;
+        *(char **)if_.esp=(char *)(initial_esp-word_lengths[i])
          }}
   if_.esp-=4;
   *(void **)if_.esp=if_.esp+4;
@@ -118,7 +121,7 @@ start_process (void *f_name)
   *(int *)if_.esp=argc;
   if_.esp-=4;
   *(int *)if_.esp=0;
-   palloc_free_page (fn_copy);
+   palloc_free_page (fncopy);
    sema_up(&sema);
    /**intr_set_level (old_level);**/
   
