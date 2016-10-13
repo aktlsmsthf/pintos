@@ -100,7 +100,7 @@ start_process (void *f_name)
      else{
           word_lengths[i]=word_lengths[i-1]+strlen(now)+1;}
      if_.esp-=strlen(now)+1;
-     (char**)if_.esp=now;
+     *(char**)if_.esp=now;
      i++;}
   argc=i;
   word_lengths[i]=0;
@@ -113,7 +113,7 @@ start_process (void *f_name)
      if(word_lengths[i]==0){
       *(int *)if_.esp=0;}
      else{
-        *(char **)if_.esp=(char *)(initial_esp-word_lengths[i])
+        *(char **)if_.esp=(char *)(initial_esp-word_lengths[i]);
          }}
   if_.esp-=4;
   *(void **)if_.esp=if_.esp+4;
