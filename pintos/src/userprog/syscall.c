@@ -41,6 +41,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_WRITE:{
       printf("5\n");
       int fd = *((int *)(f->esp+1));
+      printf("%d\n",fd);
       const void *buffer = *((void **)(f->esp+2));
       unsigned size = *((unsigned *)(f->esp+3));
       if(fd==1){
