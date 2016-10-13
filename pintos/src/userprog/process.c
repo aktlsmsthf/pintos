@@ -70,7 +70,6 @@ start_process (void *f_name)
   int i;
   int argc;
   int word_lengths[10];
-  int length;
   void *initial_esp;
    
   fncopy = palloc_get_page (0);
@@ -112,7 +111,7 @@ start_process (void *f_name)
       *(int *)if_.esp=0;}
      else{
         *(char **)if_.esp=(char *)(initial_esp-word_lengths[i]);
-        printf("%s\n",**(char **)if_.esp);
+        printf("%x\n",if_.esp);
          }}
   if_.esp-=4;
   *(void **)if_.esp=if_.esp+4;
