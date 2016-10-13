@@ -115,7 +115,6 @@ start_process (void *f_name)
   argc=i;
   word_lengths[i]=0;
    printf("%x\n", if_.esp);
-   printf("%s\n",*((char*)if_.esp));
   if_.esp-=4-((length+1)%4);
    printf("%x\n", if_.esp);
   *((int *)if_.esp)=0;
