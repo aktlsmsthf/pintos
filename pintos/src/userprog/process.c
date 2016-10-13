@@ -123,9 +123,9 @@ start_process (void *f_name)
      else{
         *(initial_esp)-=word_lengths[i]+1;
         *((char **)if_.esp)=(char *)(*initial_esp);
-         printf("%s\n",*(char *)if_.esp);}}
+         printf("%s\n",*(char **)if_.esp);}}
   if_.esp-=4;
-  *((char **)if_.esp)=(char *)if_.esp+4;
+  *((char ***)if_.esp)=(char *)if_.esp+4;
   printf("%x\n", if_.esp);
   if_.esp-=4;
   *((int *)if_.esp)=argc;
