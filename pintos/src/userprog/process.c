@@ -166,7 +166,7 @@ process_wait (tid_t child_tid UNUSED)
       struct thread *child_thread;
       child_thread = get_child_process(child_tid);
       printf("%s\n",child_thread->name);
-      list_remove(child);
+      /**list_remove(child);**/
 
       if(child_thread->waited != 0){ return -1;}
       printf("a\n");
