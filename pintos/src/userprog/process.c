@@ -143,8 +143,25 @@ start_process (void *f_name)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
-   while(1);
-   return -1;
+      struct list_elem *child = list_front(thread_current()->child_list);
+      struct thread *child_thread;
+    
+      while(list_entry(child, struct thread, elem)->tid != pid){
+        child = child->next;
+      }
+      child_thread = list_entry(child, struct thread, elem);
+      list_remove(child);
+      
+      if(child_thread->waited != 0) return -1;
+    
+      while(child_thread->status !=THREAD_DYING){
+        barrier();
+      }
+      
+      if(child_thread->exit_called ==0){ return -1;}
+      else{
+        return child_thread->status;
+      }
 }
 
 /* Free the current process's resources. */
