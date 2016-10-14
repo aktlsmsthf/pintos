@@ -7,13 +7,16 @@
 #include <console.h>
 #include "threads/init.h"
 #include <syscall.h>
+#incldue "threads/synch.h"
 
 static void syscall_handler (struct intr_frame *);
+static struct lock file_lock;
 
 void
 syscall_init (void) 
 {
   intr_register_int (0x30, 3, INTR_ON, syscall_handler, "syscall");
+  lock_init(&file_lock);
 }
 
 static void
@@ -35,7 +38,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
     case SYS_EXEC:{
       const char *cmd_line = *((char **)(f->esp)+1);
+      lock_aquire(&file_lock);
       tid_t pid = process_execute(cmd_line);
+      lock_release(&file_lock);
       printf("%s\n", thread_current()->name);
       printf("dfdfdf\n");
       printf("%d\n", pid);
@@ -67,10 +72,12 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
+      lock_aquire(&file_lock);
       if(fd==STDOUT_FILENO){
         putbuf(buffer, size);
         return size;
       }
+      lock_release(&file_lock);
       break;}
     case SYS_SEEK:{
       int fd = *((int *)(f->esp)+1);
