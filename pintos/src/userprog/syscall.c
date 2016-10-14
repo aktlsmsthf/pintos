@@ -84,7 +84,6 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       break;}
   }
-  thread_exit();
 }
 
 struct thread* get_child_process (int pid)
