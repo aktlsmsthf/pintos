@@ -26,7 +26,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
     case SYS_EXIT:{
       int status = *((int *)(f->esp)+1);
-      thread_current()->return =status;
+      thread_current()->ret =status;
       thread_current()->exit_called =1;
       thread_exit();
       break;}
