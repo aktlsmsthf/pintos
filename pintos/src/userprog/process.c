@@ -119,8 +119,7 @@ start_process (void *f_name)
   if_.esp-=4;
   *(int *)if_.esp=0;
    palloc_free_page (fncopy);
-   
-   sema_up(&sema); 
+   sema_up(&sema);
    /**intr_set_level (old_level);**/
   
   /* Start the user process by simulating a return from an
@@ -130,7 +129,6 @@ start_process (void *f_name)
      we just point the stack pointer (%esp) to our stack frame
      and jump to it. */
   asm volatile ("movl %0, %%esp; jmp intr_exit" : : "g" (&if_) : "memory");
-  
   NOT_REACHED ();
 }
 
@@ -150,9 +148,9 @@ process_wait (tid_t child_tid UNUSED)
       struct thread *child_thread;
       while(list_entry(child, struct thread, elem)->tid != child_tid){
         child = child->next;
-        
+        if(child->next==NULL){
            return -1;
-        
+        }
       }
 
       child_thread = list_entry(child, struct thread, elem);
