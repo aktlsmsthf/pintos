@@ -181,15 +181,7 @@ thread_create (const char *name, int priority,
   /* Initialize thread. */
   init_thread (t, name, priority);
   tid = t->tid = allocate_tid ();
-   
-/**#ifdef USERPROG**/
-  list_init(&(t->child_list));
-  t->waited = 0;
-  t->exit_called = 0;
-  if(t!=initial_thread){
-    list_push_front(&(thread_current()->child_list), &(t->child_elem));
-  }
-/**#endif**/
+  
 
   /* Stack frame for kernel_thread(). */
   kf = alloc_frame (t, sizeof *kf);
@@ -209,6 +201,14 @@ thread_create (const char *name, int priority,
   /* Add to run queue. */
   thread_unblock (t);
 
+   /**#ifdef USERPROG**/
+  list_init(&(t->child_list));
+  t->waited = 0;
+  t->exit_called = 0;
+  if(t!=initial_thread){
+    list_push_front(&(thread_current()->child_list), &(t->child_elem));
+  }
+/**#endif**/
   return tid;
 }
 
