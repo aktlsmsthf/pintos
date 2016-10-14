@@ -151,6 +151,7 @@ process_wait (tid_t child_tid UNUSED)
       printf("%s\n", list_entry(child, struct thread, child_elem)->name);
       while(list_entry(child, struct thread, child_elem)->tid != child_tid){
         child = child->next;
+        printf("%s\n", list_entry(child, struct thread, child_elem)->name);
         printf("r\n");
         if(child->next==NULL){
            printf("x\n");
