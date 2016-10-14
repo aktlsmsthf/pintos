@@ -160,7 +160,7 @@ process_wait (tid_t child_tid UNUSED)
       
       if(child_thread->exit_called ==0){ return -1;}
       else{
-        return child_thread->status;
+        return child_thread->ret;
       }
 }
 
