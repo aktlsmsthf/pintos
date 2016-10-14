@@ -19,6 +19,7 @@
 #include "threads/vaddr.h"
 
 #include "threads/synch.h"
+#include <list.h>
 
 static thread_func start_process NO_RETURN;
 static bool load (const char *cmdline, void (**eip) (void), void **esp);
@@ -148,9 +149,10 @@ process_wait (tid_t child_tid UNUSED)
       printf("1\n");
       printf("%d\n", child_tid);
       while(list_entry(child, struct thread, elem)->tid != child_tid){
-         /**printf("%c\n", list_entry(child, struct thread, elem)->name);
-        child = child->next;**/
-         return -1;
+        child = child->next;
+        if(is_tail(child)){
+           return -1;
+        }
       }
       printf("2\n");
       child_thread = list_entry(child, struct thread, elem);
