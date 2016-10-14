@@ -146,7 +146,7 @@ start_process (void *f_name)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
-      /**struct list_elem *child = list_front(&(thread_current()->child_list));
+      struct list_elem *child = list_front(&(thread_current()->child_list));
       struct thread *child_thread;
       printf("%s\n", thread_current()->name);
       printf("%s\n", list_entry(child, struct thread, child_elem)->name);
@@ -162,11 +162,11 @@ process_wait (tid_t child_tid UNUSED)
       }
       
       printf("hello_world!\n");
-      child_thread = list_entry(child, struct thread, child_elem);**/
+      child_thread = list_entry(child, struct thread, child_elem);
       struct thread *child_thread;
       child_thread = get_child_process(child_tid);
       printf("%s\n",child_thread->name);
-      /**list_remove(child);**/
+      list_remove(child);
 
       if(child_thread->waited != 0){ return -1;}
       printf("a\n");
@@ -174,8 +174,11 @@ process_wait (tid_t child_tid UNUSED)
          barrier();
       }
       printf("ya yunho\n");
-      if(child_thread->exit_called ==0){ return -1;}
+      if(child_thread->exit_called ==0){ 
+         palloc_free_page(child_thread);
+         return -1;}
       else{
+         palloc_free_page(child_thread);
         return child_thread->ret;
       }
 }
