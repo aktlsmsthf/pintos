@@ -86,3 +86,20 @@ syscall_handler (struct intr_frame *f UNUSED)
   }
 }
 
+struct thread* get_child_process (int pid)
+{
+  struct thread *t = thread_current();
+  struct list_elem *e;
+
+  for (e = list_begin (&t->child_list); e != list_end (&t->child_list);
+       e = list_next (e))
+        {
+          struct child_process *cp = list_entry (e, struct child_process, child_elem);
+          if (pid == cp->pid)
+	    {
+	      return cp;
+	    }
+        }
+  return NULL;
+}
+
