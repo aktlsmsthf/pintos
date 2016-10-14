@@ -445,7 +445,7 @@ init_thread (struct thread *t, const char *name, int priority)
   t->magic = THREAD_MAGIC;
    
 #ifdef USERPROG
-  list_init(t->child_list);
+  list_init(&(t->child_list));
   t->waited = 0;
   t->exit_called = 0;
 #endif
