@@ -160,11 +160,8 @@ process_wait (tid_t child_tid UNUSED)
          printf("t\n");
          printf("%d\n", list_entry(child, struct thread, child_elem)->tid);
       }
-      
       printf("hello_world!\n");
       child_thread = list_entry(child, struct thread, child_elem);
-      struct thread *child_thread;
-      child_thread = get_child_process(child_tid);
       printf("%s\n",child_thread->name);
       list_remove(child);
 
