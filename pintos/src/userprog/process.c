@@ -143,7 +143,7 @@ start_process (void *f_name)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
-      struct list_elem *child = list_front(thread_current()->child_list);
+      struct list_elem *child = list_front(&thread_current()->child_list);
       struct thread *child_thread;
     
       while(list_entry(child, struct thread, elem)->tid != child_tid){
