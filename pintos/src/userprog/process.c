@@ -146,7 +146,7 @@ process_wait (tid_t child_tid UNUSED)
       struct list_elem *child = list_front(thread_current()->child_list);
       struct thread *child_thread;
     
-      while(list_entry(child, struct thread, elem)->tid != pid){
+      while(list_entry(child, struct thread, elem)->tid != tid){
         child = child->next;
       }
       child_thread = list_entry(child, struct thread, elem);
