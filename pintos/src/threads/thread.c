@@ -198,12 +198,12 @@ thread_create (const char *name, int priority,
   sf->eip = switch_entry;
    
   
-  #ifdef USERPROG
+/**  #ifdef USERPROG**/
   list_init(&(t->child_list));
   list_push_back(&(thread_current()->child_list), &(t->child_elem)); 
   t->waited = 0;
   t->exit_called = 0;
-#endif
+/**#endif**/
   
   /* Add to run queue. */
   thread_unblock (t);
