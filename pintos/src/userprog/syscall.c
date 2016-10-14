@@ -40,9 +40,6 @@ syscall_handler (struct intr_frame *f UNUSED)
       const char *cmd_line = *((char **)(f->esp)+1);
       tid_t pid = process_execute(cmd_line);
       f->eax = pid;
-      printf("%s\n", thread_current()->name);
-      printf("dfdfdf\n");
-      printf("%d\n", pid);
       break;
     }
     case SYS_WAIT:{
@@ -87,6 +84,5 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       break;}
   }
-   thread_exit ();
 }
 
