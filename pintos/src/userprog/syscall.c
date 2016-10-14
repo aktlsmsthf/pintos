@@ -36,6 +36,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_EXEC:{
       const char *cmd_line = *((char **)(f->esp)+1);
       int pid = process_execute(cmd_line);
+      printf("%s\n", thread_current()->name);
       printf("dfdfdf\n");
       printf("%d\n", pid);
       return pid;
