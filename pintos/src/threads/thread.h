@@ -88,6 +88,12 @@ struct thread
     char name[16];                      /* Name (for debugging purposes). */
     uint8_t *stack;                     /* Saved stack pointer. */
     int priority;                       /* Priority. */
+    
+    int ret;
+    struct list child_list;
+    struct list_elem child_elem;
+    bool waited;
+    bool exit_called;
 
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
@@ -95,11 +101,7 @@ struct thread
 #ifdef USERPROG
     /* Owned by userprog/process.c. */
     uint32_t *pagedir;                  /* Page directory. */
-    int ret;
-    struct list child_list;
-    struct list_elem child_elem;
-    bool waited;
-    bool exit_called;
+    
     
 #endif
 
