@@ -27,7 +27,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       int status = *((int *)(f->esp)+1);
       thread_current()->ret =status;
       thread_current()->exit_called =1;
-      thread_exit();
+     /* thread_exit();*/
+      return status;
       break;}
     case SYS_EXEC:{
       const char *cmd_line = *((char **)(f->esp)+1);
