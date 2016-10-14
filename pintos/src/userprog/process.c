@@ -159,6 +159,7 @@ process_wait (tid_t child_tid UNUSED)
       if(child_thread->waited != 0) return -1;
 
       while(child_thread->status !=THREAD_DYING){
+         barrier();
       }
 
       if(child_thread->exit_called ==0){ return -1;}
