@@ -95,7 +95,7 @@ struct thread* get_child_process (int pid)
        e = list_next (e))
         {
           struct thread *cp = list_entry (e, struct thread, child_elem);
-          if (pid == cp->pid)
+          if (pid == cp->tid)
 	    {
 	      return cp;
 	    }
