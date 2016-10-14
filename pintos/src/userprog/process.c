@@ -147,6 +147,7 @@ process_wait (tid_t child_tid UNUSED)
       struct thread *child_thread;
       printf("1\n");
       while(list_entry(child, struct thread, elem)->tid != child_tid){
+         printf("a\n");
         child = child->next;
       }
       printf("2\n");
