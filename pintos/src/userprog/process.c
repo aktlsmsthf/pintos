@@ -20,6 +20,7 @@
 
 #include "threads/synch.h"
 #include <list.h>
+#include "userprog/syscall.h"
 
 static thread_func start_process NO_RETURN;
 static bool load (const char *cmdline, void (**eip) (void), void **esp);
@@ -145,7 +146,7 @@ start_process (void *f_name)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
-      struct list_elem *child = list_front(&(thread_current()->child_list));
+      /**struct list_elem *child = list_front(&(thread_current()->child_list));
       struct thread *child_thread;
       printf("%s\n", thread_current()->name);
       printf("%s\n", list_entry(child, struct thread, child_elem)->name);
@@ -159,8 +160,11 @@ process_wait (tid_t child_tid UNUSED)
          printf("t\n");
          printf("%d\n", list_entry(child, struct thread, child_elem)->tid);
       }
+      
       printf("hello_world!\n");
-      child_thread = list_entry(child, struct thread, child_elem);
+      child_thread = list_entry(child, struct thread, child_elem);**/
+      struct thread *child_thead;
+      child_thread = get_child_process(child_tid);
       printf("%s\n",child_thread->name);
       list_remove(child);
 
