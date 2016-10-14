@@ -186,7 +186,9 @@ thread_create (const char *name, int priority,
   list_init(&(t->child_list));
   t->waited = 0;
   t->exit_called = 0;
-  list_push_front(&(thread_current()->child_list), &(t->child_elem));
+  if(t!=initial_thread){
+    list_push_front(&(thread_current()->child_list), &(t->child_elem));
+  }
 /**#endif**/
 
   /* Stack frame for kernel_thread(). */
