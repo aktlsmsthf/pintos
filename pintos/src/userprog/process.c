@@ -152,16 +152,17 @@ process_wait (tid_t child_tid UNUSED)
            return -1;
         }
       }
-
+      printf("hello_world!\n");
       child_thread = list_entry(child, struct thread, elem);
+      printf("%s\n",child_thread->name);
       list_remove(child);
 
       if(child_thread->waited != 0) return -1;
-
+      printf("a\n");
       while(child_thread->status !=THREAD_DYING){
          barrier();
       }
-
+      printf("ya yunho\n");
       if(child_thread->exit_called ==0){ return -1;}
       else{
         return child_thread->ret;
