@@ -150,7 +150,7 @@ process_wait (tid_t child_tid UNUSED)
       printf("%d\n", child_tid);
       while(list_entry(child, struct thread, elem)->tid != child_tid){
         child = child->next;
-        if(is_tail(child)){
+        if(child->next==NULL){
            return -1;
         }
       }
