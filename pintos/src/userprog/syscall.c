@@ -7,7 +7,7 @@
 #include <console.h>
 #include "threads/init.h"
 #include <syscall.h>
-#incldue "threads/synch.h"
+#include "threads/synch.h"
 
 static void syscall_handler (struct intr_frame *);
 static struct lock file_lock;
