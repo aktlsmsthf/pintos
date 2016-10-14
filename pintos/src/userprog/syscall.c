@@ -43,12 +43,11 @@ syscall_handler (struct intr_frame *f UNUSED)
       printf("dfdfdf\n");
       printf("%d\n", pid);
       return pid;
-      break;
     }
     case SYS_WAIT:{
       printf("%d\n",*((int *)(f->esp)+1));
-      process_wait((tid_t)*((int *)(f->esp)+1));
-      break;}
+      return process_wait((tid_t)*((int *)(f->esp)+1));
+    }
     case SYS_CREATE:{
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
