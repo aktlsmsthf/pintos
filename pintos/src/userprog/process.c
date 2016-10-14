@@ -157,7 +157,7 @@ process_wait (tid_t child_tid UNUSED)
       printf("%s\n",child_thread->name);
       list_remove(child);
 
-      if(child_thread->waited != 0) return -1;
+      if(child_thread->waited != 0){ return -1;}
       printf("a\n");
       while(child_thread->status !=THREAD_DYING){
          barrier();
