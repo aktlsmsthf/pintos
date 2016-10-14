@@ -202,9 +202,7 @@ thread_create (const char *name, int priority,
   thread_unblock (t);
 
    /**#ifdef USERPROG**/
-  list_init(&(t->child_list));
-  t->waited = 0;
-  t->exit_called = 0;
+
   if(t!=initial_thread){
     list_push_front(&(thread_current()->child_list), &(t->child_elem));
   }
@@ -451,7 +449,9 @@ init_thread (struct thread *t, const char *name, int priority)
   t->priority = priority;
   t->magic = THREAD_MAGIC;
    
-
+  list_init(&(t->child_list));
+  t->waited = 0;
+  t->exit_called = 0;
 
 }
 
