@@ -503,7 +503,6 @@ void
 schedule_tail (struct thread *prev) 
 {
   struct thread *curr = running_thread ();
-  int k=1;
   ASSERT (intr_get_level () == INTR_OFF);
 
   /* Mark us as running. */
@@ -521,9 +520,8 @@ schedule_tail (struct thread *prev)
      pull out the rug under itself.  (We don't free
      initial_thread because its memory was not obtained via
      palloc().) */
-   k=0;
 #endif
-  if (k && prev != NULL && prev->status == THREAD_DYING && prev != initial_thread) 
+  if (prev != NULL && prev->status == THREAD_DYING && prev != initial_thread) 
     {
       ASSERT (prev != curr);
       palloc_free_page (prev);
