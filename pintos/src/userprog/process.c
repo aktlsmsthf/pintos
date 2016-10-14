@@ -146,23 +146,21 @@ process_wait (tid_t child_tid UNUSED)
 {
       struct list_elem *child = list_front(&(thread_current()->child_list));
       struct thread *child_thread;
-      printf("1\n");
-      printf("%d\n", child_tid);
       while(list_entry(child, struct thread, elem)->tid != child_tid){
         child = child->next;
         
            return -1;
         
       }
-      printf("2\n");
+
       child_thread = list_entry(child, struct thread, elem);
       list_remove(child);
-      printf("3\n");
+
       if(child_thread->waited != 0) return -1;
-      printf("4\n");
+
       while(child_thread->status !=THREAD_DYING){
       }
-      printf("5\n");
+
       if(child_thread->exit_called ==0){ return -1;}
       else{
         return child_thread->ret;
