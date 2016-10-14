@@ -199,7 +199,7 @@ thread_create (const char *name, int priority,
    
   
   
-  list_push_back(&(thread_current()->child_list), &(t->child_elem)); 
+  
   /* Add to run queue. */
   thread_unblock (t);
 
@@ -447,6 +447,7 @@ init_thread (struct thread *t, const char *name, int priority)
    
 #ifdef USERPROG
   list_init(&(t->child_list));
+  list_push_back(&(thread_current()->child_list), &(t->child_elem)); 
   t->waited = 0;
   t->exit_called = 0;
 #endif
