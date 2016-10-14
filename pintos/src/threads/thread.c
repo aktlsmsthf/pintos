@@ -205,7 +205,6 @@ thread_create (const char *name, int priority,
 
 
     list_push_front(&(thread_current()->child_list), &(t->child_elem));
-    printf("%s\n", list_entry(&t->child_elem, struct thread, child_elem)->name);
 
 /**#endif**/
   return tid;
