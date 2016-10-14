@@ -46,7 +46,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;
     }
     case SYS_WAIT:{
-      printf("%d\n",(tid_t)*((int *)(f->esp)+1));
+      printf("%d\n",*((int *)(f->esp)+1));
       process_wait((tid_t)*((int *)(f->esp)+1));
       break;}
     case SYS_CREATE:{
