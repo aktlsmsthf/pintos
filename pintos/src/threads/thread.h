@@ -97,7 +97,7 @@ struct thread
     uint32_t *pagedir;                  /* Page directory. */
     int ret;
     struct list child_list;
-    struct list_elem *child_elem;
+    struct list_elem child_elem;
     bool waited;
     bool exit_called;
     
