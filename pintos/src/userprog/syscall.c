@@ -32,13 +32,11 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
     case SYS_EXEC:{
       const char *cmd_line = *((char **)(f->esp)+1);
-      struct thread *parent = thread_current();
       return process_execute(cmd_line);
       break;
     }
     case SYS_WAIT:{
-      pid_t pid = *((pid_t *)(f->esp)+1);
-      process_wait(pid);
+      process_wait(*((pid_t *)(f->esp)+1));
       break;}
     case SYS_CREATE:{
       const char *file = *((char **)(f->esp)+1);
