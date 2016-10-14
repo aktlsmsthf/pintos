@@ -19,7 +19,7 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-  
+  printf("System Call\n");
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
       power_off();
