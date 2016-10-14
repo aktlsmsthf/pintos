@@ -203,9 +203,9 @@ thread_create (const char *name, int priority,
 
    /**#ifdef USERPROG**/
 
-  if(t!=initial_thread){
+
     list_push_front(&(thread_current()->child_list), &(t->child_elem));
-  }
+
 /**#endif**/
   return tid;
 }
