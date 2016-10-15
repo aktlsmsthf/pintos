@@ -102,7 +102,9 @@ start_process (void *f_name)
   /* If load failed, quit. */
   palloc_free_page (file_name);
   if (!success) 
+     printf("7\n");
     thread_exit ();
+  printf("8\n");
   i=0;
   initial_esp=if_.esp; 
   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
