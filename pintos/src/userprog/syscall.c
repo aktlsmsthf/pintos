@@ -72,10 +72,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(f==NULL) return -1;
     
       struct thread *t = thread_current();
-      struct file_fd *ffd;
+      struct file_fd *ffd = palloc_get_page(0);
       ffd -> fd = t->num_file+2;
       ffd -> file = f;
-      list_push_front(&(t->file_list));
+      list_push_front(&(t->file_list),&ffd->elem);
       t->num_file++;
       return ffd->fd;
       break;}
