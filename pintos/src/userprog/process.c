@@ -40,7 +40,6 @@ process_execute (const char *file_name)
   char *save;
   char *fn;
    
-   if(!is_user_vaddr(file_name)) return -1;
   /* Make a copy of FILE_NAME.
      Otherwise there's a race between the caller and load(). */
   fn_copy = palloc_get_page (0);
