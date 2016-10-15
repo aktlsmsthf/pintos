@@ -64,7 +64,8 @@ static void kernel_thread (thread_func *, void *aux);
 static void idle (void *aux UNUSED);
 static struct thread *running_thread (void);
 static struct thread *next_thread_to_run (void);
-static void init_thread (struct thread *, const char *name, int priority);
+static void 
+(struct thread *, const char *name, int priority);
 static bool is_thread (struct thread *) UNUSED;
 static void *alloc_frame (struct thread *, size_t size);
 static void schedule (void);
@@ -201,13 +202,15 @@ thread_create (const char *name, int priority,
   /* Add to run queue. */
   thread_unblock (t);
 
-   /**#ifdef USERPROG**/
 
+#ifdef USERPROG
+  struct child *chd=palloc_get_page(0);
+  chd->waited=0;
+  chd->exit_called=0;
+  chd->dying=0;
+  list_push_front(&(thread_current()->child_list), &chd.elem);
+#endif
 
-    list_push_front(&(thread_current()->child_list), &(t->child_elem));
-    printf("%s, %d", t->name, t->tid);
-
-/**#endif**/
   return tid;
 }
 
@@ -451,8 +454,6 @@ init_thread (struct thread *t, const char *name, int priority)
   t->magic = THREAD_MAGIC;
    
   list_init(&(t->child_list));
-  t->waited = 0;
-  t->exit_called = 0;
 
 }
 
