@@ -413,6 +413,7 @@ kernel_thread (thread_func *function, void *aux)
                     
   intr_enable ();       /* The scheduler runs with interrupts off. */
   function (aux);       /* Execute the thread function. */
+  printf("k\n");
   thread_exit ();       /* If function() returns, kill the thread. */
 }
 
