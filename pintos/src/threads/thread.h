@@ -94,6 +94,7 @@ struct thread
     bool load_finish;
     bool load_success;
     struct list child_list;
+    struct list file_list;
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
 
