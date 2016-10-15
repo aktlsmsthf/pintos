@@ -39,7 +39,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       thread_exit();
       break;}
     case SYS_EXEC:{
-      const char *cmd_line = *((char **)(f->esp)+1);
+      char *cmd_line = *((char **)(f->esp)+1);
       tid_t pid = process_execute(cmd_line);
       f->eax = pid;
       break;
