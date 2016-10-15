@@ -73,7 +73,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       const char *name= *((char **)(f->esp)+1);
       struct file *ff = filesys_open(name);
       
-      if(name==NULL || name=="" || ff==NULL) return -1;
+      if(name==NULL || ff==NULL) return -1;
     
       struct thread *t = thread_current();
       struct file_fd *ffd = palloc_get_page(0);
