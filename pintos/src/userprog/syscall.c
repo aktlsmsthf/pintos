@@ -92,9 +92,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
-      
+      int j=0;
       if(fd == 0){
-        for(int j=0; j<size; j++){
+        for(; j<size; j++){
           *(buffer+j)=input_getc();
         }
         f->eax = size;
