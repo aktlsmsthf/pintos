@@ -19,6 +19,7 @@ void exit(int);
 struct file* get_file_from_fd(int);
 struct list_elem* get_elem_from_fd(int);
 void user_memeory(void *, int);
+void check_buffer(void *, unsigned);
 
 void
 syscall_init (void) 
@@ -30,7 +31,7 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-   printf("%d\n",*((int *)(f->esp)));
+  if(!is_user_vaddr((const void *)f->esp)) exit(-1);
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
       power_off();
@@ -119,6 +120,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
+      check_buffer(buffer, size);
       int j=0;
       if(fd == 0){
         for(; j<size; j++){
@@ -142,9 +144,11 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_WRITE:{
+      user_memory(f->esp, 3);
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
+      check_buffer(buffer, size);
       if(fd==1){
         putbuf(buffer, size);
         f->eax= size;
@@ -250,9 +254,20 @@ struct list_elem* get_elem_from_fd(int fd){
 
 void user_memory(void *esp, int n){
   int i=1;
-  int * p = esp;
+  int * p;
   for(;i++;i<=n){
-    if(!is_user_vaddr((void *)(p+i))) exit(-1);
+    p = (int *) esp + i;
+    if(!is_user_vaddr((const void *) p)) exit(-1);
   }
 }
+
+void check_buffer(void *buffer, unsigned size){
+  unsigned i=0;
+  char * b = (char *) buffer;
+  for(;i++;i<size){
+    user_memory((const void *) b);
+    b++;
+  }
+}
+
 
