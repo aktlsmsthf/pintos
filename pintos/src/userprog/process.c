@@ -125,8 +125,8 @@ start_process (void *f_name)
   
   struct file *myself = filesys_open(now);
   struct file_fd *ffd = palloc_get_page(0);
-  ffd -> fd = t->num_file+2;
-  ffd -> file = ff;
+  ffd -> fd = thread_current()->num_file+2;
+  ffd -> file = myself;
   list_push_front(&(thread_current()->file_list),&ffd->elem);
    
   i=0;
@@ -223,7 +223,7 @@ process_exit (void)
   struct thread *curr = thread_current ();
   uint32_t *pd;
    
-   struct file *f = list_entry(thread_current()->file_list->tail->prev, struct file, elem);
+   struct file *f = list_entry((&(thread_current()->file_list))->tail->prev, struct file, elem);
    file_close(f);
 
   /* Destroy the current process's page directory and switch back
