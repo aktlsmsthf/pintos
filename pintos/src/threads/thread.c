@@ -196,12 +196,6 @@ thread_create (const char *name, int priority,
   /* Stack frame for switch_threads(). */
   sf = alloc_frame (t, sizeof *sf);
   sf->eip = switch_entry;
-   
-
-  /* Add to run queue. */
-  thread_unblock (t);
-  
-
   
   struct child *chd=palloc_get_page(0);
   chd->waited=0;
@@ -210,6 +204,13 @@ thread_create (const char *name, int priority,
   chd->tid=tid;
   list_push_front(&(thread_current()->child_list), &chd->elem);
   t->child=chd;
+
+  /* Add to run queue. */
+  thread_unblock (t);
+  
+
+  
+  
   return tid;
 }
 
