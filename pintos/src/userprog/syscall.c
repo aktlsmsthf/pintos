@@ -16,12 +16,10 @@ static void syscall_handler (struct intr_frame *);
 static struct lock file_lock;
 void exit(int);
 struct file* get_file_from_fd(int);
-struct file_fd* get_ffd_from_fd(int);
 
 struct file_fd{
   int fd;
   struct file *file;
-  bool using;
   struct list_elem elem;
 };
 
@@ -79,7 +77,6 @@ syscall_handler (struct intr_frame *f UNUSED)
       struct file_fd *ffd = palloc_get_page(0);
       ffd -> fd = t->num_file+2;
       ffd -> file = ff;
-      ffd -> using = 0;
       list_push_front(&(t->file_list),&ffd->elem);
       t->num_file++;
       f->eax = ffd->fd;
@@ -103,13 +100,11 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = size;
       }
       else{
-        struct file_fd *ffd = get_ffd_from_fd(fd);
-        if(ffd->using){
+        struct file * ff = get_file_from_fd(fd);
+        if(ff->pos+size>=file_length(ff)){
           f->eax = 0;}
         else{  
-          ffd->using=1;
           int r = (int) file_read(ffd->file, buffer, size);
-          ffd->using=0;
           f->eax = r;}
           
       }
@@ -124,13 +119,11 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax= size;
       }
       else{
-        struct file_fd *ffd = get_ffd_from_fd(fd);
-        if(ffd->using){
+        struct file_fd *ff = get_file_from_fd(fd);
+        if(ff->pos + size>=file_length(ff)){
           f->eax = 0;}
         else{
-          ffd->using=1;
           int r = (int) file_write(ffd->file, buffer, size);
-          ffd->using=0;
           f->eax = r;}
       }
       break;}
@@ -179,17 +172,4 @@ struct file* get_file_from_fd(int fd){
       }
       ffd = list_entry(felem, struct file_fd, elem);
       return ffd->file;
-}
-struct file_fd * get_ffd_from_fd(int fd){
-      struct thread * curr=thread_current();
-      struct list_elem * felem = list_front(&(thread_current()->file_list));
-      struct file_fd * ffd;
-      while(list_entry(felem, struct file_fd, elem)->fd != fd){
-          felem = felem->next;
-          if(felem->next==NULL){
-          return -1;
-          }
-      }
-      ffd = list_entry(felem, struct file_fd, elem);
-      return ffd;
 }
