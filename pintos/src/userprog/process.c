@@ -68,9 +68,15 @@ process_execute (const char *file_name)
     }
   }
   chd= list_entry(child, struct child, elem);
-  if(chd->ret==-2){
+  /**if(chd->ret==-2){
     palloc_free_page (chd);
-    return -1;}
+    return -1;}**/
+   while(!chd->load_finish){
+      barrier();
+   }
+   chd->load_finish=0;
+   if(!chd->load_sucess) return -1;
+   chd->load_success=0;
   free(fn);
    
   return tid;
@@ -108,11 +114,14 @@ start_process (void *f_name)
   if_.eflags = FLAG_IF | FLAG_MBS;
   now = strtok_r(file_name," ",&save);
   success = load (now, &if_.eip, &if_.esp);
-   
+  thread_current()->child->load_finish=1;
+  thread_current()->child->load_success = success;
   /* If load failed, quit. */
   palloc_free_page (file_name);
   if (!success) {
+     thread_current()->child->dying=1;
      thread_current()->child->ret=-2;
+
     thread_exit ();}
   i=0;
   initial_esp=if_.esp; 
