@@ -112,7 +112,6 @@ start_process (void *f_name)
   /* If load failed, quit. */
   palloc_free_page (file_name);
   if (!success) {
-     thread_current()->child->dying=1;
      thread_current()->child->ret=-2;
     thread_exit ();}
   i=0;
