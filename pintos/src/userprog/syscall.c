@@ -255,7 +255,7 @@ struct list_elem* get_elem_from_fd(int fd){
 
 void user_memory(void *esp, int n){
   void * p;
-  p = esp + n;
+  p = esp + n+1;
   if(!is_user_vaddr((const void *) p)) exit(-1);
 }
 
