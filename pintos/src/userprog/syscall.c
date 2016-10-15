@@ -20,6 +20,7 @@ struct file* get_file_from_fd(int);
 struct file_fd{
   int fd;
   struct file *file;
+  bool using;
   struct list_elem elem;
 };
 
@@ -77,6 +78,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       struct file_fd *ffd = palloc_get_page(0);
       ffd -> fd = t->num_file+2;
       ffd -> file = ff;
+      ffd -> using = 0;
       list_push_front(&(t->file_list),&ffd->elem);
       t->num_file++;
       f->eax = ffd->fd;
@@ -100,9 +102,14 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = size;
       }
       else{
-        struct file *ff = get_file_from_fd(fd);
-        int r = (int) file_read(ff, buffer, size);
-        f->eax = r;
+        struct file_fd *ffd = get_ffd_from_fd(fd);
+        if(ffd->using){
+          f->eax = 0;}
+        else{  
+          int r = (int) file_read(ffd->file, buffer, size);
+          ffd->using=1;
+          f->eax = r;}
+          
       }
       break;}
       
@@ -115,8 +122,12 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax= size;
       }
       else{
-        struct file *ff = get_file_from_fd(fd);
-        f->eax = (int) file_write(ff, buffer, size);
+        struct file_fd *ffd = get_ffd_from_fd(fd);
+        if(ffd->using){
+          f->eax = 0;}
+        else{
+          ffd->using=1;
+          f->eax = (int) file_write(ffd->file, buffer, size);}
       }
       break;}
       
@@ -164,4 +175,17 @@ struct file* get_file_from_fd(int fd){
       }
       ffd = list_entry(felem, struct file_fd, elem);
       return ffd->file;
+}
+struct file_fd * get_ffd_from_fd(int fd){
+      struct thread * curr=thread_current();
+      struct list_elem * felem = list_front(&(thread_current()->file_list));
+      struct file_fd * ffd;
+      while(list_entry(felem, struct file_fd, elem)->fd != fd){
+          felem = felem->next;
+          if(felem->next==NULL){
+          return -1;
+          }
+      }
+      ffd = list_entry(felem, struct file_fd, elem);
+      return ffd;
 }
