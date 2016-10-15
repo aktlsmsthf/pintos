@@ -52,7 +52,6 @@ process_execute (const char *file_name)
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
   if (tid == TID_ERROR)
     palloc_free_page (fn_copy); 
-  printf("c %s\n",thread_current()->name);
   return tid;
 }
 
