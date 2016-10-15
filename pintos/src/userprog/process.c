@@ -38,6 +38,7 @@ process_execute (const char *file_name)
   tid_t tid;
   char *real_file_name;
   char *save;
+  char *fn;
    
   sema_init(&sema,0);
   /* Make a copy of FILE_NAME.
@@ -47,7 +48,11 @@ process_execute (const char *file_name)
     return TID_ERROR;
   strlcpy (fn_copy, file_name, PGSIZE);
   printf("%s\n",file_name);
-  real_file_name=strtok_r((char *)file_name," ",&save);
+   
+  fn = malloc (strlen (file_name) + 1);
+  memcpy (fn, file_name, strlen (file_name) + 1);
+   
+  real_file_name=strtok_r(fn," ",&save);
    
   /* Create a new thread to execute FILE_NAME. */
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
