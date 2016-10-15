@@ -53,7 +53,7 @@ process_execute (const char *file_name)
   sema_down(&sema);
   if (tid == TID_ERROR)
     palloc_free_page (fn_copy); 
-  printf("c\n");
+  printf("c %s\n",thread_current()->name);
   return tid;
 }
 
