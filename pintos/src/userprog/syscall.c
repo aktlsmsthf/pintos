@@ -62,11 +62,13 @@ syscall_handler (struct intr_frame *f UNUSED)
       else{
         f->eax = filesys_create (file,initial_size);
       }
+      break;
       }
       
     case SYS_REMOVE:{
       const char *file = *((char **)(f->esp)+1);
       f->eax = filesys_remove (file); 
+      break;
      }
       
     case SYS_OPEN:{
@@ -100,6 +102,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       struct file * ff=get_file_from_fd(fd);
       f->eax = (int) file_length(ff);
+      break;
      }
       
     case SYS_READ:{
@@ -149,6 +152,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = r;
         }
       }
+      break;
       }
       
     case SYS_SEEK:{
