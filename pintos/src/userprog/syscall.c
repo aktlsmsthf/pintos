@@ -181,24 +181,18 @@ void exit(int status){
       thread_exit();
 }
 struct file* get_file_from_fd(int fd){
-     printf("a\n");
       struct thread * curr=thread_current();
       if(list_empty(&(curr->file_list))){
-         printf("b\n");
          return NULL;
       }
-      printf("c\n");
       struct list_elem * felem = list_front(&(thread_current()->file_list));
       struct file_fd * ffd;
       while(list_entry(felem, struct file_fd, elem)->fd != fd){
-          printf("d\n");
           felem = felem->next;
           if(felem->next==NULL){
-             printf("e\n");
              return NULL;
           }
       }
-      printf("f\n");
       ffd = list_entry(felem, struct file_fd, elem);
       return ffd->file;
 }
@@ -210,9 +204,7 @@ struct list_elem* get_elem_from_fd(int fd){
       }
       struct list_elem * felem = list_front(&(thread_current()->file_list));
       struct file_fd * ffd;
-      printf("%d\n",fd);
       while(list_entry(felem, struct file_fd, elem)->fd != fd){
-          printf("%d\n",list_entry(felem, struct file_fd, elem)->fd);
           felem = felem->next;
           if(felem->next==NULL){
              return NULL;
