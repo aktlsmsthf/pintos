@@ -30,7 +30,7 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-  if(!is_user_vaddr(f->esp)) exit(-1);
+  if(!is_user_vaddr((int *)(f->esp)) exit(-1);
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
       power_off();
