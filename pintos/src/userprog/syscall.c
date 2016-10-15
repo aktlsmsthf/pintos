@@ -96,13 +96,6 @@ syscall_handler (struct intr_frame *f UNUSED)
         }
         f->eax = size;
       }
-      /**else{
-        struct file * ff = get_file_from_fd(fd);
-        if((int)(ff->pos)+(int)size >= (int)file_length(ff)){
-          f->eax = 0;}
-        else{  
-          int r = (int) file_read(ff, buffer, size);
-          f->eax = r;}**/
       else{
         struct file * ff = get_file_from_fd(fd);
         int r = (int) file_read(ff, buffer, size);
@@ -118,14 +111,6 @@ syscall_handler (struct intr_frame *f UNUSED)
         putbuf(buffer, size);
         f->eax= size;
       }
-      /**else{
-        struct file *ff = get_file_from_fd(fd);
-        if((int)(ff->pos)+(int)size >= (int)file_length(ff)){
-          f->eax = 0;}
-        else{
-          int r = (int) file_write(ff, buffer, size);
-          f->eax = r;}
-      }**/
       else{
         struct file *ff = get_file_from_fd(fd);
         int r = (int) file_write(ff, buffer, size);
@@ -178,7 +163,7 @@ struct file* get_file_from_fd(int fd){
       while(list_entry(felem, struct file_fd, elem)->fd != fd){
           felem = felem->next;
           if(felem->next==NULL){
-             exit(-1);
+             return NULL;
           }
       }
       ffd = list_entry(felem, struct file_fd, elem);
@@ -195,7 +180,7 @@ struct list_elem* get_elem_from_fd(int fd){
       while(list_entry(felem, struct file_fd, elem)->fd != fd){
           felem = felem->next;
           if(felem->next==NULL){
-             exit(-1);
+             return NULL;
           }
       }
       return felem;
