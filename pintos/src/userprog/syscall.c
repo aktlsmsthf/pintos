@@ -4,6 +4,8 @@
 #include "threads/interrupt.h"
 #include "threads/thread.h"
 
+#include "filesys/file.h"
+#include "filesys/filesys.h"
 #include <console.h>
 #include "threads/init.h"
 #include <syscall.h>
