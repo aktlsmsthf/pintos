@@ -440,8 +440,7 @@ is_thread (struct thread *t)
 /* Does basic initialization of T as a blocked thread named
    NAME. */
 static void
-
-(struct thread *t, const char *name, int priority)
+init_thread(struct thread *t, const char *name, int priority)
 {
   ASSERT (t != NULL);
   ASSERT (PRI_MIN <= priority && priority <= PRI_MAX);
