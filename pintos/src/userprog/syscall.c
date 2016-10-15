@@ -107,8 +107,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         if(ffd->using){
           f->eax = 0;}
         else{  
-          int r = (int) file_read(ffd->file, buffer, size);
           ffd->using=1;
+          int r = (int) file_read(ffd->file, buffer, size);
+          ffd->using=0;
           f->eax = r;}
           
       }
@@ -128,7 +129,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = 0;}
         else{
           ffd->using=1;
-          f->eax = (int) file_write(ffd->file, buffer, size);}
+          int r = (int) file_write(ffd->file, buffer, size);
+          ffd->using=0;
+          f->eax = r;}
       }
       break;}
       
