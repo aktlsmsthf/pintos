@@ -163,8 +163,10 @@ process_wait (tid_t child_tid UNUSED)
          barrier();
       }
       if(chd->exit_called ==0){
+          palloc_free_page (chd);
          return -1;}
       else{
+          palloc_free_page (chd);
         return chd->ret;
       }
 }
