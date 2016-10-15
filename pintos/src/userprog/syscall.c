@@ -126,7 +126,7 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_READ:{
-      user_memory(f->esp,3);
+      
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
@@ -145,6 +145,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax =-1;
       }
       else{
+        user_memory(f->esp,3);
         struct file * ff = get_file_from_fd(fd);
         if(ff==NULL){
           f->eax = -1;
@@ -157,7 +158,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_WRITE:{
-      user_memory(f->esp, 3);
+      
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
@@ -173,7 +174,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = -1;
       }
       else{
-        
+        user_memory(f->esp, 3);
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
           f->eax = -1;
