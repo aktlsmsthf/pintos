@@ -102,7 +102,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = size;
       }
       else if(fd ==1){
-        f->eax =-1
+        f->eax =-1;
       }
       else{
         struct file * ff = get_file_from_fd(fd);
