@@ -109,6 +109,8 @@ struct child{
   bool waited;
   bool exit_called;
   bool dying;
+  int ret;
+  tid_t tid;
 }
 /* If false (default), use round-robin scheduler.
    If true, use multi-level feedback queue scheduler.
