@@ -67,9 +67,6 @@ process_execute (const char *file_name)
     }
   }
   chd= list_entry(child, struct child, elem);
-  /**if(chd->ret==-2){
-    palloc_free_page (chd);
-    return -1;}**/
    while(!chd->load_finish){
       barrier();
    }
@@ -120,7 +117,6 @@ start_process (void *f_name)
   
   if (!success) {
      thread_current()->child->dying=1;
-     thread_current()->child->ret=-2;
 
     thread_exit ();}
   
