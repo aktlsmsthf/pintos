@@ -16,7 +16,7 @@ static void syscall_handler (struct intr_frame *);
 static struct lock file_lock;
 void exit(int);
 struct file* get_file_from_fd(int);
-struct file* get_file_from_fd(int fd);
+struct file* get_file_from_fd(int);
 
 struct file_fd{
   int fd;
