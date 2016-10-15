@@ -61,9 +61,7 @@ process_execute (const char *file_name)
   
   struct list_elem *child = list_front(&(thread_current()->child_list));
   struct child *chd;
-  int ret;
-   
-  while(list_entry(child, struct child, elem)->tid != child_tid){
+  while(list_entry(child, struct child, elem)->tid != tid){
     child = child->next;
     if(child->next==NULL){
        return -1;
