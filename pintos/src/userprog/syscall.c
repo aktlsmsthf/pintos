@@ -133,13 +133,16 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_CLOSE:{
       int fd = *((int *)(f->esp)+1);
-      if(fd<=1){ exit(-1);}
-      struct file *ff = get_file_from_fd(fd);
-      struct file *flm = get_elem_from_fd(fd);
-      if(flm!=NULL){
-         list_remove(flm);}
-      if(ff!=NULL){
-      file_close(ff);}
+      if(fd>1){
+        struct file *ff = get_file_from_fd(fd);
+        struct file *flm = get_elem_from_fd(fd);
+        if(flm!=NULL){
+           list_remove(flm);
+        }
+        if(ff!=NULL){
+           file_close(ff);
+        }
+      }
       break;}
   }
 }
