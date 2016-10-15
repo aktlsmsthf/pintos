@@ -107,10 +107,10 @@ syscall_handler (struct intr_frame *f UNUSED)
           int r = (int) file_read(ff, buffer, size);
           f->eax = r;}**/
       else{
+        struct file * ff = get_file_from_fd(fd);
         int r = (int) file_read(ff, buffer, size);
         f->eax = r;
       }  
-      }
       break;}
       
     case SYS_WRITE:{
