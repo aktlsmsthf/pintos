@@ -104,7 +104,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         if(ff->pos+size>=file_length(ff)){
           f->eax = 0;}
         else{  
-          int r = (int) file_read(ffd->file, buffer, size);
+          int r = (int) file_read(ff, buffer, size);
           f->eax = r;}
           
       }
@@ -119,11 +119,11 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax= size;
       }
       else{
-        struct file_fd *ff = get_file_from_fd(fd);
+        struct file *ff = get_file_from_fd(fd);
         if(ff->pos + size>=file_length(ff)){
           f->eax = 0;}
         else{
-          int r = (int) file_write(ffd->file, buffer, size);
+          int r = (int) file_write(ff, buffer, size);
           f->eax = r;}
       }
       break;}
