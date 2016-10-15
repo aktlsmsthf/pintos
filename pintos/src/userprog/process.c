@@ -109,6 +109,7 @@ start_process (void *f_name)
   /* If load failed, quit. */
   palloc_free_page (file_name);
   if (!success) {
+     thread_current()->child->dying=1;
      thread_current()->child->ret=-2;
     thread_exit ();}
   i=0;
@@ -181,7 +182,9 @@ process_wait (tid_t child_tid UNUSED)
       chd= list_entry(child, struct child, elem);
       list_remove(child);
 
-      if(chd->waited != 0){ return -1;}
+      if(chd->waited != 0){
+          palloc_free_page (chd);
+          return -1;}
       chd->waited=1;
       while(!chd->dying){
          barrier();
