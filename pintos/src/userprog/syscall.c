@@ -70,7 +70,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       unsigned size = *((unsigned *)(f->esp)+3);
       if(fd==STDOUT_FILENO){
         putbuf(buffer, size);
-        return size;
+        f->eax= size;
       }
       break;}
     case SYS_SEEK:{
