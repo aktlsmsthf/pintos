@@ -56,7 +56,12 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_CREATE:{
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
-      f->eax = filesys_create (file,initial_size);  
+      if(file==NULL){
+        f->eax = 0;
+      }
+      else{
+        f->eax = filesys_create (file,initial_size);
+      }
       break;}
       
     case SYS_REMOVE:{
@@ -68,7 +73,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       const char *name= *((char **)(f->esp)+1);
       struct file *ff = filesys_open(name);
       
-      if(ff==NULL) return -1;
+      if(name==NULL || name=="" || ff==NULL) return -1;
     
       struct thread *t = thread_current();
       struct file_fd *ffd = palloc_get_page(0);
