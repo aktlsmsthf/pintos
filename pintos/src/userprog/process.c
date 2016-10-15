@@ -58,6 +58,7 @@ process_execute (const char *file_name)
   if (tid == TID_ERROR){
     palloc_free_page (fn_copy);
   }
+  free(fn);
   return tid;
 }
 
