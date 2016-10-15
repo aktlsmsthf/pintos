@@ -60,7 +60,7 @@ process_execute (const char *file_name)
   }
    int c = process_wait(tid);
   free(fn);
-   if(c==-2) {return -1;}
+   if(c<0) {return -1;}
   return tid;
 }
 
