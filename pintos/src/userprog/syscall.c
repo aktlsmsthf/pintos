@@ -161,7 +161,7 @@ void exit(int status){
 struct file* get_file_from_fd(int fd){
       struct thread * curr=thread_current();
       if(list_empty(&(curr->child_list))){
-         exit(-1);
+         return NULL;
       }
       struct list_elem * felem = list_front(&(thread_current()->file_list));
       struct file_fd * ffd;
