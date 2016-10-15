@@ -66,22 +66,24 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_OPEN:{
-      const char *file = *((char **)(f->esp)+1);
-      struct file *f = filesys_open(file);
+      const char *name= *((char **)(f->esp)+1);
+      struct file *ff = filesys_open(name);
       
-      if(f==NULL) return -1;
+      if(ff==NULL) return -1;
     
       struct thread *t = thread_current();
       struct file_fd *ffd = palloc_get_page(0);
       ffd -> fd = t->num_file+2;
-      ffd -> file = f;
+      ffd -> file = ff;
       list_push_front(&(t->file_list),&ffd->elem);
       t->num_file++;
-      return ffd->fd;
+      f->eax = ffd->fd;
       break;}
       
     case SYS_FILESIZE:{
       int fd = *((int *)(f->esp)+1);
+      struct file * ff=get_file_from_fd(fd);
+      f->eax = (int) file_length(ff);
       break;}
       
     case SYS_READ:{
@@ -126,4 +128,16 @@ void exit(int status){
       printf("%s: exit(%d)\n",curr->name,chd->ret);
       thread_exit();
 }
-
+struct file* get_file_from_fd(int fd){
+      struct thread * curr=thread_current();
+      struct list_elem * felem = list_front(&(thread_current()->file_list));
+      struct file_fd * ffd;
+      while(list_entry(felem, struct file_fd, elem)->fd != fd){
+          felem = felem->next;
+          if(felem->next==NULL){
+          return -1;
+          }
+      }
+      ffd = list_entry(felem, struct file_fd, elem);
+      return ffd->file;
+}
