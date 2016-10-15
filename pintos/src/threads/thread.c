@@ -521,10 +521,11 @@ schedule_tail (struct thread *prev)
      initial_thread because its memory was not obtained via
      palloc().) */
 #endif
-  if ((!(prev->exit_called)) && prev != NULL && prev->status == THREAD_DYING && prev != initial_thread) 
+  if (prev != NULL && prev->status == THREAD_DYING && prev != initial_thread) 
     {
       ASSERT (prev != curr);
-      palloc_free_page (prev);
+      if(!prev->exit_called){
+      palloc_free_page (prev);}
     }
    
 }
