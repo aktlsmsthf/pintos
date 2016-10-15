@@ -47,7 +47,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_EXEC:{
       user_memory(f->esp, 1);
       const char * cmd_line = *((char **)(f->esp)+1);
-      if(*cmd_line ==NULL || !is_user_vaddr((void *) cmd_line)) exit(-1);
+      
       tid_t pid = process_execute(cmd_line);
       f->eax = pid;
       break;
