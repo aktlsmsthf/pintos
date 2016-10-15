@@ -71,7 +71,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_OPEN:{
       const char *name= *((char **)(f->esp)+1);
-      if(name == NULL) return -1;
+      if(name == NULL || strcmp(name, "")==0) return -1;
       struct file *ff = filesys_open(name);
       
       if(ff==NULL) return -1;
