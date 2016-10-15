@@ -94,7 +94,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       unsigned size = *((unsigned *)(f->esp)+3);
       
       if(fd == 0){
-        f->eax = input_getc();
+        for(int j=0; j<size; j++){
+          *(buffer+j)=input_getc();
+        }
+        f->eax = size;
       }
       else{
         struct file *ff = get_file_from_fd(fd);
