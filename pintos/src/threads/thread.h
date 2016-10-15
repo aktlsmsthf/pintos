@@ -90,6 +90,9 @@ struct thread
     int priority;                       /* Priority. */
     
     struct child * child;
+    
+    bool load_finish;
+    bool load_success;
     struct list child_list;
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
