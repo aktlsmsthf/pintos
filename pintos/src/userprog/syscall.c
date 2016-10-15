@@ -153,6 +153,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_CLOSE:{
+      printf("%s\n", thread_current()->name);
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
         struct file *ff = get_file_from_fd(fd);
