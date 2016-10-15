@@ -206,6 +206,7 @@ thread_create (const char *name, int priority,
   chd->load_finish=0;
   list_push_front(&(thread_current()->child_list), &chd->elem);
   t->child=chd;
+   t->num_file = 0;
 #endif
   /* Add to run queue. */
   thread_unblock (t);
