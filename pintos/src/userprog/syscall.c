@@ -146,7 +146,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_CLOSE:{
       int fd = *((int *)(f->esp)+1);
-      if(fd<=1){ exit(-1);)
+      if(fd<=1){ exit(-1);}
       struct file *ff = get_file_from_fd(fd);
       file_close(ff);
       break;}
@@ -171,7 +171,7 @@ struct file* get_file_from_fd(int fd){
       while(list_entry(felem, struct file_fd, elem)->fd != fd){
           felem = felem->next;
           if(felem->next==NULL){
-          return -1;
+             exit(-1);
           }
       }
       ffd = list_entry(felem, struct file_fd, elem);
