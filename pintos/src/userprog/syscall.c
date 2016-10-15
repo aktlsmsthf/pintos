@@ -49,7 +49,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       const char * cmd_line = *((char **)(f->esp)+1);
       
-      if(check_bad_ptr(thread_current()->pagedir,cmdline))exit(-1);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line))exit(-1);
       tid_t pid = process_execute(cmd_line);
       f->eax = pid;
       break;
@@ -65,7 +65,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       user_memory(f->esp,2);
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
-      if(check_bad_ptr(thread_current()->pagedir,file))exit(-1);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)file))exit(-1);
       if(file==NULL){
         exit(-1);
       }
@@ -86,7 +86,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       user_memory(f->esp,1);
       const char *name= *((char **)(f->esp)+1);
       
-      if(check_bad_ptr(thread_current()->pagedir,name))exit(-1);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)name))exit(-1);
       char *e = "";
       if(name == NULL || strcmp(name, e)==0) {
         f->eax = -1;
@@ -126,7 +126,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       
-      if(check_bad_ptr(thread_current()->pagedir,buffer))exit(-1);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer))exit(-1);
       check_buffer(buffer, size);
       int j=0;
       if(fd == 0){
@@ -156,7 +156,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       
-      if(check_bad_ptr(thread_current()->pagedir,buffer))exit(-1);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer))exit(-1);
       check_buffer(buffer, size);
       if(fd==1){
         putbuf(buffer, size);
