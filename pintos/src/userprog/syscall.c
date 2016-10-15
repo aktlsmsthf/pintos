@@ -82,9 +82,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_FILESIZE:{
       int fd = *((int *)(f->esp)+1);
       struct file * ff=get_file_from_fd(fd);
-      else{
-        f->eax = (int) file_length(ff);
-      }
+      f->eax = (int) file_length(ff);
       break;}
       
     case SYS_READ:{
