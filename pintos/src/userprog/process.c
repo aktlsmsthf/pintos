@@ -115,6 +115,7 @@ start_process (void *f_name)
   success = load (now, &if_.eip, &if_.esp);
   thread_current()->child->load_finish=1;
   thread_current()->child->load_success = success;
+   
   /* If load failed, quit. */
   
   if (!success) {
@@ -129,6 +130,7 @@ start_process (void *f_name)
   ffd -> fd = thread_current()->num_file+2;
   ffd -> file = myself;
   list_push_front(&(thread_current()->file_list),&ffd->elem);
+   thread_current()->num_file++;
    
    palloc_free_page (file_name);
    
