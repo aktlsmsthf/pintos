@@ -29,11 +29,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
     case SYS_EXIT:{
       int status = *((int *)(f->esp)+1);
-      struct thread* thd;
-      thd=thread_current();
-      thd->ret =status;
-      thd->exit_called =1;
-      printf("%s: exit(%d)\n",thd->name,status);
+      struct child* chd;
+      chd=thread_current()->child;
+      chd->ret =status;
+      chd->exit_called =1;
       thread_exit();
       break;}
     case SYS_EXEC:{
