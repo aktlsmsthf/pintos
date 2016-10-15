@@ -21,7 +21,7 @@ struct file_fd{
   int fd;
   struct file *file;
   struct list_elem elem;
-}
+};
 
 void
 syscall_init (void) 
