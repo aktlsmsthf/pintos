@@ -145,6 +145,7 @@ start_process (void *f_name)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
+      printf("a\n");
       struct list_elem *child = list_front(&(thread_current()->child_list));
       struct child *chd;
       while(list_entry(child, struct child, elem)->tid != child_tid){
@@ -153,6 +154,7 @@ process_wait (tid_t child_tid UNUSED)
            return -1;
         }
       }
+      printf("b\n");
       chd= list_entry(child, struct child, elem);
       list_remove(child);
 
