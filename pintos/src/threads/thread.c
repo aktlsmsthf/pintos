@@ -203,13 +203,13 @@ thread_create (const char *name, int priority,
   thread_unblock (t);
 
 
-#ifdef USERPROG
+
   struct child *chd=palloc_get_page(0);
   chd->waited=0;
   chd->exit_called=0;
   chd->dying=0;
-  list_push_front(&(thread_current()->child_list), &chd.elem);
-#endif
+  chd->tid=tid;
+  list_push_front(&(thread_current()->child_list), &chd->elem);
 
   return tid;
 }
