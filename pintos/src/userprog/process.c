@@ -122,6 +122,13 @@ start_process (void *f_name)
      thread_current()->child->ret=-2;
 
     thread_exit ();}
+  
+  struct file *myself = filesys_open(now);
+  struct file_fd *ffd = palloc_get_page(0);
+  ffd -> fd = t->num_file+2;
+  ffd -> file = ff;
+  list_push_front(&(thread_current()->file_list),&ffd->elem);
+   
   i=0;
   initial_esp=if_.esp; 
   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
@@ -215,6 +222,9 @@ process_exit (void)
 {
   struct thread *curr = thread_current ();
   uint32_t *pd;
+   
+   struct file *f = list_entry(thread_current()->file_list->tail->prev, struct file, elem);
+   file_close(f);
 
   /* Destroy the current process's page directory and switch back
      to the kernel-only page directory. */
