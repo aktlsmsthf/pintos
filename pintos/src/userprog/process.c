@@ -147,25 +147,24 @@ int
 process_wait (tid_t child_tid UNUSED) 
 {
       struct list_elem *child = list_front(&(thread_current()->child_list));
-      struct thread *child_thread;
-      while(list_entry(child, struct thread, child_elem)->tid != child_tid){
+      struct child *chd;
+      while(list_entry(child, struct child, elem)->tid != child_tid){
         child = child->next;
         if(child->next==NULL){
            return -1;
         }
       }
-      child_thread = list_entry(child, struct thread, child_elem);
+      chd= list_entry(child, struct child, elem);
       list_remove(child);
 
-      if(child_thread->waited != 0){ return -1;}
-      while(child_thread->status !=THREAD_DYING){
+      if(chd->waited != 0){ return -1;}
+      while(!chd->dying){
          barrier();
       }
-      printf("ya yunho\n");
-      if(child_thread->exit_called ==0){ 
+      if(chd->exit_called ==0){ 
          return -1;}
       else{
-        return child_thread->ret;
+        return chd->ret;
       }
 }
 
