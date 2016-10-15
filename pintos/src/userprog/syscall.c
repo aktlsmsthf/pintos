@@ -162,7 +162,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
-      printf("%x\n", buffer);
+
       user_memory((void *)buffer, 0);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer))exit(-1);
       check_buffer(buffer, size);
@@ -287,5 +287,4 @@ void check_buffer(void *buffer, unsigned size){
 
 bool check_bad_ptr(uint32_t * pd,const void * uaddr){
   void * p = pagedir_get_page (pd, uaddr);
-  printf("%x\n", p);
   return p==NULL;}
