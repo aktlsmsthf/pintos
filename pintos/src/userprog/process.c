@@ -114,7 +114,8 @@ start_process (void *f_name)
   thread_current()->child->load_success = success;
    
   /* If load failed, quit. */
-  
+  if(!is_user_vaddr((const void *)if_.esp))return -1;
+  if(pagedir_get_page (thread_current()->pagedir, if_.esp)==NULL) return -1; 
   if (!success) {
      thread_current()->child->dying=1;
 
