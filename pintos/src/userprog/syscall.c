@@ -153,9 +153,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_CLOSE:{
-      printf("%s\n", thread_current()->name);
       int fd = *((int *)(f->esp)+1);
-      printf("%d\n",fd);
       if(fd>1){
         struct file *ff = get_file_from_fd(fd);
         struct file *flm = get_elem_from_fd(fd);
@@ -163,7 +161,6 @@ syscall_handler (struct intr_frame *f UNUSED)
            list_remove(flm);
         }
         if(ff!=NULL){
-           printf("%s\n", thread_current()->name);
            file_close(ff);
         }
       }
