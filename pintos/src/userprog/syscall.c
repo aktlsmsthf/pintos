@@ -15,6 +15,12 @@
 static void syscall_handler (struct intr_frame *);
 static struct lock file_lock;
 
+struct file_fd{
+  int fd;
+  struct file *file;
+  struct list_elem elem;
+}
+
 void
 syscall_init (void) 
 {
@@ -61,10 +67,21 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_OPEN:{
       const char *file = *((char **)(f->esp)+1);
+      struct file *f = filesys_open(file);
+      
+      if(f==NULL) return -1;
+    
+      struct thread *t = thread_current();
+      struct file_fd *ffd;
+      ffd -> fd = t->num_file+2;
+      ffd -> file = f;
+      list_push_front(&(t->file_list));
+      t->num_file++;
+      return ffd->fd;
       break;}
       
     case SYS_FILESIZE:{
-      int fd = *((int *)(f->esp)+1); 
+      int fd = *((int *)(f->esp)+1);
       break;}
       
     case SYS_READ:{
