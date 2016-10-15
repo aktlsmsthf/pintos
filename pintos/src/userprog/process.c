@@ -152,6 +152,8 @@ process_wait (tid_t child_tid UNUSED)
 {
       struct list_elem *child = list_front(&(thread_current()->child_list));
       struct child *chd;
+      int ret;
+   
       while(list_entry(child, struct child, elem)->tid != child_tid){
         child = child->next;
         if(child->next==NULL){
@@ -166,12 +168,13 @@ process_wait (tid_t child_tid UNUSED)
       while(!chd->dying){
          barrier();
       }
+      ret = chd->ret;
       if(chd->exit_called ==0){
           palloc_free_page (chd);
          return -1;}
       else{
           palloc_free_page (chd);
-        return chd->ret;
+        return ret;
       }
 }
 
