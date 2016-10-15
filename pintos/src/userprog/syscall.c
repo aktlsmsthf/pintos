@@ -27,10 +27,12 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_HALT:{
       power_off();
       break;}
+      
     case SYS_EXIT:{
       int status = *((int *)(f->esp)+1);
       exit(status);
       break;}
+      
     case SYS_EXEC:{
       const char * cmd_line = *((char **)(f->esp)+1);
       if(*cmd_line ==NULL || !is_user_vaddr((void *) cmd_line)) exit(-1);
@@ -38,29 +40,37 @@ syscall_handler (struct intr_frame *f UNUSED)
       f->eax = pid;
       break;
     }
+      
     case SYS_WAIT:{
       f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
       break;
     }
+      
     case SYS_CREATE:{
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
       f->eax = filesys_create (file,initial_size);  
       break;}
+      
     case SYS_REMOVE:{
       const char *file = *((char **)(f->esp)+1);
+      f->eax = filesys_remove (file,initial_size); 
       break;}
+      
     case SYS_OPEN:{
       const char *file = *((char **)(f->esp)+1);
       break;}
+      
     case SYS_FILESIZE:{
       int fd = *((int *)(f->esp)+1); 
       break;}
+      
     case SYS_READ:{
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       break;}
+      
     case SYS_WRITE:{
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
@@ -69,15 +79,17 @@ syscall_handler (struct intr_frame *f UNUSED)
         putbuf(buffer, size);
         f->eax= size;
       }
-
       break;}
+      
     case SYS_SEEK:{
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
       break;}
+      
     case SYS_TELL:{
       int fd = *((int *)(f->esp)+1);
       break;}
+      
     case SYS_CLOSE:{
       int fd = *((int *)(f->esp)+1);
       break;}
