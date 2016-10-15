@@ -62,7 +62,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_REMOVE:{
       const char *file = *((char **)(f->esp)+1);
-      f->eax = filesys_remove (file,initial_size); 
+      f->eax = filesys_remove (file); 
       break;}
       
     case SYS_OPEN:{
