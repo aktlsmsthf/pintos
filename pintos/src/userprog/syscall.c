@@ -44,7 +44,6 @@ syscall_handler (struct intr_frame *f UNUSED)
            prev = switch_threads (curr, next);	  
       curr = running_thread ();
       curr->status = THREAD_RUNNING;
-      thread_ticks = 0;
       break;}
     case SYS_EXEC:{
       const char *cmd_line = *((char **)(f->esp)+1);
