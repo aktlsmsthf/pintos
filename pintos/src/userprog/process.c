@@ -51,7 +51,7 @@ process_execute (const char *file_name)
   /* Create a new thread to execute FILE_NAME. */
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
   printf("d %s\n", thread_current()->name);
-  sema_down(&sema);
+  /**sema_down(&sema);**/
   if (tid == TID_ERROR)
     palloc_free_page (fn_copy); 
   printf("c %s\n",thread_current()->name);
@@ -122,7 +122,7 @@ start_process (void *f_name)
   if_.esp-=4;
   *(int *)if_.esp=0;
    palloc_free_page (fncopy);
-   sema_up(&sema);
+   /**sema_up(&sema);**/
    /**intr_set_level (old_level);**/
   
   /* Start the user process by simulating a return from an
