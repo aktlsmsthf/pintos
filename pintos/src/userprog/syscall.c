@@ -50,7 +50,6 @@ syscall_handler (struct intr_frame *f UNUSED)
       user_memory(f->esp, 1);
       
       const char * cmd_line = *((char **)(f->esp)+1);
-      printf("%x\n", cmd_line);
       user_memory((void *)cmd_line, 0);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line))exit(-1);
       tid_t pid = process_execute(cmd_line);
@@ -163,7 +162,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
-      
+      printf("%x\n", buffer);
       user_memory((void *)buffer, 0);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer))exit(-1);
       check_buffer(buffer, size);
