@@ -18,7 +18,7 @@ static struct lock file_lock;
 void exit(int);
 struct file* get_file_from_fd(int);
 struct list_elem* get_elem_from_fd(int);
-
+void user_memeory(void *, int);
 
 void
 syscall_init (void) 
@@ -30,7 +30,7 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-  if(!is_user_vaddr((int *)(f->esp))) exit(-1);
+  if(!is_user_vaddr(f->esp)) exit(-1);
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
       power_off();
@@ -42,6 +42,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_EXEC:{
+      user_memory(f->esp, 1);
       const char * cmd_line = *((char **)(f->esp)+1);
       if(*cmd_line ==NULL || !is_user_vaddr((void *) cmd_line)) exit(-1);
       tid_t pid = process_execute(cmd_line);
@@ -50,11 +51,13 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_WAIT:{
+      user_memory(f->esp,2);
       f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
       break;
     }
       
     case SYS_CREATE:{
+      user_memory(f->esp,2);
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
       if(file==NULL){
@@ -67,12 +70,14 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       
     case SYS_REMOVE:{
+      user_memory(f->esp,1);
       const char *file = *((char **)(f->esp)+1);
       f->eax = filesys_remove (file); 
       break;
      }
       
     case SYS_OPEN:{
+      user_memory(f->esp,1);
       const char *name= *((char **)(f->esp)+1);
       char *e = "";
       if(name == NULL || strcmp(name, e)==0) {
@@ -100,6 +105,7 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_FILESIZE:{
+      user_memory(f->esp,1);
       int fd = *((int *)(f->esp)+1);
       struct file * ff=get_file_from_fd(fd);
       f->eax = (int) file_length(ff);
@@ -107,6 +113,7 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_READ:{
+      user_memory(f->esp,3);
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
@@ -133,6 +140,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_WRITE:{
+      user_memory(f->esp,3);
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
@@ -157,6 +165,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       
     case SYS_SEEK:{
+      user_memory(f->esp,2);
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
       struct file *ff = get_file_from_fd(fd);
@@ -164,6 +173,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       
     case SYS_TELL:{
+      user_memory(f->esp,1);
       int fd = *((int *)(f->esp)+1);
       struct file *ff = get_file_from_fd(fd);
       if(ff==NULL){ 
@@ -175,6 +185,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_CLOSE:{
+      user_memory(f->esp,1);
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
         struct file *ff = get_file_from_fd(fd);
@@ -234,3 +245,11 @@ struct list_elem* get_elem_from_fd(int fd){
       }
       return felem;
 }
+
+void user_memory(void *esp, int n){
+  int i=1;
+  for(;i++;i<=n){
+    if(!is_user_vaddr(esp+i)) exit(-1);
+  }
+}
+
