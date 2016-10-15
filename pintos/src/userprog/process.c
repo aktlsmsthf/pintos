@@ -46,6 +46,7 @@ process_execute (const char *file_name)
   if (fn_copy == NULL)
     return TID_ERROR;
   strlcpy (fn_copy, file_name, PGSIZE);
+  printf("%s\n",file_name);
   real_file_name=strtok_r(file_name," ",&save);
    
   /* Create a new thread to execute FILE_NAME. */
