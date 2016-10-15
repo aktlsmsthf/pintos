@@ -69,7 +69,7 @@ process_execute (const char *file_name)
   }
   chd= list_entry(child, struct child, elem);
   free(fn);
-  if(chd->ret==-2) {return -1;}
+  if(chd->ret<0) {return -1;}
   return tid;
 }
 
