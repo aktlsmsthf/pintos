@@ -123,7 +123,7 @@ start_process (void *f_name)
   *(int *)if_.esp=0;
    
    palloc_free_page (fncopy);
-   
+   /**sema_up(&sema);**/
    /**intr_set_level (old_level);**/
   
   /* Start the user process by simulating a return from an
@@ -133,7 +133,7 @@ start_process (void *f_name)
      we just point the stack pointer (%esp) to our stack frame
      and jump to it. */
   asm volatile ("movl %0, %%esp; jmp intr_exit" : : "g" (&if_) : "memory");
-   sema_up(&sema);
+   
   NOT_REACHED ();
 }
 
