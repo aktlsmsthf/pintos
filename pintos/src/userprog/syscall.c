@@ -39,7 +39,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
     case SYS_EXEC:{
       const char * cmd_line = *((char **)(f->esp)+1);
-      lock_aquire(&file_lock);
+      lock_acquire(&file_lock);
       tid_t pid = process_execute(cmd_line);
       lock_release(&file_lock);
       f->eax = pid;
@@ -68,7 +68,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       unsigned size = *((unsigned *)(f->esp)+3);
       break;}
     case SYS_WRITE:{
-      lock_aquire(&file_lock);
+      lock_acquire(&file_lock);
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
