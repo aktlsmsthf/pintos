@@ -91,10 +91,6 @@ struct thread
     
     int ret;
     struct list child_list;
-    struct list_elem child_elem;
-    bool waited;
-    bool exit_called;
-
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
 
@@ -108,7 +104,12 @@ struct thread
     /* Owned by thread.c. */
     unsigned magic;                     /* Detects stack overflow. */
   };
-
+struct child{
+  struct list_elem elem;
+  bool waited;
+  bool exit_called;
+  bool dying;
+}
 /* If false (default), use round-robin scheduler.
    If true, use multi-level feedback queue scheduler.
    Controlled by kernel command-line option "-o mlfqs". */
