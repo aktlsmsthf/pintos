@@ -57,7 +57,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
       if(file==NULL){
-        f->eax = 0;
+        exit(-1);
       }
       else{
         f->eax = filesys_create (file,initial_size);
