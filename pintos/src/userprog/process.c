@@ -47,7 +47,6 @@ process_execute (const char *file_name)
   if (fn_copy == NULL)
     return TID_ERROR;
   strlcpy (fn_copy, file_name, PGSIZE);
-  printf("%s\n",file_name);
    
   fn = malloc (strlen (file_name) + 1);
   memcpy (fn, file_name, strlen (file_name) + 1);
