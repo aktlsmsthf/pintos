@@ -172,7 +172,6 @@ process_wait (tid_t child_tid UNUSED)
       }
       printf("ya yunho\n");
       if(child_thread->exit_called ==0){ 
-         palloc_free_page(child_thread);
          return -1;}
       else{
          palloc_free_page(child_thread);
