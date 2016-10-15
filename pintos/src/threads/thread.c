@@ -357,7 +357,7 @@ thread_get_load_avg (void)
 }
 
 /* Returns 100 times the current thread's recent_cpu value. */
-int
+
 thread_get_recent_cpu (void) 
 {
   /* Not yet implemented. */
@@ -521,7 +521,7 @@ schedule_tail (struct thread *prev)
      initial_thread because its memory was not obtained via
      palloc().) */
 #endif
-  if (prev != NULL && prev->status == THREAD_DYING && prev != initial_thread) 
+  if ((!(prev->exit_called)) && prev != NULL && prev->status == THREAD_DYING && prev != initial_thread) 
     {
       ASSERT (prev != curr);
       palloc_free_page (prev);
