@@ -62,42 +62,42 @@ syscall_handler (struct intr_frame *f UNUSED)
       else{
         f->eax = filesys_create (file,initial_size);
       }
-      break;}
+      }
       
     case SYS_REMOVE:{
       const char *file = *((char **)(f->esp)+1);
       f->eax = filesys_remove (file); 
-      break;}
+     }
       
     case SYS_OPEN:{
       const char *name= *((char **)(f->esp)+1);
       char *e = "";
       if(name == NULL || strcmp(name, e)==0) {
-        f->eax -1;
-        break;
-      }
-      struct file *ff = filesys_open(name);
-      
-      if(ff==NULL) {
         f->eax = -1;
-        break;
       }
-  
-    
-      struct thread *t = thread_current();
-      struct file_fd *ffd = palloc_get_page(0);
-      ffd -> fd = t->num_file+2;
-      ffd -> file = ff;
-      list_push_front(&(t->file_list),&ffd->elem);
-      t->num_file++;
-      f->eax = ffd->fd;
-      break;}
+      else{
+        struct file *ff = filesys_open(name);
+      
+        if(ff==NULL) {
+          f->eax = -1;
+        }
+        else{
+          struct thread *t = thread_current();
+          struct file_fd *ffd = palloc_get_page(0);
+          ffd -> fd = t->num_file+2;
+          ffd -> file = ff;
+          list_push_front(&(t->file_list),&ffd->elem);
+          t->num_file++;
+          f->eax = ffd->fd;
+        }
+      }
+     }
       
     case SYS_FILESIZE:{
       int fd = *((int *)(f->esp)+1);
       struct file * ff=get_file_from_fd(fd);
       f->eax = (int) file_length(ff);
-      break;}
+     }
       
     case SYS_READ:{
       int fd = *((int *)(f->esp)+1);
@@ -146,14 +146,14 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = r;
         }
       }
-      break;}
+      }
       
     case SYS_SEEK:{
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
       struct file *ff = get_file_from_fd(fd);
       file_seek(ff, position);
-      break;}
+      }
       
     case SYS_TELL:{
       int fd = *((int *)(f->esp)+1);
