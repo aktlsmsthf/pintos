@@ -39,7 +39,6 @@ process_execute (const char *file_name)
   char *real_file_name;
   char *save;
   char *fn;
-  int i;
    
   sema_init(&sema,0);
   /* Make a copy of FILE_NAME.
@@ -56,8 +55,6 @@ process_execute (const char *file_name)
    
   /* Create a new thread to execute FILE_NAME. */
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
-  i=0;
-  while(i++<1000);
   if (tid == TID_ERROR){
     palloc_free_page (fn_copy);
   }
