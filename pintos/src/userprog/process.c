@@ -58,7 +58,6 @@ process_execute (const char *file_name)
   if (tid == TID_ERROR){
     palloc_free_page (fn_copy);
   }
-   printf("%d\n", tid);
    process_wait(tid);
   free(fn);
   return tid;
@@ -99,8 +98,9 @@ start_process (void *f_name)
    
   /* If load failed, quit. */
   palloc_free_page (file_name);
-  if (!success) 
-    thread_exit ();
+  if (!success) {
+     printf("a\n");
+    thread_exit ();}
   i=0;
   initial_esp=if_.esp; 
   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
