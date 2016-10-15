@@ -96,6 +96,7 @@ struct thread
     struct list child_list;
     struct list file_list;
     int num_file;
+    struct file *myself;
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
 
