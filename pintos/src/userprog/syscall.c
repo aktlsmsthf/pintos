@@ -183,7 +183,7 @@ void exit(int status){
 struct file* get_file_from_fd(int fd){
      printf("a\n");
       struct thread * curr=thread_current();
-      if(list_empty(&(curr->child_list))){
+      if(list_empty(&(curr->file_list))){
          printf("b\n");
          return NULL;
       }
@@ -205,7 +205,7 @@ struct file* get_file_from_fd(int fd){
 
 struct list_elem* get_elem_from_fd(int fd){
       struct thread * curr=thread_current();
-      if(list_empty(&(curr->child_list))){
+      if(list_empty(&(curr->file_list))){
          return NULL;
       }
       struct list_elem * felem = list_front(&(thread_current()->file_list));
