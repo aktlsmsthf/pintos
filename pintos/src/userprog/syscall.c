@@ -29,18 +29,11 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
     case SYS_EXIT:{
       int status = *((int *)(f->esp)+1);
-      struct thread * curr=thread_current();
-      struct child* chd;
-      chd=curr->child;
-      chd->ret =status;
-      chd->exit_called =1;
-      chd->dying=1;
-      printf("%s: exit(%d)\n",curr->name,chd->ret);
-      thread_exit();
+      exit(status);
       break;}
     case SYS_EXEC:{
       const char * cmd_line = *((char **)(f->esp)+1);
-      if(!is_user_vaddr((void *) cmd_line)) f->eax = -1;
+      if(!is_user_vaddr((void *) cmd_line)) exit(-1);
       tid_t pid = process_execute(cmd_line);
       f->eax = pid;
       break;
@@ -88,5 +81,17 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       break;}
   }
+}
+
+
+void exit(int status){
+      struct thread * curr=thread_current();
+      struct child* chd;
+      chd=curr->child;
+      chd->ret =status;
+      chd->exit_called =1;
+      chd->dying=1;
+      printf("%s: exit(%d)\n",curr->name,chd->ret);
+      thread_exit();
 }
 
