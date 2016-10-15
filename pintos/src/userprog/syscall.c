@@ -142,7 +142,6 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_WRITE:{
-      user_memory(f->esp,3);
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
