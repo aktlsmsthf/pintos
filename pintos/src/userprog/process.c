@@ -55,6 +55,7 @@ process_execute (const char *file_name)
    
   /* Create a new thread to execute FILE_NAME. */
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
+  sema_down(&sema);
   if (tid == TID_ERROR){
     palloc_free_page (fn_copy);
   }
@@ -65,11 +66,18 @@ process_execute (const char *file_name)
     child = child->next;
     if(child->next==NULL){
        return -1;
+       sema_up(&sema);
     }
   }
   chd= list_entry(child, struct child, elem);
-  printf("%d %d\n",chd->ret,chd->tid);
+  if(chd->ret==-2){
+    palloc_free_page (chd);
+    
+    sema_up(&sema); 
+    return -1}
   free(fn);
+  
+  sema_up(&sema); 
   return tid;
 }
 
@@ -90,9 +98,11 @@ start_process (void *f_name)
   int argc;
   int word_lengths[30];
   void *initial_esp;
-   
+  
+  sema_down(&sema);  
   fncopy = palloc_get_page (0);
   if (fncopy == NULL){
+    sema_up(&sema);
     thread_exit ();
   }
 
@@ -109,9 +119,9 @@ start_process (void *f_name)
   /* If load failed, quit. */
   palloc_free_page (file_name);
   if (!success) {
-     printf("sp %d\n",thread_current()->child->tid);
      thread_current()->child->dying=1;
      thread_current()->child->ret=-2;
+     sema_up(&sema);
     thread_exit ();}
   i=0;
   initial_esp=if_.esp; 
@@ -142,6 +152,7 @@ start_process (void *f_name)
   *(int *)if_.esp=0;
    
    palloc_free_page (fncopy);
+   sema_up(&sema);
    /**intr_set_level (old_level);**/
   
   /* Start the user process by simulating a return from an
