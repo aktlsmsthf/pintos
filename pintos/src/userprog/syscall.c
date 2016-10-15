@@ -41,7 +41,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_EXEC:{
-      lock_acqurie(&file_lock);
+      lock_acquire(&file_lock);
       user_memory(f->esp, 1);
       const char * cmd_line = *((char **)(f->esp)+1);
       if(*cmd_line ==NULL || !is_user_vaddr((void *) cmd_line)) exit(-1);
@@ -52,7 +52,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_WAIT:{
-      lock_acqurie(&file_lock);
+      lock_acquire(&file_lock);
       user_memory(f->esp,2);
       f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
       lock_release(&file_lock);
@@ -60,7 +60,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_CREATE:{
-      lock_acqurie(&file_lock);
+      lock_acquire(&file_lock);
       user_memory(f->esp,2);
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
@@ -75,7 +75,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       
     case SYS_REMOVE:{
-      lock_acqurie(&file_lock);
+      lock_acquire(&file_lock);
       user_memory(f->esp,1);
       const char *file = *((char **)(f->esp)+1);
       f->eax = filesys_remove (file); 
@@ -84,7 +84,7 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_OPEN:{
-      lock_acqurie(&file_lock);
+      lock_acquire(&file_lock);
       user_memory(f->esp,1);
       const char *name= *((char **)(f->esp)+1);
       char *e = "";
@@ -114,7 +114,7 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_FILESIZE:{
-      lock_acqurie(&file_lock);
+      lock_acquire(&file_lock);
       user_memory(f->esp,1);
       int fd = *((int *)(f->esp)+1);
       struct file * ff=get_file_from_fd(fd);
@@ -124,7 +124,7 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_READ:{
-      lock_acqurie(&file_lock);
+      lock_acquire(&file_lock);
       user_memory(f->esp,3);
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
@@ -153,7 +153,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_WRITE:{
-      lock_acqurie(&file_lock);
+      lock_acquire(&file_lock);
       user_memory(f->esp,3);
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
@@ -180,7 +180,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       
     case SYS_SEEK:{
-      lock_acqurie(&file_lock);
+      lock_acquire(&file_lock);
       user_memory(f->esp,2);
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
@@ -191,7 +191,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       
     case SYS_TELL:{
-      lock_acqurie(&file_lock);
+      lock_acquire(&file_lock);
       user_memory(f->esp,1);
       int fd = *((int *)(f->esp)+1);
       struct file *ff = get_file_from_fd(fd);
@@ -205,7 +205,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_CLOSE:{
-      lock_acqurie(&file_lock);
+      lock_acquire(&file_lock);
       user_memory(f->esp,1);
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
