@@ -74,12 +74,14 @@ syscall_handler (struct intr_frame *f UNUSED)
       char *e = "";
       if(name == NULL || strcmp(name, e)==0) {
         f->eax = -1;
+        break;
       }
       else{
         struct file *ff = filesys_open(name);
       
         if(ff==NULL) {
           f->eax = -1;
+          break;
         }
         else{
           struct thread *t = thread_current();
