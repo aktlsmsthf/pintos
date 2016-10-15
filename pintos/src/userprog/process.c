@@ -72,7 +72,7 @@ start_process (void *f_name)
   char *fncopy; 
   int i;
   int argc;
-  int word_lengths[10];
+  int word_lengths[100];
   void *initial_esp;
    
   fncopy = palloc_get_page (0);
