@@ -90,6 +90,15 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
+      
+      if(fd == 0){
+        f->eax = input_getc();
+      }
+      else{
+        struct file *ff = get_file_from_fd(fd);
+        int r = (int) file_read(ff, buffer, size);
+        f->eax = r;
+      }
       break;}
       
     case SYS_WRITE:{
@@ -100,19 +109,29 @@ syscall_handler (struct intr_frame *f UNUSED)
         putbuf(buffer, size);
         f->eax= size;
       }
+      else{
+        struct file *ff = get_file_from_fd(fd);
+        f->eax = (int) file_write(ff, buffer, size);
+      }
       break;}
       
     case SYS_SEEK:{
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
+      struct file *ff = get_file_from_fd(fd);
+      file_seek(ff, position);
       break;}
       
     case SYS_TELL:{
       int fd = *((int *)(f->esp)+1);
+      struct file *ff = get_file_from_fd(fd);
+      f->eax = file_tell(ff);
       break;}
       
     case SYS_CLOSE:{
       int fd = *((int *)(f->esp)+1);
+      struct file *ff = get_file_from_fd(fd);
+      file_close(ff);
       break;}
   }
 }
