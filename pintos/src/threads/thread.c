@@ -202,6 +202,8 @@ thread_create (const char *name, int priority,
   chd->exit_called=0;
   chd->dying=0;
   chd->tid=tid;
+  chd->load_success=0;
+  chd->load_finish=0;
   list_push_front(&(thread_current()->child_list), &chd->elem);
   t->child=chd;
 #endif
