@@ -150,6 +150,9 @@ start_process (void *f_name)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
+      if(list_head(&(thread_current()->child_list))->next==list_tail(&(thread_current()->child_list))){
+         return -1
+      }
       struct list_elem *child = list_front(&(thread_current()->child_list));
       struct child *chd;
       int ret;
