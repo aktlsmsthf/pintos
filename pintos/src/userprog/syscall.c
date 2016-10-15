@@ -17,11 +17,6 @@ static struct lock file_lock;
 void exit(int);
 struct file* get_file_from_fd(int);
 
-struct file_fd{
-  int fd;
-  struct file *file;
-  struct list_elem elem;
-};
 
 void
 syscall_init (void) 
