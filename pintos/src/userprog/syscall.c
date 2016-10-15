@@ -33,6 +33,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       chd=thread_current()->child;
       chd->ret =status;
       chd->exit_called =1;
+      chd->dying=1;
       thread_exit();
       break;}
     case SYS_EXEC:{
