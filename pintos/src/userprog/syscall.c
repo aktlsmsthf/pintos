@@ -157,11 +157,12 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(fd>1){
         struct file *ff = get_file_from_fd(fd);
         struct file *flm = get_elem_from_fd(fd);
-        if(flm!=NULL){
-           list_remove(flm);
-        }
+       
         if(ff!=NULL){
            file_close(ff);
+        }
+         if(flm!=NULL){
+           list_remove(flm);
         }
       }
       break;}
