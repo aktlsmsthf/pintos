@@ -79,6 +79,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       if(ff==NULL) {
         f->eax = -1;
+        break;
       }
   
     
