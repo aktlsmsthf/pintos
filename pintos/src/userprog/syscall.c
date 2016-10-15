@@ -50,6 +50,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       user_memory(f->esp, 1);
       
       const char * cmd_line = *((char **)(f->esp)+1);
+      printf("%x\n", cmd_line);
       user_memory((void *)cmd_line, 0);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line))exit(-1);
       tid_t pid = process_execute(cmd_line);
