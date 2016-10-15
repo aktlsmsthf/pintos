@@ -263,13 +263,9 @@ run_task (char **argv)
   
   printf ("Executing '%s':\n", task);
 #ifdef USERPROG
-  printf("1\n");
   process_wait (process_execute (task));
-  printf("2\n");
 #else
-  printf("3\n");
   run_test (task);
-  printf("4\n");
 #endif
   printf ("Execution of '%s' complete.\n", task);
 }
