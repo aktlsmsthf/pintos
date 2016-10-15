@@ -158,10 +158,11 @@ process_wait (tid_t child_tid UNUSED)
       list_remove(child);
 
       if(chd->waited != 0){ return -1;}
+      chd->waited=1;
       while(!chd->dying){
          barrier();
       }
-      if(chd->exit_called ==0){ 
+      if(chd->exit_called ==0){
          return -1;}
       else{
         return chd->ret;
