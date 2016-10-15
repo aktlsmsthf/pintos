@@ -158,11 +158,11 @@ process_wait (tid_t child_tid UNUSED)
 
       if(chd->waited != 0){ return -1;}
       chd->waited=1;
-      printf("a\n");
+      printf("%s\n", thread_current()->name);
       while(!chd->dying){
          barrier();
       }
-      printf("b\n");
+      printf("%s\n", thread_current()->name);
       if(chd->exit_called ==0){
           palloc_free_page (chd);
          return -1;}
