@@ -94,9 +94,7 @@ start_process (void *f_name)
   if_.cs = SEL_UCSEG;
   if_.eflags = FLAG_IF | FLAG_MBS;
   now = strtok_r(file_name," ",&save);
-   printf("3\n");
   success = load (now, &if_.eip, &if_.esp);
-   printf("4\n");
    
   /* If load failed, quit. */
   palloc_free_page (file_name);
