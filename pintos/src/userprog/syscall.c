@@ -32,6 +32,7 @@ static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
   if(!is_user_vaddr((const void *)f->esp)) exit(-1);
+  if(check_bad_ptr(thread_current()->pagedir,f->esp)) exit(-1);
   if(f->esp<0x08048000) exit(-1);
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
