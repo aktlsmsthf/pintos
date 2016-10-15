@@ -148,6 +148,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       if(fd<=1){ exit(-1);}
       struct file *ff = get_file_from_fd(fd);
+      struct file *flm = get_elem_from_fd(fd);
+      list_remove(flm);
       file_close(ff);
       break;}
   }
@@ -176,4 +178,17 @@ struct file* get_file_from_fd(int fd){
       }
       ffd = list_entry(felem, struct file_fd, elem);
       return ffd->file;
+}
+
+struct list_elem* get_elem_from_fd(int fd){
+      struct thread * curr=thread_current();
+      struct list_elem * felem = list_front(&(thread_current()->file_list));
+      struct file_fd * ffd;
+      while(list_entry(felem, struct file_fd, elem)->fd != fd){
+          felem = felem->next;
+          if(felem->next==NULL){
+             exit(-1);
+          }
+      }
+      return felem;
 }
