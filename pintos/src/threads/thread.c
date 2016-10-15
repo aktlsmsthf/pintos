@@ -453,8 +453,8 @@ init_thread(struct thread *t, const char *name, int priority)
   t->stack = (uint8_t *) t + PGSIZE;
   t->priority = priority;
   t->magic = THREAD_MAGIC;
-  t->load_finish =1;
-  t->load_success =1;
+  t->load_finish =0;
+  t->load_success =0;
    
   list_init(&(t->child_list));
 
