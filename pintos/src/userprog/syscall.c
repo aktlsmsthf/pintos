@@ -37,6 +37,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_EXIT:{
+      user_memory(f->esp, 1);
       int status = *((int *)(f->esp)+1);
       exit(status);
       break;}
