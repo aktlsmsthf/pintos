@@ -201,16 +201,16 @@ thread_create (const char *name, int priority,
 
   /* Add to run queue. */
   thread_unblock (t);
+  
 
-
-
+  
   struct child *chd=palloc_get_page(0);
   chd->waited=0;
   chd->exit_called=0;
   chd->dying=0;
   chd->tid=tid;
   list_push_front(&(thread_current()->child_list), &chd->elem);
-
+  t->child=chd;
   return tid;
 }
 
