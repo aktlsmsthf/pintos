@@ -43,18 +43,15 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_EXEC:{
-      lock_acquire(&file_lock);
       user_memory(f->esp, 1);
       const char * cmd_line = *((char **)(f->esp)+1);
       if(*cmd_line ==NULL || !is_user_vaddr((void *) cmd_line)) exit(-1);
       tid_t pid = process_execute(cmd_line);
       f->eax = pid;
-      lock_release(&file_lock);
       break;
     }
       
     case SYS_WAIT:{
-      lock_acquire(&file_lock);
       user_memory(f->esp,2);
       f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
       lock_release(&file_lock);
@@ -62,7 +59,6 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_CREATE:{
-      lock_acquire(&file_lock);
       user_memory(f->esp,2);
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
@@ -72,21 +68,17 @@ syscall_handler (struct intr_frame *f UNUSED)
       else{
         f->eax = filesys_create (file,initial_size);
       }
-      lock_release(&file_lock);
       break;
       }
       
     case SYS_REMOVE:{
-      lock_acquire(&file_lock);
       user_memory(f->esp,1);
       const char *file = *((char **)(f->esp)+1);
       f->eax = filesys_remove (file); 
       break;
-      lock_release(&file_lock);
      }
       
     case SYS_OPEN:{
-      lock_acquire(&file_lock);
       user_memory(f->esp,1);
       const char *name= *((char **)(f->esp)+1);
       char *e = "";
@@ -111,22 +103,18 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = ffd->fd;
         }
       }
-      lock_release(&file_lock);
       break;
      }
       
     case SYS_FILESIZE:{
-      lock_acquire(&file_lock);
       user_memory(f->esp,1);
       int fd = *((int *)(f->esp)+1);
       struct file * ff=get_file_from_fd(fd);
       f->eax = (int) file_length(ff);
-      lock_release(&file_lock);
       break;
      }
       
     case SYS_READ:{
-      lock_acquire(&file_lock);
       user_memory(f->esp,3);
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
@@ -151,11 +139,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = r;
         }
       }  
-      lock_release(&file_lock);
       break;}
       
     case SYS_WRITE:{
-      lock_acquire(&file_lock);
       user_memory(f->esp,3);
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
@@ -177,23 +163,19 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = r;
         }
       }
-      lock_release(&file_lock);
       break;
       }
       
     case SYS_SEEK:{
-      lock_acquire(&file_lock);
       user_memory(f->esp,2);
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
       struct file *ff = get_file_from_fd(fd);
       file_seek(ff, position);
-      lock_release(&file_lock);
       break;
       }
       
     case SYS_TELL:{
-      lock_acquire(&file_lock);
       user_memory(f->esp,1);
       int fd = *((int *)(f->esp)+1);
       struct file *ff = get_file_from_fd(fd);
@@ -203,11 +185,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       else{
         f->eax = file_tell(ff);
       }
-      lock_release(&file_lock);
       break;}
       
     case SYS_CLOSE:{
-      lock_acquire(&file_lock);
       user_memory(f->esp,1);
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
@@ -221,7 +201,6 @@ syscall_handler (struct intr_frame *f UNUSED)
            list_remove(flm);
         }
       }
-      lock_release(&file_lock);
       break;}
   }
 }
