@@ -223,7 +223,7 @@ process_exit (void)
   struct thread *curr = thread_current ();
   uint32_t *pd;
    
-   struct file *f = list_entry(list_back(&(curr->file_list)), struct file, elem);
+   struct file *f = list_entry(list_back(&(curr->file_list)), struct file_fd, elem)->file;
    file_close(f);
 
   /* Destroy the current process's page directory and switch back
