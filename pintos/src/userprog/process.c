@@ -124,6 +124,7 @@ start_process (void *f_name)
     thread_exit ();}
   
   struct file *myself = filesys_open(now);
+  file_deny_write(myself);
   struct file_fd *ffd = palloc_get_page(0);
   ffd -> fd = thread_current()->num_file+2;
   ffd -> file = myself;
