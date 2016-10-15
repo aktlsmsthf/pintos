@@ -81,12 +81,11 @@ start_process (void *f_name)
   int word_lengths[30];
   void *initial_esp;
    
-   printf("5\n");
   fncopy = palloc_get_page (0);
   if (fncopy == NULL){
     thread_exit ();
   }
-   printf("6\n");
+
   strlcpy (fncopy, file_name, PGSIZE);
   /* Initialize interrupt frame and load executable. */   
    
@@ -320,14 +319,13 @@ load (const char *file_name, void (**eip) (void), void **esp)
 
   /* Open executable file. */
   file = filesys_open (file_name);
-   printf("1\n");
-   printf("%s\n", file_name);
+
   if (file == NULL) 
     {
       printf ("load: %s: open failed\n", file_name);
       goto done; 
     }
-   printf("2\n");
+
   /* Read and verify executable header. */
   if (file_read (file, &ehdr, sizeof ehdr) != sizeof ehdr
       || memcmp (ehdr.e_ident, "\177ELF\1\1\1", 7)
