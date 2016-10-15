@@ -45,6 +45,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
     case SYS_WAIT:{
       f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
+      break;
     }
     case SYS_CREATE:{
       const char *file = *((char **)(f->esp)+1);
