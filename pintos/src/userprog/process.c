@@ -121,7 +121,7 @@ start_process (void *f_name)
   *(int *)if_.esp=argc;
   if_.esp-=4;
   *(int *)if_.esp=0;
-   sema_up(&sema);
+   
    palloc_free_page (fncopy);
    
    /**intr_set_level (old_level);**/
@@ -133,6 +133,7 @@ start_process (void *f_name)
      we just point the stack pointer (%esp) to our stack frame
      and jump to it. */
   asm volatile ("movl %0, %%esp; jmp intr_exit" : : "g" (&if_) : "memory");
+   sema_up(&sema);
   NOT_REACHED ();
 }
 
