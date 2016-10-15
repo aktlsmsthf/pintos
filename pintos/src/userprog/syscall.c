@@ -161,6 +161,7 @@ syscall_handler (struct intr_frame *f UNUSED)
            list_remove(flm);
         }
         if(ff!=NULL){
+           printf("%s\n", thread_current()->name);
            file_close(ff);
         }
       }
