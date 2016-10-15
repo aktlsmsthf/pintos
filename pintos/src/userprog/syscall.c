@@ -71,7 +71,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_OPEN:{
       const char *name= *((char **)(f->esp)+1);
-      if(name == NULL || strcmp(name, "")==0) {
+      char *e = ""
+      if(name == NULL || strcmp(name, e)==0) {
         f->eax -1;
         break;
       }
