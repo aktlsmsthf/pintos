@@ -81,10 +81,12 @@ start_process (void *f_name)
   int word_lengths[30];
   void *initial_esp;
    
+   printf("5\n");
   fncopy = palloc_get_page (0);
   if (fncopy == NULL){
     thread_exit ();
   }
+   printf("6\n");
   strlcpy (fncopy, file_name, PGSIZE);
   /* Initialize interrupt frame and load executable. */   
    
