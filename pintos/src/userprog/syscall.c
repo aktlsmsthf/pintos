@@ -25,7 +25,6 @@ void
 syscall_init (void) 
 {
   intr_register_int (0x30, 3, INTR_ON, syscall_handler, "syscall");
-  lock_init(&file_lock);
 }
 
 static void
@@ -56,7 +55,6 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_WAIT:{
       user_memory(f->esp,2);
       f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
-      lock_release(&file_lock);
       break;
     }
       
