@@ -103,7 +103,6 @@ start_process (void *f_name)
      thread_current()->child->dying=1;
      thread_current()->child->ret=-2
     thread_exit ();}
-   printf("a\n");
   i=0;
   initial_esp=if_.esp; 
   for(now=strtok_r(fncopy," ",&save);now!=NULL;now=strtok_r(NULL," ",&save)){
