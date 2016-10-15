@@ -294,6 +294,7 @@ thread_exit (void)
 
 #ifdef USERPROG
   process_exit ();
+  thread_current()->child->dying=1; 
 #endif
 
   /* Just set our status to dying and schedule another process.
