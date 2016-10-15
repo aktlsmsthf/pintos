@@ -12,14 +12,15 @@
 #include "threads/synch.h"
 #include "threads/vaddr.h"
 #include <list.h>
+#include "userprog/pagedir.h"
 
 static void syscall_handler (struct intr_frame *);
-static struct lock file_lock;
 void exit(int);
 struct file* get_file_from_fd(int);
 struct list_elem* get_elem_from_fd(int);
 void user_memory(void *, int);
 void check_buffer(void *, unsigned);
+bool check_bad_ptr(uint32_t * pd,const void * uaddr);
 
 void
 syscall_init (void) 
@@ -45,8 +46,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_EXEC:{
       user_memory(f->esp, 1);
+      
       const char * cmd_line = *((char **)(f->esp)+1);
       
+      if(check_bad_ptr(thread_current()->pagedir,cmdline))exit(-1);
       tid_t pid = process_execute(cmd_line);
       f->eax = pid;
       break;
@@ -62,6 +65,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       user_memory(f->esp,2);
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
+      if(check_bad_ptr(thread_current()->pagedir,file))exit(-1);
       if(file==NULL){
         exit(-1);
       }
@@ -81,6 +85,8 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_OPEN:{
       user_memory(f->esp,1);
       const char *name= *((char **)(f->esp)+1);
+      
+      if(check_bad_ptr(thread_current()->pagedir,name))exit(-1);
       char *e = "";
       if(name == NULL || strcmp(name, e)==0) {
         f->eax = -1;
@@ -119,6 +125,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
+      
+      if(check_bad_ptr(thread_current()->pagedir,buffer))exit(-1);
       check_buffer(buffer, size);
       int j=0;
       if(fd == 0){
@@ -147,6 +155,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
+      
+      if(check_bad_ptr(thread_current()->pagedir,buffer))exit(-1);
       check_buffer(buffer, size);
       if(fd==1){
         putbuf(buffer, size);
@@ -267,4 +277,6 @@ void check_buffer(void *buffer, unsigned size){
   }
 }
 
-
+bool check_bad_ptr(uint32_t * pd,const void * uaddr){
+  void * p = pagedir_get_page (pd, uaddr);
+  return p==NULL;}
