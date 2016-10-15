@@ -50,8 +50,6 @@ process_execute (const char *file_name)
    
   /* Create a new thread to execute FILE_NAME. */
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
-  printf("d %s\n", thread_current()->name);
-  sema_down(&sema);
   if (tid == TID_ERROR)
     palloc_free_page (fn_copy); 
   printf("c %s\n",thread_current()->name);
@@ -123,7 +121,6 @@ start_process (void *f_name)
   *(int *)if_.esp=0;
    
    palloc_free_page (fncopy);
-   /**sema_up(&sema);**/
    /**intr_set_level (old_level);**/
   
   /* Start the user process by simulating a return from an
@@ -149,7 +146,6 @@ start_process (void *f_name)
 int
 process_wait (tid_t child_tid UNUSED) 
 {
-      printf("a\n");
       struct list_elem *child = list_front(&(thread_current()->child_list));
       struct child *chd;
       while(list_entry(child, struct child, elem)->tid != child_tid){
@@ -158,17 +154,14 @@ process_wait (tid_t child_tid UNUSED)
            return -1;
         }
       }
-      printf("b\n");
       chd= list_entry(child, struct child, elem);
       list_remove(child);
 
       if(chd->waited != 0){ return -1;}
       chd->waited=1;
-      printf("%s\n", thread_current()->name);
       while(!chd->dying){
          barrier();
       }
-      printf("%s\n", thread_current()->name);
       if(chd->exit_called ==0){
           palloc_free_page (chd);
          return -1;}
