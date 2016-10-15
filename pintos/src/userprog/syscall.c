@@ -265,7 +265,7 @@ void check_buffer(void *buffer, unsigned size){
   unsigned i=0;
   char * b = (char *) buffer;
   for(;i++;i<size){
-    user_memory((const void *) b);
+    if(!is_user_vaddr((const void *) b)) exit(-1);
     b++;
   }
 }
