@@ -22,7 +22,6 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-  printf("SYstem, %d\n", *((int *)(f->esp)));
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
       power_off();
@@ -39,7 +38,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       thread_exit();
       break;}
     case SYS_EXEC:{
-      char *cmd_line = *((char **)(f->esp)+1);
+      const char * cmd_line = *((char **)(f->esp)+1);
       tid_t pid = process_execute(cmd_line);
       f->eax = pid;
       break;
