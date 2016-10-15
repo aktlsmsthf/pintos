@@ -82,7 +82,12 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_FILESIZE:{
       int fd = *((int *)(f->esp)+1);
       struct file * ff=get_file_from_fd(fd);
-      f->eax = (int) file_length(ff);
+      if(ff==NULL){ 
+        f->eax =0;
+      }
+      else{
+        f->eax = (int) file_length(ff);
+      }
       break;}
       
     case SYS_READ:{
@@ -96,10 +101,18 @@ syscall_handler (struct intr_frame *f UNUSED)
         }
         f->eax = size;
       }
+      else if(fd ==1){
+        f->eax =-1
+      }
       else{
         struct file * ff = get_file_from_fd(fd);
-        int r = (int) file_read(ff, buffer, size);
-        f->eax = r;
+        if(ff==NULL){
+          f->eax = -1;
+        }
+        else{
+          int r = (int) file_read(ff, buffer, size);
+          f->eax = r;
+        }
       }  
       break;}
       
@@ -107,14 +120,22 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
-      if(fd==STDOUT_FILENO){
+      if(fd==1){
         putbuf(buffer, size);
         f->eax= size;
       }
+      else if(fd == 0){
+        f->eax = -1
+      }
       else{
         struct file *ff = get_file_from_fd(fd);
-        int r = (int) file_write(ff, buffer, size);
-        f->eax = r;
+        if(ff==NULL){ 
+          f->eax = -1;
+        }
+        else{
+          int r = (int) file_write(ff, buffer, size);
+          f->eax = r;
+        }
       }
       break;}
       
@@ -128,7 +149,12 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_TELL:{
       int fd = *((int *)(f->esp)+1);
       struct file *ff = get_file_from_fd(fd);
-      f->eax = file_tell(ff);
+      if(ff==NULL){ 
+        f->eax = -1;
+      }
+      else{
+        f->eax = file_tell(ff);
+      }
       break;}
       
     case SYS_CLOSE:{
