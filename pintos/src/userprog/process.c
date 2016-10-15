@@ -60,7 +60,7 @@ process_execute (const char *file_name)
   }
    int c = process_wait(tid);
   free(fn);
-   if(c==-2) return -1;
+   if(c==-2) {return -1;}
   return tid;
 }
 
@@ -101,7 +101,7 @@ start_process (void *f_name)
   palloc_free_page (file_name);
   if (!success) {
      thread_current()->child->dying=1;
-     thread_current()->child->ret=-2
+     thread_current()->child->ret=-2;
     thread_exit ();}
   i=0;
   initial_esp=if_.esp; 
