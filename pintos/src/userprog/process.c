@@ -68,8 +68,8 @@ process_execute (const char *file_name)
     }
   }
   chd= list_entry(child, struct child, elem);
+  printf("%d %d\n",chd->ret,chd->pid);
   free(fn);
-  if(chd->ret<0) {return -1;}
   return tid;
 }
 
@@ -109,6 +109,7 @@ start_process (void *f_name)
   /* If load failed, quit. */
   palloc_free_page (file_name);
   if (!success) {
+     printf("sp %d\n",thread_current()->child->pid);
      thread_current()->child->dying=1;
      thread_current()->child->ret=-2;
     thread_exit ();}
