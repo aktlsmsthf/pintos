@@ -74,7 +74,7 @@ process_execute (const char *file_name)
     palloc_free_page (chd);
     
     sema_up(&sema); 
-    return -1}
+    return -1;}
   free(fn);
   
   sema_up(&sema); 
