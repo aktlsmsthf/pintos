@@ -95,7 +95,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       int j=0;
       if(fd == 0){
         for(; j<size; j++){
-          *(buffer+j)=input_getc();
+          *(uint8_t *)(buffer+j)=input_getc();
         }
         f->eax = size;
       }
