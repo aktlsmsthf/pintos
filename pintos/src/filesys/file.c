@@ -3,6 +3,8 @@
 #include "filesys/inode.h"
 #include "threads/malloc.h"
 
+int a =0;
+int b=0;
 /* An open file. */
 struct file 
   {
@@ -17,7 +19,7 @@ struct file
 struct file *
 file_open (struct inode *inode) 
 {
-  printf("a\n");
+  printf("%d\n", ++a);
   struct file *file = calloc (1, sizeof *file);
   if (inode != NULL && file != NULL)
     {
@@ -46,7 +48,7 @@ file_reopen (struct file *file)
 void
 file_close (struct file *file) 
 {
-  printf("b\n");
+  printf("%d\n", ++b);
   if (file != NULL)
     {
       file_allow_write (file);
