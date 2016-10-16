@@ -24,10 +24,8 @@
 
    By default, half of system RAM is given to the kernel pool and
    half to the user pool.  That should be huge overkill for the
-   kernel pool, but that's just fine for demonstration purposes. */
-
-int a=0;
-
+   kernel pool, but that's just fine for demonstration purposes. *
+   
 /* A memory pool. */
 struct pool
   {
@@ -119,7 +117,6 @@ palloc_get_multiple (enum palloc_flags flags, size_t page_cnt)
 void *
 palloc_get_page (enum palloc_flags flags) 
 {
-      printf("%d\n",++a);
   return palloc_get_multiple (flags, 1);
 }
 
@@ -155,7 +152,6 @@ palloc_free_multiple (void *pages, size_t page_cnt)
 void
 palloc_free_page (void *page) 
 {
-   printf("%d\n",--a);
   palloc_free_multiple (page, 1);
 }
 
