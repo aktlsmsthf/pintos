@@ -215,7 +215,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         struct list_elem *flm = get_elem_from_fd(fd);
         struct fild_fd *ffd = list_entry(flm, struct file_fd, elem);
        
-        if(ff!=NULL){
+        if(ffd->file!=NULL){
            file_close(ffd->file);
         }
          if(flm!=NULL){
