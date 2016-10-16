@@ -241,7 +241,7 @@ process_exit (void)
    
    while(!list_empty(&(thread_current()->child_list))){
         child_elem=list_front(&(thread_current()->child_list));
-        c=list_entry(felem, struct file_fd, elem);
+        c=list_entry(felem, struct child, elem);
         list_remove(child_elem);
          palloc_free_page(c);
       }
