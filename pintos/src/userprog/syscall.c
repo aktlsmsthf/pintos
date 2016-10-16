@@ -95,7 +95,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       else{
       const char *name= *((char **)(f->esp)+1);
       
-      user_memory((void *)name, 0);
+      if(!user_memory((void *)name, 0)} exit(-1);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)name)){
         f->eax = -1;
         break;}
@@ -145,7 +145,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       
-      user_memory((void *)buffer, 0);
+      if(!user_memory((void *)buffer, 0)) exit(-1);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)){
         f->eax = -1;
         break;}
@@ -194,7 +194,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = -1;
       }
       else{
-        user_memory(f->esp, 3);
+        if(!user_memory(f->esp, 3)){
+          f->eax = -1;
+          break;}
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
           f->eax = -1;
