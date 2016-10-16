@@ -106,7 +106,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         }
         else{
           struct thread *t = thread_current();
-          struct file_fd *ffd;
+          struct file_fd *ffd = palloc_get_page(0);
           ffd -> fd = t->num_file+2;
           ffd -> file = ff;
           list_push_front(&(t->file_list),&ffd->elem);
@@ -212,15 +212,16 @@ syscall_handler (struct intr_frame *f UNUSED)
       user_memory(f->esp,1);
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
-        struct file *ff = get_file_from_fd(fd);
         struct file *flm = get_elem_from_fd(fd);
+        struct fild_fd *ffd = list_entry(flm, struct file_fd, elem);
        
         if(ff!=NULL){
-           file_close(ff);
+           file_close(ffd->file);
         }
          if(flm!=NULL){
            list_remove(flm);
         }
+        palloc_free_page(ffd);
       }
       break;}
   }
