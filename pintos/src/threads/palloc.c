@@ -97,12 +97,13 @@ palloc_get_multiple (enum palloc_flags flags, size_t page_cnt)
 
   if (pages != NULL) 
     {
+       
+       printf("%d\n",++a);
       if (flags & PAL_ZERO)
         memset (pages, 0, PGSIZE * page_cnt);
     }
   else 
     {
-       printf("%d\n",++a);
       if (flags & PAL_ASSERT)
         PANIC ("palloc_get: out of pages");
     }
