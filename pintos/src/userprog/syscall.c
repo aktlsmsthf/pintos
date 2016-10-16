@@ -96,9 +96,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       const char *name= *((char **)(f->esp)+1);
       
       if(!user_memory((void *)name, 0)) exit(-1);
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)name)){
-        f->eax = -1;
-        break;}
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)name)) exit(-1);
       char *e = "";
       if(name == NULL || strcmp(name, e)==0) {
         f->eax = -1;
@@ -179,9 +177,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
 
-      if(!user_memory((void *)buffer, 0)){
-        f ->eax = -1;
-        break;}
+      if(!user_memory((void *)buffer, 0)) exit(-1);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)){
         f -> eax = -1;
         break;}
