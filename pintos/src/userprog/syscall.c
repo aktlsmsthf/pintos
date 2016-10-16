@@ -234,6 +234,15 @@ void exit(int status){
       chd->ret =status;
       chd->exit_called =1;
       chd->dying=1;
+      if(!list_empty(&(curr->file_list))){
+         
+      }
+      struct list_elem * felem = list_front(&(thread_current()->file_list));
+      struct file_fd * ffd;
+      while(ffd = list_entry(felem, struct file_fd, elem) != NULL){
+          palloc_free_page(ffd);
+          felem = felem->next;
+      }
       printf("%s: exit(%d)\n",curr->name,chd->ret);
       thread_exit();
 }
