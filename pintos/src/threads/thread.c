@@ -15,10 +15,6 @@
 #include "userprog/process.h"
 #endif
 
-#include "userprog/syscall.h"
-#include "filesys/file.h"
-#include "filesys/filesys.h"
-
 /* Random value for struct thread's `magic' member.
    Used to detect stack overflow.  See the big comment at the top
    of thread.h for details. */
@@ -303,28 +299,7 @@ thread_exit (void)
   process_exit ();
   thread_current()->child->dying=1; 
 #endif
-   
-   struct list_elem * felem;
-   struct file_fd * ffd;
-   struct list_eem * child_elem;
-   struct child * c;
-   
-   while(!list_empty(&(thread_current()->file_list))){
-        felem=list_front(&(thread_current()->file_list));
-        ffd=list_entry(felem, struct file_fd, elem);
-        file_close(ffd->file);
-
-        list_remove(felem);
-        palloc_free_page(ffd);
-      }
-   
-   while(!list_empty(&(thread_current()->child_list))){
-        child_elem=list_front(&(thread_current()->child_list));
-        c=list_entry(felem, struct child, elem);
-        
-        list_remove(child_elem);
-         palloc_free_page(c);
-      }
+  
 
   /* Just set our status to dying and schedule another process.
      We will be destroyed during the call to schedule_tail(). */
