@@ -159,7 +159,9 @@ start_process (void *f_name)
   if_.esp-=4;
   *(int *)if_.esp=0;
    
+   
    palloc_free_page (fncopy);
+   if(if_.esp<
    /**intr_set_level (old_level);**/
   
   /* Start the user process by simulating a return from an
