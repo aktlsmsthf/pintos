@@ -235,15 +235,17 @@ process_exit (void)
         felem=list_front(&(thread_current()->file_list));
         ffd=list_entry(felem, struct file_fd, elem);
         file_close(ffd->file);
+        palloc_free_page(ffd);
         list_remove(felem);
-         palloc_free_page(ffd);
+         
       }
    
    while(!list_empty(&(thread_current()->child_list))){
         child_elem=list_front(&(thread_current()->child_list));
         c=list_entry(felem, struct child, elem);
+        palloc_free_page(c);
         list_remove(child_elem);
-         palloc_free_page(c);
+         
       }
    
    file_close(curr->myself);
