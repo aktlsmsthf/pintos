@@ -48,6 +48,8 @@ process_execute (const char *file_name)
   strlcpy (fn_copy, file_name, PGSIZE);
    
   fn = malloc (strlen (file_name) + 1);
+   if(fn==NULL)
+      return TID_ERROR;
   memcpy (fn, file_name, strlen (file_name) + 1);
    
   real_file_name=strtok_r(fn," ",&save);
