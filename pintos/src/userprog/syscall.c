@@ -242,7 +242,7 @@ void exit(int status){
         felem=list_front(&(thread_current()->file_list));
         ffd=list_entry(felem, struct file_fd, elem);
         file_close(ffd->file);
-        list_remove(flm);
+        list_remove(felem);
       }
       printf("%s: exit(%d)\n",curr->name,chd->ret);
       thread_exit();
