@@ -161,7 +161,7 @@ start_process (void *f_name)
    
    
    palloc_free_page (fncopy);
-   if(if_.esp<
+
    /**intr_set_level (old_level);**/
   
   /* Start the user process by simulating a return from an
