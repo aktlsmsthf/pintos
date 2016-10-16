@@ -227,13 +227,23 @@ syscall_handler (struct intr_frame *f UNUSED)
 }
 
 
+
 void exit(int status){
       struct thread * curr=thread_current();
       struct child* chd;
+      struct list_elem * felem;
+      struct file_fd * ffd;
+  
       chd=curr->child;
       chd->ret =status;
       chd->exit_called =1;
       chd->dying=1;
+      while(!list_empty(&(thread_current()->file_list))){
+        felem=list_front(&(thread_current()->file_list));
+        ffd=list_entry(felem, struct file_fd, elem);
+        file_close(ffd->file);
+        list_remove(flm);
+      }
       printf("%s: exit(%d)\n",curr->name,chd->ret);
       thread_exit();
 }
