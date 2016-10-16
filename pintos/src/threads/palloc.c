@@ -96,12 +96,10 @@ palloc_get_multiple (enum palloc_flags flags, size_t page_cnt)
     pages = NULL;
 
   if (pages != NULL) 
-    {
-       
-       printf("%d\n",++a);
+  {
       if (flags & PAL_ZERO)
         memset (pages, 0, PGSIZE * page_cnt);
-    }
+    } 
   else 
     {
       if (flags & PAL_ASSERT)
@@ -121,6 +119,7 @@ palloc_get_multiple (enum palloc_flags flags, size_t page_cnt)
 void *
 palloc_get_page (enum palloc_flags flags) 
 {
+      printf("%d\n",++a);
   return palloc_get_multiple (flags, 1);
 }
 
