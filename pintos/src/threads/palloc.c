@@ -155,7 +155,7 @@ palloc_free_multiple (void *pages, size_t page_cnt)
 void
 palloc_free_page (void *page) 
 {
-   prinf("%d\n",--a);
+   printf("%d\n",--a);
   palloc_free_multiple (page, 1);
 }
 
