@@ -218,6 +218,15 @@ process_exit (void)
 {
   struct thread *curr = thread_current ();
   uint32_t *pd;
+   struct list_elem * felem;
+   struct file_fd * ffd;
+   
+   while(!list_empty(&(thread_current()->file_list))){
+        felem=list_front(&(thread_current()->file_list));
+        ffd=list_entry(felem, struct file_fd, elem);
+        file_close(ffd->file);
+        list_remove(felem);
+      }
    
    file_close(curr->myself);
 
