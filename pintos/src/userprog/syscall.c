@@ -212,7 +212,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       user_memory(f->esp,1);
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
-        struct file *flm = get_elem_from_fd(fd);
+        struct list_elem *flm = get_elem_from_fd(fd);
         struct fild_fd *ffd = list_entry(flm, struct file_fd, elem);
        
         if(ff!=NULL){
