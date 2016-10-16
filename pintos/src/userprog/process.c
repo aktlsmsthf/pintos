@@ -228,8 +228,6 @@ process_exit (void)
   uint32_t *pd;
    struct list_elem * felem;
    struct file_fd * ffd;
-   struct list_eem * child_elem;
-   struct child * c;
    
    while(!list_empty(&(thread_current()->file_list))){
         felem=list_front(&(thread_current()->file_list));
@@ -238,14 +236,6 @@ process_exit (void)
 
         list_remove(felem);
         palloc_free_page(ffd);
-      }
-   
-   while(!list_empty(&(thread_current()->child_list))){
-        child_elem=list_front(&(thread_current()->child_list));
-        c=list_entry(felem, struct child, elem);
-        
-        list_remove(child_elem);
-         palloc_free_page(c);
       }
    
    file_close(curr->myself);
