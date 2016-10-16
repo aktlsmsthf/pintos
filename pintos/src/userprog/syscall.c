@@ -96,7 +96,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       const char *name= *((char **)(f->esp)+1);
       
       user_memory((void *)name, 0);
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)name))exit(-1);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)name)){
+        f->eax = -1;
+        break;}
       char *e = "";
       if(name == NULL || strcmp(name, e)==0) {
         f->eax = -1;
@@ -128,21 +130,25 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_FILESIZE:{
-      user_memory(f->esp,1);
+      if(!user_memory(f->esp,1)) f->eax = -1;
+      else{
       int fd = *((int *)(f->esp)+1);
       struct file * ff=get_file_from_fd(fd);
       f->eax = (int) file_length(ff);
-      break;
+      break;}
      }
       
     case SYS_READ:{
-      user_memory(f->esp,3);
+      if(!user_memory(f->esp,3)) f->eax = -1;
+      else{
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       
       user_memory((void *)buffer, 0);
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer))exit(-1);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)){
+        f->eax = -1;
+        break;}
       check_buffer(buffer, size);
       int j=0;
       if(fd == 0){
@@ -164,7 +170,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           int r = (int) file_read(ff, buffer, size);
           f->eax = r;
         }
-      }  
+      }}
       break;}
       
     case SYS_WRITE:{
@@ -173,8 +179,12 @@ syscall_handler (struct intr_frame *f UNUSED)
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
 
-      user_memory((void *)buffer, 0);
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer))exit(-1);
+      if(!user_memory((void *)buffer, 0)){
+        f ->eax = -1;
+        break;}
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)){
+        f -> eax = -1;
+        break;}
       check_buffer(buffer, size);
       if(fd==1){
         putbuf(buffer, size);
@@ -198,7 +208,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       
     case SYS_SEEK:{
-      user_memory(f->esp,2);
+      if(!user_memory(f->esp,2)) exit(-1);
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
       struct file *ff = get_file_from_fd(fd);
@@ -207,7 +217,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       
     case SYS_TELL:{
-      user_memory(f->esp,1);
+      if(user_memory(f->esp,1)){
+        f->eax = -1;
+        break;}
       int fd = *((int *)(f->esp)+1);
       struct file *ff = get_file_from_fd(fd);
       if(ff==NULL){ 
@@ -219,7 +231,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_CLOSE:{
-      user_memory(f->esp,1);
+      if(!user_memory(f->esp,1)) exit(-1);
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
         struct list_elem *flm = get_elem_from_fd(fd);
