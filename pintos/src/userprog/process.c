@@ -63,6 +63,7 @@ process_execute (const char *file_name)
   while(list_entry(child, struct child, elem)->tid != tid){
     child = child->next;
     if(child->next==NULL){
+       free(fn);
        return -1;
     }
   }
@@ -71,7 +72,10 @@ process_execute (const char *file_name)
       barrier();
    }
    chd->load_finish=0;
-   if(!chd->load_success) return -1;
+   if(!chd->load_success) {
+      free(fn);
+      return -1;
+   }
    chd->load_success=0;
   free(fn);
    
