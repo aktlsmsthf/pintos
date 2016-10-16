@@ -226,6 +226,7 @@ process_exit (void)
         ffd=list_entry(felem, struct file_fd, elem);
         file_close(ffd->file);
         list_remove(felem);
+         palloc_free_page(ffd);
       }
    
    file_close(curr->myself);
