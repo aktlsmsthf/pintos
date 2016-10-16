@@ -19,7 +19,7 @@ struct file
 struct file *
 file_open (struct inode *inode) 
 {
-  /**printf("%d,a\n", ++a);**/
+  printf("%d,a\n", ++a);
   struct file *file = calloc (1, sizeof *file);
   if (inode != NULL && file != NULL)
     {
@@ -48,7 +48,7 @@ file_reopen (struct file *file)
 void
 file_close (struct file *file) 
 {
-  /**printf("%d,b\n", ++b);**/
+  printf("%d,b\n", ++b);
   if (file != NULL)
     {
       file_allow_write (file);
