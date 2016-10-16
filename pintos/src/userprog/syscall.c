@@ -18,8 +18,8 @@ static void syscall_handler (struct intr_frame *);
 void exit(int);
 struct file* get_file_from_fd(int);
 struct list_elem* get_elem_from_fd(int);
-void user_memory(void *, int);
-void check_buffer(void *, unsigned);
+bool user_memory(void *, int);
+bool check_buffer(void *, unsigned);
 bool check_bad_ptr(uint32_t * pd,const void * uaddr);
 
 void
@@ -40,53 +40,59 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_EXIT:{
-      user_memory(f->esp, 1);
+      if(!user_memory(f->esp, 1)) exit(-1);
+      else{
       int status = *((int *)(f->esp)+1);
-      exit(status);
+      exit(status);}
       break;}
       
     case SYS_EXEC:{
-      user_memory(f->esp, 1);
-      
+      if(!user_memory(f->esp, 1)) f->eax = -1;
+      else{
       const char * cmd_line = *((char **)(f->esp)+1);
       user_memory((void *)cmd_line, 0);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line))exit(-1);
       tid_t pid = process_execute(cmd_line);
-      f->eax = pid;
+      f->eax = pid;}
       break;
     }
       
     case SYS_WAIT:{
-      user_memory(f->esp,1);
-      f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
+      if(!user_memory(f->esp,1)) f->eax = -1;
+      else{
+      f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));}
       break;
     }
       
     case SYS_CREATE:{
-      user_memory(f->esp,2);
+      if(!user_memory(f->esp,2)) f->eax = -1;
+      else{
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
       
       user_memory((void *)file, 0);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)file))exit(-1);
       if(file==NULL){
-        exit(-1);
+        f->eax =-1;
+        /**exit(-1);**/
       }
       else{
         f->eax = filesys_create (file,initial_size);
-      }
+      }}
       break;
       }
       
     case SYS_REMOVE:{
-      user_memory(f->esp,1);
+      if(!user_memory(f->esp,1)) f->eax = -1;
+      else{
       const char *file = *((char **)(f->esp)+1);
-      f->eax = filesys_remove (file); 
+      f->eax = filesys_remove (file); }
       break;
      }
       
     case SYS_OPEN:{
-      user_memory(f->esp,1);
+      if(!user_memory(f->esp,1)) f->eax = -1;
+      else{
       const char *name= *((char **)(f->esp)+1);
       
       user_memory((void *)name, 0);
@@ -117,7 +123,7 @@ syscall_handler (struct intr_frame *f UNUSED)
             f->eax = ffd->fd;
           }
         }
-      }
+      }}
       break;
      }
       
@@ -278,7 +284,7 @@ struct list_elem* get_elem_from_fd(int fd){
       return felem;
 }
 
-void user_memory(void *esp, int n){
+/**void user_memory(void *esp, int n){
   int * p;
   p = (int *)esp + n;
   if(!is_user_vaddr((const void *) p)) exit(-1);
@@ -291,6 +297,23 @@ void check_buffer(void *buffer, unsigned size){
     if(!is_user_vaddr((const void *) b)) exit(-1);
     b++;
   }
+}**/
+
+bool user_memory(void *esp, int n){
+  int * p;
+  p = (int *)esp + n;
+  if(!is_user_vaddr((const void *) p)) return 0;
+  else return 1;
+}
+
+bool check_buffer(void *buffer, unsigned size){
+  unsigned i=0;
+  char * b = (char *) buffer;
+  for(;i++;i<size){
+    if(!is_user_vaddr((const void *) b)) return 0;
+    b++;
+  }
+  return 1;
 }
 
 bool check_bad_ptr(uint32_t * pd,const void * uaddr){
