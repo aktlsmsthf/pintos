@@ -106,11 +106,16 @@ syscall_handler (struct intr_frame *f UNUSED)
         else{
           struct thread *t = thread_current();
           struct file_fd *ffd = palloc_get_page(0);
-          ffd -> fd = t->num_file+2;
-          ffd -> file = ff;
-          list_push_front(&(t->file_list),&ffd->elem);
-          t->num_file++;
-          f->eax = ffd->fd;
+          if(ffd==NULL){
+            f->eax =-1;
+          }
+          else{
+            ffd -> fd = t->num_file+2;
+            ffd -> file = ff;
+            list_push_front(&(t->file_list),&ffd->elem);
+            t->num_file++;
+            f->eax = ffd->fd;
+          }
         }
       }
       break;
