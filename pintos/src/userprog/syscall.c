@@ -194,9 +194,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = -1;
       }
       else{
-        if(!user_memory(f->esp, 3)){
-          f->eax = -1;
-          break;}
+        if(!user_memory(f->esp, 3)) exit(-1);
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
           f->eax = -1;
