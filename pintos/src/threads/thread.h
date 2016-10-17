@@ -117,6 +117,7 @@ struct child{
   bool dying;
   bool load_finish;
   bool load_success;
+  bool parent_exited;
   int ret;
   tid_t tid;
 };
