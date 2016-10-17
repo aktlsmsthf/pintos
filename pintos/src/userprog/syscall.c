@@ -254,8 +254,7 @@ void exit(int status){
       chd=curr->child;
       chd->ret =status;
       chd->exit_called =1;
-      
-      printf("%d\n", ++a);
+     
       printf("%s: exit(%d)\n",curr->name,chd->ret);
       thread_exit();
 }
