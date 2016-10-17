@@ -229,7 +229,6 @@ process_exit (void)
    struct child *c;
    
    if(curr->child->parent_exited){
-      printf("1\n");
       list_remove(curr->child);
       palloc_free_page(curr->child);
    }
@@ -242,7 +241,6 @@ process_exit (void)
         file_close(ffd->file);
 
         list_remove(felem);
-         printf("2\n");
         palloc_free_page(ffd);
       }
    
@@ -253,7 +251,6 @@ process_exit (void)
          c=list_entry(celem, struct child, elem);
          
          if(c->dying) {
-            printf("3\n");
             nextelem = celem->next;
             list_remove(celem);
             palloc_free_page(c);
