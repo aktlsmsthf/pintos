@@ -242,7 +242,7 @@ process_exit (void)
         palloc_free_page(ffd);
       }
    
-   if(!list_empty(&(thread_current()->child_list))){
+   /**if(!list_empty(&(thread_current()->child_list))){
       celem=list_front(&(thread_current()->child_list));
       while(celem->next!=NULL){
          c=list_entry(celem, struct child, elem);
@@ -254,7 +254,7 @@ process_exit (void)
             c->parent_exited=1;
          celem = celem->next;
          
-      }
+      }**/
    }
    
    file_close(curr->myself);
