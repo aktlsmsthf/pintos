@@ -106,8 +106,7 @@ start_process (void *f_name)
   }
 
   strlcpy (fncopy, file_name, PGSIZE);
-  /* Initialize interrupt frame and load executable. */   
-  printf("%x\n",initial_esp);
+  /* Initialize interrupt frame and load executable. */ 
   memset (&if_, 0, sizeof if_);
   if_.gs = if_.fs = if_.es = if_.ds = if_.ss = SEL_UDSEG;
   if_.cs = SEL_UCSEG;
@@ -157,7 +156,8 @@ start_process (void *f_name)
   if_.esp-=4;
   *(int *)if_.esp=0;
    
-   
+     
+  printf("%x\n",if_.esp);
    palloc_free_page (fncopy);
 
    /**intr_set_level (old_level);**/
