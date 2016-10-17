@@ -248,16 +248,21 @@ process_exit (void)
    
    if(!list_empty(&(thread_current()->child_list))){
       celem=list_front(&(thread_current()->child_list));
+      struct list_elem *nextelem;
       while(celem->next!=NULL){
          c=list_entry(celem, struct child, elem);
+         
          if(c->dying) {
             printf("3\n");
+            nextelem = celem->next;
+            list_remove(celem);
             palloc_free_page(c);
          }
-         else
+         else{
             c->parent_exited=1;
-         celem = celem->next;
-         
+            nextelem = celem->next;
+         }
+         celem = nextelem;
       }
    }
    
