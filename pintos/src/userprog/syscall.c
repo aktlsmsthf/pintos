@@ -22,6 +22,8 @@ bool user_memory(void *, int);
 bool check_buffer(void *, unsigned);
 bool check_bad_ptr(uint32_t * pd,const void * uaddr);
 
+int a=0;
+
 void
 syscall_init (void) 
 {
@@ -253,7 +255,7 @@ void exit(int status){
       chd->ret =status;
       chd->exit_called =1;
       
-      
+      printf("%d\n", ++a);
       printf("%s: exit(%d)\n",curr->name,chd->ret);
       thread_exit();
 }
