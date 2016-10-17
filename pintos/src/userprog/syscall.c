@@ -252,7 +252,7 @@ void exit(int status){
       chd=curr->child;
       chd->ret =status;
       chd->exit_called =1;
-      chd->dying=1;
+      
       
       printf("%s: exit(%d)\n",curr->name,chd->ret);
       thread_exit();
