@@ -107,7 +107,7 @@ start_process (void *f_name)
 
   strlcpy (fncopy, file_name, PGSIZE);
   /* Initialize interrupt frame and load executable. */   
-   
+  printf("%x\n",initial_esp);
   memset (&if_, 0, sizeof if_);
   if_.gs = if_.fs = if_.es = if_.ds = if_.ss = SEL_UDSEG;
   if_.cs = SEL_UCSEG;
