@@ -228,11 +228,13 @@ process_exit (void)
    struct list_elem * celem;
    struct child *c;
    
-   /**if(curr->child->parent_exited){
+   if(curr->child->parent_exited){
       printf("1\n");
       palloc_free_page(curr->child);
-   }**/
-   curr->child->dying=1;
+   }
+   else 
+      curr->child->dying=1;
+   
    while(!list_empty(&(thread_current()->file_list))){
         felem=list_front(&(thread_current()->file_list));
         ffd=list_entry(felem, struct file_fd, elem);
@@ -243,7 +245,7 @@ process_exit (void)
         palloc_free_page(ffd);
       }
    
-   /**if(!list_empty(&(thread_current()->child_list))){
+   if(!list_empty(&(thread_current()->child_list))){
       celem=list_front(&(thread_current()->child_list));
       while(celem->next!=NULL){
          c=list_entry(celem, struct child, elem);
@@ -256,7 +258,7 @@ process_exit (void)
          celem = celem->next;
          
       }
-   }**/
+   }
    
    file_close(curr->myself);
 
