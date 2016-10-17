@@ -230,6 +230,7 @@ process_exit (void)
    
    if(curr->child->parent_exited){
       printf("1\n");
+      list_remove(curr->child);
       palloc_free_page(curr->child);
    }
    else 
