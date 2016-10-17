@@ -228,10 +228,10 @@ process_exit (void)
    struct list_elem * celem;
    struct child *c;
    
-   if(curr->child->parent_exited){
+   /**if(curr->child->parent_exited){
       printf("1\n");
       palloc_free_page(curr->child);
-   }
+   }**/
    while(!list_empty(&(thread_current()->file_list))){
         felem=list_front(&(thread_current()->file_list));
         ffd=list_entry(felem, struct file_fd, elem);
