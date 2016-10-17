@@ -241,11 +241,12 @@ process_exit (void)
       celem=list_front(&(thread_current()->child_list));
       while(celem->next!=NULL){
          c=list_entry(celem, struct child, elem);
-         if(c->dying) palloc_free_page(c);
-         else{
+         if(c->dying) 
+            palloc_free_page(c);
+         else
             c->parent_exited=1;
-            celem = celem->next;
-         }
+         celem = celem->next;
+         
       }
    }
    
