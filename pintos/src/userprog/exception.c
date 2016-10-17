@@ -152,8 +152,7 @@ page_fault (struct intr_frame *f)
   user = (f->error_code & PF_U) != 0;
    
    if (not_present || (is_kernel_vaddr (fault_addr) && user)){
-      f->eax = -1;
-      return;
+      exit(-1);
    }
 
   /* To implement virtual memory, delete the rest of the function
