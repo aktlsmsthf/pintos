@@ -242,7 +242,7 @@ process_exit (void)
       while(celem->next!=NULL){
          c=list_entry(celem, struct child, elem);
          c->parent_exited=1;
-         c = c->next;
+         celem = celem->next;
       }
    }
    
