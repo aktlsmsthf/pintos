@@ -21,6 +21,7 @@ struct list_elem* get_elem_from_fd(int);
 bool user_memory(void *, int);
 bool check_buffer(void *, unsigned);
 bool check_bad_ptr(uint32_t * pd,const void * uaddr);
+struct lock sys_lock;
 
 int a=0;
 
@@ -28,6 +29,7 @@ void
 syscall_init (void) 
 {
   intr_register_int (0x30, 3, INTR_ON, syscall_handler, "syscall");
+  lock_init(&sys_lock);
 }
 
 static void
@@ -54,7 +56,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       const char * cmd_line = *((char **)(f->esp)+1);
       user_memory((void *)cmd_line, 0);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line))exit(-1);
+      lock_acquire(&sys_lock);
       tid_t pid = process_execute(cmd_line);
+      lock_release(&sys_lock);
       f->eax = pid;}
       break;
     }
@@ -105,7 +109,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         
       }
       else{
+        lock_acquire(&sys_lock);
         struct file *ff = filesys_open(name);
+        lock_release(&sys_lock);
       
         if(ff==NULL) {
           f->eax = -1;
