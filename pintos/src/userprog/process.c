@@ -229,7 +229,7 @@ process_exit (void)
    struct child *c;
    
    if(curr->child->parent_exited){
-      list_remove(curr->child);
+      list_remove(curr->child->elem);
       palloc_free_page(curr->child);
    }
    else 
