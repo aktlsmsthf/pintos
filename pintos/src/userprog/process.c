@@ -254,8 +254,8 @@ process_exit (void)
             c->parent_exited=1;
          celem = celem->next;
          
-      }**/
-   }
+      }
+   }**/
    
    file_close(curr->myself);
 
