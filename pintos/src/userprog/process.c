@@ -156,8 +156,6 @@ start_process (void *f_name)
   if_.esp-=4;
   *(int *)if_.esp=0;
    
-     
-  printf("%x\n",if_.esp);
    palloc_free_page (fncopy);
 
    /**intr_set_level (old_level);**/
