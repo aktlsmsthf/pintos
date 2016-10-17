@@ -198,10 +198,10 @@ process_wait (tid_t child_tid UNUSED)
         }
       }
       chd= list_entry(child, struct child, elem);
-      list_remove(child);
+      /**list_remove(child);**/
 
       if(chd->waited != 0){
-          palloc_free_page (chd);
+          /**palloc_free_page (chd);**/
           return -1;}
       chd->waited=1;
       while(!chd->dying){
@@ -209,10 +209,10 @@ process_wait (tid_t child_tid UNUSED)
       }
       ret = chd->ret;
       if(chd->exit_called ==0){
-          palloc_free_page (chd);
+          /**palloc_free_page (chd);**/
          return -1;}
       else{
-          palloc_free_page (chd);
+          /**palloc_free_page (chd);**/
         return ret;
       }
 }
