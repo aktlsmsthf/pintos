@@ -51,36 +51,36 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_EXEC:{
-      if(!user_memory(f->esp, 1)) f->eax = -1;
+      if(!user_memory(f->esp, 1)) exit(-1);
       else{
-      const char * cmd_line = *((char **)(f->esp)+1);
-      user_memory((void *)cmd_line, 0);
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line))exit(-1);
-      lock_acquire(&sys_lock);
-      tid_t pid = process_execute(cmd_line);
-      lock_release(&sys_lock);
-      f->eax = pid;}
+        const char * cmd_line = *((char **)(f->esp)+1);
+        user_memory((void *)cmd_line, 0);
+        if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line))exit(-1);
+        lock_acquire(&sys_lock);
+        tid_t pid = process_execute(cmd_line);
+        lock_release(&sys_lock);
+        f->eax = pid;}
       break;
     }
       
     case SYS_WAIT:{
-      if(!user_memory(f->esp,1)) f->eax = -1;
+      if(!user_memory(f->esp,1)) exit(-1);
       else{
-      f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));}
+        f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));}
       break;
     }
       
     case SYS_CREATE:{
-      if(!user_memory(f->esp,2)) f->eax = -1;
+      if(!user_memory(f->esp,2)) exit(-1);
       else{
-      const char *file = *((char **)(f->esp)+1);
-      unsigned initial_size = *((unsigned *)(f->esp)+2);
+        const char *file = *((char **)(f->esp)+1);
+        unsigned initial_size = *((unsigned *)(f->esp)+2);
       
-      user_memory((void *)file, 0);
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)file))exit(-1);
-      if(file==NULL){
-        f->eax =-1;
-        /**exit(-1);**/
+        if(!user_memory((void *)file, 0)) exit(-1);
+        if(check_bad_ptr(thread_current()->pagedir,(const void *)file)) exit(-1);
+        if(file==NULL){
+          f->eax =-1;
+          /**exit(-1);**/
       }
       else{
         f->eax = filesys_create (file,initial_size);
@@ -89,15 +89,16 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       
     case SYS_REMOVE:{
-      if(!user_memory(f->esp,1)) f->eax = -1;
+      if(!user_memory(f->esp,1)) exit(-1);
       else{
       const char *file = *((char **)(f->esp)+1);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)file)) exit(-1);
       f->eax = filesys_remove (file); }
       break;
      }
       
     case SYS_OPEN:{
-      if(!user_memory(f->esp,1)) f->eax = -1;
+      if(!user_memory(f->esp,1)) exit(-1);
       else{
       const char *name= *((char **)(f->esp)+1);
       
@@ -136,25 +137,23 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_FILESIZE:{
-      if(!user_memory(f->esp,1)) f->eax = -1;
+      if(!user_memory(f->esp,1)) exit(-1);
       else{
-      int fd = *((int *)(f->esp)+1);
-      struct file * ff=get_file_from_fd(fd);
-      f->eax = (int) file_length(ff);
+        int fd = *((int *)(f->esp)+1);
+        struct file * ff=get_file_from_fd(fd);
+        f->eax = (int) file_length(ff);
       break;}
      }
       
     case SYS_READ:{
-      if(!user_memory(f->esp,3)) f->eax = -1;
+      if(!user_memory(f->esp,3)) exit(-1);
       else{
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       
       if(!user_memory((void *)buffer, 0)) exit(-1);
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)){
-        f->eax = -1;
-        break;}
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)) exit(-1);
       check_buffer(buffer, size);
       int j=0;
       if(fd == 0){
@@ -219,9 +218,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       
     case SYS_TELL:{
-      if(user_memory(f->esp,1)){
-        f->eax = -1;
-        break;}
+      if(user_memory(f->esp,1)) exit(-1);
       int fd = *((int *)(f->esp)+1);
       struct file *ff = get_file_from_fd(fd);
       if(ff==NULL){ 
