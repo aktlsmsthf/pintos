@@ -237,7 +237,7 @@ syscall_handler (struct intr_frame *f UNUSED)
          if(flm!=NULL){
            list_remove(flm);
         }
-        //palloc_free_page(ffd);
+        palloc_free_page(ffd);
       }
       break;}
   }
