@@ -107,7 +107,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       else{
       const char *name= *((char **)(f->esp)+1);
       
-      if(!user_memory((void *)name, 0)) {printf("10\n");f->eax = -1; break;}
+      if(!user_memory((void *)name, 0)) {f->eax = -1; break;}
       if(check_bad_ptr(thread_current()->pagedir,(const void *)name)) {printf("11\n");exit(-1);}
       char *e = "";
       if(name == NULL || strcmp(name, e)==0) {
