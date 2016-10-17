@@ -124,7 +124,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         }
         else{
           struct thread *t = thread_current();
-          struct file_fd *ffd = palloc_get_page(0);
+          struct file_fd *ffd = palloc_get_page(PAL_USER);
           if(ffd==NULL){
             f->eax =-1;
           }
