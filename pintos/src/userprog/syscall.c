@@ -13,6 +13,7 @@
 #include "threads/vaddr.h"
 #include <list.h>
 #include "userprog/pagedir.h"
+#include "threads/palloc.h"
 
 static void syscall_handler (struct intr_frame *);
 void exit(int);
