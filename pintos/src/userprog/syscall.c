@@ -101,7 +101,7 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_OPEN:{
-      if(!user_memory(f->esp,1)) {exit(-1);}
+      if(!user_memory(f->esp,1)) {printf("2\n");exit(-1);}
       else{
       const char *name= *((char **)(f->esp)+1);
       
