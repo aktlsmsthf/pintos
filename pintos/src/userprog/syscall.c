@@ -113,7 +113,6 @@ syscall_handler (struct intr_frame *f UNUSED)
         char *e = "";
         if(name == NULL || strcmp(name, e)==0) {
           f->eax = -1;
-          printf("2\n");
         }
         else{
           /**lock_acquire(&sys_lock);**/
@@ -122,14 +121,12 @@ syscall_handler (struct intr_frame *f UNUSED)
         
           if(ff==NULL) {
             f->eax = -1;
-            printf("3\n");
           }
           else{
             struct thread *t = thread_current();
             struct file_fd *ffd = malloc(sizeof(struct file_fd));
             if(ffd==NULL){
               f->eax =-1;
-               printf("4\n");
             }
             else{
               ffd -> fd = t->num_file+2;
