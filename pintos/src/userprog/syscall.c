@@ -105,11 +105,12 @@ syscall_handler (struct intr_frame *f UNUSED)
       else{
       const char *name= *((char **)(f->esp)+1);
       
-      /**if(!user_memory((void *)name, 0)) {f->eax = -1; break;}**/
-      /**if(!is_user_vaddr(name)) {f->eax = -1;}**/
-      /**else{**/
+      if(!user_memory((void *)name, 0)) {f->eax = -1; break;}
+      if(!is_user_vaddr(name)) {f->eax = -1;}
+      else{
         
-        /**if(check_bad_ptr(thread_current()->pagedir,(const void *)name)) {exit(-1);}**/
+        if(check_bad_ptr(thread_current()->pagedir,(const void *)name)) {f->eax = -1;}
+        else{
         char *e = "";
         if(name == NULL || strcmp(name, e)==0) {
           f->eax = -1;
@@ -136,7 +137,7 @@ syscall_handler (struct intr_frame *f UNUSED)
               f->eax = ffd->fd;
             }
           }
-        /**}**/
+        }}
       }}
       break;
      }
