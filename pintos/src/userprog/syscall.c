@@ -72,7 +72,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(!user_memory(f->esp,1)) 
         exit(-1);
      
-      f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));}
+      f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
       break;
     }
       
