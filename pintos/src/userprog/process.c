@@ -208,7 +208,7 @@ process_wait (tid_t child_tid UNUSED)
           return -1;}
       chd->waited=1;
       while(!chd->dying){
-         barrier();
+         thread_block();
       }
       ret = chd->ret;
       if(chd->exit_called ==0){
