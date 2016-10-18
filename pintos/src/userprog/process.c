@@ -237,16 +237,16 @@ process_exit (void)
    struct list_elem * celem;
    struct child *c;
    
-   if(curr->child->parent_exited){         
-      list_remove(&(curr->child->elem));  
-      palloc_free_page(curr->child);  
-   }    
-   else {  
-      curr->child->dying=1;     
-      if(curr->parent->status==THREAD_BLOCKED)         
-         thread_unblock(curr->parent); 
+   if(curr->child->parent_exited){
+      list_remove(&(curr->child->elem));
+      palloc_free_page(curr->child);
    }
-      
+   else {
+      curr->child->dying=1;
+      if(curr->parent->status==THREAD_BLOCKED)
+         thread_unblock(curr->parent);
+   }
+   
    while(!list_empty(&(curr->file_list))){
         felem=list_front(&(curr->file_list));
         ffd=list_entry(felem, struct file_fd, elem);
