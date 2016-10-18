@@ -211,6 +211,7 @@ process_wait (tid_t child_tid UNUSED)
       old_level = intr_disable();
    
       if(!chd->dying){
+         thread_current()->wait=1;
          thread_block();
       }
       intr_set_level(old_level);
@@ -241,8 +242,9 @@ process_exit (void)
    }
    else {
       curr->child->dying=1;
-      if(curr->parent->status==THREAD_BLOCKED)
-         thread_unblock(curr->parent);}
+      if(curr->parent->wait)
+         thread_unblock(curr->parent);
+   }
    
    while(!list_empty(&(curr->file_list))){
         felem=list_front(&(curr->file_list));
