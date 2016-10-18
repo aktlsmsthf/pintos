@@ -204,7 +204,7 @@ process_wait (tid_t child_tid UNUSED)
       list_remove(child);
 
       if(chd->waited != 0){
-          /**free(chd);**/
+          free(chd);
           return -1;}
       chd->waited=1;
       while(!chd->dying){
@@ -212,10 +212,10 @@ process_wait (tid_t child_tid UNUSED)
       }
       ret = chd->ret;
       if(chd->exit_called ==0){
-          /**free (chd);**/
+          free (chd);
          return -1;}
       else{
-          /**free(chd);**/
+          free(chd);
         return ret;
       }
 }
@@ -238,8 +238,8 @@ process_exit (void)
    else 
       curr->child->dying=1;
    
-   while(!list_empty(&(thread_current()->file_list))){
-        felem=list_front(&(thread_current()->file_list));
+   while(!list_empty(&(curr->file_list))){
+        felem=list_front(&(curr->file_list));
         ffd=list_entry(felem, struct file_fd, elem);
         file_close(ffd->file);
 
@@ -247,8 +247,8 @@ process_exit (void)
         free(ffd);
       }
    
-   if(!list_empty(&(thread_current()->child_list))){
-      celem=list_front(&(thread_current()->child_list));
+   if(!list_empty(&(curr->child_list))){
+      celem=list_front(&(curr->child_list));
       struct list_elem *nextelem;
       while(celem->next!=NULL){
          c=list_entry(celem, struct child, elem);
