@@ -242,7 +242,8 @@ process_exit (void)
    }
    else {
       curr->child->dying=1;
-      thread_unblock(curr->parent);}
+      if(curr->parent->status==THREAD_BLOCKED)
+         thread_unblock(curr->parent);}
    
    while(!list_empty(&(curr->file_list))){
         felem=list_front(&(curr->file_list));
