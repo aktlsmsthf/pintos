@@ -106,7 +106,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       const char *name= *((char **)(f->esp)+1);
       
       /**if(!user_memory((void *)name, 0)) {f->eax = -1; break;}**/
-      if(name ==NULL) {f->eax = -1;}
+      if(!is_user_vaddr(name)) {f->eax = -1;}
       else{
         
         if(check_bad_ptr(thread_current()->pagedir,(const void *)name)) {exit(-1);}
