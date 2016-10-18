@@ -105,7 +105,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       else{
       const char *name= *((char **)(f->esp)+1);
       
-      if(!user_memory((void *)name, 0)) {exit(-1)}
+      if(!user_memory((void *)name, 0)) {exit(-1);}
       if(!is_user_vaddr(name)) {f->eax = -1;}
       else{
         
@@ -125,7 +125,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           }
           else{
             struct thread *t = thread_current();
-            struct file_fd *ffd = malloc(sizeof(struct file_fd));
+            struct file_fd *ffd = palloc_get_page(0);
             if(ffd==NULL){
               f->eax =-1;
             }
@@ -249,7 +249,7 @@ syscall_handler (struct intr_frame *f UNUSED)
            list_remove(flm);
         }
         if(ffd!=NULL)
-           free(ffd);
+           palloc_free_page(ffd);
       }
       break;}
   }
