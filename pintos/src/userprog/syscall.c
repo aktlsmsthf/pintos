@@ -126,7 +126,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           }
           else{
             struct thread *t = thread_current();
-            struct file_fd *ffd = palloc_get_page(PAL_USER);
+            struct file_fd *ffd = malloc(sizeof(struct fild_fd));
             if(ffd==NULL){
               f->eax =-1;
                printf("4\n");
@@ -251,7 +251,7 @@ syscall_handler (struct intr_frame *f UNUSED)
            list_remove(flm);
         }
         if(ffd!=NULL)
-           palloc_free_page(ffd);
+           free(ffd);
       }
       break;}
   }
