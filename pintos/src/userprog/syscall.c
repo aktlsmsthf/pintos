@@ -265,7 +265,7 @@ void exit(int status){
       chd->exit_called =1;
       
 
-      /**printf("%s: exit(%d)\n",curr->name,chd->ret);**/
+      printf("%s: exit(%d)\n",curr->name,chd->ret);
 
       thread_exit();
 }
