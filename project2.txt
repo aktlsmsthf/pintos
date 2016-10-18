@@ -1,0 +1,230 @@
+			+---------------------------+
+			|		CS 330	    |
+			| PROJECT 2: USER PROGRAMS  |
+			| 	   DESIGN DOCUMENT  |
+			+---------------------------+
+
+---- GROUP ----
+
+이승호 konglsh@kaist.ac.kr
+이창훈 lch7224@kaist.ac.kr
+
+
+---- PRELIMINARIES ----
+
+pintos project2 입니다.
+token 2개 사용하겠습니다. 
+
+			   ARGUMENT PASSING
+			   ================
+
+---- DATA STRUCTURES ----
+
+
+A1:
+
+없습니다.
+
+
+
+---- ALGORITHMS ----
+
+
+A2: 
+
+먼저 cmd line이 들어오면 제일 앞부분을 잘라 그 이름을 가진 thread를 create합니다.
+그렇게 start_process()가 call 되면
+먼저 처음 esp를 기억해놓습니다.
+ 
+그리고 전체 string을 strtok를 이용해 잘라줍니다. 
+이때, array에 잘라진 argument들의 길이를 누적해서 기억해 줍니다.
+array의 크기는 30으로 정했습니다. 30개 이상의 argument가 들어올 수 없습니다.
+
+그리고 잘라진 argument를 하나씩 stack에넣어줍니다.
+그 뒤 각 argument의 포인터를 stack에 넣을 때, 기억해놓은 처음 esp와 배열을 이용해 찾습니다.
+
+i번째 argument의 포인터는 처음 esp - array[i]가 됩니다.
+
+배열의 길이가 곧 argc 값이 되고, 이를 stack에 넣어줍니다.
+
+ex) 'echo x y z' -> [5, 7, 9, 11] 
+
+stack :       <- 0
+        echo  <- 5
+         x    <- 7
+         y    <- 9
+         z    <- 11
+  
+
+---- RATIONALE ----
+
+
+A3: 여러 thread에서 strtok()로 할 경우 값이 바뀌면서 잘못된 결과가 나올 수 있습니다.
+하지만 strtok_r로 할 경우 save를 이용해서 thread들이 다른 thread에 영향을 안 줄 수 있다는 장점이 있습니다.
+
+
+A4:  kernel이 할 경우 argument passing을 위해 higher priority를 가진 process를 잠시 멈춰야되는
+현상이 생길 수 있지만 shell에서 할 경우 그런 현상을 방지할 수 있습니다. 게다가 kernel의 physical code의
+여유가 생깁니다.
+
+
+			     SYSTEM CALLS
+			     ============
+
+---- DATA STRUCTURES ----
+
+
+B1:
+
+
+in thread.h
+
+struct thread
+  {
+    ...
+    struct child * child; //save process's status as child structure
+                           (parent of this process use this information) 
+    
+    bool load_finish;   // to check loading the process finished
+    bool load_success;  // to check loading the process successivly finished
+    struct list child_list;  //save this process's child as list of struct child
+    struct list file_list;   //save files this process opened
+    int num_file;            //number of files opened
+    struct file *myself;     //save process it self as file opened
+    ...}
+
+
+struct child{
+  struct list_elem elem;
+  bool waited;
+  bool exit_called;
+  bool dying;
+  bool load_finish;
+  bool load_success;
+  int ret;
+  tid_t tid;
+};     //save the process's status
+
+
+in syscall.h
+
+
+struct file_fd{
+  int fd;
+  struct file *file;
+  struct list_elem elem;
+};  // save file as a struct of fd, file pointer.
+
+
+B2:
+file descriptor는 각 process에서 unique합니다. 
+각 process에 저장된 num_file 수에 따라 fd를 할당합니다.
+
+
+---- ALGORITHMS ----
+
+
+B3: 
+
+read : input fd가 0 일경우 input_getc()를 이용
+       input fd==1 -> error
+       else : input fd로부터 file_fd를 찾습니다.
+              그 뒤 filesys/filesys.c의 file_read()를 이용해 읽어옵니다.
+
+write : input fd가 1 일경우 putbuf()를 이용
+       input fd==0 -> error
+       else : input fd로부터 file_fd를 찾습니다.
+              그 뒤 filesys/filesys.c의 file_write()를 이용해 씁니다.
+
+
+
+B4:
+가장 작은 수는 모든 data가 한 page에 저장되어 있을 때한번하면 됩니다.
+가장 많이 할 때는 모든 data가 byte 단위로 page로 구성되어 있을 때이며 4096bytes일 때는 4096번,
+2bytes일 때는 2번입니다.
+
+B5. 
+wait을 하면 process_wait을 call합니다. process_wait에서는 일단 thread_current의 child_list가 empty가
+아닌지 검사합니다. 아니라면 argument로 받은 pid와 같은 pid를 가진 child struct를 child_list에서 찾습니다. 찾은 뒤
+child의 dying을 계속 검사해 죽을 때 까지 기다립니다. child process는 죽기전에 자신의 child struct에 status 등,
+필요한 정보를 입력해서 parent가 어떻게 죽은지 알 수 있도록 합니다. 만약 child가 exit로 죽은 것이 확인되었으면 
+child에 저장된 ret값을 return해 줍니다. 아닌 경우 -1을 return합니다.
+ 
+B6.
+pointer를 받을 때 마다 is_user_vaddr과 pagedir_get_page 함수를 이용하여 user memory가 맞는지와 mapped meomory가
+맞는지 검사합니다. 또한 write, read 등 buffer나 char*를 받을 때 그것들이 다시 vaild한지 같은 방법으로 검사합니다.
+그리고 만약 검사해서 사용하면 안되는 것이라는 결과가 나오면 할당받은 resource들을 모두 free하고 끝냅니다.
+
+
+---- SYNCHRONIZATION ----
+
+B7.
+child process가 create되면 그것의 child struct를 parent thread의 child list에 추가해줍니다. child list에는
+load_finish와 load_success가 있습니다. child process에서 load가 끝나고 나면 load_finish를 1로 바꾸고 load가 성공하면
+load_success를 1, 실패하면 0으로 바꾸어줍니다. parent process에서는 thread_create에서 나온 pid를 이용해 child list에서
+해당 child를 찾아서 load_finish가 1이 될 때까지 기다립니다. 1이 된 후엔 load_success가 0이면 -1을 return해주고 
+1이면 정상적으로 진행해 줍니다.
+
+B8.
+child에 exit_called와 dying이 있다. system call-exit를 통해 exit된 process는 child struct에 exit-called를 1로 지정해준다.
+그리고 exit가 되는 모든 경우에 dying을 1로 지정한다. parent는 wait할 때 먼저 tid를 통해 맞는 child를 찾습니다. 그리고
+그 child의 dying을 검사해 1인 경우 block합니다. child가 exit될 때 dying을 1로 만들고 parent가 blocked이라면 unblock해주기 때문에
+child가 이미 죽은 상태이거나 죽고나면 그 뒤의 코드를 진행할 수 있습니다. 그 후로는 child struct의 ret를 저장해 return해주고
+child struct를 free해줍니다.
+
+Parent process를 P, child process를 C라고 하면 크게 4가지 상황이 있습니다.
+1. C가 살아있을 때 P가 wait을 call한 경우 : C->child->dying이 0이기 때문에 P가 block되고 C가 죽을 때 unblock을 해줍니다.
+                                            그 후 child struct를 free해주고 끝냅니다.
+2. C가 죽어있을 때 P가 wait을 call한 경우 : dying이 1이어서 child struct를 free 해주고 끝냅니다.
+3. C가 먼저 죽고 P가 wait을 call하지 않고 죽는 경우 : parent는 죽기 전에 child_list를 검사하여 죽은 child struct를 free해줍니다.
+4. wait call 없이 P가 먼저 죽고 C가 죽는 경우 : P가 죽을 때 자신의 child_listd에서 살아있는 child에는 parent_exited를 1로 set해줘
+                                                child가 죽을 때 그 값을 확인하고 1이라면 child struct를 free해줍니다.
+
+그렇기 때문에 할당받은 child struct들은 모두 free 될 수 있습니다. 또한 죽을 때 file list를 검사하여
+모든 file_fd struct를 free해주기 때문에 할당 받은 메모리는 모두 free됩니다.
+
+---- RATIONALE ----
+
+B9.
+memory를 받을 때마다 그것이 valid한지는 바로바로 확인하는 것이 확실하게 때문에 이렇게 했습니다.
+
+B10.
+file마다 고유한 file descriptor를 가질 수 있고 file descriptor를 이용해 해당 file을 찾을 수 있습니다. 또한 각각의 process가 
+고유의 file list를 가지고 있기 때문에 parent와 child가 file descriptor를 공유하지 않습니다.
+
+B11.
+바꾸지 않았습니다.
+			   SURVEY QUESTIONS
+			   ================
+
+Answering these questions is optional, but it will help us improve the
+course in future quarters.  Feel free to tell us anything you
+want--these questions are just to spur your thoughts.  You may also
+choose to respond anonymously in the course evaluations at the end of
+the quarter.
+
+>> In your opinion, was this assignment, or any one of the three problems
+>> in it, too easy or too hard?  Did it take too long or too little time?
+
+intr_frame을 다루는 방법을 이해하고 나서는 그다지 어렵지 않게 해결할 수 있었습니다.
+wait와 exit를 따로 구현하는 것이 아니라 서로가 영향을 주어야 하기 때문에
+그 방법을 구상하는 것이 쉽지는 않았습니다.
+
+>> Did you find that working on a particular part of the assignment gave
+>> you greater insight into some aspect of OS design?
+
+frame과 system call handler이 어떤 식으로 구성되고 작동되는지, wait과 exit의 작동 방법에
+대해 이해할 수 있었습니다.
+
+>> Is there some particular fact or hint we should give students in
+>> future quarters to help them solve the problems?  Conversely, did you
+>> find any of our guidance to be misleading?
+
+없습니다.
+
+>> Do you have any suggestions for the TAs to more effectively assist
+>> students, either for future quarters or the remaining projects?
+
+업습니다.
+
+>> Any other comments?
