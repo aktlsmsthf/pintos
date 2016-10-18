@@ -54,11 +54,11 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_EXEC:{
       if(!user_memory(f->esp, 1)) {
-        exit(-1);}
+        printf("3\n");exit(-1);}
       else{
         const char * cmd_line = *((char **)(f->esp)+1);
         user_memory((void *)cmd_line, 0);
-        if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line)){exit(-1);}
+        if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line)){printf("4\n");exit(-1);}
         lock_acquire(&sys_lock);
         tid_t pid = process_execute(cmd_line);
         lock_release(&sys_lock);
