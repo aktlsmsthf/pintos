@@ -204,7 +204,7 @@ process_wait (tid_t child_tid UNUSED)
       list_remove(child);
 
       if(chd->waited != 0){
-          palloc_free_page (chd);
+          free(chd);
           return -1;}
       chd->waited=1;
       while(!chd->dying){
@@ -212,10 +212,10 @@ process_wait (tid_t child_tid UNUSED)
       }
       ret = chd->ret;
       if(chd->exit_called ==0){
-          palloc_free_page (chd);
+          free (chd);
          return -1;}
       else{
-          palloc_free_page (chd);
+          free(chd);
         return ret;
       }
 }
@@ -233,7 +233,7 @@ process_exit (void)
    
    if(curr->child->parent_exited){
       list_remove(&(curr->child->elem));
-      palloc_free_page(curr->child);
+      free(curr->child);
    }
    else 
       curr->child->dying=1;
@@ -244,7 +244,7 @@ process_exit (void)
         file_close(ffd->file);
 
         list_remove(felem);
-        palloc_free_page(ffd);
+        free(ffd);
       }
    
    if(!list_empty(&(thread_current()->child_list))){
@@ -256,7 +256,7 @@ process_exit (void)
          if(c->dying) {
             nextelem = celem->next;
             list_remove(celem);
-            palloc_free_page(c);
+            free(c);
          }
          else{
             c->parent_exited=1;
