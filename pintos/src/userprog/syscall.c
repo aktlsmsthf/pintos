@@ -122,8 +122,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
+          lock_acquire(&sys_lock);
           struct file *ff = filesys_open(name);
-        
+          lock_release(&sys_lock);
           if(ff==NULL) {
             f->eax = -1;
           }
