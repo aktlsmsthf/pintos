@@ -264,9 +264,10 @@ syscall_handler (struct intr_frame *f UNUSED)
         
         if(ffd!=NULL)
            palloc_free_page(ffd);
-        
+      } 
       break;
     }
+  }
 }
 
 
