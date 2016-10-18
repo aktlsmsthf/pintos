@@ -211,6 +211,7 @@ thread_create (const char *name, int priority,
    t->num_file = 0;
    
    t->parent = thread_current();
+   t->wait=0;
 #endif
   /* Add to run queue. */
   thread_unblock (t);
