@@ -240,8 +240,9 @@ process_exit (void)
       list_remove(&(curr->child->elem));
       palloc_free_page(curr->child);
    }
-   else 
+   else {
       curr->child->dying=1;
+      thread_unblock(curr->parent);}
    
    while(!list_empty(&(curr->file_list))){
         felem=list_front(&(curr->file_list));
