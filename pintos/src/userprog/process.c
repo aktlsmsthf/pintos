@@ -243,7 +243,7 @@ process_exit (void)
    }
    else {
       curr->child->dying=1;
-      if(curr->parent->status==THREAD_BLOCK)
+      if(curr->parent->status==THREAD_BLOCKED)
          thread_unblock(curr->parent);
    }
    
