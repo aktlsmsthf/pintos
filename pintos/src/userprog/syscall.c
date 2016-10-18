@@ -265,7 +265,7 @@ void exit(int status){
       chd->exit_called =1;
       
 #ifdef USERPROG
-      msg("%s: exit(%d)\n",curr->name,chd->ret);
+      printf("%s: exit(%d)\n",curr->name,chd->ret);
 #endif
       thread_exit();
 }
