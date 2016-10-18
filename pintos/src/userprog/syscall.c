@@ -107,33 +107,36 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       /**if(!user_memory((void *)name, 0)) {f->eax = -1; break;}**/
       if(name ==NULL) {f->eax = -1; break;}
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)name)) {exit(-1);}
-      char *e = "";
-      if(name == NULL || strcmp(name, e)==0) {
-        f->eax = -1;
-        
-      }
       else{
-        lock_acquire(&sys_lock);
-        struct file *ff = filesys_open(name);
-        lock_release(&sys_lock);
-      
-        if(ff==NULL) {
+        
+        if(check_bad_ptr(thread_current()->pagedir,(const void *)name)) {exit(-1);}
+        char *e = "";
+        if(name == NULL || strcmp(name, e)==0) {
           f->eax = -1;
-          
+        
         }
         else{
-          struct thread *t = thread_current();
-          struct file_fd *ffd = palloc_get_page(PAL_USER);
-          if(ffd==NULL){
-            f->eax =-1;
+          lock_acquire(&sys_lock);
+          struct file *ff = filesys_open(name);
+          lock_release(&sys_lock);
+        
+          if(ff==NULL) {
+            f->eax = -1;
+          
           }
           else{
-            ffd -> fd = t->num_file+2;
-            ffd -> file = ff;
-            list_push_front(&(t->file_list),&ffd->elem);
-            t->num_file++;
-            f->eax = ffd->fd;
+            struct thread *t = thread_current();
+            struct file_fd *ffd = palloc_get_page(PAL_USER);
+            if(ffd==NULL){
+              f->eax =-1;
+            }
+            else{
+              ffd -> fd = t->num_file+2;
+              ffd -> file = ff;
+              list_push_front(&(t->file_list),&ffd->elem);
+              t->num_file++;
+              f->eax = ffd->fd;
+            }
           }
         }
       }}
