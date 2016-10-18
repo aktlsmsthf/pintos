@@ -119,7 +119,7 @@ start_process (void *f_name)
    
   /* If load failed, quit. */
   if (!success) {
-    /** thread_current()->child->dying=1;**/
+    thread_current()->child->dying=1;
 
     thread_exit ();}
   
