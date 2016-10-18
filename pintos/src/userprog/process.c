@@ -207,9 +207,14 @@ process_wait (tid_t child_tid UNUSED)
           palloc_free_page(chd);
           return -1;}
       chd->waited=1;
+   
+      enum intr_level old_level;
+      old_level = intr_disable();
+   
       while(!chd->dying){
          thread_block();
       }
+      intr_set_level(old_level);
       ret = chd->ret;
       if(chd->exit_called ==0){
           palloc_free_page (chd);
