@@ -198,7 +198,7 @@ thread_create (const char *name, int priority,
   sf->eip = switch_entry;
 #ifdef USERPROG  
   /**struct child *chd=palloc_get_page(PAL_USER);**/
-  struct child *chd = malloc(sizeof (struct child));
+  struct child *chd = palloc_get_page (0);
   chd->waited=0;
   chd->exit_called=0;
   chd->dying=0;
