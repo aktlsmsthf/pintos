@@ -59,7 +59,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         exit(-1);}
       else{
         const char * cmd_line = *((char **)(f->esp)+1);
-        user_memory((void *)cmd_line, 0);
+        if(!user_memory((void *)cmd_line, 0)) {exit (-1);}
         if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line)){ printf("3\n");exit(-1);}
         lock_acquire(&sys_lock);
         tid_t pid = process_execute(cmd_line);
