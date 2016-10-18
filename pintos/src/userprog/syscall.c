@@ -264,9 +264,9 @@ void exit(int status){
       chd->ret =status;
       chd->exit_called =1;
       
-#ifdef USERPROG
-      printf("%s: exit(%d)\n",curr->name,chd->ret);
-#endif
+
+      /**printf("%s: exit(%d)\n",curr->name,chd->ret);**/
+
       thread_exit();
 }
 struct file* get_file_from_fd(int fd){
