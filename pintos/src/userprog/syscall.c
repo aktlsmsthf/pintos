@@ -59,9 +59,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         const char * cmd_line = *((char **)(f->esp)+1);
         user_memory((void *)cmd_line, 0);
         if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line)){exit(-1);}
-        lock_acquire(&sys_lock);
+        /**lock_acquire(&sys_lock);**/
         tid_t pid = process_execute(cmd_line);
-        lock_release(&sys_lock);
+        /**lock_release(&sys_lock);**/
         f->eax = pid;}
       break;
     }
@@ -116,9 +116,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           printf("2\n");
         }
         else{
-          lock_acquire(&sys_lock);
+          /**lock_acquire(&sys_lock);**/
           struct file *ff = filesys_open(name);
-          lock_release(&sys_lock);
+          /**lock_release(&sys_lock);**/
         
           if(ff==NULL) {
             f->eax = -1;
