@@ -106,16 +106,20 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_OPEN:{
-      if(!user_memory(f->esp,1)) 
+      if(!user_memory(f->esp,1)){
         exit(-1);
+        break;
+      }
       
       const char *name= *((char **)(f->esp)+1);
       
-      if(!user_memory((void *)name, 0)) {exit(-1);}
-      if(!is_user_vaddr(name)) {f->eax = -1;}
+      if(!user_memory((void *)name, 0)) {exit(-1);break;}
+      if(!is_user_vaddr(name)) {f->eax = -1;break;}
       else{
-        if(check_bad_ptr(thread_current()->pagedir,(const void *)name)) 
+        if(check_bad_ptr(thread_current()->pagedir,(const void *)name)){ 
           exit(-1);
+          break;
+        }
     
         char *e = "";
         if(name == NULL || strcmp(name, e)==0) {
