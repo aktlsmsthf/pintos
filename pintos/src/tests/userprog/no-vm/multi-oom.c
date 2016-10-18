@@ -72,23 +72,18 @@ consume_some_resources_and_die (int seed)
   switch (random_ulong () % 5)
     {
       case 0:
-         msg("a");
         *(int *) NULL = 42;
 
       case 1:
-          msg("b");
         return *(int *) NULL;
 
       case 2:
-          msg("c");
         return *PHYS_BASE;
 
       case 3:
-          msg("d");
         *PHYS_BASE = 42;
 
       case 4:
-          msg("e");
         open ((char *)PHYS_BASE);
         exit (-1);
 
@@ -120,7 +115,6 @@ main (int argc, char *argv[])
   /* If -k is passed, crash this process. */
   if (argc > 2 && !strcmp(argv[2], "-k"))
     {
-       msg("%d", n);
       consume_some_resources_and_die (n);
       NOT_REACHED ();
     }
