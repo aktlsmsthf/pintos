@@ -204,7 +204,7 @@ process_wait (tid_t child_tid UNUSED)
       list_remove(child);
 
       if(chd->waited != 0){
-          free(chd);
+          /**free(chd);**/
           return -1;}
       chd->waited=1;
       while(!chd->dying){
@@ -212,10 +212,10 @@ process_wait (tid_t child_tid UNUSED)
       }
       ret = chd->ret;
       if(chd->exit_called ==0){
-          free (chd);
+          /**free (chd);**/
          return -1;}
       else{
-          free(chd);
+          /**free(chd);**/
         return ret;
       }
 }
