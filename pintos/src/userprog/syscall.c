@@ -45,80 +45,84 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;}
       
     case SYS_EXIT:{
-      if(!user_memory(f->esp, 1)){
-        exit(-1);}
-      else{
+      if(!user_memory(f->esp, 1))
+        exit(-1);
+    
       int status = *((int *)(f->esp)+1);
-      exit(status);}
-      break;}
+      exit(status);
+      break;
+    }
       
     case SYS_EXEC:{
-      if(!user_memory(f->esp, 1)) {
-        exit(-1);}
-      else{
-        const char * cmd_line = *((char **)(f->esp)+1);
-        user_memory((void *)cmd_line, 0);
-        if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line)){exit(-1);}
-        lock_acquire(&sys_lock);
-        tid_t pid = process_execute(cmd_line);
-        lock_release(&sys_lock);
-        f->eax = pid;}
+      if(!user_memory(f->esp, 1))
+        exit(-1);
+    
+      const char * cmd_line = *((char **)(f->esp)+1);
+      user_memory((void *)cmd_line, 0);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line))
+        exit(-1);
+      lock_acquire(&sys_lock);
+      tid_t pid = process_execute(cmd_line);
+      lock_release(&sys_lock);
+      f->eax = pid;}
       break;
     }
       
     case SYS_WAIT:{
-      if(!user_memory(f->esp,1)) { exit(-1);}
-      else{
-        f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));}
+      if(!user_memory(f->esp,1)) 
+        exit(-1);
+     
+      f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));}
       break;
     }
       
     case SYS_CREATE:{
-      if(!user_memory(f->esp,2)) {exit(-1);}
-      else{
-        const char *file = *((char **)(f->esp)+1);
-        unsigned initial_size = *((unsigned *)(f->esp)+2);
+      if(!user_memory(f->esp,2)) 
+        exit(-1);
       
-        if(!user_memory((void *)file, 0)) exit(-1);
-        if(check_bad_ptr(thread_current()->pagedir,(const void *)file)) {exit(-1);}
-        if(file==NULL){
-          f->eax =-1;
-          /**exit(-1);**/
+      const char *file = *((char **)(f->esp)+1);
+      unsigned initial_size = *((unsigned *)(f->esp)+2);
+      
+      if(!user_memory((void *)file, 0))
+        exit(-1);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)file)) {exit(-1);}
+      if(file==NULL){
+        f->eax =-1;
       }
       else{
         f->eax = filesys_create (file,initial_size);
-      }}
-      break;
       }
+      break;
+    }
       
     case SYS_REMOVE:{
-      if(!user_memory(f->esp,1)) {exit(-1);}
-      else{
+      if(!user_memory(f->esp,1)) 
+        exit(-1);
+      
       const char *file = *((char **)(f->esp)+1);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)file)) {exit(-1);}
-      f->eax = filesys_remove (file); }
+      f->eax = filesys_remove (file);
       break;
      }
       
     case SYS_OPEN:{
-      if(!user_memory(f->esp,1)) {exit(-1);}
-      else{
+      if(!user_memory(f->esp,1)) 
+        exit(-1);
+      
       const char *name= *((char **)(f->esp)+1);
       
       if(!user_memory((void *)name, 0)) {exit(-1);}
       if(!is_user_vaddr(name)) {f->eax = -1;}
       else{
-        
-        if(check_bad_ptr(thread_current()->pagedir,(const void *)name)) {exit(-1);}
-        else{
+        if(check_bad_ptr(thread_current()->pagedir,(const void *)name)) 
+          exit(-1);
+    
         char *e = "";
         if(name == NULL || strcmp(name, e)==0) {
           f->eax = -1;
         }
         else{
-          /**lock_acquire(&sys_lock);**/
           struct file *ff = filesys_open(name);
-          /**lock_release(&sys_lock);**/
         
           if(ff==NULL) {
             f->eax = -1;
@@ -137,29 +141,33 @@ syscall_handler (struct intr_frame *f UNUSED)
               f->eax = ffd->fd;
             }
           }
-        }}
-      }}
+        }
+      }
       break;
      }
       
     case SYS_FILESIZE:{
-      if(!user_memory(f->esp,1)) { exit(-1);}
-      else{
-        int fd = *((int *)(f->esp)+1);
-        struct file * ff=get_file_from_fd(fd);
-        f->eax = (int) file_length(ff);
-      break;}
+      if(!user_memory(f->esp,1)) 
+        exit(-1);
+
+      int fd = *((int *)(f->esp)+1);
+      struct file * ff=get_file_from_fd(fd);
+      f->eax = (int) file_length(ff);
+      break;
      }
       
     case SYS_READ:{
-      if(!user_memory(f->esp,3)) {exit(-1);}
-      else{
+      if(!user_memory(f->esp,3)) 
+        exit(-1);
+      
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       
-      if(!user_memory((void *)buffer, 0)) {exit(-1);}
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)){ exit(-1);}
+      if(!user_memory((void *)buffer, 0)) 
+        exit(-1);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer))
+        exit(-1);
       check_buffer(buffer, size);
       int j=0;
       if(fd == 0){
@@ -172,7 +180,6 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax =-1;
       }
       else{
-        
         struct file * ff = get_file_from_fd(fd);
         if(ff==NULL){
           f->eax = -1;
@@ -181,17 +188,19 @@ syscall_handler (struct intr_frame *f UNUSED)
           int r = (int) file_read(ff, buffer, size);
           f->eax = r;
         }
-      }}
-      break;}
+      }
+      break;
+    }
       
-    case SYS_WRITE:{
-      
+    case SYS_WRITE:{  
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
 
-      if(!user_memory((void *)buffer, 0)) {exit(-1);}
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)) {exit(-1);}
+      if(!user_memory((void *)buffer, 0)) 
+        exit(-1);
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)) 
+        exit(-1);
       check_buffer(buffer, size);
       if(fd==1){
         putbuf(buffer, size);
@@ -201,7 +210,8 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = -1;
       }
       else{
-        if(!user_memory(f->esp, 3)) {exit(-1);}
+        if(!user_memory(f->esp, 3)) 
+          exit(-1);
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
           f->eax = -1;
@@ -212,19 +222,21 @@ syscall_handler (struct intr_frame *f UNUSED)
         }
       }
       break;
-      }
+    }
       
     case SYS_SEEK:{
-      if(!user_memory(f->esp,2)) {exit(-1);}
+      if(!user_memory(f->esp,2)) 
+        exit(-1);
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
       struct file *ff = get_file_from_fd(fd);
       file_seek(ff, position);
       break;
-      }
+    }
       
     case SYS_TELL:{
-      if(user_memory(f->esp,1)) {exit(-1);}
+      if(user_memory(f->esp,1)) 
+        exit(-1);
       int fd = *((int *)(f->esp)+1);
       struct file *ff = get_file_from_fd(fd);
       if(ff==NULL){ 
@@ -233,26 +245,28 @@ syscall_handler (struct intr_frame *f UNUSED)
       else{
         f->eax = file_tell(ff);
       }
-      break;}
+      break;
+    }
       
     case SYS_CLOSE:{
-      if(!user_memory(f->esp,1)) { exit(-1);}
+      if(!user_memory(f->esp,1)) 
+        exit(-1);
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
         struct list_elem *flm = get_elem_from_fd(fd);
         struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
        
-        if(ffd->file!=NULL){
+        if(ffd->file!=NULL)
            file_close(ffd->file);
-        }
-         if(flm!=NULL){
+        
+        if(flm!=NULL)
            list_remove(flm);
-        }
+        
         if(ffd!=NULL)
            palloc_free_page(ffd);
-      }
-      break;}
-  }
+        
+      break;
+    }
 }
 
 
@@ -301,21 +315,6 @@ struct list_elem* get_elem_from_fd(int fd){
       }
       return felem;
 }
-
-/**void user_memory(void *esp, int n){
-  int * p;
-  p = (int *)esp + n;
-  if(!is_user_vaddr((const void *) p)) exit(-1);
-}
-
-void check_buffer(void *buffer, unsigned size){
-  unsigned i=0;
-  char * b = (char *) buffer;
-  for(;i++;i<size){
-    if(!is_user_vaddr((const void *) b)) exit(-1);
-    b++;
-  }
-}**/
 
 bool user_memory(void *esp, int n){
   int * p;
