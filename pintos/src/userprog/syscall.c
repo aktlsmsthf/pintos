@@ -64,7 +64,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       lock_acquire(&sys_lock);
       tid_t pid = process_execute(cmd_line);
       lock_release(&sys_lock);
-      f->eax = pid;}
+      f->eax = pid;
       break;
     }
       
