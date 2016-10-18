@@ -210,7 +210,7 @@ process_wait (tid_t child_tid UNUSED)
       enum intr_level old_level;
       old_level = intr_disable();
    
-      if(!chd->dying){
+      while(!chd->dying){
          thread_current()->wait=1;
          thread_block();
       }
