@@ -302,7 +302,7 @@ thread_exit (void)
 
 #ifdef USERPROG
   process_exit ();
-  thread_current()->child->dying=1; 
+  /**thread_current()->child->dying=1;**/ 
 #endif
   
 
