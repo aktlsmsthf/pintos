@@ -11,4 +11,4 @@ struct frame_elem{
 
 void frame_init(void);
 void frame_push(void *frame);
-struct fraem_elem* frame_pop(void);
+struct frame_elem* frame_pop(void);
