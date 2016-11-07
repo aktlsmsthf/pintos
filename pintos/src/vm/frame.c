@@ -13,6 +13,6 @@ void frame_push(void *frame){
   list_push_front(&frame_table, &f->elem);
 }
 
-void frame_pop(void){
+struct frame_elem* frame_pop(void){
   
 }
