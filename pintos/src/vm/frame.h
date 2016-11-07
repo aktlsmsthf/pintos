@@ -1,6 +1,8 @@
 #include <list.h>
+#include "threads/synch.h"
 
 struct list frame_table;
+struct lock frame_lock;
 
 struct frame_elem{
   void *frame;
