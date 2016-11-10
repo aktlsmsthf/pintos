@@ -82,7 +82,7 @@ main (void)
   thread_init ();
   console_init ();  
   
-  /**frame_init();**/
+  frame_init();
 
   /* Greet user. */
   printf ("Pintos booting with %'zu kB RAM...\n", ram_pages * PGSIZE / 1024);
