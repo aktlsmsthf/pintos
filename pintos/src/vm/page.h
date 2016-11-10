@@ -1,6 +1,6 @@
 #include <hash.h>
 
-struct spt_entry{
+struct spte_entry{
   void* page;
   bool is_swap;
   size_t index;
