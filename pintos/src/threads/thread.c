@@ -12,10 +12,11 @@
 #include "threads/synch.h"
 #include "threads/vaddr.h"
 
-#include "vm/frame.h"
-#include "vm/page.h"
+
 #ifdef USERPROG
 #include "userprog/process.h"
+#include "vm/frame.h"
+#include "vm/page.h"
 #endif
 
 /* Random value for struct thread's `magic' member.
