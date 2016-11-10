@@ -8,11 +8,11 @@ void frame_init(void){
 }
 
 void frame_push(void *frame){
-  struct frame_elem f;
+  struct frame_entry f = malloc(struct frame_entry);
   f->frame = frame;
   list_push_front(&frame_table, &f->elem);
 }
 
-struct frame_elem* frame_pop(void){
+struct frame_entry* frame_pop(void){
   
 }
