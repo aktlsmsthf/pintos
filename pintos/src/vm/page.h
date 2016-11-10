@@ -1,7 +1,7 @@
 #include <hash.h>
 
-struct spte_entry{
-  void* page;
+struct spt_entry{
+  void *page;
   bool is_swap;
   size_t index;
   struct hash_elem elem;
