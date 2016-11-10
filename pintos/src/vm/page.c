@@ -12,7 +12,7 @@ bool hash_less_func(const struct hash_elem *a, const struct hash_elem *b, void *
   return sa->page < sb->page;
 }
 
-void spt_init(struct hash spt){
+void spt_init(struct hash *spt){
   hash_init(spt, hash_hash_func, hash_less_func);
 }
 
