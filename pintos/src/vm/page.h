@@ -1,6 +1,5 @@
 #include <hash.h>
 
-struct hash supple_page_table;
 
 struct spt_entry{
   void* page;
