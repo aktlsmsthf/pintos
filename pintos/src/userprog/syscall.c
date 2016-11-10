@@ -194,7 +194,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
-          lock_acqurie(&sys_lock);
+          lock_acquire(&sys_lock);
           int r = (int) file_read(ff, buffer, size);
           lock_release(&sys_lock);
           f->eax = r;
@@ -258,7 +258,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = -1;
       }
       else{
-        lock_acuqire(&sys_lock);
+        lock_acquire(&sys_lock);
         f->eax = file_tell(ff);
         lock_release(&sys_lock);
       }
@@ -274,7 +274,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
        
         if(ffd->file!=NULL){
-          lock_acqurire(&sys_lock);
+          lock_acquire(&sys_lock);
            file_close(ffd->file);
           lock_release(&sys_lock);
         }
