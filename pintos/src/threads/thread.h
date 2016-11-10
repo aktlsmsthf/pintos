@@ -101,6 +101,8 @@ struct thread
     struct list_elem elem;              /* List element. */
     struct thread *parent;
     bool wait;
+    
+    struct hash spt_table;
 
 #ifdef USERPROG
     /* Owned by userprog/process.c. */
