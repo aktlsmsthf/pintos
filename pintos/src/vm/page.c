@@ -12,15 +12,15 @@ bool hash_less_func(const struct hash_elem *a, const struct hash_elem *b, void *
   return sa->page < sb->page;
 }
 
-void spt_init(){
-  hash_init(supple_page_table, hash_hash_func, hash_less_func);
+void spt_init(struct hash spt){
+  hash_init(spt, hash_hash_func, hash_less_func);
 }
 
-void spt_alloc(void* page){
+void spt_alloc(struct hash spt, void* page){
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   spte->page = page;
   spte->is_swap = false;
   spte->index = -1;
   
-  hash_insert(supple_page_table, spte->elem);
+  hash_insert(spt, spte->elem);
 }
