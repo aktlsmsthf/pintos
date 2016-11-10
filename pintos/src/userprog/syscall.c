@@ -90,7 +90,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax =-1;
       }
       else{
+        lock_acquire(&sys_lock);
         f->eax = filesys_create (file,initial_size);
+        lock_release(&sys_lock);
       }
       break;
     }
@@ -101,7 +103,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       const char *file = *((char **)(f->esp)+1);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)file)) {exit(-1);}
+      lock_acquire(&sys_lock);
       f->eax = filesys_remove (file);
+      lock_release(&sys_lock);
       break;
      }
       
@@ -190,7 +194,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
+          lock_acqurie(&sys_lock);
           int r = (int) file_read(ff, buffer, size);
+          lock_release(&sys_lock);
           f->eax = r;
         }
       }
@@ -222,7 +228,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
+          lock_acquire(&sys_lock);
           int r = (int) file_write(ff, buffer, size);
+          lock_release(&sys_lock);
           f->eax = r;
         }
       }
@@ -235,7 +243,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
       struct file *ff = get_file_from_fd(fd);
+      lock_acquire(&sys_lock);
       file_seek(ff, position);
+      lock_release(&sys_lock);
       break;
     }
       
@@ -248,7 +258,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = -1;
       }
       else{
+        lock_acuqire(&sys_lock);
         f->eax = file_tell(ff);
+        lock_release(&sys_lock);
       }
       break;
     }
@@ -261,8 +273,11 @@ syscall_handler (struct intr_frame *f UNUSED)
         struct list_elem *flm = get_elem_from_fd(fd);
         struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
        
-        if(ffd->file!=NULL)
+        if(ffd->file!=NULL){
+          lock_acqurire(&sys_lock);
            file_close(ffd->file);
+          lock_release(&sys_lock);
+        }
         
         if(flm!=NULL)
            list_remove(flm);
