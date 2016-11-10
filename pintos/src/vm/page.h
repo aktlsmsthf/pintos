@@ -8,3 +8,6 @@ struct spt_entry{
   size_t index;
   struct hash_elem elem;
 };
+
+void spt_init(void);
+void spt_alloc(void* page);
