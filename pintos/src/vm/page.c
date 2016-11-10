@@ -19,8 +19,6 @@ void spt_init(struct hash *spt){
 void spt_alloc(struct hash *spt, void* page){
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   spte->page = page;
-  spte->is_swap = false;
-  spte->index = -1;
-  
+
   hash_insert(spt, &spte->elem);
 }
