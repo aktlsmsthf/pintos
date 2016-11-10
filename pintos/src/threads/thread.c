@@ -16,7 +16,7 @@
 #ifdef USERPROG
 #include "userprog/process.h"
 #include "vm/frame.h"
-/**#include "vm/page.h"**/
+#include "vm/page.h"
 #endif
 
 /* Random value for struct thread's `magic' member.
