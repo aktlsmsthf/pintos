@@ -16,7 +16,7 @@ void spt_init(){
   hash_init(supple_page_table, hash_hash_func, hash_less_func);
 }
 
-void page_table_alloc(void* page){
+void spt_alloc(void* page){
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   spte->page = page;
   spte->is_swap = false;
