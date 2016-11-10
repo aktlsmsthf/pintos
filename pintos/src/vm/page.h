@@ -1,6 +1,5 @@
 #include <hash.h>
 
-
 struct spt_entry{
   void* page;
   bool is_swap;
