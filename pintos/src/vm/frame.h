@@ -1,11 +1,13 @@
 #include <list.h>
 #include "threads/synch.h"
+#include "vm/page.h"
 
 struct list frame_table;
 struct lock frame_lock;
 
 struct frame_entry{
   void *frame;
+  struct spt_entry *spte;
   struct list_elem elem;
 };
 
