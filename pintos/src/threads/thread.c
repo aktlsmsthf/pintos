@@ -13,6 +13,7 @@
 #include "threads/vaddr.h"
 
 #include "vm/frame.h"
+#include "vm/page.h"
 #ifdef USERPROG
 #include "userprog/process.h"
 #endif
@@ -216,6 +217,7 @@ thread_create (const char *name, int priority,
    t->parent = thread_current();
    t->wait=0;
 #endif
+   spt_init(t->spt);
   /* Add to run queue. */
   thread_unblock (t);
   
