@@ -8,5 +8,5 @@ struct spt_entry{
   struct hash_elem elem;
 };
 
-void spt_init(struct hash spt);
-void spt_alloc(struct hash spt, void* page);
+void spt_init(struct hash *spt);
+void spt_alloc(struct hash *spt, void* page);
