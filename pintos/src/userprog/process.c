@@ -599,6 +599,8 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
           palloc_free_page (kpage);
           return false; 
         }
+     
+     spt_alloc(thread_current()->spt, upage);
 
       /* Advance. */
       read_bytes -= page_read_bytes;
@@ -621,8 +623,10 @@ setup_stack (void **esp)
   if (kpage != NULL) 
     {
       success = install_page (((uint8_t *) PHYS_BASE) - PGSIZE, kpage, true);
-      if (success)
+      if (success){
         *esp = PHYS_BASE;
+         spt_alloc(thread_current()->spt, ((uint8_t *) PHYS_BASE) - PGSIZE);
+      }
       else
         palloc_free_page (kpage);
     }
