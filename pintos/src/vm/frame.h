@@ -7,7 +7,7 @@ struct lock frame_lock;
 struct frame_entry{
   void *frame;
   struct list_elem elem;
-}
+};
 
 void frame_init(void);
 void* frame_alloc(void);
