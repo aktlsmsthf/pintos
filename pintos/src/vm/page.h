@@ -7,4 +7,4 @@ struct spt_entry{
   bool is_swap;
   size_t index;
   struct hash_elem elem;
-}
+};
