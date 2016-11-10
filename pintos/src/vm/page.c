@@ -7,8 +7,8 @@ unsigned hash_hash_func(const struct hash_elem *element, void *aux){
 }
 
 bool hash_less_func(const struct hash_elem *a, const struct hash_elem *b, void *aux){
-  struct sptentry *sa = hash_entry(elemtent, struct spt_entry, elem);
-  struct sptentry *sb = hash_entry(elemtent, struct spt_entry, elem);
+  struct spt_entry *sa = hash_entry(elemtent, struct spt_entry, elem);
+  struct spt_entry *sb = hash_entry(elemtent, struct spt_entry, elem);
   return sa->page < sb->page;
 }
 
