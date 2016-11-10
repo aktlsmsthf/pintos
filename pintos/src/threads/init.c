@@ -35,6 +35,8 @@
 #include "filesys/fsutil.h"
 #endif
 
+#include "vm/frame.h"
+
 /* Amount of physical memory, in 4 kB pages. */
 size_t ram_pages;
 
@@ -79,6 +81,8 @@ main (void)
      then enable console locking. */
   thread_init ();
   console_init ();  
+  
+  frame_init();
 
   /* Greet user. */
   printf ("Pintos booting with %'zu kB RAM...\n", ram_pages * PGSIZE / 1024);
