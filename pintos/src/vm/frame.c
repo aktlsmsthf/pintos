@@ -9,6 +9,9 @@ void frame_init(void){
 }
 
 void frame_alloc(void* frame){
+  if(frame==NULL){
+    frame=frame_evict();
+  }
   struct frame_entry *f = malloc(sizeof(struct frame_entry));
   f->frame = frame;
   list_push_front(&frame_table, &f->elem);
@@ -18,6 +21,6 @@ struct frame_entry* frame_pop(void){
   
 }
 
-struct frame_entry* frame_evit(void){
+struct frame_entry* frame_evict(void){
   
 }
