@@ -6,7 +6,7 @@
 struct spt_entry{
   void *page;
   struct hash_elem elem;
-  struct frame_entry* frame;
+  struct frame_entry* fe;
 };
 
 void spt_init(struct hash *spt);
