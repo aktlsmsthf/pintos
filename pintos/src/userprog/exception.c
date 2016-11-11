@@ -8,6 +8,9 @@
 #include "threads/vaddr.h"
 #include "userprog/syscall.h"
 
+#include "vm/page.h"
+#include "vm/frame.h"
+
 /* Number of page faults processed. */
 static long long page_fault_cnt;
 
@@ -151,10 +154,10 @@ page_fault (struct intr_frame *f)
   write = (f->error_code & PF_W) != 0;
   user = (f->error_code & PF_U) != 0;
   
-   if(fault_address >= f->esp-32){
+   if(fault_addr >= f->esp-32){
       uint8_t *frame = frame_alloc();
-      spt_alloc(pg_round_down(fault_address));
-      install_page(pg_round_down(fault_address), frame, true);
+      spt_alloc(pg_round_down(fault_addr));
+      install_page(pg_round_down(fault_addr), frame, true);
    }
    
    /**if (not_present || (is_kernel_vaddr (fault_addr) && user)){
