@@ -276,7 +276,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         
         
         if(ffd->is_closed){
-          exit(-1)
+          exit(-1);
         }
         if(!ffd->is_closed && ffd->file!=NULL){
           lock_acquire(&sys_lock);
