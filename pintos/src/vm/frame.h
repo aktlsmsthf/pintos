@@ -1,3 +1,5 @@
+#ifndef FRAME_H
+#define FRAME_H
 #include <list.h>
 #include "threads/synch.h"
 #include "vm/page.h"
@@ -15,3 +17,5 @@ void frame_init(void);
 void frame_alloc(void* frame);
 struct frame_entry* frame_evict(void);
 struct frame_entry* frame_pop(void);
+
+#endif
