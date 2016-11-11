@@ -1,6 +1,7 @@
 #include "vm/swap.h"
 #include <disk.h>
 #include <bitmap.h>
+#include "threads/palloc.h"
 
 void swap_table_init(){
   swap_table = bitmap_create(10);
@@ -14,4 +15,14 @@ int swap_out(void *frame){
     disk_write(swap_disk, index+i, frame+512*i);
   }
   return index;
+}
+
+void swap_in(int index){
+  void *frame = palloc_get_page(PAL_USER);
+  frame_alloc(frame);
+  int i=0;
+  for(;i++;i<8){
+    disk_read(swap_disk, index+i;frame+512*i);
+  }
+  bitmap_flip(swap_table, index);
 }
