@@ -12,6 +12,7 @@ struct file_fd{
   int fd;
   struct file *file;
   struct list_elem elem;
+  bool is_closed;
 };
 
 
