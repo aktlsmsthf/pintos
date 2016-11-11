@@ -21,6 +21,6 @@ struct frame_entry* frame_pop(void){
   
 }
 
-struct frame_entry* frame_evict(void){
+void* frame_evict(void){
   
 }
