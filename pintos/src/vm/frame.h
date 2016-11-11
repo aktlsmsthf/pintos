@@ -17,8 +17,8 @@ struct frame_entry{
 };
 
 void frame_init(void);
-void frame_alloc(void* frame);
-struct frame_entry* frame_evict(void);
+void frame_spt_alloc(void* frame, struct hash *spt, void* page);
+void * frame_evict(void);
 struct frame_entry* frame_pop(void);
 
 #endif
