@@ -9,6 +9,8 @@ struct lock frame_lock;
 
 struct frame_entry{
   void *frame;
+  bool in_swap;
+  int swap_where;
   struct spt_entry *spte;
   struct list_elem elem;
 };
