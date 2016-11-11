@@ -155,8 +155,9 @@ page_fault (struct intr_frame *f)
   user = (f->error_code & PF_U) != 0;
   
    if(fault_addr >= f->esp-32){
-      uint8_t *frame = frame_alloc();
-      spt_alloc(pg_round_down(fault_addr));
+      uint8_t *frame = palloc_get_page(PAL_USER);
+      frame_alloc(frame);
+      spt_alloc(&thread_current()->spt, pg_round_down(fault_addr));
       install_page(pg_round_down(fault_addr), frame, true);
    }
    
