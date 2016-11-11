@@ -61,9 +61,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(!user_memory((void *)cmd_line, 0)){ f->eax = -1; break;}
       if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line))
         exit(-1);
-      lock_acquire(&sys_lock);
+      /**lock_acquire(&sys_lock);**/
       tid_t pid = process_execute(cmd_line);
-      lock_release(&sys_lock);
+      /**lock_release(&sys_lock);**/
       f->eax = pid;
       break;
     }
