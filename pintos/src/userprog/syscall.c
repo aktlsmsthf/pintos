@@ -275,15 +275,16 @@ syscall_handler (struct intr_frame *f UNUSED)
         struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
         
         
+        if(ffd->is_closed){
+          exit(-1)
+        }
         if(!ffd->is_closed && ffd->file!=NULL){
           lock_acquire(&sys_lock);
            file_close(ffd->file);
           lock_release(&sys_lock);
           ffd->is_closed=1;
         }
-        else{
-          exit(-1);
-        }
+        
         
         /**if(flm!=NULL)
            list_remove(flm);
