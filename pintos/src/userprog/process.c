@@ -116,7 +116,7 @@ start_process (void *f_name)
   if_.cs = SEL_UCSEG;
   if_.eflags = FLAG_IF | FLAG_MBS;
   now = strtok_r(file_name," ",&save);
-   spt_init(thread_current()->spt);
+   spt_init(&thread_current()->spt);
   success = load (now, &if_.eip, &if_.esp);
   thread_current()->child->load_finish=1;
   thread_current()->child->load_success = success;
