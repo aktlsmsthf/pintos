@@ -254,7 +254,7 @@ process_exit (void)
    while(!list_empty(&(curr->file_list))){
         felem=list_front(&(curr->file_list));
         ffd=list_entry(felem, struct file_fd, elem);
-        if(!ffd->is_close){
+        if(!ffd->is_closed){
          file_close(ffd->file);
         }
 
