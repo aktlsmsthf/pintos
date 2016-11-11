@@ -102,7 +102,7 @@ struct thread
     struct thread *parent;
     bool wait;
     
-    struct hash *spt;
+    struct hash spt;
 
 #ifdef USERPROG
     /* Owned by userprog/process.c. */
