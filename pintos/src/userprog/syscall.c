@@ -145,6 +145,7 @@ syscall_handler (struct intr_frame *f UNUSED)
             else{
               ffd -> fd = t->num_file+2;
               ffd -> file = ff;
+              ffd -> is_closed=0;
               list_push_front(&(t->file_list),&ffd->elem);
               t->num_file++;
               f->eax = ffd->fd;
@@ -272,18 +273,20 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(fd>1){
         struct list_elem *flm = get_elem_from_fd(fd);
         struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
-       
-        if(ffd->file!=NULL){
+        
+        
+        if(!ffd->is_closed && ffd->file!=NULL){
           lock_acquire(&sys_lock);
            file_close(ffd->file);
           lock_release(&sys_lock);
+          ffd->is_closed=1;
         }
         
-        if(flm!=NULL)
+        /**if(flm!=NULL)
            list_remove(flm);
         
         if(ffd!=NULL)
-           palloc_free_page(ffd);
+           palloc_free_page(ffd);**/
       } 
       break;
     }
