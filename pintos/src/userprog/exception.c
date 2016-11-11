@@ -11,6 +11,7 @@
 #include "vm/page.h"
 #include "vm/frame.h"
 #include "threads/palloc.h"
+#include "userprog/process.h"
 
 /* Number of page faults processed. */
 static long long page_fault_cnt;
