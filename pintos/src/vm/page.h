@@ -1,5 +1,5 @@
-#ifndef A
-#define A
+#ifndef PAGE_H
+#define PAGE_H
 
 #include <hash.h>
 
