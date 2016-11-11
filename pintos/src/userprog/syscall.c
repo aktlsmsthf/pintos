@@ -281,6 +281,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           lock_release(&sys_lock);
           ffd->is_closed=1;
         }
+        else{
+          exit(-1);
+        }
         
         /**if(flm!=NULL)
            list_remove(flm);
