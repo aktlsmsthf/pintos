@@ -254,7 +254,9 @@ process_exit (void)
    while(!list_empty(&(curr->file_list))){
         felem=list_front(&(curr->file_list));
         ffd=list_entry(felem, struct file_fd, elem);
-        file_close(ffd->file);
+        if(!ffd->is_close){
+         file_close(ffd->file);
+        }
 
         list_remove(felem);
         palloc_free_page(ffd);
