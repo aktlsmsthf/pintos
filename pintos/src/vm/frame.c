@@ -22,5 +22,16 @@ struct frame_entry* frame_pop(void){
 }
 
 void* frame_evict(void){
+  struct list_elem * frame_elem = list_front(frame_table);
+  struct frame_entry * fe;
+  while(!list_entry(frame_elem, struct frame_entry, elem)->is_free){
+          frame_elem = frame_elem->next;
+          if(felem->next==NULL){
+             frame_elem = list_front(frame_table);
+             break;
+          }
+      }
+  fe = list_entry(frame_elem, struct frame_entry, elem);
+  
   
 }
