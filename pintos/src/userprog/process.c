@@ -587,7 +587,6 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
       uint8_t *kpage = palloc_get_page (PAL_USER);
       if (kpage == NULL)
         return false;
-     frame_alloc(kpage);
 
       /* Load this page. */
       if (file_read (file, kpage, page_read_bytes) != (int) page_read_bytes)
@@ -604,7 +603,7 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
           return false; 
         }
      
-     spt_alloc(&thread_current()->spt, upage);
+     frame_spt_alloc(kpage, &thread_current()->spt, upage);
 
       /* Advance. */
       read_bytes -= page_read_bytes;
@@ -623,17 +622,16 @@ setup_stack (void **esp)
   bool success = false;
 
   kpage = palloc_get_page (PAL_USER | PAL_ZERO);
-  frame_alloc(kpage);
   if (kpage != NULL) 
     {
       success = install_page (((uint8_t *) PHYS_BASE) - PGSIZE, kpage, true);
       if (success){
         *esp = PHYS_BASE;
-         spt_alloc(&thread_current()->spt, ((uint8_t *) PHYS_BASE) - PGSIZE);
       }
       else
         palloc_free_page (kpage);
     }
+  frame_spt_alloc(kpage,&thread_current()->spt, ((uint8_t *) PHYS_BASE) - PGSIZE); 
   return success;
 }
 
