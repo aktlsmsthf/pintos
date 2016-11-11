@@ -13,4 +13,5 @@ struct frame_entry{
 
 void frame_init(void);
 void frame_alloc(void* frame);
+struct frame_entry* frame_evict(void);
 struct frame_entry* frame_pop(void);
