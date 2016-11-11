@@ -8,12 +8,15 @@ void frame_init(void){
   lock_init(&frame_lock);
 }
 
-void frame_alloc(void* frame){
+void frame_alloc(void* frame, struct spt_entry * spte){
   if(frame==NULL){
     frame=frame_evict();
   }
   struct frame_entry *f = malloc(sizeof(struct frame_entry));
   f->frame = frame;
+  f->in_swap = 0;
+  f->is_free = 0;
+  f->spte = spte;
   list_push_front(&frame_table, &f->elem);
 }
 
