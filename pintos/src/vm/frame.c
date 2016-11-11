@@ -22,6 +22,7 @@ struct frame_entry* frame_pop(void){
 }
 
 void* frame_evict(void){
+  void * ret;
   struct list_elem * frame_elem = list_front(frame_table);
   struct frame_entry * fe;
   while(!list_entry(frame_elem, struct frame_entry, elem)->is_free){
@@ -32,8 +33,9 @@ void* frame_evict(void){
           }
       }
   fe = list_entry(frame_elem, struct frame_entry, elem);
-  fe->in_swap=1;
-  fe->where=swap_out(fe->frame);
-  
-  
+  fe->in_swap = 1;
+  fe->swap_where = swap_out(fe->frame);
+  ret=fe->frame;
+  fe->frame = NULL;
+  return ret;  
 }
