@@ -163,9 +163,9 @@ page_fault (struct intr_frame *f)
       install_page(pg_round_down(fault_addr), frame, true);
    }**/
    
-   if (not_present || (is_kernel_vaddr (fault_addr) && user)){
+   /**if (not_present || (is_kernel_vaddr (fault_addr) && user)){
       exit(-1);
-   }
+   }**/
 
   /* To implement virtual memory, delete the rest of the function
      body, and replace it with code that brings in the page to
