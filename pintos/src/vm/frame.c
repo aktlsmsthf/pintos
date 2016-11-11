@@ -32,6 +32,8 @@ void* frame_evict(void){
           }
       }
   fe = list_entry(frame_elem, struct frame_entry, elem);
+  fe->in_swap=1;
+  fe->where=swap_out(fe->frame);
   
   
 }
