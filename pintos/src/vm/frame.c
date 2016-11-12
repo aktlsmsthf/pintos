@@ -35,13 +35,11 @@ void* frame_evict(void){
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
   while(!list_entry(frame_elem, struct frame_entry, elem)->is_free){
-      if(!pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
-        if(list_entry(frame_elem, struct frame_entry, elem)->is_free==1){
-          break;
-        }
-        else{
-          list_entry(frame_elem, struct frame_entry, elem)->is_free=1;
-        }
+      if(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
+        pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
+      }
+      else{
+        break;
       }
       frame_elem = frame_elem->next;
       if(frame_elem->next==NULL){
