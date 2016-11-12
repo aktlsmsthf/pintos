@@ -163,11 +163,17 @@ page_fault (struct intr_frame *f)
          if(spte->fe->in_swap){
             printf("1\n");
             uint8_t *frame = frame_evict();
+            printf("2\n");
             swap_in(spte->fe->swap_where, frame);
+            printf("3\n");
             spte->fe->in_swap = 0;
+            printf("4\n");
             spte->fe->swap_where = -1;
+            printf("5\n");
             spte->fe->frame = frame;
+            printf("6\n");
             install_page(pg_round_down(fault_addr), frame, true);
+            printf("7\n");
             return;
          }
       }
