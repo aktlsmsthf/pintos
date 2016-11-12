@@ -118,6 +118,7 @@ start_process (void *f_name)
   now = strtok_r(file_name," ",&save);
    spt_init(&thread_current()->spt);
   success = load (now, &if_.eip, &if_.esp);
+   printf("2\n");
   thread_current()->child->load_finish=1;
   thread_current()->child->load_success = success;
    
