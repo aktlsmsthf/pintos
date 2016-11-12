@@ -6,8 +6,9 @@
 
 
 void swap_init(void){
-  swap_table = bitmap_create(11);
   swap_disk = disk_get(1,1);
+  swap_table = bitmap_create(disk_size(swap_disk)/8);
+  
 }
 
 size_t swap_out(void *frame){
