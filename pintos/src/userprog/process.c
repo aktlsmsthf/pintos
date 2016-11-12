@@ -116,10 +116,11 @@ start_process (void *f_name)
   if_.cs = SEL_UCSEG;
   if_.eflags = FLAG_IF | FLAG_MBS;
   now = strtok_r(file_name," ",&save);
-   printf("3\n");
+
    spt_init(&thread_current()->spt);
-   printf("2\n");
+
   success = load (now, &if_.eip, &if_.esp);
+      printf("3\n");
    
   thread_current()->child->load_finish=1;
   thread_current()->child->load_success = success;
