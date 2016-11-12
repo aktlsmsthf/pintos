@@ -8,9 +8,7 @@
 
 #define SIZE (2 * 1024 * 1024)
 
-printf("1\n");
 static char buf[SIZE];
-printf("2\n");
 
 void
 test_main (void)
