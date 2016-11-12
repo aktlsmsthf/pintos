@@ -12,6 +12,7 @@ void swap_init(void){
 }
 
 size_t swap_out(void *frame){
+  printf("2\n");
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   size_t i;
   for(i=0;i++;i<8){
