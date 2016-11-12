@@ -13,6 +13,7 @@
 #include "vm/swap.h"
 #include "threads/palloc.h"
 #include "userprog/process.h"
+#include "userprog/pagedir.h"
 
 /* Number of page faults processed. */
 static long long page_fault_cnt;
@@ -181,7 +182,8 @@ page_fault (struct intr_frame *f)
             
             
             swap_in(spte->fe, frame);
-            install_page(pg_round_down(fault_addr), frame, spte->writable);
+            pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);
+            //install_page(pg_round_down(fault_addr), frame, spte->writable);
             /**spte->fe->in_swap = 0;
             spte->fe->swap_where = -1;
             spte->fe->frame = frame;**/
