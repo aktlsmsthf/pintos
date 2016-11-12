@@ -587,14 +587,12 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
       size_t page_zero_bytes = PGSIZE - page_read_bytes;
 
       /* Get a page of memory. */
-     printf("3\n");
       uint8_t *kpage = palloc_get_page (PAL_USER);
-     printf("4\n");
       frame_alloc(kpage);
-     printf("5\n");
       if (kpage == NULL)
         return false;
       spt_alloc(&thread_current()->spt, upage);
+      printf("6\n");
       /* Load this page. */
       if (file_read (file, kpage, page_read_bytes) != (int) page_read_bytes)
         {
