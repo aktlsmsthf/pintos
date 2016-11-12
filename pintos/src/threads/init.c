@@ -93,7 +93,7 @@ main (void)
   malloc_init ();
   paging_init ();
   
-  swap_init();
+  
 
   /* Segmentation. */
 #ifdef USERPROG
@@ -109,7 +109,7 @@ main (void)
 #ifdef USERPROG
   exception_init ();
   syscall_init ();
-  
+  swap_init();
 #endif
 
   /* Start thread scheduler and enable interrupts. */
