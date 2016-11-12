@@ -116,7 +116,9 @@ start_process (void *f_name)
   if_.cs = SEL_UCSEG;
   if_.eflags = FLAG_IF | FLAG_MBS;
   now = strtok_r(file_name," ",&save);
+   printf("3\n");
    spt_init(&thread_current()->spt);
+   printf("2\n");
   success = load (now, &if_.eip, &if_.esp);
    
   thread_current()->child->load_finish=1;
@@ -488,11 +490,11 @@ load (const char *file_name, void (**eip) (void), void **esp)
           break;
         }
     }
-  printf("2\n");
+   
   /* Set up stack. */
   if (!setup_stack (esp))
     goto done;
-  printf("3\n");
+
   /* Start address. */
   *eip = (void (*) (void)) ehdr.e_entry;
 
