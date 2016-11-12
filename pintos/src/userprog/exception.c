@@ -170,17 +170,15 @@ page_fault (struct intr_frame *f)
          
    }
    
-   if (not_present || (is_kernel_vaddr (fault_addr) && user)){
-      exit(-1);
-   } 
+  
    if(not_present && is_user_vaddr(fault_addr)){
    struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
       if(spte!=NULL){
          if(spte->fe->in_swap){
-            uint8_t *frame = palloc_get_page(PAL_USER);
-            if(frame ==NULL){
-               frame = frame_evict();
-            }
+            
+            //uint8_t *frame = palloc_get_page(PAL_USER);
+            uint8_t * frame = frame_evict();
+            
             
             swap_in(spte->fe, frame);
             install_page(pg_round_down(fault_addr), frame, spte->writable);
@@ -192,6 +190,9 @@ page_fault (struct intr_frame *f)
          }
       }  
    }
+    if (not_present || (is_kernel_vaddr (fault_addr) && user)){
+      exit(-1);
+   } 
  
    
 
