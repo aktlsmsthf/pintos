@@ -284,6 +284,7 @@ process_exit (void)
       }
    }
    
+   
       file_close(curr->myself);
 
    
