@@ -20,6 +20,7 @@ size_t swap_out(void *frame){
     printf("1\n");
     disk_write(swap_disk, index+i, (uint8_t *)frame+512*i);
   }
+  printf("4\n");
   return index;
 }
 
