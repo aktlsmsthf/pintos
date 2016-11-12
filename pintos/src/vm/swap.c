@@ -21,11 +21,16 @@ int swap_out(void *frame){
 }
 
 void swap_in(struct frame_entry *fe,void * frame){
+  lock_acquire(&frame_lock);
   int i=0;
   int index = fe->swap_where;
   for(;i++;i<8){
     disk_read(swap_disk, index+i , (uint8_t *) frame+512*i);
   }
   bitmap_flip(swap_table, index);
+  fe->in_swap = 0;
+  fe->swap_where = -1;
+  fe->frame = freme;
+  lock_release(&frame_lock);
 }
 
