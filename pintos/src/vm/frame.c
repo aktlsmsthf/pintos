@@ -49,7 +49,6 @@ void * frame_alloc(void * frame){
 */
 
 void* frame_evict(void){
-  printf("a\n");
   lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
@@ -76,9 +75,7 @@ void* frame_evict(void){
       }
   }**/
   fe = list_entry(frame_elem, struct frame_entry, elem);
-  printf("b\n");
   fe->swap_where = swap_out(fe->frame);
-  printf("c\n");
   fe->in_swap = 1;
   
   /**ret=fe->frame;**/
