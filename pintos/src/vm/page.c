@@ -14,7 +14,7 @@ static bool page_less(const struct hash_elem *a, const struct hash_elem *b, void
 }
 
 void spt_alloc(struct hash * spt, void * page){
-  struct spt_entry *spte = malloc(sizeof(struct frame_entry));
+  struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   spte->page = page;
   hash_insert(spte,&spte->elem);
 }
