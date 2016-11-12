@@ -14,14 +14,11 @@ static bool page_less(const struct hash_elem *a, const struct hash_elem *b, void
 }
 
 void spt_alloc(struct hash * spt, void * page){
-  printf("2\n");
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
-  printf("3\n");
   spte->page = page;
-  printf("4\n");
   hash_insert(spt ,&spte->elem);
-  printf("5\n");
 }
+
 void spt_init(struct hash *spt){
   hash_init(spt, page_hash, page_less, NULL);
 }
