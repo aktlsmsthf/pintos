@@ -3,9 +3,9 @@
 #include <bitmap.h>
 
 
-struct bitmap * swap_table = bitmap_create(10);
+static struct bitmap * swap_table = bitmap_create(10);
 
-struct disk * swap_disk = disk_get(1,1);
+static struct disk * swap_disk = disk_get(1,1);
 
 int swap_out(void *frame);
 
