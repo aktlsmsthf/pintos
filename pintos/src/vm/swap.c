@@ -3,7 +3,7 @@
 #include <bitmap.h>
 #include "threads/palloc.h"
 
-void swap_table_init(){
+void swap_table_init(void){
   swap_table = bitmap_create(10);
   swap_disk = disk_get(1,1);
 }
