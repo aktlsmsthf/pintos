@@ -157,20 +157,22 @@ page_fault (struct intr_frame *f)
   write = (f->error_code & PF_W) != 0;
   user = (f->error_code & PF_U) != 0;
    
-   /**if(not_present && is_user_vaddr(fault_addr)){
+   if(not_present && is_user_vaddr(fault_addr)){
       struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
       if(spte!=NULL){
          if(spte->fe->in_swap){
+            lock_acquire(&frame_lock);
             uint8_t *frame = frame_evict();
             swap_in(spte->fe->swap_where, frame);
             spte->fe->in_swap = 0;
             spte->fe->swap_where = -1;
             spte->fe->frame = frame;
             install_page(pg_round_down(fault_addr), frame, true);
+            lock_release(&frame_lock);
             return;
          }
       }
-   }**/
+   }
   
    if(not_present && fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
       uint8_t *frame = palloc_get_page(PAL_USER);
