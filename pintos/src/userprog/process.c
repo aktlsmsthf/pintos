@@ -117,7 +117,7 @@ start_process (void *f_name)
   if_.eflags = FLAG_IF | FLAG_MBS;
   now = strtok_r(file_name," ",&save);
 
-   spt_init(&thread_current()->spt);
+  // spt_init(&thread_current()->spt);
 
   success = load (now, &if_.eip, &if_.esp);
    
