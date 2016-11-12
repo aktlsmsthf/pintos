@@ -21,9 +21,14 @@ int swap_out(void *frame){
 
 void swap_in(int index,void * frame){
   int i=0;
+  printf("10\n");
   for(;i++;i<8){
+    printf("11\n");
     disk_read(swap_disk, index+i ,frame+512*i);
+    printf("12\n");
   }
+  printf("13\n");
   bitmap_flip(swap_table, index);
+  printf("14\n");
 }
 
