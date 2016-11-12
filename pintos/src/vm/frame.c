@@ -17,7 +17,6 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page){
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
     
   if(frame==NULL){
-    printf("a\n");
     frame=frame_evict();
       
   }  
@@ -65,6 +64,5 @@ void* frame_evict(void){
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   ret=fe->frame;
   fe->frame = NULL;
-  printf("%x\n", ret);
   return ret;  
 }
