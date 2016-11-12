@@ -12,7 +12,6 @@ struct frame_entry{
   bool in_swap;
   int swap_where;
   bool is_free;
-  struct spt_entry *spte;
   struct list_elem elem;
 };
 
