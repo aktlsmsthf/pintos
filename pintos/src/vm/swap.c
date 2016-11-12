@@ -2,17 +2,18 @@
 #include <disk.h>
 #include <bitmap.h>
 #include "threads/palloc.h"
+#include "vm/frame.h"
 
 
 void swap_init(void){
-  &swap_table = bitmap_create(10);
-  &swap_disk = disk_get(1,1);
+  swap_table = bitmap_create(10);
+  swap_disk = disk_get(1,1);
 }
 
 int swap_out(void *frame){
   int index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
-  int i=0;
-  for(;i++;i<8){
+  int i;
+  for(i=0;i++;i<8){
     disk_write(swap_disk, index+i, frame+512*i);
   }
   return index;
