@@ -17,7 +17,7 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page){
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
     
   if(frame==NULL){
-    print("a\n");
+    printf("a\n");
     frame=frame_evict();
       
   }  
