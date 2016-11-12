@@ -93,7 +93,7 @@ main (void)
   malloc_init ();
   paging_init ();
   
- swap_init();
+ /**swap_init();**/
 
   /* Segmentation. */
 #ifdef USERPROG
@@ -349,60 +349,4 @@ usage (void)
           "  ls                 List files in the root directory.\n"
           "  cat FILE           Print FILE to the console.\n"
           "  rm FILE            Delete FILE.\n"
-          "Use these actions indirectly via `pintos' -g and -p options:\n"
-          "  put FILE           Put FILE into file system from scratch disk.\n"
-          "  get FILE           Get FILE from file system into scratch disk.\n"
-#endif
-          "\nOptions:\n"
-          "  -h                 Print this help message and power off.\n"
-          "  -q                 Power off VM after actions or on panic.\n"
-          "  -f                 Format file system disk during startup.\n"
-          "  -rs=SEED           Set random number seed to SEED.\n"
-          "  -mlfqs             Use multi-level feedback queue scheduler.\n"
-#ifdef USERPROG
-          "  -ul=COUNT          Limit user memory to COUNT pages.\n"
-#endif
-          );
-  power_off ();
-}
-
-
-/* Powers down the machine we're running on,
-   as long as we're running on Bochs or QEMU. */
-void
-power_off (void) 
-{
-  const char s[] = "Shutdown";
-  const char *p;
-
-#ifdef FILESYS
-  filesys_done ();
-#endif
-
-  print_stats ();
-
-  printf ("Powering off...\n");
-  serial_flush ();
-
-  for (p = s; *p != '\0'; p++)
-    outb (0x8900, *p);
-  asm volatile ("cli; hlt" : : : "memory");
-  printf ("still running...\n");
-  for (;;);
-}
-
-/* Print statistics about Pintos execution. */
-static void
-print_stats (void) 
-{
-  timer_print_stats ();
-  thread_print_stats ();
-#ifdef FILESYS
-  disk_print_stats ();
-#endif
-  console_print_stats ();
-  kbd_print_stats ();
-#ifdef USERPROG
-  exception_print_stats ();
-#endif
-}
+          "Use these actions indirectly via `
