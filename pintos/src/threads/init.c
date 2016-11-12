@@ -109,7 +109,6 @@ main (void)
 #ifdef USERPROG
   exception_init ();
   syscall_init ();
-  swap_init();
 #endif
 
   /* Start thread scheduler and enable interrupts. */
@@ -121,9 +120,12 @@ main (void)
   /* Initialize file system. */
   disk_init ();
   filesys_init (format_filesys);
-#endif
-   
   
+#endif
+#ifdef USERPROG
+  
+  swap_init();
+#endif  
 
   printf ("Boot complete.\n");
   
