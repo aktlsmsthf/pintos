@@ -172,8 +172,8 @@ page_fault (struct intr_frame *f)
    
    if(not_present && is_user_vaddr(fault_addr)){
       struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
-      printf("1\n");
       if(spte!=NULL){
+         printf("1\n");
          if(spte->fe->in_swap){
             uint8_t *frame = frame_evict();
             swap_in(spte->fe->swap_where, frame);
