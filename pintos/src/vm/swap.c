@@ -20,8 +20,9 @@ int swap_out(void *frame){
   return index;
 }
 
-void swap_in(int index,void * frame){
+void swap_in(struct frame_entry *fe,void * frame){
   int i=0;
+  int index = fe->swap_where;
   for(;i++;i<8){
     disk_read(swap_disk, index+i , (uint8_t *) frame+512*i);
   }
