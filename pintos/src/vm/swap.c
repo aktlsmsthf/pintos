@@ -14,6 +14,7 @@ int swap_out(void *frame){
   int index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   int i;
   for(i=0;i++;i<8){
+    printf("1\n");
     disk_write(swap_disk, index+i, (uint8_t *)frame+512*i);
   }
   return index;
