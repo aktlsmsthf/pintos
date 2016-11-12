@@ -4,7 +4,7 @@
 #include "threads/palloc.h"
 #include "vm/frame.h"
 
-
+/*
 void swap_init(void){
   swap_table = bitmap_create(10);
   swap_disk = disk_get(1,1);
@@ -28,3 +28,4 @@ void swap_in(int index){
   }
   bitmap_flip(swap_table, index);
 }
+*/
