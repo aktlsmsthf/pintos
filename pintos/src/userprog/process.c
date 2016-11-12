@@ -588,7 +588,7 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 
       /* Get a page of memory. */
       uint8_t *kpage = palloc_get_page (PAL_USER);
-      kpage = frame_spt_alloc(kpage, &thread_current()->spt, upage);
+      kpage = frame_spt_alloc(kpage, &thread_current()->spt, upage, writable);
       if (kpage == NULL)
         return false;
       
@@ -626,7 +626,7 @@ setup_stack (void **esp)
   bool success = false;
 
   kpage = palloc_get_page (PAL_USER | PAL_ZERO);
-  kpage = frame_spt_alloc(kpage, &thread_current()->spt, ((uint8_t *) PHYS_BASE) - PGSIZE); 
+  kpage = frame_spt_alloc(kpage, &thread_current()->spt, ((uint8_t *) PHYS_BASE) - PGSIZE, true); 
    
   if (kpage != NULL) 
     {
