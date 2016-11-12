@@ -118,7 +118,7 @@ start_process (void *f_name)
   now = strtok_r(file_name," ",&save);
    spt_init(&thread_current()->spt);
   success = load (now, &if_.eip, &if_.esp);
-   printf("2\n");
+   
   thread_current()->child->load_finish=1;
   thread_current()->child->load_success = success;
    
@@ -488,11 +488,11 @@ load (const char *file_name, void (**eip) (void), void **esp)
           break;
         }
     }
-
+  printf("2\n");
   /* Set up stack. */
   if (!setup_stack (esp))
     goto done;
-
+  printf("3\n");
   /* Start address. */
   *eip = (void (*) (void)) ehdr.e_entry;
 
