@@ -16,10 +16,10 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page){
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
     
-  if(frame==NULL){
+  /**if(frame==NULL){
     frame=frame_evict();
       
-  }  
+  }  **/
   spte->page = page;
   spte->fe = fe;
   hash_insert(spt ,&spte->elem);
