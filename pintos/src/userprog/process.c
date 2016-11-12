@@ -592,7 +592,6 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
       if (kpage == NULL)
         return false;
       spt_alloc(&thread_current()->spt, upage);
-      printf("6\n");
       /* Load this page. */
       if (file_read (file, kpage, page_read_bytes) != (int) page_read_bytes)
         {
