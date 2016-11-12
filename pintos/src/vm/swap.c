@@ -30,7 +30,7 @@ void swap_in(struct frame_entry *fe,void * frame){
   bitmap_flip(swap_table, index);
   fe->in_swap = 0;
   fe->swap_where = -1;
-  fe->frame = freme;
+  fe->frame = frame;
   lock_release(&frame_lock);
 }
 
