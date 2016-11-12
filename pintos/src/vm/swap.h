@@ -9,7 +9,7 @@ struct bitmap *swap_table ;
 struct disk *swap_disk ;
 
 void swap_init(void);
-int swap_out(void *frame);
+size_t swap_out(void *frame);
 
 void swap_in(struct frame_entry *fe,void *frame);
 #endif
