@@ -11,17 +11,22 @@ void frame_init(void){
 
 }
 
-void * frame_alloc(void * frame){
+void * frame_spt_alloc(void * frame, struct hash * spt, void * page){
+  
+  struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
   
   if(frame==NULL){
     frame=frame_evict();
     
   }
-  
+  spte->page = page;
+  spte->fe = fe
+  hash_insert(spt ,&spte->elem);
   fe->frame = frame;
   fe->in_swap = 0;
   fe->is_free = 0;
+  fe->spte = spte;
   list_push_front(&frame_table, &fe->elem);
   return frame;
 }
