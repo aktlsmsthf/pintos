@@ -4,6 +4,11 @@
 #include "threads/palloc.h"
 
 
+void swap_init(void){
+  &swap_table = bitmap_create(10);
+  &disk swap_disk = disk_get(1,1);
+}
+
 int swap_out(void *frame){
   int index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   int i=0;
