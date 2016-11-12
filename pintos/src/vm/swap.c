@@ -11,7 +11,7 @@ void swap_init(void){
 }
 
 int swap_out(void *frame){
-  size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
+  int index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   int i;
   for(i=0;i++;i<8){
     disk_write(swap_disk, index+i, (uint8_t *)frame+512*i);
@@ -19,12 +19,12 @@ int swap_out(void *frame){
   return index;
 }
 
-void swap_in(size_t index,void * frame){
+void swap_in(int index,void * frame){
   int i=0;
   printf("10\n");
   for(;i++;i<8){
     printf("11\n");
-    disk_read(swap_disk, index+i , (uint8_t *)frame+512*i);
+    disk_read(swap_disk, index+i , (uint8_t *) frame+512*i);
     printf("12\n");
   }
   printf("13\n");
