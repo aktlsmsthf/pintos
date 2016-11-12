@@ -53,14 +53,14 @@ void* frame_evict(void){
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
-  /**while(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
+  while(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
       pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
       frame_elem = frame_elem->next;
       if(frame_elem->next==NULL){
          frame_elem = list_front(&frame_table);
       }
-  }**/
-  while(true){
+  }
+  /**while(true){
       if(!list_entry(frame_elem, struct frame_entry, elem)->in_swap){
         if(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
           pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
@@ -73,7 +73,7 @@ void* frame_evict(void){
       if(frame_elem->next==NULL){
          frame_elem = list_front(&frame_table);
       }
-  }
+  }**/
   fe = list_entry(frame_elem, struct frame_entry, elem);
   fe->in_swap = 1;
   fe->swap_where = swap_out(fe->frame);
