@@ -156,8 +156,19 @@ page_fault (struct intr_frame *f)
   not_present = (f->error_code & PF_P) == 0;
   write = (f->error_code & PF_W) != 0;
   user = (f->error_code & PF_U) != 0;
-   if(not_present && fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
-      struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
+  if(not_present && fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
+      
+      uint8_t *frame = palloc_get_page(PAL_USER);
+      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(fault_addr), true);
+      /*
+      frame_alloc(frame);
+      spt_alloc(&thread_current()->spt, pg_round_down(fault_addr));
+      */
+      install_page(pg_round_down(fault_addr), frame, true);
+      return;
+         
+   } 
+   struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
       if(spte!=NULL){
          if(spte->fe->in_swap){
             uint8_t *frame = palloc_get_page(PAL_USER);
@@ -173,20 +184,7 @@ page_fault (struct intr_frame *f)
             printf("a");
             return;
          }
-      }
-      else{
-      uint8_t *frame = palloc_get_page(PAL_USER);
-      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(fault_addr), true);
-      /*
-      frame_alloc(frame);
-      spt_alloc(&thread_current()->spt, pg_round_down(fault_addr));
-      */
-      install_page(pg_round_down(fault_addr), frame, true);
-      return;
-      }
-         
-   } 
-     
+      }  
   
  
    
