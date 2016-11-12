@@ -108,6 +108,7 @@ main (void)
 #ifdef USERPROG
   exception_init ();
   syscall_init ();
+  frame_init();
 #endif
 
   /* Start thread scheduler and enable interrupts. */
@@ -120,7 +121,7 @@ main (void)
   disk_init ();
   filesys_init (format_filesys);
 #endif
-   frame_init();
+   
   
 
   printf ("Boot complete.\n");
