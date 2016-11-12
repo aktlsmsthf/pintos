@@ -1,5 +1,6 @@
 #include "vm/page.h"
 #include <hash.h>
+#include "threads/malloc.h"
 
 static unsigned page_hash(const struct hash_elem *element, void *aux){
   struct spt_entry *spte = hash_entry(element, struct spt_entry, elem);
