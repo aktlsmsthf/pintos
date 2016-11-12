@@ -36,6 +36,7 @@
 #endif
 
 #include "vm/frame.h"
+#include "vm/swap.h"
 
 /* Amount of physical memory, in 4 kB pages. */
 size_t ram_pages;
@@ -82,7 +83,7 @@ main (void)
   thread_init ();
   console_init ();  
   
-  
+  frame_init();
 
   /* Greet user. */
   printf ("Pintos booting with %'zu kB RAM...\n", ram_pages * PGSIZE / 1024);
@@ -92,7 +93,7 @@ main (void)
   malloc_init ();
   paging_init ();
   
- 
+ swap_init();
 
   /* Segmentation. */
 #ifdef USERPROG
@@ -108,7 +109,7 @@ main (void)
 #ifdef USERPROG
   exception_init ();
   syscall_init ();
-  frame_init();
+  
 #endif
 
   /* Start thread scheduler and enable interrupts. */
