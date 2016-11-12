@@ -48,6 +48,7 @@ void * frame_alloc(void * frame){
 */
 
 void* frame_evict(void){
+  lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
@@ -64,5 +65,6 @@ void* frame_evict(void){
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   ret=fe->frame;
   fe->frame = NULL;
+  lock_release(&frame_lock);
   return ret;  
 }
