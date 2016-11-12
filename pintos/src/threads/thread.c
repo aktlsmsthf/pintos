@@ -217,7 +217,8 @@ thread_create (const char *name, int priority,
    
    t->parent = thread_current();
    t->wait=0;
-
+  
+   spt_init(&thread_current()->spt);
 #endif
    
   /* Add to run queue. */
