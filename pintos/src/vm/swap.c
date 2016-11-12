@@ -7,7 +7,7 @@
 
 void swap_init(void){
   swap_disk = disk_get(1,1);
-  swap_table = bitmap_create(10);
+  swap_table = bitmap_create(disk_size(swap_disk)/8);
   
 }
 
