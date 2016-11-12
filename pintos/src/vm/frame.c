@@ -14,16 +14,15 @@ void frame_init(void){
 void frame_alloc(void * frame){
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
   
-  /**if(frame==NULL){
+  if(frame==NULL){
     frame=frame_evict();
     
-  }**/
+  }
   
   fe->frame = frame;
   fe->in_swap = 0;
   fe->is_free = 0;
   list_push_front(&frame_table, &fe->elem);
-  /**return frame;**/
 }
 
 struct frame_entry* frame_pop(void){
