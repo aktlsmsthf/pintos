@@ -405,11 +405,9 @@ load (const char *file_name, void (**eip) (void), void **esp)
   int i;
 
   /* Allocate and activate page directory. */
-   printf("2\n");
   t->pagedir = pagedir_create ();
   if (t->pagedir == NULL) 
     goto done;
-  printf("3\n");
   process_activate ();
 
   /* Open executable file. */
@@ -483,11 +481,9 @@ load (const char *file_name, void (**eip) (void), void **esp)
                   read_bytes = 0;
                   zero_bytes = ROUND_UP (page_offset + phdr.p_memsz, PGSIZE);
                 }
-             printf("3\n");
               if (!load_segment (file, file_page, (void *) mem_page,
                                  read_bytes, zero_bytes, writable))
                 goto done;
-             printf("4\n");
             }
           else
             goto done;
@@ -591,8 +587,11 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
       size_t page_zero_bytes = PGSIZE - page_read_bytes;
 
       /* Get a page of memory. */
+     printf("3\n");
       uint8_t *kpage = palloc_get_page (PAL_USER);
+     printf("4\n");
       frame_alloc(kpage);
+     printf("5\n");
       if (kpage == NULL)
         return false;
       spt_alloc(&thread_current()->spt, upage);
