@@ -75,8 +75,9 @@ void* frame_evict(void){
       }
   }**/
   fe = list_entry(frame_elem, struct frame_entry, elem);
-  fe->in_swap = 1;
+  
   fe->swap_where = swap_out(fe->frame);
+  fe->in_swap = 1;
   
   ret=fe->frame;
   /**fe->frame = NULL;**/
