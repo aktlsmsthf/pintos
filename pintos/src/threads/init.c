@@ -92,7 +92,7 @@ main (void)
   malloc_init ();
   paging_init ();
   
-  frame_init();
+ 
 
   /* Segmentation. */
 #ifdef USERPROG
@@ -120,7 +120,7 @@ main (void)
   disk_init ();
   filesys_init (format_filesys);
 #endif
-  
+   frame_init();
   
 
   printf ("Boot complete.\n");
