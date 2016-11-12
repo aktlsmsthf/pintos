@@ -167,6 +167,15 @@ page_fault (struct intr_frame *f)
       return;
    }
    
+   struct spt_entry *spte = spte_find(thread_current()->spt, pg_round_down(fault_addr));
+   if(spte->fe->in_swap){
+      uint8_t *frame = frame_evit();
+      swap_in(spte->fe->swap_where, frame);
+      spte->fe->in_swap = 0;
+      spte->fe->frame = frame;
+      return;
+   }
+   
    if (not_present || (is_kernel_vaddr (fault_addr) && user)){
       exit(-1);
    }
