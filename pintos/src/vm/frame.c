@@ -49,7 +49,7 @@ void * frame_alloc(void * frame){
 */
 
 void* frame_evict(void){
-  print("a\n");
+  printf("a\n");
   lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
