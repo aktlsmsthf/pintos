@@ -19,6 +19,14 @@ void spt_alloc(struct hash * spt, void * page){
   hash_insert(spt ,&spte->elem);
 }
 */
+struct spt_entry * spte_find(struct hash *spt, void * page){
+  struct spt_entry *spte;
+  struct hash_elem *elem;
+  spte ->page = page;
+  elem = hash_find(spt, &spte->elem);
+  return hash_entry(spt, struct spt_entry, elem);
+}
+
 void spt_init(struct hash *spt){
   hash_init(spt, page_hash, page_less, NULL);
 }
