@@ -68,6 +68,7 @@ void* frame_evict(void){
   fe->swap_where = swap_out(fe->frame);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   ret=fe->frame;
-  /**fe->frame = NULL;**/
+  fe->frame = NULL;
+  printf("%x", ret);
   return ret;  
 }
