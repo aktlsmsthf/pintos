@@ -63,9 +63,10 @@ void* frame_evict(void){
   fe = list_entry(frame_elem, struct frame_entry, elem);
   fe->in_swap = 1;
   fe->swap_where = swap_out(fe->frame);
-  pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
+  
   ret=fe->frame;
-  fe->frame = NULL;
+  /**fe->frame = NULL;**/
+  pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   lock_release(&frame_lock);
   return ret;  
 }
