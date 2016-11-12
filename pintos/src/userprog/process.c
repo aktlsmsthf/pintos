@@ -603,6 +603,7 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
           palloc_free_page (kpage);
           return false; 
         }
+      spt_alloc(&thread_current()->spt, upage);
      
 
       /* Advance. */
@@ -633,6 +634,8 @@ setup_stack (void **esp)
       else
         palloc_free_page (kpage);
     }
+  
+  spt_alloc(&thread_current()->spt,((uint8_t *) PHYS_BASE) - PGSIZE); 
   return success;
 }
 
