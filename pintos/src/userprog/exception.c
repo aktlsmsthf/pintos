@@ -188,6 +188,7 @@ page_fault (struct intr_frame *f)
  
    
    if (not_present || (is_kernel_vaddr (fault_addr) && user)){
+      printf("b\n");
       exit(-1);
    }
   /* To implement virtual memory, delete the rest of the function
