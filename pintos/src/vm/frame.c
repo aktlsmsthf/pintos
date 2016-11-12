@@ -28,6 +28,7 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page){
   list_push_front(&frame_table, &fe->elem);
   return frame;
 }
+/**
 void * frame_alloc(void * frame){
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
   
@@ -42,7 +43,7 @@ void * frame_alloc(void * frame){
   list_push_front(&frame_table, &fe->elem);
   return frame;
 }
-
+*//
 struct frame_entry* frame_pop(void){
   
 }
