@@ -122,10 +122,7 @@ main (void)
   filesys_init (format_filesys);
   
 #endif
-#ifdef USERPROG
-  
   swap_init();
-#endif  
 
   printf ("Boot complete.\n");
   
