@@ -10,6 +10,8 @@ struct spt_entry{
 };
 
 void spt_init(struct hash *spt);
+struct spt_entry * spte_find(struct hash *spt, void *page);
+
 /*
 void spt_alloc(struct hash *spt, void *page);
 */
