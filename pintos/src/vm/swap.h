@@ -1,6 +1,7 @@
 #ifndef SWAP_H
 #define SWAP_H
 #include <bitmap.h>
+#include "devices/disk.h"
 
 
 static struct bitmap * swap_table = bitmap_create(10);
