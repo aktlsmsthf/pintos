@@ -80,7 +80,7 @@ void* frame_evict(void){
   
   ret=fe->frame;
   /**fe->frame = NULL;**/
-  /**palloc_free_page(fe->frame);**/
+  palloc_free_page(fe->frame);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   lock_release(&frame_lock);
   return ret;  
