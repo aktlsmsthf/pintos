@@ -25,7 +25,7 @@ void swap_in(struct frame_entry *fe,void * frame){
   size_t i=0;
   size_t index = fe->swap_where;
   for(;i<8;i++){
-    disk_read(swap_disk, index+i , (uint8_t *) frame+512*i);
+    disk_read(swap_disk, index*8+i , (uint8_t *) frame+512*i);
   }
   bitmap_flip(swap_table, index);
   fe->in_swap = 0;
