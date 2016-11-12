@@ -176,11 +176,12 @@ page_fault (struct intr_frame *f)
             if(frame ==NULL){
                frame = frame_evict();
             }
+            install_page(pg_round_down(fault_addr), frame, spte->writable);
             swap_in(spte->fe, frame);
             /**spte->fe->in_swap = 0;
             spte->fe->swap_where = -1;
             spte->fe->frame = frame;**/
-            install_page(pg_round_down(fault_addr), frame, spte->writable);
+            
             return;
          }
       }  
