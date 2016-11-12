@@ -1,5 +1,5 @@
 #include "vm/swap.h"
-#include <disk.h>
+#include "devices/disk.h"
 #include <bitmap.h>
 #include "threads/palloc.h"
 #include "vm/frame.h"
