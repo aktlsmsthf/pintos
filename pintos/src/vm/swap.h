@@ -4,10 +4,11 @@
 #include "devices/disk.h"
 
 
-static struct bitmap * swap_table = bitmap_create(10);
+static struct bitmap swap_table ;
 
-static struct disk * swap_disk = disk_get(1,1);
+static struct disk swap_disk ;
 
+void swap_init(void);
 int swap_out(void *frame);
 
 void swap_in(int index);
