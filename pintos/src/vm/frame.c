@@ -2,6 +2,7 @@
 #include <list.h>
 #include "threads/synch.h"
 #include "threads/palloc.h"
+#include "vm/swap.h"
 
 void frame_init(void){
   list_init(&frame_table);
@@ -16,7 +17,7 @@ void frame_alloc(void* frame){
   fe->frame = frame;
   fe->in_swap = 0;
   fe->is_free = 0;
-  list_push_front(&frame_table, &f->elem);
+  list_push_front(&frame_table, &fe->elem);
 }
 
 struct frame_entry* frame_pop(void){
