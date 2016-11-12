@@ -19,7 +19,7 @@ void spt_alloc(struct hash * spt, void * page){
   printf("3\n");
   spte->page = page;
   printf("4\n");
-  hash_insert(spte,&spte->elem);
+  hash_insert(spt ,&spte->elem);
   printf("5\n");
 }
 void spt_init(struct hash *spt){
