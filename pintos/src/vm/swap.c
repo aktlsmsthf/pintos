@@ -6,7 +6,7 @@
 
 void swap_init(void){
   &swap_table = bitmap_create(10);
-  &disk swap_disk = disk_get(1,1);
+  &swap_disk = disk_get(1,1);
 }
 
 int swap_out(void *frame){
@@ -23,7 +23,7 @@ void swap_in(int index){
   frame_alloc(frame);
   int i=0;
   for(;i++;i<8){
-    disk_read(swap_disk, index+i;frame+512*i);
+    disk_read(swap_disk, index+i ,frame+512*i);
   }
   bitmap_flip(swap_table, index);
 }
