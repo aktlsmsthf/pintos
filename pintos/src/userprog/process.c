@@ -120,7 +120,6 @@ start_process (void *f_name)
    spt_init(&thread_current()->spt);
 
   success = load (now, &if_.eip, &if_.esp);
-      printf("3\n");
    
   thread_current()->child->load_finish=1;
   thread_current()->child->load_success = success;
@@ -406,9 +405,11 @@ load (const char *file_name, void (**eip) (void), void **esp)
   int i;
 
   /* Allocate and activate page directory. */
+   printf("2\n");
   t->pagedir = pagedir_create ();
   if (t->pagedir == NULL) 
     goto done;
+  printf("3\n");
   process_activate ();
 
   /* Open executable file. */
@@ -482,9 +483,11 @@ load (const char *file_name, void (**eip) (void), void **esp)
                   read_bytes = 0;
                   zero_bytes = ROUND_UP (page_offset + phdr.p_memsz, PGSIZE);
                 }
+             printf("3\n");
               if (!load_segment (file, file_page, (void *) mem_page,
                                  read_bytes, zero_bytes, writable))
                 goto done;
+             printf("4\n");
             }
           else
             goto done;
