@@ -10,6 +10,7 @@
 
 #include "vm/page.h"
 #include "vm/frame.h"
+#include "vm/swap.h"
 #include "threads/palloc.h"
 #include "userprog/process.h"
 
