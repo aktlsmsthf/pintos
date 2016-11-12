@@ -20,7 +20,7 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page){
       
   }  
   spte->page = page;
-  spte->fe = fe
+  spte->fe = fe;
   hash_insert(spt ,&spte->elem);
   fe->frame = frame;
   fe->in_swap = 0;
@@ -44,10 +44,7 @@ void * frame_alloc(void * frame){
   list_push_front(&frame_table, &fe->elem);
   return frame;
 }
-*//
-struct frame_entry* frame_pop(void){
-  
-}
+*/
 
 void* frame_evict(void){
   void * ret;
