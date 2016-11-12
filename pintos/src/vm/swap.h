@@ -10,5 +10,5 @@ struct disk *swap_disk ;
 void swap_init(void);
 int swap_out(void *frame);
 
-void swap_in(int index);
+void swap_in(int index,void *frame);
 #endif
