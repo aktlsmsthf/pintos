@@ -26,12 +26,12 @@ struct frame_entry* frame_pop(void){
 
 void* frame_evict(void){
   void * ret;
-  struct list_elem * frame_elem = list_front(frame_table);
+  struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
   while(!list_entry(frame_elem, struct frame_entry, elem)->is_free){
           list_entry(frame_elem, struct frame_entry, elem)->is_free=1;
           frame_elem = frame_elem->next;
-          if(felem->next==NULL){
+          if(frame_elem->next==NULL){
              frame_elem = list_front(frame_table);
           }
       }
