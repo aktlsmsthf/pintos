@@ -6,7 +6,7 @@
 
 
 void swap_init(void){
-  swap_table = bitmap_create(10);
+  swap_table = bitmap_create(1024);
   swap_disk = disk_get(1,1);
 }
 
