@@ -69,6 +69,6 @@ void* frame_evict(void){
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   ret=fe->frame;
   fe->frame = NULL;
-  printf("%x", ret);
+  printf("%x\n", ret);
   return ret;  
 }
