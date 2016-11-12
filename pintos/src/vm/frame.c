@@ -4,6 +4,7 @@
 #include "threads/palloc.h"
 #include "vm/swap.h"
 #include "threads/malloc.h"
+#include "userprog/pagedir.h"
 
 void frame_init(void){
   list_init(&frame_table);
