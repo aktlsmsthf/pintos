@@ -169,7 +169,7 @@ page_fault (struct intr_frame *f)
    
    struct spt_entry *spte = spte_find(thread_current()->spt, pg_round_down(fault_addr));
    if(spte->fe->in_swap){
-      uint8_t *frame = frame_evit();
+      uint8_t *frame = frame_evict();
       swap_in(spte->fe->swap_where, frame);
       spte->fe->in_swap = 0;
       spte->fe->frame = frame;
