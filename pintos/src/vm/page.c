@@ -21,15 +21,10 @@ void spt_alloc(struct hash * spt, void * page){
 }
 */
 struct spt_entry * spte_find(void * page){
-  printf("1\n");
-  struct spt_entry *spte = malloc(sizeof(struct spt_entry));
-  printf("2\n");
+  struct spt_entry *spte;
   struct hash_elem *elem;
-  printf("3\n");
   spte ->page = page;
-  printf("4\n");
   elem = hash_find(&thread_current()->spt, &spte->elem);
-  printf("5\n");
   return elem != NULL ? hash_entry(elem, struct spt_entry, elem) : NULL;
 }
 
