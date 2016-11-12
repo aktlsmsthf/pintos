@@ -3,7 +3,7 @@
 #include "threads/synch.h"
 #include "threads/palloc.h"
 #include "vm/swap.h"
-#include "thread/malloc.h"
+#include "threads/malloc.h"
 
 void frame_init(void){
   list_init(&frame_table);
