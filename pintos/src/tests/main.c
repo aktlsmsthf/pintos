@@ -5,7 +5,6 @@
 int
 main (int argc UNUSED, char *argv[]) 
 {
-  msg("1");
   test_name = argv[0];
   
   msg ("begin");
