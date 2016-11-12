@@ -93,7 +93,7 @@ main (void)
   malloc_init ();
   paging_init ();
   
- /**swap_init();**/
+  swap_init();
 
   /* Segmentation. */
 #ifdef USERPROG
