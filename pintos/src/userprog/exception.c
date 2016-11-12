@@ -172,6 +172,7 @@ page_fault (struct intr_frame *f)
       uint8_t *frame = frame_evict();
       swap_in(spte->fe->swap_where, frame);
       spte->fe->in_swap = 0;
+      spte->fe->swap_where = -1;
       spte->fe->frame = frame;
       return;
    }
