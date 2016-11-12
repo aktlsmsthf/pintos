@@ -10,7 +10,7 @@ struct lock frame_lock;
 struct frame_entry{
   void *frame;
   bool in_swap;
-  int swap_where;
+  size_t swap_where;
   bool is_free;
   struct spt_entry * spte;
   struct list_elem elem;
