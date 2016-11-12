@@ -12,6 +12,11 @@ static bool page_less(const struct hash_elem *a, const struct hash_elem *b, void
   return sa->page < sb->page;
 }
 
+void spt_alloc(struct spt * spt, void * page){
+  struct spt_entry *spte;
+  spte->page = page;
+  hash_insert(spte);
+}
 void spt_init(struct hash *spt){
   hash_init(spt, page_hash, page_less, NULL);
 }
