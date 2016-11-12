@@ -62,7 +62,7 @@ void* frame_evict(void){
   }**/
   while(true){
       if(!list_entry(frame_elem, struct frame_entry, elem)->in_swap){
-        if(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false)){
+        if(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
           pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
         }
         else{
