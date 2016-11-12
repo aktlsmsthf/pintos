@@ -175,6 +175,7 @@ page_fault (struct intr_frame *f)
       spte->fe->in_swap = 0;
       spte->fe->swap_where = -1;
       spte->fe->frame = frame;
+      install_page(pg_round_down(fault_addr), frame, true);
       return;
    }
    
