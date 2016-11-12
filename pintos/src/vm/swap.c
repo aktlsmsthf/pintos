@@ -19,9 +19,7 @@ int swap_out(void *frame){
   return index;
 }
 
-void swap_in(int index){
-  void *frame = palloc_get_page(PAL_USER);
-  frame_alloc(frame);
+void swap_in(int index,void * frame){
   int i=0;
   for(;i++;i<8){
     disk_read(swap_disk, index+i ,frame+512*i);
