@@ -15,7 +15,7 @@ static bool page_less(const struct hash_elem *a, const struct hash_elem *b, void
 void spt_alloc(struct spt * spt, void * page){
   struct spt_entry *spte;
   spte->page = page;
-  hash_insert(spte);
+  hash_insert(spte,&spte->elem);
 }
 void spt_init(struct hash *spt){
   hash_init(spt, page_hash, page_less, NULL);
