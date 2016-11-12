@@ -22,7 +22,7 @@ void spt_alloc(struct hash * spt, void * page){
 */
 struct spt_entry * spte_find(void * page){
   printf("1\n");
-  struct spt_entry *spte;
+  struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   printf("2\n");
   struct hash_elem *elem;
   printf("3\n");
