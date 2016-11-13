@@ -86,6 +86,7 @@ void* frame_evict(void){
   
   /**ret=fe->frame;
   fe->frame = NULL;**/
+  palloc_free_page(fe->frame);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   fe->frame = NULL;
   ret = palloc_get_page(PAL_USER);
