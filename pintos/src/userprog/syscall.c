@@ -364,6 +364,6 @@ bool check_buffer(void *buffer, unsigned size){
 }
 
 bool check_bad_ptr(uint32_t * pd,const void * uaddr){
-  void * p = pagedir_get_page (pd, pg_round_down(uaddr));
+  void * p = pagedir_get_page (pd, uaddr);
   return p==NULL;
 }
