@@ -12,6 +12,12 @@ void frame_init(void){
   lock_init(&frame_lock);
 
 }
+void frame_remove(struct frame_entry *fe){
+  list_remove(&fe->elem);
+  palloc_free(fe->frame);
+  free(fe);
+}
+  
 void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writable){
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
