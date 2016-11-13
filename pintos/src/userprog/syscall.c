@@ -379,13 +379,15 @@ bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
             swap_in(spte->fe, frame);
             install_page(spte->page, frame, spte->writable);
          }
+          return true;
       }  
-   if(uaddr >= f->esp-32){
+  else if(uaddr >= f->esp-32){
       uint8_t *frame = palloc_get_page(PAL_USER);
       frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
       install_page(pg_round_down(uaddr), frame, true);     
+      return true;
    }
+   else spte==NULL;
   }
-  else{ret=1;}
-  return spte==NULL || ret;
+  else{return true;}
 }
