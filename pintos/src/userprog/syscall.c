@@ -398,7 +398,7 @@ bool user_memory(void *esp, int n){
   return false;
 }
 
-bool check_bad_ptr(struct intr_frame *f, const void* uaddr){
+/**bool check_bad_ptr(struct intr_frame *f, const void* uaddr){
   if(is_user_vaddr(uaddr)){
     struct spt_entry *spte = spte_find(pg_round_down(uaddr));
       if(spte!=NULL){
@@ -417,7 +417,7 @@ bool check_bad_ptr(struct intr_frame *f, const void* uaddr){
       return true;
   }
   return false;
-}
+}**/
 
 bool check_buffer(void *buffer, unsigned size){
   unsigned i=0;
@@ -429,11 +429,11 @@ bool check_buffer(void *buffer, unsigned size){
   return 1;
 }
 
-/**bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
+bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
   
     void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
     return p==NULL;
-}**/
+}
 /*
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
   void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
