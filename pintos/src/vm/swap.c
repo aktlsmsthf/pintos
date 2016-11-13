@@ -4,6 +4,7 @@
 #include "threads/palloc.h"
 #include "vm/frame.h"
 #include "threads/thread.h"
+#include "threads/vaddr.h"
 
 
 void swap_init(void){
