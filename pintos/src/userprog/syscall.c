@@ -367,7 +367,7 @@ bool check_buffer(void *buffer, unsigned size){
 }
 
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
-  if(!is_user_vaddr(uaddr)){
+  if(pagedir_get_page (thread_current()->pagedir, uaddr)==NULL){
     exit(-1);}
   struct spt_entry *spte = spte_find(pg_round_down(uaddr));
   if(spte!=NULL){
