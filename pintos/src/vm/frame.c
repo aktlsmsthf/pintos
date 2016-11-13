@@ -20,9 +20,9 @@ void frame_remove(struct frame_entry *fe){
   lock_release(&frame_lock);
 }
   
-void * frame_spt_alloc(struct hash * spt, void * page, bool writable){
+void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writable){
   //lock_acquire(&frame_lock);
-  uint8_t *frame = palloc_get_page(PAL_USER);
+  //uint8_t *frame = palloc_get_page(PAL_USER);
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
     
