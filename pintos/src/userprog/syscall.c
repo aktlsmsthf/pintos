@@ -365,6 +365,7 @@ bool user_memory(void *esp, int n){
     struct spt_entry *spte = spte_find(pg_round_down(p));
       if(spte!=NULL){
          if(spte->fe->in_swap ){
+            printf("1\n");
             uint8_t *frame = palloc_get_page(PAL_USER);
             if(frame==NULL){frame=frame_evict();}
             swap_in(spte->fe, frame);
@@ -373,6 +374,7 @@ bool user_memory(void *esp, int n){
       }
   }
   if(is_user_vaddr(p)){
+    printf("2\n");
     uint8_t *frame = palloc_get_page(PAL_USER);
       frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(p), true);
       install_page(pg_round_down(p), frame, true);
