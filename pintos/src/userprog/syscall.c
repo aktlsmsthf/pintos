@@ -406,7 +406,7 @@ bool check_bad_ptr(struct intr_frame *f, const void* uaddr){
             uint8_t *frame = palloc_get_page(PAL_USER);
             if(frame==NULL){frame=frame_evict();}
             swap_in(spte->fe, frame);
-            return false;
+            return true;
          }
       }
   }
@@ -414,9 +414,9 @@ bool check_bad_ptr(struct intr_frame *f, const void* uaddr){
     uint8_t *frame = palloc_get_page(PAL_USER);
       frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
       install_page(pg_round_down(uaddr), frame, true);
-      return false;
+      return true;
   }
-  return true;
+  return false;
 }
 
 bool check_buffer(void *buffer, unsigned size){
