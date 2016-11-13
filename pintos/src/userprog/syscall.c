@@ -26,7 +26,8 @@ struct file* get_file_from_fd(int);
 struct list_elem* get_elem_from_fd(int);
 bool user_memory(void *, int);
 bool check_buffer(void *, unsigned);
-bool check_bad_ptr(struct intr_frame *f,const void * uaddr);
+//bool check_bad_ptr(struct intr_frame *f,const void * uaddr);
+bool check_bad_ptr(uint32_t * pd,const void * uaddr);
 struct lock sys_lock;
 
 int a=0;
@@ -365,7 +366,11 @@ bool check_buffer(void *buffer, unsigned size){
   }
   return 1;
 }
-
+bool check_bad_ptr(uint32_t * pd,const void * uaddr){
+    void * p = pagedir_get_page (pd, uaddr);
+    return p==NULL;
+}  
+/*
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
   struct spt_entry *spte=NULL;
   bool ret=0;
@@ -391,3 +396,4 @@ bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
   }
   else{return true;}
 }
+*/
