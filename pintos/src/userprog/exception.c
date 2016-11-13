@@ -14,6 +14,7 @@
 #include "threads/palloc.h"
 #include "userprog/process.h"
 #include "userprog/pagedir.h"
+#include "threads/pte.h"
 
 /* Number of page faults processed. */
 static long long page_fault_cnt;
