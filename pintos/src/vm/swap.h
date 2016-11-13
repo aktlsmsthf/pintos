@@ -2,7 +2,7 @@
 #define SWAP_H
 #include <bitmap.h>
 #include "devices/disk.h"
-#include "vm/page.h"
+#include "vm/frame.h"
 
 
 struct bitmap *swap_table ;
