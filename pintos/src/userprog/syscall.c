@@ -378,7 +378,6 @@ bool check_bad_ptr(uint32_t * pd,const void * uaddr){
             install_page(spte->page, frame, spte->writable);
          }
       }  
-   }
    if(uaddr >= f->esp-32){
       uint8_t *frame = palloc_get_page(PAL_USER);
       frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
