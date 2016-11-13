@@ -164,13 +164,13 @@ page_fault (struct intr_frame *f)
    struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
       if(spte!=NULL){
          if(spte->fe->in_swap){
-            /**uint8_t *frame = palloc_get_page(PAL_USER);
-            if(frame==NULL){frame=frame_evict();}**/
+            uint8_t *frame = palloc_get_page(PAL_USER);
+            if(frame==NULL){frame=frame_evict();}
             //frame_spt_alloc(frame
             
             swap_in(spte, pg_round_down(fault_addr));
-            /**pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);
-           install_page(spte->page, frame, spte->writable);**/
+            pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);
+           install_page(spte->page, frame, spte->writable);
             /**spte->fe->in_swap = 0;
             spte->fe->swap_where = -1;
             spte->fe->frame = frame;**/
