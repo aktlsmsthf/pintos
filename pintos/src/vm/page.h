@@ -8,6 +8,7 @@ struct spt_entry{
   struct hash_elem elem;
   struct frame_entry* fe;
   bool writable;
+  bool file;
 };
 
 void spt_init(struct hash *spt);
