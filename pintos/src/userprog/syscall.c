@@ -258,7 +258,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_TELL:{
-      if(user_memory(f->esp,1)) 
+      if(!user_memory(f->esp,1)) 
         exit(-1);
       int fd = *((int *)(f->esp)+1);
       struct file *ff = get_file_from_fd(fd);
