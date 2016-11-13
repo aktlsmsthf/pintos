@@ -216,8 +216,12 @@ syscall_handler (struct intr_frame *f UNUSED)
       unsigned size = *((unsigned *)(f->esp)+3);
 
       if(!user_memory((void *)buffer, 0)){
+        
+      printf("1\n");
         exit(-1);}
       if(check_bad_ptr(f,(const void *)buffer)) {
+        
+      printf("2\n");
         exit(-1);}
       check_buffer(buffer, size);
       if(fd==1){
@@ -229,9 +233,12 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       else{
         if(!user_memory(f->esp, 3)){
+          
+           printf("3\n");
           exit(-1);}
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
+          
           f->eax = -1;
         }
         else{
@@ -411,13 +418,14 @@ bool check_buffer(void *buffer, unsigned size){
   }
   return 1;
 }
-/*
+
 bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
   
     void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
     return p==NULL;
 }
-*/
+
+/*
 bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
   void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
   struct spt_entry * spte;
@@ -442,5 +450,5 @@ bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
    return true;}
   }
 }
-
+*/
 
