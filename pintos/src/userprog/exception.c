@@ -168,7 +168,7 @@ page_fault (struct intr_frame *f)
             if(frame==NULL){frame=frame_evict();}
             //frame_spt_alloc(frame
             
-            swap_in(spte, pg_round_down(fault_addr));
+            swap_in(spte, frame);
             pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);
            install_page(spte->page, frame, spte->writable);
             /**spte->fe->in_swap = 0;
