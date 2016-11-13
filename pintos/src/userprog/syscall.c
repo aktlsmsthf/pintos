@@ -16,6 +16,9 @@
 #include "threads/palloc.h"
 #include "userprog/process.h"
 #include <string.h>
+#include "vm/page.h"
+#include "vm/frame.h"
+#include "vm/swap.h"
 
 static void syscall_handler (struct intr_frame *);
 void exit(int);
@@ -364,22 +367,21 @@ bool check_buffer(void *buffer, unsigned size){
 }
 
 bool check_bad_ptr(uint32_t * pd,const void * uaddr){
-  if(!is_user_vaddr(fault_addr)){
+  if(!is_user_vaddr(uaddr)){
     exit(-1);}
-  struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
+  struct spt_entry *spte = spte_find(pg_round_down(uaddr));
   if(spte!=NULL){
          if(spte->fe->in_swap){
             uint8_t *frame = palloc_get_page(PAL_USER);
             if(frame==NULL){frame=frame_evict();}
             swap_in(spte->fe, frame);
             install_page(spte->page, frame, spte->writable);
-            pass=true;
          }
       }  
    }
    if(uaddr >= f->esp-32){
       uint8_t *frame = palloc_get_page(PAL_USER);
-      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(fault_addr), true);
+      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
       install_page(pg_round_down(fault_addr), frame, true);     
    }
   
