@@ -3,6 +3,7 @@
 #include <bitmap.h>
 #include "threads/palloc.h"
 #include "vm/frame.h"
+#include "threads/thread.h"
 
 
 void swap_init(void){
