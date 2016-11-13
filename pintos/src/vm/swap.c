@@ -5,7 +5,7 @@
 #include "vm/frame.h"
 #include "threads/vaddr.h"
 
-int spp = PGSIZE/DISK_SECTOR_SIZE
+int spp = PGSIZE/DISK_SECTOR_SIZE;
 
 void swap_init(void){
   swap_disk = disk_get(1,1);
