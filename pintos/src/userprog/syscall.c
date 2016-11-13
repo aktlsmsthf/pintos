@@ -51,6 +51,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_EXIT:{
       if(!user_memory(f->esp, 1)){
+        printf("a\n");
         exit(-1);}
     
       int status = *((int *)(f->esp)+1);
@@ -77,6 +78,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_WAIT:{
       if(!user_memory(f->esp,1)){
+        printf("b\n");
         exit(-1);}
      
       f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
@@ -85,14 +87,16 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_CREATE:{
       if(!user_memory(f->esp,2)){ 
+        printf("c\n");
         exit(-1);}
       
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
       
       if(!user_memory((void *)file, 0)){
+        printf("d\n");
         exit(-1);}
-      if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
+      if(check_bad_ptr(f,(const void *)file)) {printf("e\n"); exit(-1);}
       if(file==NULL){
         f->eax =-1;
       }
@@ -106,10 +110,11 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_REMOVE:{
       if(!user_memory(f->esp,1)){
+        printf("f\n");
         exit(-1);}
       
       const char *file = *((char **)(f->esp)+1);
-      if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
+      if(check_bad_ptr(f,(const void *)file)) {printf("g\n");exit(-1);}
       lock_acquire(&sys_lock);
       f->eax = filesys_remove (file);
       lock_release(&sys_lock);
@@ -118,16 +123,18 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_OPEN:{
       if(!user_memory(f->esp,1)){
+        printf("h\n");
         exit(-1);
         break;
       }
       
       const char *name= *((char **)(f->esp)+1);
       
-      if(!user_memory((void *)name, 0)) {exit(-1);break;}
-      if(!is_user_vaddr(name)) {f->eax = -1;break;}
+      if(!user_memory((void *)name, 0)) {printf("i\n"); exit(-1);break;}
+      if(!is_user_vaddr(name)) {printf("j\n");f->eax = -1;break;}
       else{
         if(check_bad_ptr(f,(const void *)name)){
+          printf("k\n");
           exit(-1);
           break;
         }
@@ -166,6 +173,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_FILESIZE:{
       if(!user_memory(f->esp,1)){
+        printf("l\n");
         exit(-1);}
 
       int fd = *((int *)(f->esp)+1);
@@ -176,6 +184,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_READ:{
       if(!user_memory(f->esp,3)){
+        printf("m\n");
         exit(-1);}
       
       int fd = *((int *)(f->esp)+1);
@@ -183,9 +192,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       unsigned size = *((unsigned *)(f->esp)+3);
       
       if(!user_memory((void *)buffer, 0)){
-        
+        printf("n\n");
         exit(-1);}
       if(check_bad_ptr(f,(const void *)buffer)){
+        printf("o\n");
         exit(-1);}
       check_buffer(buffer, size);
       int j=0;
@@ -219,8 +229,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       unsigned size = *((unsigned *)(f->esp)+3);
 
       if(!user_memory((void *)buffer, 0)){
+        printf("p\n");
         exit(-1);}
       if(check_bad_ptr(f,(const void *)buffer)) {
+        printf("q\n");
         exit(-1);}
       check_buffer(buffer, size);
       if(fd==1){
@@ -232,6 +244,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       else{
         if(!user_memory(f->esp, 3)){
+          printf("r\n");
           exit(-1);}
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
@@ -277,6 +290,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_CLOSE:{
       if(!user_memory(f->esp,1)) {
+        printf("s\n");
         exit(-1);}
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
