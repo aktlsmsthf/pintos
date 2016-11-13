@@ -5,6 +5,8 @@
 #include "vm/frame.h"
 #include "threads/vaddr.h"
 #include "threads/synch.h"
+#include "threads/thread.h"
+#include "userprog/pagedir.h"
 
 int spp = PGSIZE/DISK_SECTOR_SIZE;
 
