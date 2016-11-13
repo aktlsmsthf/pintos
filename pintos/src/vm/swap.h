@@ -11,7 +11,7 @@ struct disk *swap_disk ;
 struct lock swap_lock;
 
 void swap_init(void);
-size_t swap_out(void *frame);
+void* swap_out(struct frame_entry *fe);
 void swap_remove(size_t index);
 void swap_in(struct frame_entry *fe,void *frame);
 #endif
