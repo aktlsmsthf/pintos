@@ -11,7 +11,7 @@ int spp = PGSIZE/DISK_SECTOR_SIZE;
 void swap_init(void){
   swap_disk = disk_get(1,1);
   swap_table = bitmap_create(disk_size(swap_disk)/spp);
-  lock_init(swap_lock);
+  lock_init(&swap_lock);
 }
 void swap_remove(size_t index){
   lock_acquire(&swap_lock);
