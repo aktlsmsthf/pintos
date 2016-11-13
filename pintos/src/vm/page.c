@@ -33,7 +33,7 @@ void spt_alloc(struct hash * spt, void * page){
 }
 */
 struct spt_entry * spte_find(void * page){
-  lock_acqurie(&frame_lock);
+  lock_acquire(&frame_lock);
   struct spt_entry spte;
   struct hash_elem * e;
   spte.page = page;
