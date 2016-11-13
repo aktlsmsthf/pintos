@@ -169,7 +169,7 @@ page_fault (struct intr_frame *f)
             //frame_spt_alloc(frame
             
             swap_in(spte, pg_round_down(fault_addr));
-            //pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);
+            pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);
            install_page(spte->page, frame, spte->writable);
             /**spte->fe->in_swap = 0;
             spte->fe->swap_where = -1;
