@@ -370,14 +370,14 @@ bool check_buffer(void *buffer, unsigned size){
 
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
   
-  if(fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
+  if(fault_addr >= f->esp-32 && is_user_vaddr(uaddr)){
       uint8_t *frame = palloc_get_page(PAL_USER);
-      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(fault_addr), true);
+      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
       /*
       frame_alloc(frame);
       spt_alloc(&thread_current()->spt, pg_round_down(fault_addr));
       */
-      install_page(pg_round_down(fault_addr), frame, true);
+      install_page(pg_round_down(uaddr), frame, true);
       
       return false;
    }
