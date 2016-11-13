@@ -36,17 +36,18 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-  if(!is_user_vaddr((const void *)f->esp)) exit(-1);
-  if(check_bad_ptr(thread_current()->pagedir,f->esp)) exit(-1);
-  if(f->esp<0x08048000) exit(-1);
+  if(!is_user_vaddr((const void *)f->esp)){printf("1\n"); exit(-1);}
+  if(check_bad_ptr(thread_current()->pagedir,f->esp)){printf("2\n"); exit(-1);}
+  if(f->esp<0x08048000) {printf("3\n");exit(-1);}
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
       power_off();
       break;}
       
     case SYS_EXIT:{
-      if(!user_memory(f->esp, 1))
-        exit(-1);
+      if(!user_memory(f->esp, 1)){
+        printf("4\n");
+        exit(-1);}
     
       int status = *((int *)(f->esp)+1);
       exit(status);
@@ -54,8 +55,9 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_EXEC:{
-      if(!user_memory(f->esp, 1))
-        exit(-1);
+      if(!user_memory(f->esp, 1)){
+        printf("5\n");
+        exit(-1);}
       const char * cmd_line = *((char **)(f->esp)+1);
       if(!user_memory((void *)cmd_line, 0)){ f->eax = -1; break;}
       if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line))
@@ -68,22 +70,23 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_WAIT:{
-      if(!user_memory(f->esp,1)) 
-        exit(-1);
+      if(!user_memory(f->esp,1)){
+        printf("6\n");
+        exit(-1);}
      
       f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
       break;
     }
       
     case SYS_CREATE:{
-      if(!user_memory(f->esp,2)) 
-        exit(-1);
+      if(!user_memory(f->esp,2)){printf("7\n"); 
+        exit(-1);}
       
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
       
-      if(!user_memory((void *)file, 0))
-        exit(-1);
+      if(!user_memory((void *)file, 0)){printf("8\n");
+        exit(-1);}
       if(check_bad_ptr(thread_current()->pagedir,(const void *)file)) {exit(-1);}
       if(file==NULL){
         f->eax =-1;
@@ -97,8 +100,8 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_REMOVE:{
-      if(!user_memory(f->esp,1)) 
-        exit(-1);
+      if(!user_memory(f->esp,1)){printf("9\n"); 
+        exit(-1);}
       
       const char *file = *((char **)(f->esp)+1);
       if(check_bad_ptr(thread_current()->pagedir,(const void *)file)) {exit(-1);}
@@ -110,6 +113,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_OPEN:{
       if(!user_memory(f->esp,1)){
+        printf("10\n");
         exit(-1);
         break;
       }
@@ -119,7 +123,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(!user_memory((void *)name, 0)) {exit(-1);break;}
       if(!is_user_vaddr(name)) {f->eax = -1;break;}
       else{
-        if(check_bad_ptr(thread_current()->pagedir,(const void *)name)){ 
+        if(check_bad_ptr(thread_current()->pagedir,(const void *)name)){
+          printf("11\n");
           exit(-1);
           break;
         }
@@ -157,8 +162,9 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_FILESIZE:{
-      if(!user_memory(f->esp,1)) 
-        exit(-1);
+      if(!user_memory(f->esp,1)){
+        printf("12\n");
+        exit(-1);}
 
       int fd = *((int *)(f->esp)+1);
       struct file * ff=get_file_from_fd(fd);
@@ -167,17 +173,20 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_READ:{
-      if(!user_memory(f->esp,3)) 
-        exit(-1);
+      if(!user_memory(f->esp,3)){
+        printf("13\n");
+        exit(-1);}
       
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       
-      if(!user_memory((void *)buffer, 0)) 
-        exit(-1);
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer))
-        exit(-1);
+      if(!user_memory((void *)buffer, 0)){
+        printf("15\n");
+        exit(-1);}
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)){
+        printf("16\n");
+        exit(-1);}
       check_buffer(buffer, size);
       int j=0;
       if(fd == 0){
@@ -209,10 +218,12 @@ syscall_handler (struct intr_frame *f UNUSED)
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
 
-      if(!user_memory((void *)buffer, 0)) 
-        exit(-1);
-      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)) 
-        exit(-1);
+      if(!user_memory((void *)buffer, 0)){
+        printf("17\n");
+        exit(-1);}
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)) {
+        printf("18\n");
+        exit(-1);}
       check_buffer(buffer, size);
       if(fd==1){
         putbuf(buffer, size);
@@ -222,8 +233,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = -1;
       }
       else{
-        if(!user_memory(f->esp, 3)) 
-          exit(-1);
+        if(!user_memory(f->esp, 3)){
+          printf("19\n");
+          exit(-1);}
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
           f->eax = -1;
