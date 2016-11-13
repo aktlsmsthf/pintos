@@ -21,7 +21,7 @@ void frame_remove(struct frame_entry *fe);
 /*
 void * frame_alloc(void* frame);
 */
-void * frame_spt_alloc(struct hash * spt, void * page, bool writable);
+void * frame_spt_alloc(void * frame,struct hash * spt, void * page, bool writable);
 void * frame_evict(void);
 struct frame_entry* frame_pop(void);
 
