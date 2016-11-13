@@ -10,7 +10,10 @@ void swap_init(void){
   swap_table = bitmap_create(disk_size(swap_disk)/8);
   
 }
-
+void swap_remove(size_t index){  
+  bitmap_flip(swap_table, index);
+}
+  
 size_t swap_out(void *frame){
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   size_t i=0;
