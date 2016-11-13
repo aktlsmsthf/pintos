@@ -2,6 +2,8 @@
 #include <hash.h>
 #include "threads/malloc.h"
 #include "threads/thread.h"
+#include "vm/frame.h"
+#include "vm/swap.h"
 
 static unsigned page_hash(const struct hash_elem *element, void *aux){
   struct spt_entry *spte = hash_entry(element, struct spt_entry, elem);
@@ -12,6 +14,16 @@ static bool page_less(const struct hash_elem *a, const struct hash_elem *b, void
   struct spt_entry *sa = hash_entry(a, struct spt_entry, elem);
   struct spt_entry *sb = hash_entry(b, struct spt_entry, elem);
   return sa->page < sb->page;
+}
+static void page_destroy_func(struct hash_elem *helem, void *aux){
+  struct spt_entry *spte = hash_entry(helem, struct spt_entry,elem);
+  if(spte->fe->in_swap){
+    swap_remove(spte->fe->swap_where);}
+  frame_remove(spte->fe);  
+  free(spte);
+}
+void spt_destroy (struct hash *spt){
+  hash_destroy (spt, page_destroy_func);
 }
 /*
 void spt_alloc(struct hash * spt, void * page){
