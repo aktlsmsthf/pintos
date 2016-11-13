@@ -426,19 +426,17 @@ bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
   else{
   spte = spte_find(pg_round_down(uaddr));
   if(spte!=NULL){
-         printf("%x\n",spte->fe->frame);
          if(spte->fe->in_swap){
             uint8_t *frame = palloc_get_page(PAL_USER);
             if(frame==NULL){frame=frame_evict();}
             swap_in(spte->fe, frame);
             install_page(spte->page, frame, spte->writable);
             
-         printf("%x\n",spte->fe->frame);
             return false;
          }
    else if(uaddr>= f->esp-32 && is_user_vaddr(uaddr)){
       uint8_t *frame = palloc_get_page(PAL_USER);
-      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true)
+      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
       install_page(pg_round_down(uaddr), frame, true);
      return false;}
       
