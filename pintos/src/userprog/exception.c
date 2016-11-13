@@ -163,7 +163,7 @@ page_fault (struct intr_frame *f)
    bool pass=false;
    if(not_present && is_user_vaddr(fault_addr)){
    struct spt_entry spte = spte_find(pg_round_down(fault_addr));
-      if(!spte){
+      if(spte){
          if(spte.fe->in_swap ){
             uint8_t *frame = palloc_get_page(PAL_USER);
             if(frame==NULL){frame=frame_evict();}
