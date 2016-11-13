@@ -371,15 +371,15 @@ bool check_buffer(void *buffer, unsigned size){
   }
   return 1;
 }
-
+/*
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
     printf("%x\n",uaddr);
     
     printf("%x\n",pg_round_down(uaddr));
     void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
     return p==NULL;
-}  
-/*
+} */ 
+
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
   void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
   struct spt_entry * spte;
@@ -387,15 +387,18 @@ bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
   else{
   spte = spte_find(pg_round_down(uaddr));
   if(spte!=NULL){
+         printf("%x\n",spte->fe->frame);
          if(spte->fe->in_swap){
             uint8_t *frame = palloc_get_page(PAL_USER);
             if(frame==NULL){frame=frame_evict();}
             swap_in(spte->fe, frame);
             install_page(spte->page, frame, spte->writable);
+            
+         printf("%x\n",spte->fe->frame);
             return false;
          }
    return true;}
   }
-}*/
+}
 
 
