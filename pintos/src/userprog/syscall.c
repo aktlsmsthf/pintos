@@ -88,8 +88,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
       
-      if(!user_memory((void *)file, 0)){
-        exit(-1);}
+      /**if(!user_memory((void *)file, 0)){
+        exit(-1);}**/
       if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
       if(file==NULL){
         f->eax =-1;
@@ -122,7 +122,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       const char *name= *((char **)(f->esp)+1);
       
-      if(!user_memory((void *)name, 0)) {exit(-1);break;}
+      /**f(!user_memory((void *)name, 0)) {exit(-1);break;}**/
       if(!is_user_vaddr(name)) {f->eax = -1;break;}
       else{
         if(check_bad_ptr(f,(const void *)name)){
@@ -365,7 +365,6 @@ bool user_memory(void *esp, int n){
     struct spt_entry *spte = spte_find(pg_round_down(p));
       if(spte!=NULL){
          if(spte->fe->in_swap ){
-            printf("1\n");
             uint8_t *frame = palloc_get_page(PAL_USER);
             if(frame==NULL){frame=frame_evict();}
             swap_in(spte->fe, frame);
@@ -374,7 +373,6 @@ bool user_memory(void *esp, int n){
       }
   }
   if(is_user_vaddr(p)){
-    printf("2\n");
     uint8_t *frame = palloc_get_page(PAL_USER);
       frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(p), true);
       install_page(pg_round_down(p), frame, true);
