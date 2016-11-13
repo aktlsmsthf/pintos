@@ -173,9 +173,6 @@ page_fault (struct intr_frame *f)
             pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);
             install_page(spte->page, frame, spte->writable);
             
-            uint32_t *pte;
-            pte = lookup_page (thread_current()->pagedir, pg_round_down(fault_addr), false);
-            *pte |= PTE_P;
             /**spte->fe->in_swap = 0;
             spte->fe->swap_where = -1;
             spte->fe->frame = frame;**/
@@ -192,9 +189,6 @@ page_fault (struct intr_frame *f)
       */
       install_page(pg_round_down(fault_addr), frame, true);
       
-      uint32_t *pte2;
-      pte2 = lookup_page (thread_current()->pagedir, pg_round_down(fault_addr), false);
-      *pte2 |= PTE_P; 
       pass=true;
          
    }
