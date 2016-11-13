@@ -3,7 +3,7 @@
 #include <syscall-nr.h>
 #include "threads/interrupt.h"
 #include "threads/thread.h"
-
+#include "userprog/exception.h"
 #include "filesys/file.h"
 #include "filesys/filesys.h"
 #include <console.h>
