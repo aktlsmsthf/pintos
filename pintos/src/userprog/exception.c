@@ -164,14 +164,10 @@ page_fault (struct intr_frame *f)
    if(not_present && is_user_vaddr(fault_addr)){
    struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
       if(spte!=NULL){
-         printf("b\n");
          if(spte->fe->in_swap){
-            printf("c\n");
             uint8_t *frame = palloc_get_page(PAL_USER);
-            if(frame==NULL){frame=frame_evict();
-                           printf("d\n");}
+            if(frame==NULL){frame=frame_evict();}
             //frame_spt_alloc(frame
-            printf("e\n");
             
             swap_in(spte->fe, frame);
             //pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);
@@ -179,7 +175,6 @@ page_fault (struct intr_frame *f)
             /**spte->fe->in_swap = 0;
             spte->fe->swap_where = -1;
             spte->fe->frame = frame;**/
-            printf("f\n");
             pass=true;
          }
       }  
