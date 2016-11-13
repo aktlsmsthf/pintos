@@ -419,7 +419,7 @@ bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
     return p==NULL;
 }
 */
-bool check_bad_ptr(const void * uaddr){
+bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
   void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
   struct spt_entry * spte;
   if(p!=NULL){return false;}
@@ -436,7 +436,7 @@ bool check_bad_ptr(const void * uaddr){
          printf("%x\n",spte->fe->frame);
             return false;
          }
-   else if(uaddr>= f->esp-32 && is_user_vaddr(fault_addr)){
+   else if(uaddr>= f->esp-32 && is_user_vaddr(uaddr)){
       uint8_t *frame = palloc_get_page(PAL_USER);
       frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true)
       install_page(pg_round_down(uaddr), frame, true);
