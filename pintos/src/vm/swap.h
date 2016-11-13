@@ -11,5 +11,5 @@ struct disk *swap_disk ;
 void swap_init(void);
 size_t swap_out(void *frame);
 void swap_remove(size_t index);
-void swap_in(struct spte_entry *spte,void *fault_addr);
+void swap_in(struct spt_entry *spte,void *fault_addr);
 #endif
