@@ -180,21 +180,17 @@ page_fault (struct intr_frame *f)
       }  
    }
     if(!pass && not_present && fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
-      printf("g\n");
       uint8_t *frame = palloc_get_page(PAL_USER);
       frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(fault_addr), true);
       /*
       frame_alloc(frame);
       spt_alloc(&thread_current()->spt, pg_round_down(fault_addr));
       */
-       printf("h\n");
       install_page(pg_round_down(fault_addr), frame, true);
       pass=true;
          
    }
     if (!pass && (not_present || (is_kernel_vaddr (fault_addr) && user))){
-       printf("%d\n",fault_addr);
-       printf("i\n");
       exit(-1);
    } 
  
