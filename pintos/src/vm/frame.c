@@ -67,13 +67,13 @@ void* frame_evict(void){
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
   while(list_entry(frame_elem, struct frame_entry, elem)->frame==NULL || pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
-    if(list_entry(frame_elem, struct frame_entry, elem)->spte->file){
+    //if(list_entry(frame_elem, struct frame_entry, elem)->spte->writable){
       pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
       frame_elem = frame_elem->next;
       if(frame_elem->next==NULL){
          frame_elem = list_front(&frame_table);
       }
-    }
+    //}
   }
   /**while(true){
       if(!list_entry(frame_elem, struct frame_entry, elem)->in_swap){
