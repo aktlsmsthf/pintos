@@ -21,15 +21,22 @@ void swap_remove(size_t index){
   lock_release(&swap_lock);
 }
   
-size_t swap_out(void *frame){
+void* swap_out(struct frame_entry *fe){
+  void* ret;
   lock_acquire(&swap_lock);
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   int i;
   for(i=0;i<spp;i++){
-    disk_write(swap_disk, index*spp+i, (uint8_t *)frame+512*i);
+    disk_write(swap_disk, index*spp+i, (uint8_t *)fe->frame+512*i);
   }
+  fe->swap_where = index;
+  fe->in_swap = 1;
+  palloc_free_page(fe->frame);
+  pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
+  fe->frame = NULL;
+  ret = palloc_get_page(PAL_USER);
   lock_release(&swap_lock);
-  return index;
+  return ret;
 }
 
 void swap_in(struct frame_entry *fe, void * frame){
