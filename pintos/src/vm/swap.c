@@ -7,7 +7,7 @@
 #include "threads/synch.h"
 #include "threads/thread.h"
 #include "userprog/pagedir.h"
-#incldue "userprog/process.h"
+#include "userprog/process.h"
 
 int spp = PGSIZE/DISK_SECTOR_SIZE;
 
