@@ -185,10 +185,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       if(!user_memory((void *)buffer, 0)){
         printf("15\n");
-        exit(-1);}
+        exit(-1);}/*
       if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)){
         printf("16\n");
-        exit(-1);}
+        exit(-1);}*/
       check_buffer(buffer, size);
       int j=0;
       if(fd == 0){
