@@ -193,6 +193,7 @@ page_fault (struct intr_frame *f)
          
    }
     if (!pass && (not_present || (is_kernel_vaddr (fault_addr) && user))){
+       printf("k\n");
       exit(-1);
    } 
  
