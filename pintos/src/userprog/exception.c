@@ -165,6 +165,7 @@ page_fault (struct intr_frame *f)
    struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
       if(spte!=NULL){
          if(spte->fe->in_swap){
+            printf("b\n");
             uint8_t *frame = palloc_get_page(PAL_USER);
             if(frame==NULL){frame=frame_evict();}
             //frame_spt_alloc(frame
@@ -181,6 +182,7 @@ page_fault (struct intr_frame *f)
       }  
    }
     if(!pass && not_present && fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
+       printf("c\n");
       uint8_t *frame = palloc_get_page(PAL_USER);
       frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(fault_addr), true);
       /*
