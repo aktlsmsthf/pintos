@@ -182,7 +182,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(!user_memory((void *)buffer, 0)){
         
         exit(-1);}
-      if(check_bad_ptr(f,(const void *)buffer))
+      if(check_bad_ptr(f,(const void *)buffer)){
         exit(-1);}
       check_buffer(buffer, size);
       int j=0;
