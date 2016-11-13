@@ -83,8 +83,8 @@ void* frame_evict(void){
          frame_elem = list_front(&frame_table);
       }
   }**/
-  /**fe = list_entry(frame_elem, struct frame_entry, elem);
-  fe->swap_where = swap_out(fe->frame);
+  fe = list_entry(frame_elem, struct frame_entry, elem);
+  /**fe->swap_where = swap_out(fe->frame);
   fe->in_swap = 1;**/
   
   //ret=fe->frame;
