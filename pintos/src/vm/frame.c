@@ -14,7 +14,7 @@ void frame_init(void){
 }
 void frame_remove(struct frame_entry *fe){
   list_remove(&fe->elem);
-  palloc_free(fe->frame);
+  palloc_free_page(fe->frame);
   free(fe);
 }
   
