@@ -185,7 +185,7 @@ page_fault (struct intr_frame *f)
       frame_alloc(frame);
       spt_alloc(&thread_current()->spt, pg_round_down(fault_addr));
       */
-      k=install_page(pg_round_down(fault_addr), frame, true);
+      install_page(pg_round_down(fault_addr), frame, true);
       pass=true;
          
    }
