@@ -26,8 +26,6 @@ size_t swap_out(void *frame){
 
 void swap_in(struct frame_entry *fe, void * frame){
   lock_acquire(&frame_lock);
-  
-
   size_t i=0;
   size_t index = fe->swap_where;
   for(;i<8;i++){
@@ -37,7 +35,6 @@ void swap_in(struct frame_entry *fe, void * frame){
   fe->in_swap = 0;
   fe->swap_where = -1;
   fe->frame = frame;
-
   lock_release(&frame_lock);
 }
 
