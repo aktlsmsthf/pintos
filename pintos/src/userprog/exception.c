@@ -159,7 +159,7 @@ page_fault (struct intr_frame *f)
   user = (f->error_code & PF_U) != 0;
    
  
-   
+   bool k;
    bool pass=false;
    if(not_present && is_user_vaddr(fault_addr)){
    struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
@@ -171,7 +171,7 @@ page_fault (struct intr_frame *f)
             
             swap_in(spte->fe, frame);
             //pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);
-            bool k=install_page(spte->page, frame, spte->writable);
+           k=install_page(spte->page, frame, spte->writable);
             printf("%d\n",k);
             /**spte->fe->in_swap = 0;
             spte->fe->swap_where = -1;
