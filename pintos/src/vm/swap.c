@@ -17,16 +17,16 @@ void swap_init(void){
   lock_init(&swap_lock);
 }
 void swap_remove(size_t index){
-  lock_acquire(&swap_lock);
+  //lock_acquire(&swap_lock);
   if(index!=-1){
     bitmap_flip(swap_table, index);
   }
-  lock_release(&swap_lock);
+  //lock_release(&swap_lock);
 }
   
 void* swap_out(struct frame_entry *fe){
   void* ret;
-  lock_acquire(&swap_lock);
+  //lock_acquire(&swap_lock);
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   int i;
   for(i=0;i<spp;i++){
@@ -38,12 +38,12 @@ void* swap_out(struct frame_entry *fe){
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   fe->frame = NULL;
   ret = palloc_get_page(PAL_USER);
-  lock_release(&swap_lock);
+  //lock_release(&swap_lock);
   return ret;
 }
 
 void swap_in(struct frame_entry *fe, void * frame){
-  lock_acquire(&swap_lock);
+  //lock_acquire(&swap_lock);
   int i;
   size_t index = fe->swap_where;
   for(i=0;i<spp;i++){
@@ -54,6 +54,6 @@ void swap_in(struct frame_entry *fe, void * frame){
   fe->swap_where = -1;
   fe->frame = frame;
   install_page(fe->spte->page, frame, fe->spte->writable);
-  lock_release(&swap_lock);
+  //lock_release(&swap_lock);
 }
 
