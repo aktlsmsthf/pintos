@@ -13,9 +13,11 @@ void frame_init(void){
 
 }
 void frame_remove(struct frame_entry *fe){
+  lock_acquire(&frame_lock);
   list_remove(&fe->elem);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   free(fe);
+  lock_release(&frame_lock);
 }
   
 void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writable){
