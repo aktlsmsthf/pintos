@@ -373,7 +373,8 @@ bool check_buffer(void *buffer, unsigned size){
 }
 
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
-    void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
+    printf("%x\n",uaddr);
+    void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
     return p==NULL;
 }  
 /*
