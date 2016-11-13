@@ -39,6 +39,8 @@ test_main (void)
   /* Check that it's all 0x5a. */
   msg ("read pass");
   for (i = 0; i < SIZE; i++)
-    if (buf[i] != 0x5a)
+    if (buf[i] != 0x5a){
+       printf("%x\n", buf[i]);
       fail ("byte %zu != 0x5a", i);
+    }
 }
