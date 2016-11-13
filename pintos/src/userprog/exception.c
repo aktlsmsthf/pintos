@@ -160,7 +160,7 @@ page_fault (struct intr_frame *f)
    
  
    
-  
+   bool pass=false;
    if(not_present && is_user_vaddr(fault_addr)){
    struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
       if(spte!=NULL){
@@ -178,11 +178,11 @@ page_fault (struct intr_frame *f)
             spte->fe->swap_where = -1;
             spte->fe->frame = frame;**/
             
-            return;
+            pass=true;
          }
       }  
    }
-    if(not_present && fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
+    if(!pass && not_present && fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
       
       uint8_t *frame = palloc_get_page(PAL_USER);
       frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(fault_addr), true);
@@ -191,10 +191,10 @@ page_fault (struct intr_frame *f)
       spt_alloc(&thread_current()->spt, pg_round_down(fault_addr));
       */
       install_page(pg_round_down(fault_addr), frame, true);
-      return;
+      pass=true;
          
    }
-    if (not_present || (is_kernel_vaddr (fault_addr) && user)){
+    if (!pass && (not_present || (is_kernel_vaddr (fault_addr) && user))){
       exit(-1);
    } 
  
@@ -203,11 +203,13 @@ page_fault (struct intr_frame *f)
   /* To implement virtual memory, delete the rest of the function
      body, and replace it with code that brings in the page to
      which fault_addr refers. */
+  if(!pass){
   printf ("Page fault at %p: %s error %s page in %s context.\n",
           fault_addr,
           not_present ? "not present" : "rights violation",
           write ? "writing" : "reading",
           user ? "user" : "kernel");
   kill (f);
+  }
 }
 
