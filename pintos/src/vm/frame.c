@@ -20,7 +20,7 @@ void frame_remove(struct frame_entry *fe){
   lock_release(&frame_lock);
 }
   
-void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writable){
+void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writable, bool file){
   //lock_acquire(&frame_lock);
   //uint8_t *frame = palloc_get_page(PAL_USER);
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
@@ -34,6 +34,7 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writab
   spte->page = page;
   spte->fe = fe;
   spte->writable = writable;
+  spte->file = file;
   hash_insert(spt ,&spte->elem);
   fe->frame = frame;
   fe->in_swap = 0;
