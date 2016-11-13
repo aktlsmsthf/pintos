@@ -376,7 +376,6 @@ bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
     printf("%x\n",uaddr);
   
     void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
-    printf("%x\n",p);
     return p==NULL;
 }
 /*
