@@ -366,11 +366,12 @@ bool check_buffer(void *buffer, unsigned size){
   }
   return 1;
 }
+/*
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
     void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
     return p==NULL;
 }  
-
+*/
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
   void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
   if(p!=NULL){return false;}
