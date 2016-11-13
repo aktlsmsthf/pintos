@@ -84,10 +84,12 @@ void* frame_evict(void){
   fe->swap_where = swap_out(fe->frame);
   fe->in_swap = 1;
   
-  ret=fe->frame;
-  fe->frame = NULL;
+  /**ret=fe->frame;
+  fe->frame = NULL;**/
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
-  /*ret = palloc_get_page(PAL_USER);*/
+  palloc_free_page(fe->frame);
+  fe->frame = NULL;
+  ret = palloc_get_page(PAL_USER);
   lock_release(&frame_lock);
   return ret;
 }
