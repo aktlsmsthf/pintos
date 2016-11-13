@@ -18,8 +18,8 @@ void swap_remove(size_t index){
   
 size_t swap_out(void *frame){
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
-  size_t i=0;
-  for(;i<spp;i++){
+  int i;
+  for(i=0;i<spp;i++){
     disk_write(swap_disk, index*spp+i, (uint8_t *)frame+512*i);
   }
   return index;
@@ -27,9 +27,9 @@ size_t swap_out(void *frame){
 
 void swap_in(struct frame_entry *fe, void * frame){
   lock_acquire(&frame_lock);
-  size_t i=0;
+  int i;
   size_t index = fe->swap_where;
-  for(;i<spp;i++){
+  for(i=0;i<spp;i++){
     disk_read(swap_disk, index*spp+i , (uint8_t *) frame+512*i);
   }
   bitmap_flip(swap_table, index);
