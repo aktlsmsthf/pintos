@@ -367,9 +367,10 @@ bool check_buffer(void *buffer, unsigned size){
 }
 
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
+  struct spt_entry *spte=NULL;
   if(pagedir_get_page (thread_current()->pagedir, uaddr)==NULL){
-    exit(-1);}
-  struct spt_entry *spte = spte_find(pg_round_down(uaddr));
+
+  spte = spte_find(pg_round_down(uaddr));
   if(spte!=NULL){
          if(spte->fe->in_swap){
             uint8_t *frame = palloc_get_page(PAL_USER);
@@ -383,6 +384,6 @@ bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
       frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
       install_page(pg_round_down(uaddr), frame, true);     
    }
-  
+  }
   return spte==NULL;
 }
