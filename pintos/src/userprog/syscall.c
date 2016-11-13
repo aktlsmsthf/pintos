@@ -44,6 +44,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 {
   if(!is_user_vaddr((const void *)f->esp)){exit(-1);}
   if(check_bad_ptr(f,f->esp)){exit(-1);}
+  printf("%d\n",*((int *)(f->esp)));
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
       power_off();
@@ -216,12 +217,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       unsigned size = *((unsigned *)(f->esp)+3);
 
       if(!user_memory((void *)buffer, 0)){
-        
-      printf("1\n");
         exit(-1);}
       if(check_bad_ptr(f,(const void *)buffer)) {
-        
-      printf("2\n");
         exit(-1);}
       check_buffer(buffer, size);
       if(fd==1){
@@ -233,8 +230,6 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       else{
         if(!user_memory(f->esp, 3)){
-          
-           printf("3\n");
           exit(-1);}
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
