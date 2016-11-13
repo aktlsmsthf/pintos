@@ -364,6 +364,24 @@ bool check_buffer(void *buffer, unsigned size){
 }
 
 bool check_bad_ptr(uint32_t * pd,const void * uaddr){
-  void * p = pagedir_get_page (pd, uaddr);
-  return p==NULL;
+  if(!is_user_vaddr(fault_addr)){
+    exit(-1);}
+  struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
+  if(spte!=NULL){
+         if(spte->fe->in_swap){
+            uint8_t *frame = palloc_get_page(PAL_USER);
+            if(frame==NULL){frame=frame_evict();}
+            swap_in(spte->fe, frame);
+            install_page(spte->page, frame, spte->writable);
+            pass=true;
+         }
+      }  
+   }
+   if(uaddr >= f->esp-32){
+      uint8_t *frame = palloc_get_page(PAL_USER);
+      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(fault_addr), true);
+      install_page(pg_round_down(fault_addr), frame, true);     
+   }
+  
+  return spte==NULL;
 }
