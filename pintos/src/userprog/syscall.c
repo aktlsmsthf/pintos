@@ -61,10 +61,13 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_EXEC:{
       if(!user_memory(f->esp, 1)){
+        printf("a\n");
         exit(-1);}
       const char * cmd_line = *((char **)(f->esp)+1);
       if(!user_memory((void *)cmd_line, 0)){f->eax = -1; break;}
       if(check_bad_ptr(f,(const void *)cmd_line)){
+        
+        printf("b\n");
         exit(-1);
       }
       /**lock_acquire(&sys_lock);**/
