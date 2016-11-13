@@ -283,7 +283,7 @@ process_exit (void)
          celem = nextelem;
       }
    }
-   
+   void spt_destroy (&curr->spt);
    
       file_close(curr->myself);
 
