@@ -32,6 +32,7 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writab
   hash_insert(spt ,&spte->elem);
   fe->frame = frame;
   fe->in_swap = 0;
+  fe->swap_where = -1;
   fe->is_free = 0;
   fe->spte = spte;
   list_push_front(&frame_table, &fe->elem);
