@@ -7,6 +7,7 @@
 #include "threads/synch.h"
 #include "threads/thread.h"
 #include "userprog/pagedir.h"
+#incldue "userprog/process.h"
 
 int spp = PGSIZE/DISK_SECTOR_SIZE;
 
@@ -52,6 +53,7 @@ void swap_in(struct frame_entry *fe, void * frame){
   fe->in_swap = 0;
   fe->swap_where = -1;
   fe->frame = frame;
+  install_page(fe->spte->page, frame);
   lock_release(&swap_lock);
 }
 
