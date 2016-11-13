@@ -83,16 +83,17 @@ void* frame_evict(void){
          frame_elem = list_front(&frame_table);
       }
   }**/
-  fe = list_entry(frame_elem, struct frame_entry, elem);
+  /**fe = list_entry(frame_elem, struct frame_entry, elem);
   fe->swap_where = swap_out(fe->frame);
-  fe->in_swap = 1;
+  fe->in_swap = 1;**/
   
-  /**ret=fe->frame;
-  fe->frame = NULL;**/
-  palloc_free_page(fe->frame);
+  //ret=fe->frame;
+  //fe->frame = NULL;
+  /**palloc_free_page(fe->frame);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   fe->frame = NULL;
-  ret = palloc_get_page(PAL_USER);
+  ret = palloc_get_page(PAL_USER);**/
+  ret = swap_out(fe);
   lock_release(&frame_lock);
   return ret;
 }
