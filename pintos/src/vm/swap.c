@@ -25,26 +25,20 @@ size_t swap_out(void *frame){
   return index;
 }
 
-void swap_in(struct spt_entry *spte, void * fault_addr){
+void swap_in(struct frame_entry *fe, void * frame){
   lock_acquire(&frame_lock);
   
-  uint8_t *frame = palloc_get_page(PAL_USER);
-  if(frame == NULL)
-    frame = frame_evict();
-  
+
   size_t i=0;
-  size_t index = spte->fe->swap_where;
+  size_t index = fe->swap_where;
   for(;i<8;i++){
     disk_read(swap_disk, index*8+i , (uint8_t *) frame+512*i);
   }
   bitmap_flip(swap_table, index);
-  spte->fe->in_swap = 0;
-  spte->fe->swap_where = -1;
-  spte->fe->frame = frame;
-  
-  pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);
-  install_page(spte->page, frame, spte->writable);
-  
+  fe->in_swap = 0;
+  fe->swap_where = -1;
+  fe->frame = frame;
+
   lock_release(&frame_lock);
 }
 
