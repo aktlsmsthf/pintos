@@ -47,12 +47,18 @@ sort_chunks (void)
       int handle;
 
       msg ("sort chunk %zu", i);
+      
 
       /* Write this chunk to a file. */
       quiet = true;
       CHECK ((handle = open ("buffer")) > 1, "open \"buffer\"");
+      msg("1\n");
       write (handle, buf1 + CHUNK_SIZE * i, CHUNK_SIZE);
+       
+      msg("2\n");
       close (handle);
+      
+      msg("3\n"); 
 
       /* Sort with subprocess. */
       CHECK ((child = exec ("child-sort buffer")) != -1,
@@ -62,6 +68,8 @@ sort_chunks (void)
       /* Read chunk back from file. */
       CHECK ((handle = open ("buffer")) > 1, "open \"buffer\"");
       read (handle, buf1 + CHUNK_SIZE * i, CHUNK_SIZE);
+       
+      msg("4\n");
       close (handle);
 
       quiet = false;
