@@ -63,7 +63,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         exit(-1);}
       const char * cmd_line = *((char **)(f->esp)+1);
       if(!user_memory((void *)cmd_line, 0)){ f->eax = -1; break;}
-      if(check_bad_ptr(f,(const void *)cmd_line))
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)cmd_line))
         exit(-1);
       /**lock_acquire(&sys_lock);**/
       tid_t pid = process_execute(cmd_line);
@@ -89,7 +89,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       if(!user_memory((void *)file, 0)){
         exit(-1);}
-      if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)file)) {exit(-1);}
       if(file==NULL){
         f->eax =-1;
       }
@@ -106,7 +106,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         exit(-1);}
       
       const char *file = *((char **)(f->esp)+1);
-      if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)file)) {exit(-1);}
       lock_acquire(&sys_lock);
       f->eax = filesys_remove (file);
       lock_release(&sys_lock);
@@ -124,7 +124,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(!user_memory((void *)name, 0)) {exit(-1);break;}
       if(!is_user_vaddr(name)) {f->eax = -1;break;}
       else{
-        if(check_bad_ptr(f,(const void *)name)){
+        if(check_bad_ptr(thread_current()->pagedir,(const void *)name)){
           exit(-1);
           break;
         }
@@ -181,7 +181,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       if(!user_memory((void *)buffer, 0)){
         exit(-1);}
-      if(check_bad_ptr(f,(const void *)buffer)){
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)){
         exit(-1);}
       check_buffer(buffer, size);
       int j=0;
@@ -216,7 +216,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 
       if(!user_memory((void *)buffer, 0)){
         exit(-1);}
-      if(check_bad_ptr(f,(const void *)buffer)) {
+      if(check_bad_ptr(thread_current()->pagedir,(const void *)buffer)) {
         exit(-1);}
       check_buffer(buffer, size);
       if(fd==1){
