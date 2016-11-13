@@ -189,6 +189,10 @@ page_fault (struct intr_frame *f)
       spt_alloc(&thread_current()->spt, pg_round_down(fault_addr));
       */
       install_page(pg_round_down(fault_addr), frame, true);
+      
+      uint32_t *pte2;
+      pte2 = lookup_page (thread_current()->pagedir, pg_round_down(fault_addr), false);
+      *pte2 |= PTE_P; 
       pass=true;
          
    }
