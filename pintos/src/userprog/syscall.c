@@ -351,14 +351,14 @@ struct list_elem* get_elem_from_fd(int fd){
       return felem;
 }
 
-/**bool user_memory(void *esp, int n){
+bool user_memory(void *esp, int n){
   int * p;
   p = (int *)esp + n;
   if(!is_user_vaddr((const void *) p)) return 0;
   else return 1;
-}**/
+}
 
-bool user_memory(void *esp, int n){
+/**bool user_memory(void *esp, int n){
   int * p;
   p = (int*)esp +n;
   if(is_user_vaddr(p)){
@@ -379,7 +379,7 @@ bool user_memory(void *esp, int n){
       return true;
   }
   return false;
-}
+}**/
 
 /**bool check_bad_ptr(struct intr_frame *f, const void* uaddr){
   if(is_user_vaddr(uaddr)){
