@@ -33,10 +33,10 @@ void spt_alloc(struct hash * spt, void * page){
 }
 */
 struct spt_entry * spte_find(void * page){
-  struct spt_entry *spte;
-  struct hash_elem *e;
-  spte ->page = page;
-  e = hash_find(&thread_current()->spt, &spte->elem);
+  struct spt_entry spte;
+  struct hash_elem e;
+  spte.page = page;
+  e = hash_find(&thread_current()->spt, &spte.elem);
   return e != NULL ? hash_entry(e, struct spt_entry, elem) : NULL;
 }
 
