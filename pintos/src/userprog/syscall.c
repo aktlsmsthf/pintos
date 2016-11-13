@@ -351,11 +351,55 @@ struct list_elem* get_elem_from_fd(int fd){
       return felem;
 }
 
-bool user_memory(void *esp, int n){
+/**bool user_memory(void *esp, int n){
   int * p;
   p = (int *)esp + n;
   if(!is_user_vaddr((const void *) p)) return 0;
   else return 1;
+}**/
+
+bool user_memory(void *esp, int n){
+  int * p;
+  p = (int*)esp +n;
+  if(is_user_vaddr(p)){
+    struct spt_entry *spte = spte_find(pg_round_down(p));
+      if(spte!=NULL){
+         if(spte->fe->in_swap ){
+            uint8_t *frame = palloc_get_page(PAL_USER);
+            if(frame==NULL){frame=frame_evict();}
+            swap_in(spte->fe, frame);
+            return true;
+         }
+      }
+  }
+  if(is_user_vaddr(p)){
+    uint8_t *frame = palloc_get_page(PAL_USER);
+      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(p), true);
+      install_page(pg_round_down(p), frame, true);
+      return true;
+  }
+  return false;
+}
+
+bool check_bad_ptr(struct intr_frame *f, const void* uaddr){
+  if(is_user_vaddr(uaddr)){
+    struct spt_entry *spte = spte_find(pg_round_down(uaddr));
+      if(spte!=NULL){
+         if(spte->fe->in_swap ){
+            uint8_t *frame = palloc_get_page(PAL_USER);
+            if(frame==NULL){frame=frame_evict();}
+            swap_in(spte->fe, frame);
+            return true;
+         }
+      }
+  }
+  if(is_user_vaddr(uaddr) && uaddr>f->esp-32){
+    uint8_t *frame = palloc_get_page(PAL_USER);
+      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
+      install_page(pg_round_down(uaddr), frame, true);
+      return true;
+  }
+  return false;
 }
 
 bool check_buffer(void *buffer, unsigned size){
@@ -368,11 +412,11 @@ bool check_buffer(void *buffer, unsigned size){
   return 1;
 }
 
-bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
+/**bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
   
     void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
     return p==NULL;
-}
+}*//
 /*
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
   void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
