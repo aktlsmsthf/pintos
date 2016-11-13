@@ -159,7 +159,6 @@ page_fault (struct intr_frame *f)
   user = (f->error_code & PF_U) != 0;
    
  
-   bool k;
    bool pass=false;
    if(not_present && is_user_vaddr(fault_addr)){
    struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
@@ -171,8 +170,7 @@ page_fault (struct intr_frame *f)
             
             swap_in(spte->fe, frame);
             //pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);
-           k=install_page(spte->page, frame, spte->writable);
-            printf("i%d\n",k);
+           install_page(spte->page, frame, spte->writable);
             /**spte->fe->in_swap = 0;
             spte->fe->swap_where = -1;
             spte->fe->frame = frame;**/
@@ -188,12 +186,10 @@ page_fault (struct intr_frame *f)
       spt_alloc(&thread_current()->spt, pg_round_down(fault_addr));
       */
       k=install_page(pg_round_down(fault_addr), frame, true);
-       printf("s%d\n",k);
       pass=true;
          
    }
     if (!pass && (not_present || (is_kernel_vaddr (fault_addr) && user))){
-       printf("k\n");
       exit(-1);
    } 
  
