@@ -368,6 +368,7 @@ bool check_buffer(void *buffer, unsigned size){
 
 bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
   struct spt_entry *spte=NULL;
+  bool ret=0;
   if(pagedir_get_page (thread_current()->pagedir, uaddr)==NULL){
 
   spte = spte_find(pg_round_down(uaddr));
@@ -385,5 +386,6 @@ bool check_bad_ptr(struct intr_frame *f,const void * uaddr){
       install_page(pg_round_down(uaddr), frame, true);     
    }
   }
-  return spte==NULL;
+  else{ret=1;}
+  return spte==NULL || ret;
 }
