@@ -5,11 +5,11 @@
 #include "vm/frame.h"
 #include "threads/vaddr.h"
 
-#define SECTORS_PER_PAGE PGSIZE/DISK_SECTOR_SIZE
+int spp = PGSIZE/DISK_SECTOR_SIZE
 
 void swap_init(void){
   swap_disk = disk_get(1,1);
-  swap_table = bitmap_create(disk_size(swap_disk)/SECTORS_PER_PAGE);
+  swap_table = bitmap_create(disk_size(swap_disk)/spp);
   
 }
 void swap_remove(size_t index){  
@@ -19,8 +19,8 @@ void swap_remove(size_t index){
 size_t swap_out(void *frame){
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   size_t i=0;
-  for(;i<SECTORS_PER_PAGE;i++){
-    disk_write(swap_disk, index*SECTORS_PER_PAGE+i, (uint8_t *)frame+512*i);
+  for(;i<spp;i++){
+    disk_write(swap_disk, index*spp+i, (uint8_t *)frame+512*i);
   }
   return index;
 }
@@ -29,8 +29,8 @@ void swap_in(struct frame_entry *fe, void * frame){
   lock_acquire(&frame_lock);
   size_t i=0;
   size_t index = fe->swap_where;
-  for(;i<SECTORS_PER_PAGE;i++){
-    disk_read(swap_disk, index*SECTORS_PER_PAGE+i , (uint8_t *) frame+512*i);
+  for(;i<spp;i++){
+    disk_read(swap_disk, index*spp+i , (uint8_t *) frame+512*i);
   }
   bitmap_flip(swap_table, index);
   fe->in_swap = 0;
