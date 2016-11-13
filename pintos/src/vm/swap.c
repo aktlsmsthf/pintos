@@ -4,6 +4,7 @@
 #include "threads/palloc.h"
 #include "vm/frame.h"
 #include "threads/vaddr.h"
+#include "threads/synch.h"
 
 int spp = PGSIZE/DISK_SECTOR_SIZE;
 
