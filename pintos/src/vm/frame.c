@@ -13,7 +13,7 @@ void frame_init(void){
 
 }
 void frame_remove(struct frame_entry *fe){
-  ,]
+  
   /**struct list_elem *e = list_front(&frame_table);
   bool exist = false;
   while(e->next!=NULL){
