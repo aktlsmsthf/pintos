@@ -104,7 +104,7 @@ start_process (void *f_name)
   int word_lengths[30];
   void *initial_esp;
    
-  fncopy = palloc_get_page (0);
+  fncopy = malloc(sizeof(file_name)+1);
   if (fncopy == NULL){
     thread_exit ();
   }
@@ -166,7 +166,7 @@ start_process (void *f_name)
   if_.esp-=4;
   *(int *)if_.esp=0;
    
-   palloc_free_page (fncopy);
+   free (fncopy);
 
    /**intr_set_level (old_level);**/
   
