@@ -19,7 +19,9 @@ void frame_remove(struct frame_entry *fe){
   while(e->next!=NULL){
     if(list_entry(e, struct frame_entry, elem)->frame==fe->frame){
       exist = true;
+      break;
     }
+    e = e->next;
   }
   list_remove(&fe->elem);
   if(!exist)
