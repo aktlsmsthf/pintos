@@ -331,7 +331,6 @@ bool check_valid(void *esp, void *addr){
   }
   return true;
 }
-
 bool check_valid_buffer(void *esp, void *buffer, unsigned size){
   return true;
 }
