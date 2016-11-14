@@ -18,7 +18,7 @@ struct frame_entry{
 };
 
 void frame_init(void);
-void frame_remove(struct frame_entry *fe);
+void frame_remove(struct frame_entry *fe,bool pe);
 /*
 void * frame_alloc(void* frame);
 */
