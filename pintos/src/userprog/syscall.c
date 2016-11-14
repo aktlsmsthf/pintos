@@ -218,11 +218,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       unsigned size = *((unsigned *)(f->esp)+3);
 
       if(!user_memory((void *)buffer, 0)){
-        printf("a\n");
         exit(-1);}
       if(check_bad_ptr(f,(const void *)buffer)) {
-        
-        printf("b\n");
         exit(-1);}
       check_buffer(buffer, size);
       if(fd==1){
@@ -230,14 +227,10 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax= size;
       }
       else if(fd == 0){
-        
-        printf("c\n");
         f->eax = -1;
       }
       else{
         if(!user_memory(f->esp, 3)){
-          
-        printf("d\n");
           exit(-1);}
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
