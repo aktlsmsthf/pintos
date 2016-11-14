@@ -322,11 +322,12 @@ void check_vaild(void *esp, const void *addr){
       if(frame == NULL) {frame = frame_evict();}
       swap_in(spte->fe, frame);
     }
-    return;
   }
-  if(addr>=esp-32){
-    uint8_t *frame = palloc_get_page(PAL_USER);
-    frame = frame_spt_alloc(frame, &thread_current() -> spt, pg_round_down(addr), true);
+  else{
+    if(addr>=esp-32){
+      uint8_t *frame = palloc_get_page(PAL_USER);
+      frame = frame_spt_alloc(frame, &thread_current() -> spt, pg_round_down(addr), true);
+    }
   }
 }
 
