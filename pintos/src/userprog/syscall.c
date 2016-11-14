@@ -41,7 +41,8 @@ syscall_init (void)
 }
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
-{  
+{ 
+  exit11();
   check_valid(f->esp, f->esp);
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
