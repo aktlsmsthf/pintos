@@ -430,7 +430,7 @@ bool user_memory(void *esp, int n){
 		
           }
           else{
-            if(buffer_tmp>=f->esp-32){
+            if(buffer_tmp>=esp-32){
               uint8_t *frame = palloc_get_page(PAL_USER);
               frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true);
        
