@@ -310,7 +310,10 @@ struct list_elem* get_elem_from_fd(int fd){
       }
       return felem;
 }
- 
+
+bool check_valid(void *esp, void *addr){
+  return 1;
+}
 bool check_vaild(void *esp,  void *addr){
   if(!is_user_vaddr(addr)){
     exit(-1);
