@@ -136,7 +136,7 @@ start_process (void *f_name)
   file_deny_write(myself);
   thread_current()->myself = myself;
    
-   //palloc_free_page (file_name);
+   palloc_free_page (file_name);
    
   i=0;
   initial_esp=if_.esp; 
