@@ -33,13 +33,13 @@ void spt_alloc(struct hash * spt, void * page){
 }
 */
 struct spt_entry * spte_find(void * page){
-  lock_acquire(&swap_lock);
+  //lock_acquire(&swap_lock);
   struct spt_entry spte;
   struct hash_elem * e;
   spte.page = page;
   e = hash_find(&thread_current()->spt, &spte.elem);
   return e != NULL ? hash_entry(e, struct spt_entry, elem) : NULL;
-  lock_release(&swap_lock);
+  //lock_release(&swap_lock);
 }
 
 void spt_init(struct hash *spt){
