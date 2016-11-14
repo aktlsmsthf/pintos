@@ -159,11 +159,11 @@ page_fault (struct intr_frame *f)
   write = (f->error_code & PF_W) != 0;
   user = (f->error_code & PF_U) != 0;
    
- 
+  printf("%x\n", fault_addr);
    bool pass=false;
    if(not_present && is_user_vaddr(fault_addr)){
    struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
-      printf("%x\n", spte);
+      
       if(spte!=NULL){
          printf("1\n");
          if(spte->fe->in_swap ){
