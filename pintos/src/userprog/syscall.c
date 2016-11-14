@@ -118,15 +118,13 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_OPEN:{
       if(!user_memory(f->esp,1)){
         
-        printf("sdf\n");
         exit(-1);
         break;
       }
       
       const char *name= *((char **)(f->esp)+1);
       
-      if(!user_memory((void *)name, 0)) {
-        printf("sdf\n");exit(-1);break;}
+      if(!user_memory((void *)name, 0)) {exit(-1);break;}
       if(!is_user_vaddr(name)) {f->eax = -1;break;}
       else{
         if(check_bad_ptr(f,(const void *)name)){
@@ -178,6 +176,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_READ:{
       if(!user_memory(f->esp,3)){
+        printf("a\n");
         exit(-1);}
       
       int fd = *((int *)(f->esp)+1);
@@ -185,6 +184,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       unsigned size = *((unsigned *)(f->esp)+3);
       
       if(!user_memory((void *)buffer, 0)){
+        
+        printf("a\n");
         exit(-1);}
       if(check_bad_ptr(f,(const void *)buffer)){
         exit(-1);}
