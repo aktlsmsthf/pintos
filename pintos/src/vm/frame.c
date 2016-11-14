@@ -15,6 +15,7 @@ void frame_init(void){
 void frame_remove(struct frame_entry *fe){
   
   lock_acquire(&frame_lock);
+  /*
   struct list_elem *e = list_front(&frame_table);
   bool exist = false;
   while(e->next!=NULL){
@@ -26,7 +27,7 @@ void frame_remove(struct frame_entry *fe){
   }
   if(!exist){
     palloc_free_page(fe->frame);
-  }
+  }*/
   list_remove(&fe->elem);
   int i=0;
   //palloc_free_page(fe->frame);
