@@ -32,7 +32,7 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writab
     frame=frame_evict();
       
   }
-  //lock_acquire(&frame_lock);
+  
   spte->page = page;
   spte->fe = fe;
   spte->writable = writable;
@@ -42,8 +42,9 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writab
   fe->swap_where = -1;
   fe->is_free = 0;
   fe->spte = spte;
+  lock_acquire(&frame_lock);
   list_push_front(&frame_table, &fe->elem);
-  //lock_release(&frame_lock);
+  lock_release(&frame_lock);
   return frame;
 }
 /**
