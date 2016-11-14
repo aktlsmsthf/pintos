@@ -180,6 +180,7 @@ page_fault (struct intr_frame *f)
             pass=true;
          }
       }  
+      else printf("durl\n");
    }
     if(!pass && not_present && fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
       uint8_t *frame = palloc_get_page(PAL_USER | PAL_ZERO);
