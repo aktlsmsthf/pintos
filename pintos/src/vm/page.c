@@ -20,7 +20,7 @@ static void page_destroy_func(struct hash_elem *helem, void *aux){
   if(spte->fe->in_swap){
     swap_remove(spte->fe->swap_where);}
   
-  frame_remove(spte->fe,(bool)(*aux));  
+  frame_remove(spte->fe,*((bool*)aux));  
   free(spte);
 }
 void spt_destroy (struct hash *spt,bool pe){
