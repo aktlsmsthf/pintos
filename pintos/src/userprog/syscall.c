@@ -331,7 +331,7 @@ bool check_valid(void *esp, void *addr){
   }
   return true;
 }
-bool check_vaild(void *esp,  void *addr){
+/**bool check_vaild(void *esp,  void *addr){
   if(!is_user_vaddr(addr)){
     exit(-1);
   }
@@ -350,7 +350,7 @@ bool check_vaild(void *esp,  void *addr){
     }
   }
   return true;
-}
+}**/
 
 bool check_valid_buffer(void *esp, void *buffer, unsigned size){
   check_valid(esp, buffer);
