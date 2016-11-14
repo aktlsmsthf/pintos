@@ -44,6 +44,7 @@ void* swap_out(struct frame_entry *fe){
   //printf("a %x\n", ret);
   //printf("%d\n", bitmap_count(swap_table, 0, disk_size(swap_disk)/spp, 1));
   lock_release(&swap_lock);
+  memset(ret,0,PGSIZE);
   return ret;
 }
 
