@@ -629,7 +629,7 @@ setup_stack (void **esp)
 
   //lock_acquire(&frame_lock);
   kpage = palloc_get_page (PAL_USER | PAL_ZERO);
-  kpage = frame_spt_alloc(kpage, &thread_current()->spt, ((uint8_t *) PHYS_BASE) - PGSIZE, true); 
+  //kpage = frame_spt_alloc(kpage, &thread_current()->spt, ((uint8_t *) PHYS_BASE) - PGSIZE, true); 
    
   if (kpage != NULL) 
     {
