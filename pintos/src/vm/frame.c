@@ -31,7 +31,7 @@ void frame_remove(struct frame_entry *fe){
   */
   list_remove(&fe->elem);
   int i=0;
-  if(true) {i=1;}
+  printf("1\n");
   //palloc_free_page(fe->frame);
   //printf("%s\n", thread_current()->name);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
