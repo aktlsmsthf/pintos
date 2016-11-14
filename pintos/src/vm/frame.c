@@ -14,8 +14,16 @@ void frame_init(void){
 }
 void frame_remove(struct frame_entry *fe){
   //lock_acquire(&frame_lock);
+  bool exist = false;
+  struct list_elem *e = list_front(&frame_table);
+  while(e->next!=NULL){
+    if(list_entry(e, struct frame_entry, elem)->frame==fe->frame){
+      exit = true;
+    }
+  }
   list_remove(&fe->elem);
-  palloc_free_page(fe->frame);
+  if(!exist)
+    palloc_free_page(fe->frame);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   free(fe);
   //lock_release(&frame_lock);
