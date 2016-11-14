@@ -44,7 +44,7 @@ process_execute (const char *file_name)
    
   /* Make a copy of FILE_NAME.
      Otherwise there's a race between the caller and load(). */
-  fn_copy = malloc(sizeof(file_name)+1);
+  fn_copy = palloc_get_page(0);
   if (fn_copy == NULL)
     return TID_ERROR;
   strlcpy (fn_copy, file_name, PGSIZE);
@@ -59,7 +59,7 @@ process_execute (const char *file_name)
   /* Create a new thread to execute FILE_NAME. */
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
   if (tid == TID_ERROR){
-    free(fn_copy);
+    palloc_free_page(fn_copy);
   }
   
   struct list_elem *child = list_front(&(thread_current()->child_list));
@@ -104,7 +104,7 @@ start_process (void *f_name)
   int word_lengths[30];
   void *initial_esp;
    
-  fncopy = malloc(sizeof(file_name)+1);
+  fncopy = palloc_get_page(0);
   if (fncopy == NULL){
     thread_exit ();
   }
@@ -136,7 +136,7 @@ start_process (void *f_name)
   file_deny_write(myself);
   thread_current()->myself = myself;
    
-   palloc_free_page (file_name);
+  // palloc_free_page (file_name);
    
   i=0;
   initial_esp=if_.esp; 
@@ -166,7 +166,7 @@ start_process (void *f_name)
   if_.esp-=4;
   *(int *)if_.esp=0;
    
-   free (fncopy);
+   palloc_free_page(fncopy);
 
    /**intr_set_level (old_level);**/
   
