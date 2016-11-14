@@ -44,10 +44,11 @@ process_execute (const char *file_name)
    
   /* Make a copy of FILE_NAME.
      Otherwise there's a race between the caller and load(). */
-  fn_copy = palloc_get_page(0);
+  fn_copy = malloc (strlen (file_name) + 1);
   if (fn_copy == NULL)
     return TID_ERROR;
-  strlcpy (fn_copy, file_name, PGSIZE);
+  
+  memcpy (fn_copy, file_name, strlen (file_name) + 1); 
    
   fn = malloc (strlen (file_name) + 1);
    if(fn==NULL)
@@ -59,7 +60,7 @@ process_execute (const char *file_name)
   /* Create a new thread to execute FILE_NAME. */
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
   if (tid == TID_ERROR){
-    palloc_free_page(fn_copy);
+    free(fn_copy);
   }
   
   struct list_elem *child = list_front(&(thread_current()->child_list));
@@ -82,6 +83,7 @@ process_execute (const char *file_name)
    }
    chd->load_success=0;
   free(fn);
+  
    
   return tid;
 }
@@ -104,12 +106,12 @@ start_process (void *f_name)
   int word_lengths[30];
   void *initial_esp;
    
-  fncopy = palloc_get_page(0);
+  fncopy =  malloc (strlen (file_name) + 1);
   if (fncopy == NULL){
     thread_exit ();
   }
 
-  strlcpy (fncopy, file_name, PGSIZE);
+  memcpy(fncopy, file_name, strlen (file_name) + 1); 
   /* Initialize interrupt frame and load executable. */ 
   memset (&if_, 0, sizeof if_);
   if_.gs = if_.fs = if_.es = if_.ds = if_.ss = SEL_UDSEG;
@@ -136,7 +138,7 @@ start_process (void *f_name)
   file_deny_write(myself);
   thread_current()->myself = myself;
    
-   palloc_free_page (file_name);
+   //palloc_free_page (file_name);
    
   i=0;
   initial_esp=if_.esp; 
@@ -166,7 +168,7 @@ start_process (void *f_name)
   if_.esp-=4;
   *(int *)if_.esp=0;
    
-   palloc_free_page(fncopy);
+   free(fncopy);
 
    /**intr_set_level (old_level);**/
   
