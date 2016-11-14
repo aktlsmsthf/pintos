@@ -3,6 +3,7 @@
 #include <list.h>
 #include "threads/synch.h"
 #include "vm/page.h"
+#include "threads/palloc.h"
 
 struct list frame_table;
 struct lock frame_lock;
@@ -21,7 +22,7 @@ void frame_remove(struct frame_entry *fe);
 /*
 void * frame_alloc(void* frame);
 */
-void * frame_spt_alloc(void * frame,struct hash * spt, void * page, bool writable);
+void * frame_spt_alloc(void * frame,struct hash * spt, void * page, bool writable, enum palloc_flags flags);
 void * frame_evict(void);
 struct frame_entry* frame_pop(void);
 
