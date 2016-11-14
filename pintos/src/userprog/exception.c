@@ -163,6 +163,7 @@ page_fault (struct intr_frame *f)
    bool pass=false;
    if(not_present && is_user_vaddr(fault_addr)){
    struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
+      printf("%x\n", spte);
       if(spte!=NULL){
          printf("1\n");
          if(spte->fe->in_swap ){
