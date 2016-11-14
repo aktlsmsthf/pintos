@@ -426,8 +426,7 @@ bool user_memory(void *esp, int n){
               if(frame==NULL){frame=frame_evict();}
               swap_in(spte->fe, frame);
 	      return true;
-            }
-		
+	    }	
           }
           else{
             if(buffer_tmp>=esp-32){
@@ -438,6 +437,7 @@ bool user_memory(void *esp, int n){
 	      return true;
             }
           }
+	}
 		return false;
 }
 /**bool user_memory(void *esp, int n){
