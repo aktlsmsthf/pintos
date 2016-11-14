@@ -12,7 +12,7 @@ void frame_init(void){
   lock_init(&frame_lock);
 
 }
-void frame_remove(struct frame_entry *fe){
+void frame_remove(struct frame_entry *fe, bool pe){
   
   lock_acquire(&frame_lock);
   /*
@@ -30,7 +30,7 @@ void frame_remove(struct frame_entry *fe){
   }*/
   list_remove(&fe->elem);
   int i=0;
-  //palloc_free_page(fe->frame);
+  if(!pe){palloc_free_page(fe->frame);}
   //printf("%s\n", thread_current()->name);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   free(fe);
