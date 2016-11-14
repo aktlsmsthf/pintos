@@ -15,7 +15,8 @@ struct file_fd{
   bool is_closed;
 };
 
-
+void check_valid_ptr(void *, const void *);
+void check_valid_buffer(void *, void *, unsigned);
 
 
 #endif /* userprog/syscall.h */
