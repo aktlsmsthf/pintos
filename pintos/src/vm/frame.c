@@ -28,9 +28,6 @@ void frame_remove(struct frame_entry *fe){
     printf("a\n");
     palloc_free_page(fe->frame);
   }**/
-  if(fe->frame!=NULL){
-    palloc_free_page(fe->frame);
-  }
   list_remove(&fe->elem);
   
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
