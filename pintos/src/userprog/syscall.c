@@ -3,7 +3,6 @@
 #include <syscall-nr.h>
 #include "threads/interrupt.h"
 #include "threads/thread.h"
-
 #include "filesys/file.h"
 #include "filesys/filesys.h"
 #include <console.h>
@@ -19,6 +18,7 @@
 #include "vm/page.h"
 #include "vm/frame.h"
 #include "vm/swap.h"
+#include "threads/vaddr.h"
 
 static void syscall_handler (struct intr_frame *);
 void exit(int);
@@ -29,30 +29,24 @@ bool check_buffer(void *, unsigned);
 //bool check_bad_ptr(const void * uaddr);
 bool check_bad_ptr(struct intr_frame *f ,const void * uaddr);
 struct lock sys_lock;
-
 int a=0;
-
 void
 syscall_init (void) 
-{
+{  
   intr_register_int (0x30, 3, INTR_ON, syscall_handler, "syscall");
   lock_init(&sys_lock);
 }
-
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
-{
-  if(!is_user_vaddr((const void *)f->esp)){exit(-1);}
-  if(check_bad_ptr(f,f->esp)){exit(-1);}
-  printf("a %d %x\n", *((int *)(f->esp)), f->esp);
+{  
+  check_valid_ptr(f->esp, f->esp);
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
       power_off();
       break;}
       
     case SYS_EXIT:{
-      if(!user_memory(f->esp, 1)){
-        exit(-1);}
+      check_valid_ptr(f->esp, f->esp+1);
     
       int status = *((int *)(f->esp)+1);
       exit(status);
@@ -60,13 +54,10 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_EXEC:{
-      if(!user_memory(f->esp, 1)){
-        exit(-1);}
+      check_valid_ptr(f->esp, f->esp+1);
       const char * cmd_line = *((char **)(f->esp)+1);
-      if(!user_memory((void *)cmd_line, 0)){f->eax = -1; break;}
-      if(check_bad_ptr(f,(const void *)cmd_line)){
-        exit(-1);
-      }
+      check_valid_buffer(f->esp, cmd_line);
+      
       /**lock_acquire(&sys_lock);**/
       tid_t pid = process_execute(cmd_line);
       /**lock_release(&sys_lock);**/
@@ -75,23 +66,20 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_WAIT:{
-      if(!user_memory(f->esp,1)){
-        exit(-1);}
+      check_valid_ptr(f->esp, f->esp+1);
      
       f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
       break;
     }
       
     case SYS_CREATE:{
-      if(!user_memory(f->esp,2)){
-        exit(-1);}
+      check_valid_ptr(f->esp, f->esp+2);
       
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
       
-      if(!user_memory((void *)file, 0)){
-        exit(-1);}
-      if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
+      check_valid_ptr(f->esp, file);
+      
       if(file==NULL){
         f->eax =-1;
       }
@@ -104,11 +92,10 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_REMOVE:{
-      if(!user_memory(f->esp,1)){
-        exit(-1);}
+      check_valid_ptr(f->esp, f->esp+1);
       
       const char *file = *((char **)(f->esp)+1);
-      if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
+      check_valid_ptr(f->esp, file);
       lock_acquire(&sys_lock);
       f->eax = filesys_remove (file);
       lock_release(&sys_lock);
@@ -116,21 +103,13 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_OPEN:{
-      if(!user_memory(f->esp,1)){
-        
-        exit(-1);
-        break;
-      }
+      check_valid_ptr(f->esp, f->esp+1);
       
       const char *name= *((char **)(f->esp)+1);
       
-      if(!user_memory((void *)name, 0)) {exit(-1);break;}
-      if(!is_user_vaddr(name)) {f->eax = -1;break;}
+      check_valid_ptr(f->esp, name);
       else{
-        if(check_bad_ptr(f,(const void *)name)){
-          exit(-1);
-          break;
-        }
+        
     
         char *e = "";
         if(name == NULL || strcmp(name, e)==0) {
@@ -165,9 +144,7 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_FILESIZE:{
-      if(!user_memory(f->esp,1)){
-        exit(-1);}
-
+      check_valid_ptr(f->esp, f->esp+1);
       int fd = *((int *)(f->esp)+1);
       struct file * ff=get_file_from_fd(fd);
       f->eax = (int) file_length(ff);
@@ -175,21 +152,14 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_READ:{
-      if(!user_memory(f->esp,3)){
-        printf("a\n");
-        exit(-1);}
+      check_valid_ptr(f->esp, f->esp +3);
       
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       
-      if(!user_memory((void *)buffer, 0)){
-        printf("b\n");
-        exit(-1);}
-      if(check_bad_ptr(f,(const void *)buffer)){
-        printf("c\b");
-        exit(-1);}
-      check_buffer(buffer, size);
+      check_valid_ptr(f->esp, buffer);
+      check_valid_buffer(f->esp, buffer, size);
       int j=0;
       if(fd == 0){
         for(; j<size; j++){
@@ -219,12 +189,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
-
-      if(!user_memory((void *)buffer, 0)){
-        exit(-1);}
-      if(check_bad_ptr(f,(const void *)buffer)) {
-        exit(-1);}
-      check_buffer(buffer, size);
+      check_valid_ptr(f->esp, buffer);
+      check_valid_buffer(f->esp, buffer, size);
       if(fd==1){
         putbuf(buffer, size);
         f->eax= size;
@@ -233,8 +199,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = -1;
       }
       else{
-        if(!user_memory(f->esp, 3)){
-          exit(-1);}
+        check_valid_ptr(f->esp, f->esp+3);
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
           
@@ -251,8 +216,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_SEEK:{
-      if(!user_memory(f->esp,2)) 
-        exit(-1);
+      check_valid_ptr(f->esp, f->esp+2);
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
       struct file *ff = get_file_from_fd(fd);
@@ -263,8 +227,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_TELL:{
-      if(!user_memory(f->esp,1)) 
-        exit(-1);
+      check_valid_ptr(f->esp, f->esp+1);
       int fd = *((int *)(f->esp)+1);
       struct file *ff = get_file_from_fd(fd);
       if(ff==NULL){ 
@@ -279,8 +242,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_CLOSE:{
-      if(!user_memory(f->esp,1)) {
-        exit(-1);}
+      check_valid_ptr(f->esp, f->esp+1);
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
         struct list_elem *flm = get_elem_from_fd(fd);
@@ -297,21 +259,11 @@ syscall_handler (struct intr_frame *f UNUSED)
           ffd->is_closed=1;
           lock_release(&sys_lock);
         }
-        
-        
-        /**if(flm!=NULL)
-           list_remove(flm);
-        
-        if(ffd!=NULL)
-           palloc_free_page(ffd);**/
-      } 
       break;
     }
   }
 }
-
-
-
+ 
 void exit(int status){
       struct thread * curr=thread_current();
       struct child* chd;
@@ -321,9 +273,9 @@ void exit(int status){
       chd->exit_called =1;
       
       printf("%s: exit(%d)\n",curr->name,chd->ret);
-
       thread_exit();
 }
+ 
 struct file* get_file_from_fd(int fd){
       struct thread * curr=thread_current();
       if(list_empty(&(curr->file_list))){
@@ -340,7 +292,7 @@ struct file* get_file_from_fd(int fd){
       ffd = list_entry(felem, struct file_fd, elem);
       return ffd->file;
 }
-
+ 
 struct list_elem* get_elem_from_fd(int fd){
       struct thread * curr=thread_current();
       if(list_empty(&(curr->file_list))){
@@ -356,98 +308,32 @@ struct list_elem* get_elem_from_fd(int fd){
       }
       return felem;
 }
-
-bool user_memory(void *esp, int n){
-  int * p;
-  p = (int *)esp + n;
-  if(!is_user_vaddr((const void *) p)) {return 0;}
-  else return 1;
+ 
+void check_vaild_ptr(void * esp, void * addr){
+  if(!is_user_vaddr(addr)){
+    exit(-1);
+  }
+  struct spt_entry *spte = spte_find(pg_roudn_down(addr));
+  if(spte!=NULL){
+    if(spte->fe->in_swap){
+      uint8_t *frame = palloc_get_page(PAL_USER);
+      if(frame == NULL) {frame = frame_evict();}
+      swap_in(spte->fe, frame);
+    }
+    return;
+  }
+  if(addr>=esp-32){
+    uint8_t *frame = palloc_get_page(PAL_USER);
+    frame = frame_spt_alloc(frame, &thread_current() -> spt, pg_roudn_down(addr), true);
+  }
 }
 
-/**bool user_memory(void *esp, int n){
-  int * p;
-  p = (int*)esp +n;
-  if(is_user_vaddr(p)){
-    struct spt_entry *spte = spte_find(pg_round_down(p));
-      if(spte!=NULL){
-         if(spte->fe->in_swap ){
-            uint8_t *frame = palloc_get_page(PAL_USER);
-            if(frame==NULL){frame=frame_evict();}
-            swap_in(spte->fe, frame);
-            return true;
-         }
-      }
-  }
-  if(is_user_vaddr(p)){
-    uint8_t *frame = palloc_get_page(PAL_USER);
-      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(p), true);
-      install_page(pg_round_down(p), frame, true);
-      return true;
-  }
-  return false;
-}**/
-
-/**bool check_bad_ptr(struct intr_frame *f, const void* uaddr){
-  if(is_user_vaddr(uaddr)){
-    struct spt_entry *spte = spte_find(pg_round_down(uaddr));
-      if(spte!=NULL){
-         if(spte->fe->in_swap ){
-            uint8_t *frame = palloc_get_page(PAL_USER);
-            if(frame==NULL){frame=frame_evict();}
-            swap_in(spte->fe, frame);
-            return true;
-         }
-      }
-  }
-  if(is_user_vaddr(uaddr) && uaddr>f->esp-32){
-    uint8_t *frame = palloc_get_page(PAL_USER);
-      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
-      install_page(pg_round_down(uaddr), frame, true);
-      return true;
-  }
-  return false;
-}**/
-
-bool check_buffer(void *buffer, unsigned size){
-  unsigned i=0;
+void check_valid_buffer(void * buffer, void *esp, unsigned size){
+  check_valid_ptr(buffer, esp);
   char * b = (char *) buffer;
-  for(;i++;i<size){
-    if(!is_user_vaddr((const void *) b)){return 0;}
+  int i;
+  for(i=0; i<size; i++){
+    check_valid_ptr(esp, b);
     b++;
   }
-  return 1;
 }
-
-bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
-  
-    void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
-    return p==NULL;
-}
-
-/*
-bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
-  void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
-  struct spt_entry * spte;
-  if(p!=NULL){return false;}
-  else{
-  spte = spte_find(pg_round_down(uaddr));
-  if(spte!=NULL){
-         if(spte->fe->in_swap){
-            uint8_t *frame = palloc_get_page(PAL_USER);
-            if(frame==NULL){frame=frame_evict();}
-            swap_in(spte->fe, frame);
-            install_page(spte->page, frame, spte->writable);
-            
-            return false;
-         }
-   else if(uaddr>= f->esp-32 && is_user_vaddr(uaddr)){
-      uint8_t *frame = palloc_get_page(PAL_USER);
-      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
-      install_page(pg_round_down(uaddr), frame, true);
-     return false;}
-      
-   return true;}
-  }
-}
-*/
-
