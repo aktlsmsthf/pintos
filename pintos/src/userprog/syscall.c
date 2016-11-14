@@ -310,7 +310,7 @@ struct list_elem* get_elem_from_fd(int fd){
       return felem;
 }
  
-void check_vaild_ptr(void * esp, void * addr){
+void check_vaild_ptr(void *esp, const void *addr){
   if(!is_user_vaddr(addr)){
     exit(-1);
   }
@@ -329,7 +329,7 @@ void check_vaild_ptr(void * esp, void * addr){
   }
 }
 
-void check_valid_buffer(void * esp, void *buffer, unsigned size){
+void check_valid_buffer(void *esp, void *buffer, unsigned size){
   check_valid_ptr(esp, buffer);
   char * b = (char *) buffer;
   int i;
