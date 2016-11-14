@@ -29,7 +29,7 @@ void frame_remove(struct frame_entry *fe){
   }**/
   //lock_acquire(&frame_lock);
   list_remove(&fe->elem);
-  palloc_free_page(fe->frame);
+
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   free(fe);
   //lock_release(&frame_lock);
