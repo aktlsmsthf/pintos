@@ -330,7 +330,7 @@ void check_vaild_ptr(void * esp, void * addr){
 }
 
 void check_valid_buffer(void * esp, void *buffer, unsigned size){
-  check_valid_ptr(buffer, esp);
+  check_valid_ptr(esp, buffer);
   char * b = (char *) buffer;
   int i;
   for(i=0; i<size; i++){
