@@ -98,7 +98,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       check_valid(f->esp, f->esp+1);
       
       const char *file = *((char **)(f->esp)+1);
-      check_valid_ptr(f->esp, file);
+      check_valid(f->esp, file);
       lock_acquire(&sys_lock);
       f->eax = filesys_remove (file);
       lock_release(&sys_lock);
@@ -110,7 +110,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       const char *name= *((char **)(f->esp)+1);
       
-      check_valid_ptr(f->esp, name);
+      check_valid(f->esp, name);
 
         char *e = "";
         if(name == NULL || strcmp(name, e)==0) {
@@ -331,10 +331,8 @@ bool check_valid(void *esp, void *addr){
   }
   return true;
 }
+
 bool check_valid_buffer(void *esp, void *buffer, unsigned size){
-  return true;
-}
-/**bool check_valid_buffer(void *esp, void *buffer, unsigned size){
   check_valid(esp, buffer);
   char * b = (char *) buffer;
   int i;
@@ -343,4 +341,4 @@ bool check_valid_buffer(void *esp, void *buffer, unsigned size){
     b++;
   }
   return true;
-}**/
+}
