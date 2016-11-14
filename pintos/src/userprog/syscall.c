@@ -42,14 +42,14 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {  
-  check_valid_ptr(f->esp, f->esp);
+  check_valid(f->esp, f->esp);
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
       power_off();
       break;}
       
     case SYS_EXIT:{
-      check_valid_ptr(f->esp, f->esp+1);
+      check_valid(f->esp, f->esp+1);
     
       int status = *((int *)(f->esp)+1);
       exit(status);
@@ -57,9 +57,9 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_EXEC:{
-      check_valid_ptr(f->esp, f->esp+1);
+      check_valid(f->esp, f->esp+1);
       const char * cmd_line = *((char **)(f->esp)+1);
-      check_valid_ptr(f->esp, cmd_line);
+      check_valid(f->esp, cmd_line);
       
       /**lock_acquire(&sys_lock);**/
       tid_t pid = process_execute(cmd_line);
@@ -69,19 +69,19 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_WAIT:{
-      check_valid_ptr(f->esp, f->esp+1);
+      check_valid(f->esp, f->esp+1);
      
       f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
       break;
     }
       
     case SYS_CREATE:{
-      check_valid_ptr(f->esp, f->esp+2);
+      check_valid(f->esp, f->esp+2);
       
       const char *file = *((char **)(f->esp)+1);
       unsigned initial_size = *((unsigned *)(f->esp)+2);
       
-      check_valid_ptr(f->esp, file);
+      check_valid(f->esp, file);
       
       if(file==NULL){
         f->eax =-1;
@@ -95,7 +95,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_REMOVE:{
-      check_valid_ptr(f->esp, f->esp+1);
+      check_valid(f->esp, f->esp+1);
       
       const char *file = *((char **)(f->esp)+1);
       check_valid_ptr(f->esp, file);
@@ -106,7 +106,7 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_OPEN:{
-      check_valid_ptr(f->esp, f->esp+1);
+      check_valid(f->esp, f->esp+1);
       
       const char *name= *((char **)(f->esp)+1);
       
@@ -145,7 +145,7 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_FILESIZE:{
-      check_valid_ptr(f->esp, f->esp+1);
+      check_valid(f->esp, f->esp+1);
       int fd = *((int *)(f->esp)+1);
       struct file * ff=get_file_from_fd(fd);
       f->eax = (int) file_length(ff);
@@ -153,13 +153,13 @@ syscall_handler (struct intr_frame *f UNUSED)
      }
       
     case SYS_READ:{
-      check_valid_ptr(f->esp, f->esp +3);
+      check_valid(f->esp, f->esp +3);
       
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       
-      check_valid_ptr(f->esp, buffer);
+      check_valid(f->esp, buffer);
       check_valid_buffer(f->esp, buffer, size);
       int j=0;
       if(fd == 0){
@@ -190,7 +190,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
-      check_valid_ptr(f->esp, buffer);
+      check_valid(f->esp, buffer);
       check_valid_buffer(f->esp, buffer, size);
       if(fd==1){
         putbuf(buffer, size);
@@ -200,7 +200,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = -1;
       }
       else{
-        check_valid_ptr(f->esp, f->esp+3);
+        check_valid(f->esp, f->esp+3);
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
           
@@ -217,7 +217,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_SEEK:{
-      check_valid_ptr(f->esp, f->esp+2);
+      check_valid(f->esp, f->esp+2);
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
       struct file *ff = get_file_from_fd(fd);
@@ -228,7 +228,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_TELL:{
-      check_valid_ptr(f->esp, f->esp+1);
+      check_valid(f->esp, f->esp+1);
       int fd = *((int *)(f->esp)+1);
       struct file *ff = get_file_from_fd(fd);
       if(ff==NULL){ 
@@ -243,7 +243,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_CLOSE:{
-      check_valid_ptr(f->esp, f->esp+1);
+      check_valid(f->esp, f->esp+1);
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
         struct list_elem *flm = get_elem_from_fd(fd);
