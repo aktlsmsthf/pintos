@@ -312,7 +312,24 @@ struct list_elem* get_elem_from_fd(int fd){
 }
 
 bool check_valid(void *esp, void *addr){
-  return 1;
+  if(!is_user_vaddr(addr)){
+    exit(-1);
+  }
+  struct spt_entry *spte = spte_find(pg_round_down(addr));
+  if(spte!=NULL){
+    if(spte->fe->in_swap){
+      uint8_t *frame = palloc_get_page(PAL_USER);
+      if(frame == NULL) {frame = frame_evict();}
+      swap_in(spte->fe, frame);
+    }
+  }
+  else{
+    if(addr>=esp-32){
+      uint8_t *frame = palloc_get_page(PAL_USER);
+      frame = frame_spt_alloc(frame, &thread_current() -> spt, pg_round_down(addr), true);
+    }
+  }
+  return true;
 }
 bool check_vaild(void *esp,  void *addr){
   if(!is_user_vaddr(addr)){
