@@ -24,8 +24,7 @@ static void syscall_handler (struct intr_frame *);
 void exit(int);
 struct file* get_file_from_fd(int);
 struct list_elem* get_elem_from_fd(int);
-static bool check_valid(void*, void*);
-static bool check_valid_buffer(void*, void*, unsigned);
+
 //bool user_memory(void *, int);
 //bool check_buffer(void *, unsigned);
 //bool check_bad_ptr(const void * uaddr);
@@ -312,7 +311,7 @@ struct list_elem* get_elem_from_fd(int fd){
       return felem;
 }
  
-static bool check_vaild(void *esp, const void *addr){
+bool check_vaild(void *esp, const void *addr){
   if(!is_user_vaddr(addr)){
     exit(-1);
   }
@@ -333,7 +332,7 @@ static bool check_vaild(void *esp, const void *addr){
   return true;
 }
 
-static bool check_valid_buffer(void *esp, void *buffer, unsigned size){
+bool check_valid_buffer(void *esp, void *buffer, unsigned size){
   check_valid(esp, buffer);
   char * b = (char *) buffer;
   int i;
