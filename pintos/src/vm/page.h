@@ -9,7 +9,7 @@ struct spt_entry{
   struct hash_elem elem;
   struct frame_entry* fe;
   bool writable;
-  enum palloc_flages flags;
+  enum palloc_flags flags;
 };
 
 void spt_init(struct hash *spt);
