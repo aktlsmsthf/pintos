@@ -89,7 +89,9 @@ void* frame_evict(void){
   while(list_entry(frame_elem, struct frame_entry, elem)->frame == NULL 
         || pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
     //if(list_entry(frame_elem, struct frame_entry, elem)->spte->writable){
-      pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
+      if(list_entry(frame_elem, struct frame_entry, elem)->frame != NULL){
+        pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
+      }
       frame_elem = frame_elem->next;
       if(frame_elem->next==NULL){
         i++;
