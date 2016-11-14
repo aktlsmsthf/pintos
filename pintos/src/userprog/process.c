@@ -287,7 +287,7 @@ process_exit (void)
          celem = nextelem;
       }
    }
-   spt_destroy (&curr->spt);
+   spt_destroy (&curr->spt,parent_exist);
    
       file_close(curr->myself);
 
