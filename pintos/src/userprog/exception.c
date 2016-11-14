@@ -168,7 +168,7 @@ page_fault (struct intr_frame *f)
          if(spte->fe->in_swap ){
             //printf("2\n");
             uint8_t *frame = palloc_get_page(PAL_USER);
-            if(frame==NULL){frame=frame_evict();}
+            while(frame==NULL){frame=frame_evict();}
             //frame_spt_alloc(frame
             
             swap_in(spte->fe, frame);
