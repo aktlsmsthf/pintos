@@ -25,10 +25,12 @@ void swap_remove(size_t index){
 }
   
 void* swap_out(struct frame_entry *fe){
+  ASSERT(fe->frame!=NULL);
   void* ret;
   lock_acquire(&swap_lock);
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   //printf("%d\n", index);
+  
   int i;
   for(i=0;i<spp;i++){
     disk_write(swap_disk, index*spp+i, (uint8_t *)fe->frame+DISK_SECTOR_SIZE*i);
