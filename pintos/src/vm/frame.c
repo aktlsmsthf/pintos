@@ -27,12 +27,12 @@ void frame_remove(struct frame_entry *fe){
     printf("a\n");
     palloc_free_page(fe->frame);
   }**/
-  lock_acquire(&frame_lock);
+  //lock_acquire(&frame_lock);
   list_remove(&fe->elem);
   
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   free(fe);
-  lock_release(&frame_lock);
+  //lock_release(&frame_lock);
 }
   
 void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writable){
@@ -56,9 +56,9 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writab
   fe->swap_where = -1;
   fe->is_free = 0;
   fe->spte = spte;
-  lock_acquire(&frame_lock);
+  //lock_acquire(&frame_lock);
   list_push_front(&frame_table, &fe->elem);
-  lock_release(&frame_lock);
+  //lock_release(&frame_lock);
   return frame;
 }
 /**
@@ -79,7 +79,7 @@ void * frame_alloc(void * frame){
 */
 
 void* frame_evict(void){
-  lock_acquire(&frame_lock);
+  //lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
@@ -117,6 +117,6 @@ void* frame_evict(void){
   fe->frame = NULL;
   ret = palloc_get_page(PAL_USER);**/
   ret = swap_out(fe);
-  lock_release(&frame_lock);
+  //lock_release(&frame_lock);
   return ret;
 }
