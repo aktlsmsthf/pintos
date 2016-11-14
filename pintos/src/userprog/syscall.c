@@ -172,11 +172,48 @@ syscall_handler (struct intr_frame *f UNUSED)
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
       
-      if(!user_memory((void *)buffer, 0)){
+      /**if(!user_memory((void *)buffer, 0)){
         exit(-1);}
       if(check_bad_ptr(f,(const void *)buffer)){
         exit(-1);}
-      check_buffer(buffer, size);
+      check_buffer(buffer, size);**/
+      unsigned buffer_size = size;
+      void * buffer_tmp = buffer;
+      
+      while(buffer_tmp!=NULL){
+        if(!is_valid_uvaddr(buffer_tmp)) exit(-1);
+        
+        if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
+          struct spt_entry *spte = spte_find(pg_roudn_down(buffer_tmp));
+          if(spte!=NULL){
+            if(spte->is_swap){
+              uint8_t *frame = palloc_get_page(PAL_USER);
+              if(frame==NULL){frame=frame_evict();}
+              swap_in(spte->fe, frame);
+            }
+          }
+          else{
+            if(buffer_tmp>=f->esp-32){
+              uint8_t *frame = palloc_get_page(PAL_USER);
+              frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true);
+       
+              install_page(pg_round_down(buffer_tmp), frame, true);
+            }
+          }
+          
+        }
+        if (buffer_size == 0{
+	        buffer_tmp = NULL;
+	      }
+        else if (buffer_size > PGSIZE){
+	        buffer_tmp += PGSIZE;
+	        buffer_size -= PGSIZE;
+	      } 
+        else{
+	        buffer_tmp = buffer + size - 1;
+	        buffer_size = 0;
+	      }
+      }
       int j=0;
       if(fd == 0){
         for(; j<size; j++){
@@ -206,11 +243,48 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
-      if(!user_memory((void *)buffer, 0)){
+      /**if(!user_memory((void *)buffer, 0)){
         exit(-1);}
       if(check_bad_ptr(f,(const void *)buffer)) {
         exit(-1);}
-      check_buffer(buffer, size);
+      check_buffer(buffer, size);**/
+      unsigned buffer_size = size;
+      void * buffer_tmp = buffer;
+      
+      while(buffer_tmp!=NULL){
+        if(!is_valid_uvaddr(buffer_tmp)) exit(-1);
+        
+        if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
+          struct spt_entry *spte = spte_find(pg_roudn_down(buffer_tmp));
+          if(spte!=NULL){
+            if(spte->is_swap){
+              uint8_t *frame = palloc_get_page(PAL_USER);
+              if(frame==NULL){frame=frame_evict();}
+              swap_in(spte->fe, frame);
+            }
+          }
+          else{
+            if(buffer_tmp>=f->esp-32){
+              uint8_t *frame = palloc_get_page(PAL_USER);
+              frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true);
+       
+              install_page(pg_round_down(buffer_tmp), frame, true);
+            }
+          }
+          
+        }
+        if (buffer_size == 0{
+	        buffer_tmp = NULL;
+	      }
+        else if (buffer_size > PGSIZE){
+	        buffer_tmp += PGSIZE;
+	        buffer_size -= PGSIZE;
+	      } 
+        else{
+	        buffer_tmp = buffer + size - 1;
+	        buffer_size = 0;
+	      }
+      }
       if(fd==1){
         putbuf(buffer, size);
         f->eax= size;
