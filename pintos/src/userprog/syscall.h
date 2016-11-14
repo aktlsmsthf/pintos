@@ -15,6 +15,9 @@ struct file_fd{
   bool is_closed;
 };
 
+bool check_valid(void*, void*);
+bool check_valid_buffer(void*, void*, unsigned);
+
 
 
 
