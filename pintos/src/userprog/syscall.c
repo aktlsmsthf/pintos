@@ -259,6 +259,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           ffd->is_closed=1;
           lock_release(&sys_lock);
         }
+      }
       break;
     }
   }
