@@ -416,7 +416,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 }**/
 bool user_memory(void *esp, int n){
 	void *buffer_tmp = esp+n;
-	if(!is_user_vaddr(buffer_tmp)) exit(-1);
+	if(!is_user_vaddr(buffer_tmp)) return false;
         
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
