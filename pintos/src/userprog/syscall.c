@@ -408,13 +408,13 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       return felem;
 }
-/**bool user_memory(void *esp, int n){
+bool user_memory(void *esp, int n){
   int * p;
   p = (int *)esp + n;
   if(!is_user_vaddr((const void *) p)) {return 0;}
   else return 1;
-}**/
-bool user_memory(void *esp, int n){
+}
+/**bool user_memory(void *esp, int n){
 	void *buffer_tmp = esp+n;
 	if(!is_user_vaddr(buffer_tmp)) return false;
         
@@ -439,7 +439,7 @@ bool user_memory(void *esp, int n){
           }
 	}
 		return false;
-}
+}**/
 /**bool user_memory(void *esp, int n){
   int * p;
   p = (int*)esp +n;
