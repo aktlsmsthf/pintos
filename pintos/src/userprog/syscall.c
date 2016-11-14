@@ -352,6 +352,9 @@ bool check_valid(void *esp, void *addr){
   return true;
 }**/
 bool check_valid_buffer(void *esp, void *buffer, unsigned size){
+  return true;
+}
+bool check_valid_buffer(void *esp, void *buffer, unsigned size){
   check_valid(esp, buffer);
   char * b = (char *) buffer;
   int i;
@@ -361,14 +364,3 @@ bool check_valid_buffer(void *esp, void *buffer, unsigned size){
   }
   return true;
 }
-
-/**bool check_valid_buffer(void *esp, void *buffer, unsigned size){
-  check_valid(esp, buffer);
-  char * b = (char *) buffer;
-  int i;
-  for(i=0; i<size; i++){
-    check_valid(esp, b);
-    b++;
-  }
-  return true;
-}**/
