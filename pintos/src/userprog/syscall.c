@@ -362,7 +362,7 @@ bool check_valid_buffer(void *esp, void *buffer, unsigned size){
   return true;
 }
 
-bool check_valid_buffer(void *esp, void *buffer, unsigned size){
+/**bool check_valid_buffer(void *esp, void *buffer, unsigned size){
   check_valid(esp, buffer);
   char * b = (char *) buffer;
   int i;
@@ -371,4 +371,4 @@ bool check_valid_buffer(void *esp, void *buffer, unsigned size){
     b++;
   }
   return true;
-}
+}**/
