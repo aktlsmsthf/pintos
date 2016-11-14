@@ -360,7 +360,7 @@ struct list_elem* get_elem_from_fd(int fd){
 bool user_memory(void *esp, int n){
   int * p;
   p = (int *)esp + n;
-  if(!is_user_vaddr((const void *) p)) return 0;
+  if(!is_user_vaddr((const void *) p)) {printf("um\n");return 0;}
   else return 1;
 }
 
@@ -412,7 +412,7 @@ bool check_buffer(void *buffer, unsigned size){
   unsigned i=0;
   char * b = (char *) buffer;
   for(;i++;i<size){
-    if(!is_user_vaddr((const void *) b)) return 0;
+    if(!is_user_vaddr((const void *) b)){printf("cb\n"); return 0;}
     b++;
   }
   return 1;
