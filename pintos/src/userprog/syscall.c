@@ -421,6 +421,7 @@ bool check_buffer(void *buffer, unsigned size){
 bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
   
     void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
+    if(p==NULL){printf("k\n");}
     return p==NULL;
 }
 
