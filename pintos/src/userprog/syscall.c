@@ -314,7 +314,7 @@ void check_vaild_ptr(void * esp, void * addr){
   if(!is_user_vaddr(addr)){
     exit(-1);
   }
-  struct spt_entry *spte = spte_find(pg_roudn_down(addr));
+  struct spt_entry *spte = spte_find(pg_round_down(addr));
   if(spte!=NULL){
     if(spte->fe->in_swap){
       uint8_t *frame = palloc_get_page(PAL_USER);
@@ -325,7 +325,7 @@ void check_vaild_ptr(void * esp, void * addr){
   }
   if(addr>=esp-32){
     uint8_t *frame = palloc_get_page(PAL_USER);
-    frame = frame_spt_alloc(frame, &thread_current() -> spt, pg_roudn_down(addr), true);
+    frame = frame_spt_alloc(frame, &thread_current() -> spt, pg_round_down(addr), true);
   }
 }
 
