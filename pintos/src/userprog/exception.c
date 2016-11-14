@@ -167,7 +167,7 @@ page_fault (struct intr_frame *f)
          //printf("1\n");
          if(spte->fe->in_swap ){
             
-     printf("%x\n", fault_addr);
+     //printf("%x\n", fault_addr);
             //printf("2\n");
             uint8_t *frame = palloc_get_page(spte->flags);
             while(frame==NULL){frame=frame_evict();}
