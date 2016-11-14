@@ -74,6 +74,7 @@ void* frame_evict(void){
          frame_elem = list_front(&frame_table);
       }
     }
+    printf("1\n");
   }
   /**while(true){
       if(!list_entry(frame_elem, struct frame_entry, elem)->in_swap){
