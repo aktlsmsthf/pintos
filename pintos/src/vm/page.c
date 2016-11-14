@@ -22,7 +22,8 @@ static void page_destroy_func(struct hash_elem *helem, void *aux){
   frame_remove(spte->fe);  
   free(spte);
 }
-void spt_destroy (struct hash *spt){
+void spt_destroy (struct hash *spt,bool pe){
+  spt->aux=pe;
   hash_destroy (spt, page_destroy_func);
 }
 /*
