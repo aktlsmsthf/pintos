@@ -14,8 +14,9 @@ void frame_init(void){
 }
 void frame_remove(struct frame_entry *fe){
   //lock_acquire(&frame_lock);
+  
+  /**struct list_elem *e = list_front(&frame_table);
   bool exist = false;
-  struct list_elem *e = list_front(&frame_table);
   while(e->next!=NULL){
     if(list_entry(e, struct frame_entry, elem)->spte->writable && list_entry(e, struct frame_entry, elem)!=fe && list_entry(e, struct frame_entry, elem)->frame==fe->frame){
       exist = true;
@@ -23,11 +24,12 @@ void frame_remove(struct frame_entry *fe){
     }
     e = e->next;
   }
-  list_remove(&fe->elem);
   if(!exist){
     printf("a\n");
     palloc_free_page(fe->frame);
-  }
+  }**/
+  list_remove(&fe->elem);
+  
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   free(fe);
   //lock_release(&frame_lock);
