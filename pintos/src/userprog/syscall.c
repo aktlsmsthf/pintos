@@ -257,7 +257,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
           struct spt_entry *spte = spte_find(pg_roudn_down(buffer_tmp));
           if(spte!=NULL){
-            if(spte->is_swap){
+            if(spte->fe->is_swap){
               uint8_t *frame = palloc_get_page(PAL_USER);
               if(frame==NULL){frame=frame_evict();}
               swap_in(spte->fe, frame);
