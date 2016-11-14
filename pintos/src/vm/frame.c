@@ -24,8 +24,10 @@ void frame_remove(struct frame_entry *fe){
     e = e->next;
   }
   list_remove(&fe->elem);
-  if(!exist)
+  if(!exist){
+    printf("a\n");
     palloc_free_page(fe->frame);
+  }
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   free(fe);
   //lock_release(&frame_lock);
