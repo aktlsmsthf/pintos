@@ -335,7 +335,7 @@ void check_valid_buffer(void *esp, void *buffer, unsigned size){
   char * b = (char *) buffer;
   int i;
   for(i=0; i<size; i++){
-    check_valid_ptr(esp, b);
+    check_valid(esp, b);
     b++;
   }
 }
