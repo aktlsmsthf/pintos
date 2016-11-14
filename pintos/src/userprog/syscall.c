@@ -24,12 +24,14 @@ static void syscall_handler (struct intr_frame *);
 void exit(int);
 struct file* get_file_from_fd(int);
 struct list_elem* get_elem_from_fd(int);
+void check_valid_ptr(void *, const void *);
+void check_valid_buffer(void *, void *, unsigned);
 //bool user_memory(void *, int);
 //bool check_buffer(void *, unsigned);
 //bool check_bad_ptr(const void * uaddr);
 //bool check_bad_ptr(struct intr_frame *f ,const void * uaddr);
 //void check_valid_ptr(void *, const void *);
-void check_valid_buffer(void *, void *, unsigned);
+
 struct lock sys_lock;
 int a=0;
 void
