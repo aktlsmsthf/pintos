@@ -42,7 +42,7 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-  if(!is_user_vaddr((const void *)f->esp)){exit(-1);}
+  if(!is_user_vaddr((const void *)f->esp)){printf("k\n");exit(-1);}
   if(check_bad_ptr(f,f->esp)){exit(-1);}
   printf("%d\n",*((int *)(f->esp)));
   switch(*((int *)(f->esp))){
