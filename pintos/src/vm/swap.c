@@ -31,7 +31,7 @@ void* swap_out(struct frame_entry *fe){
   //printf("%d\n", index);
   int i;
   for(i=0;i<spp;i++){
-    disk_write(swap_disk, index*spp+i, (uint8_t *)fe->frame+512*i);
+    disk_write(swap_disk, index*spp+i, (uint8_t *)fe->frame+DISK_SECTOR_SIZE*i);
   }
   fe->swap_where = index;
   fe->in_swap = 1;
@@ -44,7 +44,6 @@ void* swap_out(struct frame_entry *fe){
   //printf("a %x\n", ret);
   //printf("%d\n", bitmap_count(swap_table, 0, disk_size(swap_disk)/spp, 1));
   lock_release(&swap_lock);
-  memset(ret,0,PGSIZE);
   return ret;
 }
 
@@ -54,7 +53,7 @@ void swap_in(struct frame_entry *fe, void * frame){
   size_t index = fe->swap_where;
   //printf("%d\n", -1*index);
   for(i=0;i<spp;i++){
-    disk_read(swap_disk, index*spp+i , (uint8_t *) frame+512*i);
+    disk_read(swap_disk, index*spp+i , (uint8_t *) frame+DISK_SECTOR_SIZE*i);
   }
   bitmap_flip(swap_table, index);
   fe->in_swap = 0;
