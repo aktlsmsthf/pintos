@@ -35,11 +35,12 @@ void* swap_out(struct frame_entry *fe){
   }
   fe->swap_where = index;
   fe->in_swap = 1;
+  printf("b %x\n", fe->frame);
   palloc_free_page(fe->frame);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   fe->frame = NULL;
   ret = palloc_get_page(PAL_USER);
-  printf("%x\n", ret);
+  printf("a %x\n", ret);
   //printf("%d\n", bitmap_count(swap_table, 0, disk_size(swap_disk)/spp, 1));
   lock_release(&swap_lock);
   return ret;
