@@ -28,7 +28,7 @@ struct list_elem* get_elem_from_fd(int);
 //bool check_buffer(void *, unsigned);
 //bool check_bad_ptr(const void * uaddr);
 //bool check_bad_ptr(struct intr_frame *f ,const void * uaddr);
-void check_valid_ptr(void *, void *);
+void check_valid_ptr(void *, const void *);
 void check_valid_buffer(void *, void *, unsigned);
 struct lock sys_lock;
 int a=0;
