@@ -181,10 +181,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       void * buffer_tmp = buffer;
       
       while(buffer_tmp!=NULL){
-        if(!is_valid_uvaddr(buffer_tmp)) exit(-1);
+        if(!is_user_vaddr(buffer_tmp)) exit(-1);
         
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
-          struct spt_entry *spte = spte_find(pg_roudn_down(buffer_tmp));
+          struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
           if(spte!=NULL){
             if(spte->fe->in_swap){
               uint8_t *frame = palloc_get_page(PAL_USER);
@@ -252,10 +252,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       void * buffer_tmp = buffer;
       
       while(buffer_tmp!=NULL){
-        if(!is_valid_uvaddr(buffer_tmp)) exit(-1);
+        if(!is_user_vaddr(buffer_tmp)) exit(-1);
         
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
-          struct spt_entry *spte = spte_find(pg_roudn_down(buffer_tmp));
+          struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
           if(spte!=NULL){
             if(spte->fe->in_swap){
               uint8_t *frame = palloc_get_page(PAL_USER);
