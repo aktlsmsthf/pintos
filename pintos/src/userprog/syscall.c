@@ -42,7 +42,7 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {
-  if(!is_user_vaddr((const void *)f->esp)){printf("k\n");exit(-1);}
+  if(!is_user_vaddr((const void *)f->esp)){exit(-1);}
   if(check_bad_ptr(f,f->esp)){exit(-1);}
   printf("%d\n",*((int *)(f->esp)));
   switch(*((int *)(f->esp))){
@@ -61,14 +61,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_EXEC:{
       if(!user_memory(f->esp, 1)){
-        printf("a\n");
         exit(-1);}
       const char * cmd_line = *((char **)(f->esp)+1);
-      if(!user_memory((void *)cmd_line, 0)){
-        printf("b\n");f->eax = -1; break;}
+      if(!user_memory((void *)cmd_line, 0)){f->eax = -1; break;}
       if(check_bad_ptr(f,(const void *)cmd_line)){
-        
-        printf("c\n");
         exit(-1);
       }
       /**lock_acquire(&sys_lock);**/
@@ -79,7 +75,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
       
     case SYS_WAIT:{
-      if(!user_memory(f->esp,1)){
+      if(!user_memory(f->esp,1)){printf("sdf\n");
         exit(-1);}
      
       f->eax =  process_wait((tid_t)*((int *)(f->esp)+1));
