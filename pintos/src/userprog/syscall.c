@@ -186,7 +186,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
           struct spt_entry *spte = spte_find(pg_roudn_down(buffer_tmp));
           if(spte!=NULL){
-            if(spte->fe->is_swap){
+            if(spte->fe->in_swap){
               uint8_t *frame = palloc_get_page(PAL_USER);
               if(frame==NULL){frame=frame_evict();}
               swap_in(spte->fe, frame);
@@ -202,17 +202,17 @@ syscall_handler (struct intr_frame *f UNUSED)
           }
           
         }
-        if (buffer_size == 0{
-	        buffer_tmp = NULL;
-	      }
+        if (buffer_size == 0){
+	    buffer_tmp = NULL;
+	}
         else if (buffer_size > PGSIZE){
-	        buffer_tmp += PGSIZE;
-	        buffer_size -= PGSIZE;
-	      } 
+	     buffer_tmp += PGSIZE;
+	     buffer_size -= PGSIZE;
+	} 
         else{
-	        buffer_tmp = buffer + size - 1;
-	        buffer_size = 0;
-	      }
+	    buffer_tmp = buffer + size - 1;
+	    buffer_size = 0;
+	 }
       }
       int j=0;
       if(fd == 0){
