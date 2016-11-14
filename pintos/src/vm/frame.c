@@ -14,22 +14,21 @@ void frame_init(void){
 }
 void frame_remove(struct frame_entry *fe){
   
-  /**struct list_elem *e = list_front(&frame_table);
+  struct list_elem *e = list_front(&frame_table);
   bool exist = false;
   while(e->next!=NULL){
-    if(list_entry(e, struct frame_entry, elem)->spte->writable && list_entry(e, struct frame_entry, elem)!=fe && list_entry(e, struct frame_entry, elem)->frame==fe->frame){
+    if(list_entry(e, struct frame_entry, elem)!=fe && list_entry(e, struct frame_entry, elem)->frame==fe->frame){
       exist = true;
       break;
     }
     e = e->next;
   }
   if(!exist){
-    printf("a\n");
     palloc_free_page(fe->frame);
-  }**/
+  }
   lock_acquire(&frame_lock);
   list_remove(&fe->elem);
-  palloc_free_page(fe->frame);
+  //palloc_free_page(fe->frame);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   free(fe);
   lock_release(&frame_lock);
@@ -84,8 +83,7 @@ void* frame_evict(void){
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
   while(list_entry(frame_elem, struct frame_entry, elem)->frame == NULL 
-        || pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)
-        || pagedir_is_dirty(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
+        || pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
     //if(list_entry(frame_elem, struct frame_entry, elem)->spte->writable){
       pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
       frame_elem = frame_elem->next;
