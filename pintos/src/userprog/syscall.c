@@ -311,7 +311,7 @@ struct list_elem* get_elem_from_fd(int fd){
       return felem;
 }
  
-void check_vaild_ptr(void *esp, const void *addr){
+void check_vaild(void *esp, const void *addr){
   if(!is_user_vaddr(addr)){
     exit(-1);
   }
