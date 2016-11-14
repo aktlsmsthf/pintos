@@ -40,7 +40,7 @@ void* swap_out(struct frame_entry *fe){
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   ret=fe->frame;
   fe->frame = NULL;
-  printf("%x\n", ret);
+  //printf("%x\n", ret);
   //ret = palloc_get_page(PAL_USER);
   //printf("a %x\n", ret);
   //printf("%d\n", bitmap_count(swap_table, 0, disk_size(swap_disk)/spp, 1));
