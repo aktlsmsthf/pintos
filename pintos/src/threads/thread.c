@@ -205,8 +205,8 @@ thread_create (const char *name, int priority,
    
   spt_init(&t->spt);
   //struct child *chd=palloc_get_page(PAL_USER);
-  //struct child *chd = palloc_get_page (0);
-  struct child *chd = malloc(sizeof(struct child)); 
+  struct child *chd = palloc_get_page (0);
+  //struct child *chd = malloc(sizeof(struct child)); 
   chd->waited=0;
   chd->exit_called=0;
   chd->dying=0;
