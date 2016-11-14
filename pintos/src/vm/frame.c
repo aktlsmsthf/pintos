@@ -16,7 +16,7 @@ void frame_remove(struct frame_entry *fe){
   lock_acquire(&frame_lock);
   list_remove(&fe->elem);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
-  palloc_free_page(fe->frame);
+  //palloc_free_page(fe->frame);
   free(fe);
   lock_release(&frame_lock);
 }
