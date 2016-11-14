@@ -42,7 +42,6 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 { 
-  exit11();
   check_valid(f->esp, f->esp);
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
@@ -312,7 +311,7 @@ struct list_elem* get_elem_from_fd(int fd){
       return felem;
 }
  
-bool check_vaild(void *esp, const void *addr){
+bool check_vaild(void *esp,  void *addr){
   if(!is_user_vaddr(addr)){
     exit(-1);
   }
