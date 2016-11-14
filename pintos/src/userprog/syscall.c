@@ -176,6 +176,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_READ:{
       if(!user_memory(f->esp,3)){
+        printf("a\n");
         exit(-1);}
       
       int fd = *((int *)(f->esp)+1);
@@ -183,8 +184,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       unsigned size = *((unsigned *)(f->esp)+3);
       
       if(!user_memory((void *)buffer, 0)){
+        printf("b\n");
         exit(-1);}
       if(check_bad_ptr(f,(const void *)buffer)){
+        printf("c\b");
         exit(-1);}
       check_buffer(buffer, size);
       int j=0;
