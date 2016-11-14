@@ -273,7 +273,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           }
           
         }
-        if (buffer_size == 0{
+        if (buffer_size == 0){
 	        buffer_tmp = NULL;
 	      }
         else if (buffer_size > PGSIZE){
