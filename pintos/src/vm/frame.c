@@ -90,7 +90,7 @@ void* frame_evict(void){
       pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
       frame_elem = frame_elem->next;
       if(frame_elem->next==NULL){
-        int i++;
+        i++;
         if(i==2){return NULL;}
         frame_elem = list_front(&frame_table);
       }
