@@ -46,7 +46,9 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
    
+  lock_acquire(&frame_lock);
   uint8_t *frame = palloc_get_page(flags);
+  lock_release(&frame_lock);
   while(frame==NULL){
     frame=frame_evict(flags);
   }
