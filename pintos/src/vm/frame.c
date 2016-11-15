@@ -10,7 +10,7 @@
 void frame_init(void){
   list_init(&frame_table);
   lock_init(&frame_lock);
-
+  lock_init(&palloc_lock);
 }
 void frame_remove(struct frame_entry *fe, bool pe){
   
@@ -34,8 +34,9 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
    
-
+  lock_acquire(&palloc_lock);
   uint8_t *frame = palloc_get_page(flags);
+  lock_release(&palloc_lock);
 
   while(frame==NULL){
     frame=frame_evict(flags);
