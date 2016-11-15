@@ -582,7 +582,6 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
 
   file_seek (file, ofs);
   
-  lock_acquire(&frame_lock); 
   while (read_bytes > 0 || zero_bytes > 0) 
     {
       /* Do calculate how to fill this page.
@@ -621,7 +620,6 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
       upage += PGSIZE;
     }
   
-  lock_release(&frame_lock); 
   return true;
 }
 
