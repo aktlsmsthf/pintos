@@ -109,7 +109,7 @@ void* frame_evict(void){
         }
       }
       else{break;}
-        
+    }
     else{
       pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
       frame_elem = frame_elem->next;
