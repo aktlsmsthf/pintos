@@ -183,8 +183,8 @@ page_fault (struct intr_frame *f)
       }  
    }
     if(!pass && not_present && fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
-      uint8_t *frame = palloc_get_page(PAL_USER);
-      frame = frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(fault_addr), true, PAL_USER);
+      uint8_t *frame = palloc_get_page(6);
+      frame = frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(fault_addr), true, 6);
        //uint8_t *frame = frame_spt_alloc(&thread_current()->spt, pg_round_down(fault_addr), true);
        /*
       frame_alloc(frame);
