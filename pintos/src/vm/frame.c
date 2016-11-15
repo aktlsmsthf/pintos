@@ -46,13 +46,14 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
     frame=frame_evict(flags);
   }
   
-  printf("%x\n",fe->frame);
   spte->page = page;
   spte->fe = fe;
   spte->writable = writable;
   spte->flags = flags;
   hash_insert(spt ,&spte->elem);
   fe->frame = frame;
+  
+  printf("%x\n",fe->frame);
   fe->in_swap = 0;
   fe->swap_where = -1;
   fe->is_free = 0;
