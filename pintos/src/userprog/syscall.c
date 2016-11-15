@@ -270,6 +270,9 @@ syscall_handler (struct intr_frame *f UNUSED)
               uint8_t *frame = palloc_get_page(spte->flags);
               if(frame==NULL){frame=frame_evict(spte->flags);}
               swap_in(spte->fe, frame);
+	      if(!spte->writable){
+		      exit(-1);
+	      }
             }
           }
           else{
@@ -280,7 +283,6 @@ syscall_handler (struct intr_frame *f UNUSED)
               install_page(pg_round_down(buffer_tmp), frame, true);
             }
           }
-          
         }
         if (buffer_size == 0){
 	        buffer_tmp = NULL;
