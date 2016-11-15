@@ -18,6 +18,8 @@
 #include "vm/page.h"
 #include "vm/frame.h"
 #include "vm/swap.h"
+#incldue "devices/timer.h"
+
 static void syscall_handler (struct intr_frame *);
 void exit(int);
 struct file* get_file_from_fd(int);
@@ -62,7 +64,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       tid_t pid = process_execute(cmd_line);
       /**lock_release(&sys_lock);**/
       f->eax = pid;
-	printf("%d\n", thread_ticks());
+	printf("%d\n", timer_ticks());
       break;
     }
       
