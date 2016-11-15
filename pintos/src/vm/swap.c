@@ -48,7 +48,7 @@ void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   //printf("b\n");
   fe->frame = NULL;
   //printf("c\n");
-  list_remove(&fe->elem);
+  //list_remove(&fe->elem);
   //printf("%x\n", ret);
   //printf("%d\n", fe->spte->flags);
   ret = palloc_get_page(flags);
