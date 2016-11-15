@@ -29,7 +29,6 @@ void* swap_out(struct frame_entry *fe){
   lock_acquire(&swap_lock);
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   
-  printf("%d\n",index);
   int i;
   for(i=0;i<spp;i++){
     disk_write(swap_disk, index*spp+i, (uint8_t *)fe->frame+DISK_SECTOR_SIZE*i);
@@ -38,14 +37,12 @@ void* swap_out(struct frame_entry *fe){
   fe->in_swap = 1;
   //printf("b %x\n", fe->frame);
   palloc_free_page(fe->frame);
-  printf("mid\n");
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   //ret=fe->frame;
   fe->frame = NULL;
   //printf("%x\n", ret);
   printf("%d\n",fe->spte->flags);
   ret = palloc_get_page(fe->spte->flags);
-  printf("out s\n");
   //printf("a %x\n", ret);
   //printf("%d\n", bitmap_count(swap_table, 0, disk_size(swap_disk)/spp, 1));
   lock_release(&swap_lock);
