@@ -15,7 +15,7 @@ void frame_init(void){
 void frame_remove(struct frame_entry *fe, bool pe){
   
   lock_acquire(&frame_lock);
-  /*
+  
   struct list_elem *e = list_front(&frame_table);
   bool exist = false;
   while(e->next!=NULL){
@@ -27,12 +27,12 @@ void frame_remove(struct frame_entry *fe, bool pe){
   }
   if(!exist){
     palloc_free_page(fe->frame);
-  }*/
+  }
   if(!fe->in_swap){
     list_remove(&fe->elem);
   }
   //if(!pe){palloc_free_page(fe->frame);}
-  palloc_free_page(fe->frame);
+  //palloc_free_page(fe->frame);
   //printf("%s\n", thread_current()->name);
   pagedir_clear_page(fe->t->pagedir, fe->spte->page);
   free(fe);
