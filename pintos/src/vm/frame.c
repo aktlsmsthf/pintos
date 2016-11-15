@@ -28,7 +28,9 @@ void frame_remove(struct frame_entry *fe, bool pe){
   if(!exist){
     palloc_free_page(fe->frame);
   }*/
-  list_remove(&fe->elem);
+  if(!fe->in_swap){
+    list_remove(&fe->elem);
+  }
   //if(!pe){palloc_free_page(fe->frame);}
   palloc_free_page(fe->frame);
   //printf("%s\n", thread_current()->name);
