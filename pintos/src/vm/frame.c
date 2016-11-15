@@ -27,7 +27,7 @@ void frame_remove(struct frame_entry *fe, bool pe){
   }
   if(!exist){
     palloc_free_page(fe->frame);
-  }*//
+  }*/
   if(!fe->in_swap){
     list_remove(&fe->elem);
   }
