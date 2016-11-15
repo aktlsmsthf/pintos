@@ -85,7 +85,7 @@ void* frame_evict(void){
   //lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
-  struct frame_entry * fe
+  struct frame_entry * fe;
   
   while(list_entry(frame_elem, struct frame_entry, elem)->frame == NULL
         || !pagedir_is_dirty(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)
