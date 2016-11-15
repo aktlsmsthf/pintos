@@ -8,6 +8,7 @@
 
 struct list frame_table;
 struct lock frame_lock;
+struct lock palloc_lock;
 
 struct frame_entry{
   void *frame;
