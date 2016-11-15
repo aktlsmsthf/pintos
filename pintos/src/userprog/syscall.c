@@ -207,6 +207,7 @@ syscall_handler (struct intr_frame *f UNUSED)
               //uint8_t *frame = palloc_get_page(6);
               uint8_t *frame = frame_spt_alloc( &thread_current()->spt,pg_round_down(buffer_tmp), true,6);
               
+	      printf("%x\n", frame);
               install_page(pg_round_down(buffer_tmp), frame, true);
             }
           }
