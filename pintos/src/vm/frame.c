@@ -47,7 +47,7 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writab
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
     
   if(frame==NULL){
-    frame=frame_evict();
+    frame=frame_evict(flags);
   }
   spte->page = page;
   spte->fe = fe;
@@ -83,7 +83,7 @@ void * frame_alloc(void * frame){
 }
 */
 
-void* frame_evict(void){
+void* frame_evict(enum palloc_flags flags){
   lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
@@ -163,7 +163,7 @@ void* frame_evict(void){
   fe->frame = NULL;
   ret = palloc_get_page(PAL_USER);**/
   
-  ret = swap_out(fe);
+  ret = swap_out(fe, flags);
   lock_release(&frame_lock);
   return ret;
 }
