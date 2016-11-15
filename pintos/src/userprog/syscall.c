@@ -62,6 +62,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       tid_t pid = process_execute(cmd_line);
       /**lock_release(&sys_lock);**/
       f->eax = pid;
+	printf("%d\n", thread_ticks());
       break;
     }
       
