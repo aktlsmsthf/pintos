@@ -105,66 +105,6 @@ void* frame_evict(enum palloc_flags flags){
       fe = list_entry(frame_elem, struct frame_entry, elem);
     //}
   }
-  
-  /**while(true){
-    if(list_entry(frame_elem, struct frame_entry, elem)->frame != NULL
-       &&!pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
-          break;
-        }
-    else{
-      pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
-      frame_elem = frame_elem->next;
-      if(frame_elem->next==NULL){
-        frame_elem = list_front(&frame_table);
-      }
-    }
-  }**/
-  /**int i=0;
-  while(true){
-    if(list_entry(frame_elem, struct frame_entry, elem)->frame != NULL){
-      if(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
-        pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
-      }
-      else{
-        if(pagedir_is_dirty(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
-          break;
-        }
-        if(i ==1){
-          break;
-        }
-      }
-    }
-    frame_elem = frame_elem->next;
-    if(frame_elem->next==NULL){
-       i++;
-        frame_elem = list_front(&frame_table);
-    }
-  }**/
-  /**while(true){
-      if(!list_entry(frame_elem, struct frame_entry, elem)->in_swap){
-        if(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
-          pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
-        }
-        else{
-          break;
-        }
-      }
-      frame_elem = frame_elem->next;
-      if(frame_elem->next==NULL){
-         frame_elem = list_front(&frame_table);
-      }
-  }**/
-  //fe = list_entry(frame_elem, struct frame_entry, elem);
-  /**fe->swap_where = swap_out(fe->frame);
-  fe->in_swap = 1;**/
-  
-  //ret=fe->frame;
-  //fe->frame = NULL;
-  /**palloc_free_page(fe->frame);
-  pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
-  fe->frame = NULL;
-  ret = palloc_get_page(PAL_USER);**/
-  
   ret = swap_out(fe, flags);
   lock_release(&frame_lock);
   return ret;
