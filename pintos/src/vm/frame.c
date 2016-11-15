@@ -40,16 +40,16 @@ void frame_remove(struct frame_entry *fe, bool pe){
 }
   
 void * frame_spt_alloc(struct hash * spt, void * page, bool writable, enum palloc_flags flags){
-  //lock_acquire(&frame_lock);
+  lock_acquire(&frame_lock);
   uint8_t *frame = palloc_get_page(PAL_USER);
   //lock_release(&frame_lock);
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
     
   if(frame==NULL){
-    //lock_release(&frame_lock);
+    lock_release(&frame_lock);
     frame=frame_evict(flags);
-    //lock_acquire(&frame_lock);
+    lock_acquire(&frame_lock);
   }
   spte->page = page;
   spte->fe = fe;
@@ -62,7 +62,7 @@ void * frame_spt_alloc(struct hash * spt, void * page, bool writable, enum pallo
   fe->is_free = 0;
   fe->spte = spte;
   fe->t = thread_current();
-  lock_acquire(&frame_lock);
+  //lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
   //printf("%x %x\n",fe->frame,spte->page);
