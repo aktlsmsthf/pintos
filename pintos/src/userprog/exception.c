@@ -195,9 +195,12 @@ page_fault (struct intr_frame *f)
       pass=true;
          
    }
+   struct spt_entry *spte = spte_find(pg_round_down(fault_addr)); 
+   if(write && !spte->writable) exit(-1);
     if (!pass && (not_present || (is_kernel_vaddr (fault_addr) && user))){
       exit(-1);
-   } 
+   }
+    
  
    
 
