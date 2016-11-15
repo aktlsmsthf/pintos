@@ -40,7 +40,6 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   while(frame==NULL){
     frame=frame_evict(flags);
   }
-  lock_acquire(&frame_lock);
   spte->page = page;
   spte->fe = fe;
   spte->writable = writable;
