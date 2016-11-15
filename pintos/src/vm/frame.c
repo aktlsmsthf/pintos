@@ -16,7 +16,7 @@ void frame_remove(struct frame_entry *fe, bool pe){
   
   lock_acquire(&frame_lock);
   
-  struct list_elem *e = list_front(&frame_table);
+  /**struct list_elem *e = list_front(&frame_table);
   bool exist = false;
   while(e->next!=NULL){
     if(list_entry(e, struct frame_entry, elem)!=fe && list_entry(e, struct frame_entry, elem)->frame==fe->frame){
@@ -27,7 +27,7 @@ void frame_remove(struct frame_entry *fe, bool pe){
   }
   if(!exist){
     palloc_free_page(fe->frame);
-  }
+  }*//
   if(!fe->in_swap){
     list_remove(&fe->elem);
   }
