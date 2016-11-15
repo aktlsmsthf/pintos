@@ -90,10 +90,11 @@ void * frame_alloc(void * frame){
 void* frame_evict(enum palloc_flags flags){
   lock_acquire(&frame_lock);
   uint8_t frame = palloc_get_page(flags);
+  lock_release(&frame_lock);
   if(frame!=NULL){
-    lock_release(&frame_lock);
     return frame;
   }
+  lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
