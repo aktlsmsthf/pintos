@@ -246,7 +246,7 @@ process_exit (void)
    struct list_elem * celem;
    struct child *c;
    bool parent_exist=1;
-   if(curr->parent==NULL||curr->parent->tid==1){parent_exist=0;}
+   if(curr->parent==NULL){parent_exist=0;}
    
    if(curr->child->parent_exited){
       list_remove(&(curr->child->elem));
