@@ -88,6 +88,7 @@ void* frame_evict(void){
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
   while(list_entry(frame_elem, struct frame_entry, elem)->frame == NULL
+        ||list_entry(frame_elem, struct frame_entry, elem)->spte->writable
         || list_entry(frame_elem, struct frame_entry, elem)->spte->flags==6
         || pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
     //if(list_entry(frame_elem, struct frame_entry, elem)->spte->writable){
