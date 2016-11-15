@@ -84,7 +84,6 @@ void * frame_alloc(void * frame){
 void* frame_evict(void){
   //lock_acquire(&frame_lock);
   void * ret;
-  int k =1;
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe
   
@@ -98,8 +97,6 @@ void* frame_evict(void){
       }
       frame_elem = frame_elem->next;
       if(frame_elem->next==NULL){
-        i++;
-        if(i==2){return NULL;}
         frame_elem = list_front(&frame_table);
       }
     //}
