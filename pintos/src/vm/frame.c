@@ -48,7 +48,6 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writab
   while(frame==NULL){
     frame=frame_evict();
   }
-  
   spte->page = page;
   spte->fe = fe;
   spte->writable = writable;
@@ -62,6 +61,7 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writab
   lock_acquire(&frame_lock);
   list_push_front(&frame_table, &fe->elem);
   lock_release(&frame_lock);
+  printf("%x %x\n",fe->frame,spte->page);
   return frame;
 }
 /**
