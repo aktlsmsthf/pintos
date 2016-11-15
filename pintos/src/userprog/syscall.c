@@ -28,15 +28,21 @@ bool user_memory(void *, int);
 bool check_buffer(void *, unsigned);
 //bool check_bad_ptr(const void * uaddr);
 bool check_bad_ptr(struct intr_frame *f ,const void * uaddr);
+
 struct lock sys_lock;
 int a=0;
+
 void
 syscall_init (void) 
-{  intr_register_int (0x30, 3, INTR_ON, syscall_handler, "syscall");
+{  
+  intr_register_int (0x30, 3, INTR_ON, syscall_handler, "syscall");
   lock_init(&sys_lock);
-}static void
+}
+
+static void
 syscall_handler (struct intr_frame *f UNUSED) 
-{  if(!is_user_vaddr((const void *)f->esp)){exit(-1);}
+{  
+  if(!is_user_vaddr((const void *)f->esp)){exit(-1);}
   if(check_bad_ptr(f,f->esp)){exit(-1);}
   switch(*((int *)(f->esp))){
     case SYS_HALT:{
@@ -197,8 +203,8 @@ syscall_handler (struct intr_frame *f UNUSED)
           else{
             if(buffer_tmp>=f->esp-32){
               uint8_t *frame = palloc_get_page(6);
-              frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true,6);
-       
+              frame = frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true,6);
+              
               install_page(pg_round_down(buffer_tmp), frame, true);
             }
           }
@@ -268,8 +274,8 @@ syscall_handler (struct intr_frame *f UNUSED)
           else{
             if(buffer_tmp>=f->esp-32){
               uint8_t *frame = palloc_get_page(6);
-              frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true, 6);
-       
+              frame = frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true, 6);
+              
               install_page(pg_round_down(buffer_tmp), frame, true);
             }
           }
