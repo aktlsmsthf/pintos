@@ -38,12 +38,14 @@ void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   fe->swap_where = index;
   fe->in_swap = 1;
 
-
+  lock_acquire(&palloc_lock);
   palloc_free_page(fe->frame);
+  ret = palloc_get_page(flags);
+  lock_release(&palloc_lock);
+  
   pagedir_clear_page(fe->t->pagedir, fe->spte->page);
   fe->frame = NULL;
-  ret = palloc_get_page(flags);
-
+  
   return ret;
 }
 
@@ -51,7 +53,7 @@ void swap_in(struct frame_entry *fe, void * frame){
   lock_acquire(&swap_lock);
   int i;
   size_t index = fe->swap_where;
-  //printf("%d\n", -1*index);
+
   if (bitmap_test(swap_table, index) == 0){printf("1\n"); return;}
   bitmap_flip(swap_table, index);
   lock_release(&swap_lock);
