@@ -270,9 +270,6 @@ syscall_handler (struct intr_frame *f UNUSED)
               uint8_t *frame = palloc_get_page(spte->flags);
               if(frame==NULL){frame=frame_evict(spte->flags);}
               swap_in(spte->fe, frame);
-	      if(!spte->writable){
-		      exit(-1);
-	      }
             }
           }
           else{
@@ -284,6 +281,7 @@ syscall_handler (struct intr_frame *f UNUSED)
             }
           }
         }
+	
         if (buffer_size == 0){
 	        buffer_tmp = NULL;
 	      }
@@ -295,6 +293,10 @@ syscall_handler (struct intr_frame *f UNUSED)
 	        buffer_tmp = buffer + size - 1;
 	        buffer_size = 0;
 	      }
+      }
+      struct spt_entry *spte = spte_find(pg_round_down(buffer));
+      if(!spte->writable){
+	      exit(-1);
       }
       if(fd==1){
         putbuf(buffer, size);
