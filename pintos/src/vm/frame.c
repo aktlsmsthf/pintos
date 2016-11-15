@@ -81,7 +81,7 @@ void * frame_alloc(void * frame){
 */
 
 void* frame_evict(void){
-  lock_acquire(&frame_lock);
+  //lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
@@ -153,7 +153,7 @@ void* frame_evict(void){
   fe->frame = NULL;
   ret = palloc_get_page(PAL_USER);**/
   
-  lock_release(&frame_lock);
+  //lock_release(&frame_lock);
   ret = swap_out(fe);
   return ret;
 }
