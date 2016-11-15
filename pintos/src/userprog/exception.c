@@ -16,6 +16,8 @@
 #include "userprog/pagedir.h"
 #include "threads/pte.h"
 
+#include "devices/timer.h"
+
 /* Number of page faults processed. */
 static long long page_fault_cnt;
 
@@ -196,7 +198,7 @@ page_fault (struct intr_frame *f)
          
    }
     if (!pass && (not_present || (is_kernel_vaddr (fault_addr) && user))){
-       printf("%d\n", thread_tick());
+       printf("%d\n", timer_ticks());
       exit(-1);
    } 
  
