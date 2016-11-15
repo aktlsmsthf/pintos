@@ -223,6 +223,9 @@ syscall_handler (struct intr_frame *f UNUSED)
 	    buffer_size = 0;
 	 }
       }
+      if(!spte->writable){
+	   exit(-1);
+      }
       int j=0;
       if(fd == 0){
         for(; j<size; j++){
@@ -295,9 +298,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	      }
       }
       struct spt_entry *spte = spte_find(pg_round_down(buffer));
-      if(!spte->writable){
-	      exit(-1);
-      }
+      
       if(fd==1){
         putbuf(buffer, size);
         f->eax= size;
