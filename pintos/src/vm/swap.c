@@ -49,7 +49,7 @@ void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   //printf("%x\n", ret);
   //printf("%d\n", fe->spte->flags);
   ret = palloc_get_page(flags);
-  printf("a %x\n", ret);
+  //printf("a %x\n", ret);
   //printf("%d\n", bitmap_count(swap_table, 0, disk_size(swap_disk)/spp, 1));
   lock_release(&swap_lock);
   return ret;
