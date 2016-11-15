@@ -286,7 +286,7 @@ process_exit (void)
       }
    }
    spt_destroy (&curr->spt,parent_exist);
-   //file_close(curr->myself);
+   file_close(curr->myself);
 
    
   /* Destroy the current process's page directory and switch back
