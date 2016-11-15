@@ -82,11 +82,12 @@ void * frame_alloc(void * frame){
 */
 
 void* frame_evict(void){
-  lock_acquire(&frame_lock);
+  //lock_acquire(&frame_lock);
   void * ret;
-  int i =0;
+  int k =1;
   struct list_elem * frame_elem = list_front(&frame_table);
-  struct frame_entry * fe;
+  struct frame_entry * fe
+  
   while(list_entry(frame_elem, struct frame_entry, elem)->frame == NULL
         || !pagedir_is_dirty(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)
         || pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
@@ -103,6 +104,7 @@ void* frame_evict(void){
       }
     //}
   }
+    
   /**while(true){
     if(list_entry(frame_elem, struct frame_entry, elem)->frame != NULL){
       if(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
@@ -144,6 +146,6 @@ void* frame_evict(void){
   fe->frame = NULL;
   ret = palloc_get_page(PAL_USER);**/
   ret = swap_out(fe);
-  lock_release(&frame_lock);
+  //lock_release(&frame_lock);
   return ret;
 }
