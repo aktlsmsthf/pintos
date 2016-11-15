@@ -23,9 +23,10 @@ void frame_remove(struct frame_entry *fe, bool pe){
   lock_acquire(&palloc_lock);
   //printf("%x %x r\n",fe->frame,fe->spte->page);
   //if(!pe){palloc_free_page(fe->frame);}
+  if(fe->frame!=NULL){
   palloc_free_page(fe->frame);
+  }
   lock_release(&palloc_lock);
-  
   pagedir_clear_page(fe->t->pagedir, fe->spte->page);
   free(fe);
   
