@@ -196,8 +196,8 @@ syscall_handler (struct intr_frame *f UNUSED)
           }
           else{
             if(buffer_tmp>=f->esp-32){
-              uint8_t *frame = palloc_get_page(PAL_USER | PAL_ZERO);
-              frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true, PAL_USER | PAL_ZERO);
+              uint8_t *frame = palloc_get_page(PAL_USER);
+              frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true, PAL_USER);
        
               install_page(pg_round_down(buffer_tmp), frame, true);
             }
