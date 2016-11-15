@@ -41,11 +41,12 @@ void frame_remove(struct frame_entry *fe, bool pe){
   lock_release(&frame_lock);
 }
   
-void * frame_spt_alloc(void* frame, struct hash * spt, void * page, bool writable, enum palloc_flags flags){
+void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum palloc_flags flags){
   //lock_acquire(&frame_lock);
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
-    
+   
+  uint8_t *frame = palloc_get_page(flags);
   if(frame==NULL){
     frame=frame_evict(flags);
   }
