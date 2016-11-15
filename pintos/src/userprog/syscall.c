@@ -305,6 +305,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax= size;
       }
       else if(fd == 0){
+	      printf("1\n");
         f->eax = -1;
       }
       else{
@@ -312,7 +313,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           exit(-1);}
         struct file *ff = get_file_from_fd(fd);
         if(ff==NULL){ 
-          
+          printf("2\n");
           f->eax = -1;
         }
         else{
