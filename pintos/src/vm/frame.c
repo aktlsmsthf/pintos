@@ -102,14 +102,10 @@ void* frame_evict(void){
   }*/
   while(true){
     if(list_entry(frame_elem, struct frame_entry, elem)->frame != NULL
-       &&!pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
-      if(list_entry(frame_elem, struct frame_entry, elem)->spte->writable){
-        if(pagedir_is_dirty(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
+       &&!pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)
+       &&pagedir_is_dirty(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
           break;
         }
-      }
-      else{break;}
-    }
     else{
       pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
       frame_elem = frame_elem->next;
