@@ -196,7 +196,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           if(spte!=NULL){
             if(spte->fe->in_swap){
               uint8_t *frame = palloc_get_page(spte->flags);
-              if(frame==NULL){frame=frame_evict();}
+              if(frame==NULL){frame=frame_evict(spte->flags);}
               swap_in(spte->fe, frame);
             }
           }
@@ -267,7 +267,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           if(spte!=NULL){
             if(spte->fe->in_swap){
               uint8_t *frame = palloc_get_page(spte->flags);
-              if(frame==NULL){frame=frame_evict();}
+              if(frame==NULL){frame=frame_evict(spte->flags);}
               swap_in(spte->fe, frame);
             }
           }
