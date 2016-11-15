@@ -109,7 +109,7 @@ void* frame_evict(enum palloc_flags flags){
   }
   lock_release(&frame_lock);
   list_remove(&fe->elem);
-  printf("%x %x\n", fe,fe->frame);
+  //printf("%x %x\n", fe,fe->frame);
   ret = swap_out(fe, flags);
  
   return ret;
