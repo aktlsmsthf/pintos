@@ -170,7 +170,7 @@ page_fault (struct intr_frame *f)
             
      //printf("%x\n", fault_addr);
             uint8_t *frame = palloc_get_page(spte->flags);
-            if(frame==NULL){frame=frame_evict();}
+            while(frame==NULL){frame=frame_evict();}
             //frame_spt_alloc(frame
             swap_in(spte->fe, frame);
             /**pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);**/
