@@ -86,7 +86,6 @@ void* frame_evict(void){
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
-  /*
   while(list_entry(frame_elem, struct frame_entry, elem)->frame == NULL
         || pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
     //if(list_entry(frame_elem, struct frame_entry, elem)->spte->writable){
@@ -99,7 +98,8 @@ void* frame_evict(void){
         frame_elem = list_front(&frame_table);
       }
     //}
-  }*/
+  }
+  /*
   while(true){
     if(list_entry(frame_elem, struct frame_entry, elem)->frame != NULL
        &&!pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
@@ -112,7 +112,7 @@ void* frame_evict(void){
         frame_elem = list_front(&frame_table);
       }
     }
-  }
+  }*/
   /**while(true){
     if(list_entry(frame_elem, struct frame_entry, elem)->frame != NULL){
       if(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
