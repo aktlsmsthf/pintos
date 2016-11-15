@@ -60,7 +60,7 @@ void swap_in(struct frame_entry *fe, void * frame){
   int i;
   size_t index = fe->swap_where;
   //printf("%d\n", -1*index);
-  if (bitmap_test(swap_table, index) == 0){return;}
+  if (bitmap_test(swap_table, index) == 0){printf("1\n"); return;}
   bitmap_flip(swap_table, index);
   for(i=0;i<spp;i++){
     disk_read(swap_disk, index*spp+i , (uint8_t *) frame + DISK_SECTOR_SIZE*i);
