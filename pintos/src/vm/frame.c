@@ -86,7 +86,7 @@ void* frame_evict(enum palloc_flags flags){
         pagedir_set_accessed(fe->t->pagedir, fe->spte->page, false);
       }
       else{
-        if(fe->spte->writable){
+        if(pagedir_is_dirty(fe->t->pagedir, fe->spte->page)){
           break;
         }
       }
