@@ -37,14 +37,14 @@ void* swap_out(struct frame_entry *fe){
   fe->in_swap = 1;
   //printf("b %x\n", fe->frame);
   //ret=fe->frame;
-  //printf("%x %x\n",fe->frame,fe->spte->page);
+  printf("%x %x\n",fe->frame,fe->spte->page);
   palloc_free_page(fe->frame);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   //ret=fe->frame;
   fe->frame = NULL;
   list_remove(&fe->elem);
-  //printf("%x\n", ret);
-  //printf("%d\n", fe->spte->flags);
+  printf("%x\n", ret);
+  printf("%d\n", fe->spte->flags);
   ret = palloc_get_page(fe->spte->flags);
   printf("a %x\n", ret);
   //printf("%d\n", bitmap_count(swap_table, 0, disk_size(swap_disk)/spp, 1));
