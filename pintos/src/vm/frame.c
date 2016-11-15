@@ -30,7 +30,7 @@ void frame_remove(struct frame_entry *fe, bool pe){
   }*/
   list_remove(&fe->elem);
   //if(!pe){palloc_free_page(fe->frame);}
-  palloc_free_page(fe->frame);
+  //palloc_free_page(fe->frame);
   //printf("%s\n", thread_current()->name);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   free(fe);
