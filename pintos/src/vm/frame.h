@@ -4,6 +4,7 @@
 #include "threads/synch.h"
 #include "vm/page.h"
 #include "threads/palloc.h"
+#include "threads/thread.h"
 
 struct list frame_table;
 struct lock frame_lock;
@@ -14,6 +15,7 @@ struct frame_entry{
   size_t swap_where;
   bool is_free;
   struct spt_entry * spte;
+  struct thread * t;
   struct list_elem elem;
 };
 
