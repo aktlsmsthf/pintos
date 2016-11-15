@@ -41,18 +41,16 @@ void frame_remove(struct frame_entry *fe, bool pe){
   lock_release(&frame_lock);
 }
   
-void * frame_spt_alloc(struct hash * spt, void * page, bool writable, enum palloc_flags flags){
-  
-  uint8_t *frame = frame_evict(flags);
-  lock_acquire(&frame_lock);
+void * frame_spt_alloc(void* frame, struct hash * spt, void * page, bool writable, enum palloc_flags flags){
+  //lock_acquire(&frame_lock);
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
     
-  /**if(frame==NULL){
+  if(frame==NULL){
     lock_release(&frame_lock);
     frame=frame_evict(flags);
     lock_acquire(&frame_lock);
-  }**/
+  }
   spte->page = page;
   spte->fe = fe;
   spte->writable = writable;
@@ -64,7 +62,7 @@ void * frame_spt_alloc(struct hash * spt, void * page, bool writable, enum pallo
   fe->is_free = 0;
   fe->spte = spte;
   fe->t = thread_current();
-  //lock_acquire(&frame_lock);
+  lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
   //printf("%x %x\n",fe->frame,spte->page);
@@ -88,12 +86,6 @@ void * frame_alloc(void * frame){
 */
 
 void* frame_evict(enum palloc_flags flags){
-  lock_acquire(&frame_lock);
-  uint8_t frame = palloc_get_page(flags);
-  lock_release(&frame_lock);
-  if(frame!=NULL){
-    return frame;
-  }
   lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
