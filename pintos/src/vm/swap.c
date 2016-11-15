@@ -42,6 +42,7 @@ void* swap_out(struct frame_entry *fe){
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   //ret=fe->frame;
   fe->frame = NULL;
+  list_remove(&fe->elem);
   //printf("%x\n", ret);
   //printf("%d\n", fe->spte->flags);
   ret = palloc_get_page(fe->spte->flags);
@@ -65,6 +66,7 @@ void swap_in(struct frame_entry *fe, void * frame){
   fe->swap_where = -1;
   fe->frame = frame;
   install_page(fe->spte->page, frame, fe->spte->writable);
+  list_push_back(&frame_table, &fe->elem);
   lock_release(&swap_lock);
 }
 
