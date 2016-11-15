@@ -26,7 +26,7 @@ void swap_remove(size_t index){
   
 void* swap_out(struct frame_entry *fe){
   void* ret;
-  lock_acquire(&swap_lock);
+  //lock_acquire(&swap_lock);
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   
   int i;
@@ -44,12 +44,12 @@ void* swap_out(struct frame_entry *fe){
   ret = palloc_get_page(fe->spte->flags);
   //printf("a %x\n", ret);
   //printf("%d\n", bitmap_count(swap_table, 0, disk_size(swap_disk)/spp, 1));
-  lock_release(&swap_lock);
+  //lock_release(&swap_lock);
   return ret;
 }
 
 void swap_in(struct frame_entry *fe, void * frame){
-  lock_acquire(&swap_lock);
+  //lock_acquire(&swap_lock);
   int i;
   size_t index = fe->swap_where;
   //printf("%d\n", -1*index);
@@ -62,6 +62,6 @@ void swap_in(struct frame_entry *fe, void * frame){
   fe->swap_where = -1;
   fe->frame = frame;
   install_page(fe->spte->page, frame, fe->spte->writable);
-  lock_release(&swap_lock);
+  //lock_release(&swap_lock);
 }
 
