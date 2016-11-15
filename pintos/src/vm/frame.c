@@ -59,7 +59,7 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writab
   fe->is_free = 0;
   fe->spte = spte;
   lock_acquire(&frame_lock);
-  list_push_front(&frame_table, &fe->elem);
+  list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
   printf("%x %x\n",fe->frame,spte->page);
   return frame;
