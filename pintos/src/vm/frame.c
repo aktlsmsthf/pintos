@@ -70,7 +70,7 @@ void* frame_evict(enum palloc_flags flags){
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
   fe = list_entry(frame_elem, struct frame_entry, elem);
-  /*while(fe->frame == NULL || pagedir_is_accessed(fe->t->pagedir ,fe->spte->page)){
+  while(fe->frame == NULL || pagedir_is_accessed(fe->t->pagedir ,fe->spte->page)){
       if(fe->frame != NULL){
         pagedir_set_accessed(fe->t->pagedir ,fe->spte->page, false);
       }
@@ -79,24 +79,8 @@ void* frame_evict(enum palloc_flags flags){
         frame_elem = list_front(&frame_table);
       }
       fe = list_entry(frame_elem, struct frame_entry, elem);
-  }*/
-  while(true){
-    if(fe->frame !=NULL){
-      if(pagedir_is_accessed(fe->t->pagedir, fe->spte->page)){
-        pagedir_set_accessed(fe->t->pagedir, fe->spte->page, false);
-      }
-      else{
-        if(pagedir_is_dirty(fe->t->pagedir, fe->spte->page)){
-          break;
-        }
-      }
-    }
-    frame_elem = frame_elem->next;
-      if(frame_elem->next==NULL){
-        frame_elem = list_front(&frame_table);
-      }
-      fe = list_entry(frame_elem, struct frame_entry, elem);
   }
+
   list_remove(&fe->elem);
   lock_release(&frame_lock);
   //printf("%x %x\n", fe,fe->frame);
