@@ -302,6 +302,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       if(fd==1){
         putbuf(buffer, size);
+	      printf("4\n");
         f->eax= size;
       }
       else if(fd == 0){
@@ -317,6 +318,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
+		printf("3\n");
           lock_acquire(&sys_lock);
           int r = (int) file_write(ff, buffer, size);
           lock_release(&sys_lock);
