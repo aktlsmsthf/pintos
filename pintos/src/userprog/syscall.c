@@ -223,16 +223,20 @@ syscall_handler (struct intr_frame *f UNUSED)
 	    buffer_size = 0;
 	 }
       }
+      
       struct spt_entry *spte = spte_find(pg_round_down(buffer));
       if(!spte->writable){
 	   exit(-1);
       }
+      
       int j=0;
       if(fd == 0){
+	 lock_acquire(&sys_lock);
         for(; j<size; j++){
           *(uint8_t *)(buffer+j)=input_getc();
         }
         f->eax = size;
+	lock_release(&sys_lock);
       }
       else if(fd ==1){
         f->eax =-1;
@@ -243,9 +247,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
-          lock_acquire(&sys_lock);
+          //lock_acquire(&sys_lock);
           int r = (int) file_read(ff, buffer, size);
-          lock_release(&sys_lock);
+          //lock_release(&sys_lock);
           f->eax = r;
         }
       }
@@ -301,7 +305,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       
       if(fd==1){
+	lock_acquire(&sys_lock);
         putbuf(buffer, size);
+	lock_release(&sys_lock);
         f->eax= size;
       }
       else if(fd == 0){
