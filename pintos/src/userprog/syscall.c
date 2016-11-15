@@ -18,7 +18,7 @@
 #include "vm/page.h"
 #include "vm/frame.h"
 #include "vm/swap.h"
-#incldue "devices/timer.h"
+#include "devices/timer.h"
 
 static void syscall_handler (struct intr_frame *);
 void exit(int);
