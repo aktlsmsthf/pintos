@@ -48,7 +48,7 @@ void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   list_remove(&fe->elem);
   //printf("%x\n", ret);
   //printf("%d\n", fe->spte->flags);
-  ret = palloc_get_page(flags);
+  ret = palloc_get_page(6);
   printf("a %x\n", ret);
   //printf("%d\n", bitmap_count(swap_table, 0, disk_size(swap_disk)/spp, 1));
   lock_release(&swap_lock);
