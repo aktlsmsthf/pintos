@@ -60,7 +60,7 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
-  printf("%x %x fsa\n",fe->frame,spte->page);
+ // printf("%x %x fsa\n",fe->frame,spte->page);
   return frame;
 }
 
