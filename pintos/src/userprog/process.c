@@ -56,13 +56,11 @@ process_execute (const char *file_name)
   memcpy (fn, file_name, strlen (file_name) + 1);
    
   real_file_name=strtok_r(fn," ",&save);
-  lock_acquire(&frame_lock); 
   /* Create a new thread to execute FILE_NAME. */
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
   if (tid == TID_ERROR){
     free(fn_copy);
   }
-  lock_release(&frame_lock);
   struct list_elem *child = list_front(&(thread_current()->child_list));
   struct child *chd;
   while(list_entry(child, struct child, elem)->tid != tid){
@@ -583,6 +581,8 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
   ASSERT (ofs % PGSIZE == 0);
 
   file_seek (file, ofs);
+  
+  lock_release(&frame_lock); 
   while (read_bytes > 0 || zero_bytes > 0) 
     {
       /* Do calculate how to fill this page.
@@ -620,6 +620,8 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
       zero_bytes -= page_zero_bytes;
       upage += PGSIZE;
     }
+  
+  lock_release(&frame_lock); 
   return true;
 }
 
