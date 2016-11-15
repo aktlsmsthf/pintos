@@ -596,7 +596,7 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
       uint8_t *kpage = frame_spt_alloc( &thread_current()->spt, upage, writable, PAL_USER);
       if (kpage == NULL)
         return false;
-      
+      printf("%s %x\n", thread_current()->name, kpage);
       /* Load this page. */
       if (file_read (file, kpage, page_read_bytes) != (int) page_read_bytes)
         {
@@ -634,7 +634,7 @@ setup_stack (void **esp)
   //lock_acquire(&frame_lock);
   //kpage = palloc_get_page (6);
   kpage = frame_spt_alloc( &thread_current()->spt, ((uint8_t *) PHYS_BASE) - PGSIZE, true, 6); 
-   
+   printf("%s %x\n", thread_current()->name, kpage);
   if (kpage != NULL) 
     {
       success = install_page (((uint8_t *) PHYS_BASE) - PGSIZE, kpage, true);
