@@ -37,7 +37,7 @@ void* swap_out(struct frame_entry *fe){
   fe->in_swap = 1;
   //printf("b %x\n", fe->frame);
   //ret=fe->frame;
-  //printf("%x %x\n",fe->frame,fe->spte->page);
+  printf("%x %x\n",fe->frame,fe->spte->page);
   palloc_free_page(fe->frame);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   //ret=fe->frame;
