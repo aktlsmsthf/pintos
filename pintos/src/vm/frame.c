@@ -115,6 +115,7 @@ void* frame_evict(void){
       }
     }
   }**/
+  int i=0;
   while(true){
     if(list_entry(frame_elem, struct frame_entry, elem)->frame != NULL){
       if(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
@@ -124,10 +125,14 @@ void* frame_evict(void){
         if(pagedir_is_dirty(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
           break;
         }
+        if(i ==1){
+          break;
+        }
       }
     }
     frame_elem = frame_elem->next;
     if(frame_elem->next==NULL){
+       i++;
         frame_elem = list_front(&frame_table);
     }
   }
