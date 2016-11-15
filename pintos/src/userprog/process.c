@@ -56,13 +56,13 @@ process_execute (const char *file_name)
   memcpy (fn, file_name, strlen (file_name) + 1);
    
   real_file_name=strtok_r(fn," ",&save);
-   
+  lock_acquire(&frame_lock); 
   /* Create a new thread to execute FILE_NAME. */
   tid = thread_create (real_file_name, PRI_DEFAULT, start_process, fn_copy);
   if (tid == TID_ERROR){
     free(fn_copy);
   }
-  
+  lock_release(&frame_lock);
   struct list_elem *child = list_front(&(thread_current()->child_list));
   struct child *chd;
   while(list_entry(child, struct child, elem)->tid != tid){
