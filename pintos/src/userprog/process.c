@@ -633,7 +633,7 @@ setup_stack (void **esp)
 
   //lock_acquire(&frame_lock);
   //kpage = palloc_get_page (6);
-  uint8_t *kpage = frame_spt_alloc(&thread_current()->spt, ((uint8_t *) PHYS_BASE) - PGSIZE, true, 6); 
+  kpage = frame_spt_alloc(&thread_current()->spt, ((uint8_t *) PHYS_BASE) - PGSIZE, true, 6); 
    //printf("%s %x\n", thread_current()->name, kpage);
   if (kpage != NULL) 
     {
