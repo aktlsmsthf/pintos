@@ -223,6 +223,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	    buffer_size = 0;
 	 }
       }
+      struct spt_entry *spte = spte_find(pg_round_down(buffer));
       if(!spte->writable){
 	   exit(-1);
       }
@@ -297,7 +298,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	        buffer_size = 0;
 	      }
       }
-      struct spt_entry *spte = spte_find(pg_round_down(buffer));
+      
       
       if(fd==1){
         putbuf(buffer, size);
