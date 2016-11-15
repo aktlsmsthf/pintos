@@ -82,7 +82,7 @@ void* frame_evict(enum palloc_flags flags){
   }*/
   while(true){
     if(fe->frame !=NULL){
-      if(pagedir_is_accessed(fe->t->pagedir, fe->spte->apage)){
+      if(pagedir_is_accessed(fe->t->pagedir, fe->spte->page)){
         pagedir_set_accessed(fe->t->pagedir, fe->spte->page, false);
       }
       else{
