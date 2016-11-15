@@ -44,7 +44,7 @@ void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
    ;// palloc_get_page(flags);
   pagedir_clear_page(fe->t->pagedir, fe->spte->page);
   lock_release(&palloc_lock);
-  //printf("%x %x\n", fe->frame,fe->spte->page);
+  printf("%x %x\n", fe->frame,fe->spte->page);
   fe->frame = NULL;
   
   return ret;
