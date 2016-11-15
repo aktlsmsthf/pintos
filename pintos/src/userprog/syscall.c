@@ -195,6 +195,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
           if(spte!=NULL){
             if(spte->fe->in_swap){
+	      
               uint8_t *frame = palloc_get_page(spte->flags);
               if(frame==NULL){frame=frame_evict(spte->flags);}
               swap_in(spte->fe, frame);
@@ -202,8 +203,8 @@ syscall_handler (struct intr_frame *f UNUSED)
           }
           else{
             if(buffer_tmp>=f->esp-32){
-              uint8_t *frame = palloc_get_page(6);
-              frame = frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true,6);
+              //uint8_t *frame = palloc_get_page(6);
+              uint8_t *frame = frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true,6);
               
               install_page(pg_round_down(buffer_tmp), frame, true);
             }
@@ -273,8 +274,8 @@ syscall_handler (struct intr_frame *f UNUSED)
           }
           else{
             if(buffer_tmp>=f->esp-32){
-              uint8_t *frame = palloc_get_page(6);
-              frame = frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true, 6);
+              //uint8_t *frame = palloc_get_page(6);
+              uint8_t *frame = frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true, 6);
               
               install_page(pg_round_down(buffer_tmp), frame, true);
             }
