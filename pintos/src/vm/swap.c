@@ -39,9 +39,12 @@ void* swap_out(struct frame_entry *fe){
   //ret=fe->frame;
   printf("%x %x\n",fe->frame,fe->spte->page);
   palloc_free_page(fe->frame);
+  printf("a\n");
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   //ret=fe->frame;
+  printf("b\n");
   fe->frame = NULL;
+  printf("c\n");
   list_remove(&fe->elem);
   printf("%x\n", ret);
   printf("%d\n", fe->spte->flags);
