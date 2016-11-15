@@ -115,7 +115,7 @@ void* frame_evict(void){
       }
     }
   }**/
-  /while(true){
+  while(true){
     if(list_entry(frame_elem, struct frame_entry, elem)->frame != NULL){
       if(pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
         pagedir_set_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page, false);
