@@ -57,9 +57,9 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writab
   fe->swap_where = -1;
   fe->is_free = 0;
   fe->spte = spte;
-  //lock_acquire(&frame_lock);
+  lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
-  //lock_release(&frame_lock);
+  lock_release(&frame_lock);
   //printf("%x %x\n",fe->frame,spte->page);
   return frame;
 }
@@ -81,11 +81,12 @@ void * frame_alloc(void * frame){
 */
 
 void* frame_evict(void){
-  //lock_acquire(&frame_lock);
+  lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
   while(list_entry(frame_elem, struct frame_entry, elem)->frame == NULL
+        || list_entry(frame_elem, struct frame_entry, elem)->spte->flags ==6
         || pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
     //if(list_entry(frame_elem, struct frame_entry, elem)->spte->writable){
       
@@ -153,7 +154,7 @@ void* frame_evict(void){
   fe->frame = NULL;
   ret = palloc_get_page(PAL_USER);**/
   
-  //lock_release(&frame_lock);
+  lock_release(&frame_lock);
   ret = swap_out(fe);
   return ret;
 }
