@@ -26,6 +26,7 @@ void swap_remove(size_t index){
   
 void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   void* ret;
+  printf("%x\n", fe->frame);
   lock_acquire(&swap_lock);
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   
