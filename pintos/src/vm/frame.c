@@ -21,7 +21,7 @@ void frame_remove(struct frame_entry *fe, bool pe){
   }
   //printf("%s %x a\n", thread_current()->name, fe->frame);
   lock_acquire(&palloc_lock);
-  //printf("%x %x r\n",fe->frame,fe->spte->page);
+  printf("%x %x r\n",fe->frame,fe->spte->page);
   //if(!pe){palloc_free_page(fe->frame);}
   if(fe->frame!=NULL){
   palloc_free_page(fe->frame);
@@ -64,7 +64,7 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
- // printf("%x %x fsa\n",fe->frame,spte->page);
+  printf("%x %x fsa\n",fe->frame,spte->page);
   return frame;
 }
 
@@ -87,7 +87,7 @@ void* frame_evict(enum palloc_flags flags){
 
   list_remove(&fe->elem);
   lock_release(&frame_lock);
-  //printf("%x %x\n", fe,fe->frame);
+  printf("%x %x\n",fe->frame,fe->spte->page);
   ret = swap_out(fe, flags);
  
   return ret;
