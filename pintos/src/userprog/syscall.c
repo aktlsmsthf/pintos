@@ -318,7 +318,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           lock_acquire(&sys_lock);
           int r = (int) file_write(ff, buffer, size);
           lock_release(&sys_lock);
-		printf("%s\n", *(char*)buffer);
+          printf("%x\n", buffer);
           f->eax = r;
         }
       }
