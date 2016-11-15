@@ -68,6 +68,7 @@ void swap_in(struct frame_entry *fe, void * frame){
   fe->in_swap = 0;
   fe->swap_where = -1;
   fe->frame = frame;
+  printf("%x %x\n", thread_current(), fe->t);
   install_page(fe->spte->page, frame, fe->spte->writable);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&swap_lock);
