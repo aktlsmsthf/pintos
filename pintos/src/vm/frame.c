@@ -88,7 +88,8 @@ void* frame_evict(void){
   struct frame_entry * fe;
   
   while(list_entry(frame_elem, struct frame_entry, elem)->frame == NULL
-        || !pagedir_is_dirty(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)
+        || (!pagedir_is_dirty(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)
+            && list_entry(frame_elem, struct frame_entry, elem)->spte->writable)
         || pagedir_is_accessed(thread_current()->pagedir ,list_entry(frame_elem, struct frame_entry, elem)->spte->page)){
     //if(list_entry(frame_elem, struct frame_entry, elem)->spte->writable){
       
