@@ -90,7 +90,7 @@ void* frame_evict(void){
   struct frame_entry * fe;
   fe = list_entry(frame_elem, struct frame_entry, elem);
   while(fe->frame == NULL
-        || pagedir_is_accessed(fe->t->pagedir ,fe)->spte->page)){
+        || pagedir_is_accessed(fe->t->pagedir ,fe->spte->page)){
     //if(list_entry(frame_elem, struct frame_entry, elem)->spte->writable){
       
       if(fe->frame != NULL){
