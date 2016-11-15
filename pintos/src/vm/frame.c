@@ -29,7 +29,6 @@ void frame_remove(struct frame_entry *fe, bool pe){
     palloc_free_page(fe->frame);
   }*/
   list_remove(&fe->elem);
-  int i=0;
   if(!pe){palloc_free_page(fe->frame);}
   //palloc_free_page(fe->frame);
   //printf("%s\n", thread_current()->name);
@@ -45,7 +44,7 @@ void * frame_spt_alloc(void * frame, struct hash * spt, void * page, bool writab
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
     
-  while(frame==NULL){
+  if(frame==NULL){
     frame=frame_evict();
   }
   spte->page = page;
