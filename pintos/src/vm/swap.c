@@ -43,7 +43,7 @@ void* swap_out(struct frame_entry *fe){
   //ret=fe->frame;
   fe->frame = NULL;
   //printf("%x\n", ret);
-  printf("after clear\n");
+  printf("&d\n",fe->spte->flags);
   ret = palloc_get_page(fe->spte->flags);
   printf("out s\n");
   //printf("a %x\n", ret);
