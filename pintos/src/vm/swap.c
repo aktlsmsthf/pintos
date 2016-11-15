@@ -28,7 +28,7 @@ void* swap_out(struct frame_entry *fe){
   void* ret;
   lock_acquire(&swap_lock);
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
-  //printf("%d\n", index);
+  printf("%d\n", index);
   
   int i;
   for(i=0;i<spp;i++){
