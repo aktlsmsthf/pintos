@@ -34,7 +34,7 @@ void frame_remove(struct frame_entry *fe, bool pe){
   //if(!pe){palloc_free_page(fe->frame);}
   palloc_free_page(fe->frame);
   //printf("%s\n", thread_current()->name);
-  pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
+  pagedir_clear_page(fe->t->pagedir, fe->spte->page);
   free(fe);
   lock_release(&frame_lock);
 }
