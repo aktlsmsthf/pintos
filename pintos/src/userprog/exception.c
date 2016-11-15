@@ -175,6 +175,7 @@ page_fault (struct intr_frame *f)
             while(frame==NULL){frame=frame_evict(spte->flags);}
             //uint8_t *frame = frame_evict(spte->flags);
             //frame_spt_alloc(frame
+            printf("%x\n",frame);
             swap_in(spte->fe, frame);
             /**pagedir_set_page (thread_current()->pagedir, pg_round_down(fault_addr), frame, spte->writable);**/
             //install_page(spte->page, frame, spte->writable);
