@@ -29,8 +29,8 @@ void frame_remove(struct frame_entry *fe, bool pe){
     palloc_free_page(fe->frame);
   }*/
   list_remove(&fe->elem);
-  if(!pe){palloc_free_page(fe->frame);}
-  //palloc_free_page(fe->frame);
+  //if(!pe){palloc_free_page(fe->frame);}
+  palloc_free_page(fe->frame);
   //printf("%s\n", thread_current()->name);
   pagedir_clear_page(thread_current()->pagedir, fe->spte->page);
   free(fe);
@@ -154,7 +154,7 @@ void* frame_evict(void){
   fe->frame = NULL;
   ret = palloc_get_page(PAL_USER);**/
   
-  lock_release(&frame_lock);
   ret = swap_out(fe);
+  lock_release(&frame_lock);
   return ret;
 }
