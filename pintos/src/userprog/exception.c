@@ -169,9 +169,9 @@ page_fault (struct intr_frame *f)
          if(spte->fe->in_swap ){
             
      //printf("%x\n", fault_addr);
-           lock_acquire(&palloc_lock);
+           //lock_acquire(&palloc_lock);
             uint8_t *frame = palloc_get_page(spte->flags);
-            lock_release(&palloc_lock);
+            //lock_release(&palloc_lock);
             while(frame==NULL){frame=frame_evict(spte->flags);}
             //uint8_t *frame = frame_evict(spte->flags);
             //frame_spt_alloc(frame
