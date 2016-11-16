@@ -54,7 +54,7 @@ void swap_in(struct frame_entry *fe, enum palloc_flags flags){
   
   //lock_acquire(&frame_lock);
   void *frame = palloc_get_page(flags);
-  if(frame == NULL){ frame = frame_evict(flags);}
+  while(frame == NULL){ frame = frame_evict(flags);}
   int i;
   size_t index = fe->swap_where;
   
