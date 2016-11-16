@@ -35,13 +35,13 @@ void frame_remove(struct frame_entry *fe, bool pe){
 }
   
 void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum palloc_flags flags){
-  //lock_acquire(&frame_lock);
+  lock_acquire(&frame_lock);
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
    //
-  lock_acquire(&palloc_lock);
+  //lock_acquire(&palloc_lock);
   uint8_t *frame = palloc_get_page(flags);
-  lock_release(&palloc_lock);
+  //lock_release(&palloc_lock);
 //
   while(frame==NULL){
     frame=frame_evict(flags);
@@ -61,7 +61,7 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   fe->spte = spte;
   fe->t = thread_current();
   
-  lock_acquire(&frame_lock);
+  //*lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
   //printf("%x %x fsa\n",fe->frame,spte->page);
@@ -69,6 +69,31 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
 }
 
 void* frame_evict(enum palloc_flags flags){
+  //*lock_acquire(&frame_lock);
+  void * ret;
+  struct list_elem * frame_elem = list_front(&frame_table);
+  struct frame_entry * fe;
+  fe = list_entry(frame_elem, struct frame_entry, elem);
+  while(fe->frame == NULL || pagedir_is_accessed(fe->t->pagedir ,fe->spte->page)){
+      if(fe->frame != NULL){
+        pagedir_set_accessed(fe->t->pagedir ,fe->spte->page, false);
+      }
+      frame_elem = frame_elem->next;
+      if(frame_elem->next==NULL){
+        frame_elem = list_front(&frame_table);
+      }
+      fe = list_entry(frame_elem, struct frame_entry, elem);
+  }
+
+  list_remove(&fe->elem);
+  //*lock_release(&frame_lock);
+  //printf("%x %x\n",fe->frame,fe->spte->page);
+  ret = swap_out(fe, flags);
+ 
+  return ret;
+}
+
+void* frame_evict1(enum palloc_flags flags){
   lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
@@ -86,10 +111,11 @@ void* frame_evict(enum palloc_flags flags){
   }
 
   list_remove(&fe->elem);
-  lock_release(&frame_lock);
+  
   //printf("%x %x\n",fe->frame,fe->spte->page);
   ret = swap_out(fe, flags);
   //lock_release(&frame_lock);
- 
+ lock_release(&frame_lock);
   return ret;
 }
+
