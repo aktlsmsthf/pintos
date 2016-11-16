@@ -50,7 +50,7 @@ void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   return ret;
 }
 
-void swap_in(struct frame_entry *fe, enum_flags flags){
+void swap_in(struct frame_entry *fe, enum palloc_flags flags){
   //*lock_acquire(&swap_lock);
   lock_acquire(&frame_lock);
   void *frame = palloc_get_page(flags);
