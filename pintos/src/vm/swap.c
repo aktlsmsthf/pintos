@@ -70,6 +70,6 @@ void swap_in(struct frame_entry *fe, void * frame){
   lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
-  lock_release(&swap_table);
+  lock_release(&swap_lock);
 }
 
