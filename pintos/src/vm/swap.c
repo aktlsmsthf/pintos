@@ -50,9 +50,11 @@ void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   return ret;
 }
 
-void swap_in(struct frame_entry *fe, void * frame){
+void swap_in(struct frame_entry *fe, enum_flags flags){
   //*lock_acquire(&swap_lock);
   lock_acquire(&frame_lock);
+  void *frame = palloc_get_page(flags);
+  if(frame == NULL){ frame = frame_evict(flags);}
   int i;
   size_t index = fe->swap_where;
 
