@@ -172,7 +172,7 @@ page_fault (struct intr_frame *f)
            //*lock_acquire(&palloc_lock);
             uint8_t *frame = palloc_get_page(spte->flags);
             //*lock_release(&palloc_lock);
-            while(frame==NULL){frame=frame_evict(spte->flags);}
+            while(frame==NULL){frame=frame_evict1(spte->flags);}
             //uint8_t *frame = frame_evict(spte->flags);
             //frame_spt_alloc(frame
             swap_in(spte->fe, frame);
