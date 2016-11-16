@@ -10,7 +10,7 @@
 void frame_init(void){
   list_init(&frame_table);
   lock_init(&frame_lock);
-  lock_init(&palloc_lock);
+  //lock_init(&palloc_lock);
 }
 void frame_remove(struct frame_entry *fe, bool pe){
   
@@ -20,13 +20,13 @@ void frame_remove(struct frame_entry *fe, bool pe){
     list_remove(&fe->elem);
   }
   //printf("%s %x a\n", thread_current()->name, fe->frame);
-  lock_acquire(&palloc_lock);
+  //lock_acquire(&palloc_lock);
   //printf("%x %x r\n",fe->frame,fe->spte->page);
   //if(!pe){palloc_free_page(fe->frame);}
   if(fe->frame!=NULL){
   palloc_free_page(fe->frame);
   }
-  lock_release(&palloc_lock);
+  //lock_release(&palloc_lock);
   pagedir_clear_page(fe->t->pagedir, fe->spte->page);
   free(fe);
   
@@ -39,9 +39,9 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
    //
-  lock_acquire(&palloc_lock);
+  //lock_acquire(&palloc_lock);
   uint8_t *frame = palloc_get_page(flags);
-  lock_release(&palloc_lock);
+  //lock_release(&palloc_lock);
 //
   while(frame==NULL){
     frame=frame_evict(flags);
