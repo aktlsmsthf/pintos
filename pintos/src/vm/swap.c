@@ -57,7 +57,7 @@ void swap_in(struct frame_entry *fe, void * frame){
 
   if (bitmap_test(swap_table, index) == 0){printf("1\n"); return;}
   bitmap_flip(swap_table, index);
-  lock_release(&swap_lock);
+  ///lock_release(&swap_lock);
   for(i=0;i<spp;i++){
     disk_read(swap_disk, index*spp+i , (uint8_t *) frame + DISK_SECTOR_SIZE*i);
   }
@@ -70,5 +70,6 @@ void swap_in(struct frame_entry *fe, void * frame){
   lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
+  lock_release(&swap_table);
 }
 
