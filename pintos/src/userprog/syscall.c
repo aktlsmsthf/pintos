@@ -197,11 +197,11 @@ syscall_handler (struct intr_frame *f UNUSED)
             if(spte->fe->in_swap){
 	      
 	      //*lock_acquire(&palloc_lock);
-              uint8_t *frame = palloc_get_page(spte->flags);
+              /////uint8_t *frame = palloc_get_page(spte->flags);
               //*lock_release(&palloc_lock);
-              while(frame==NULL){frame=frame_evict1(spte->flags);}
+              /////while(frame==NULL){frame=frame_evict1(spte->flags);}
 	      //uint8_t *frame = frame_evict(spte->flags);
-              swap_in(spte->fe, frame);
+              swap_in(spte->fe, spte->flags);
             }
           }
           else{
@@ -280,11 +280,11 @@ syscall_handler (struct intr_frame *f UNUSED)
           if(spte!=NULL){
             if(spte->fe->in_swap){
 	      //*lock_acquire(&palloc_lock);
-              uint8_t *frame = palloc_get_page(spte->flags);
+              /////uint8_t *frame = palloc_get_page(spte->flags);
 	      //*lock_release(&palloc_lock);
-              while(frame==NULL){frame=frame_evict1(spte->flags);}
+              /////while(frame==NULL){frame=frame_evict1(spte->flags);}
 	      //uint8_t *frame = frame_evict(spte->flags);
-              swap_in(spte->fe, frame);
+              swap_in(spte->fe, spte->flags);
             }
           }
           else{
