@@ -16,15 +16,11 @@ static bool page_less(const struct hash_elem *a, const struct hash_elem *b, void
   return sa->page < sb->page;
 }
 static void page_destroy_func(struct hash_elem *helem, void *aux){
-
   struct spt_entry *spte = hash_entry(helem, struct spt_entry,elem);
-  
   if(spte->fe->in_swap){
     swap_remove(spte->fe->swap_where);}
   frame_remove(spte->fe,*((bool*)aux));
-  
   free(spte);
-
 }
 void spt_destroy (struct hash *spt,bool pe){
   spt->aux=&pe;
