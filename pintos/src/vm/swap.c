@@ -76,4 +76,3 @@ void swap_in(struct frame_entry *fe, enum palloc_flags flags){
   //lock_release(&swap_lock);
   lock_release(&frame_lock);
 }
-
