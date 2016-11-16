@@ -17,33 +17,33 @@ void swap_init(void){
   lock_init(&swap_lock);
 }
 void swap_remove(size_t index){
-  lock_acquire(&swap_lock);
+  //*lock_acquire(&swap_lock);
   if(index!=-1){
     bitmap_flip(swap_table, index);
   }
-  lock_release(&swap_lock);
+  //*lock_release(&swap_lock);
 }
   
 void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   void* ret;
   //printf("%x %x\n ",fe, fe->frame);
-  lock_acquire(&swap_lock);
+  //*lock_acquire(&swap_lock);
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   
   int i;
   for(i=0;i<spp;i++){
     disk_write(swap_disk, index*spp+i, (uint8_t *)fe->frame+DISK_SECTOR_SIZE*i);
   }
-  lock_release(&swap_lock);
+  //*lock_release(&swap_lock);
   fe->swap_where = index;
   fe->in_swap = 1;
 
-  lock_acquire(&palloc_lock);
+  //*lock_acquire(&palloc_lock);
   palloc_free_page(fe->frame);
   //ret =memset (fe->frame, 0, PGSIZE);
   ret = palloc_get_page(flags);
   pagedir_clear_page(fe->t->pagedir, fe->spte->page);
-  lock_release(&palloc_lock);
+  //*lock_release(&palloc_lock);
  // printf("%x %x\n", fe->frame,fe->spte->page);
   fe->frame = NULL;
   
@@ -51,7 +51,7 @@ void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
 }
 
 void swap_in(struct frame_entry *fe, void * frame){
-  lock_acquire(&swap_lock);
+  //*lock_acquire(&swap_lock);
   int i;
   size_t index = fe->swap_where;
 
@@ -64,12 +64,12 @@ void swap_in(struct frame_entry *fe, void * frame){
   fe->in_swap = 0;
   fe->swap_where = -1;
   fe->frame = frame;
-  lock_release(&swap_lock);
+  //*lock_release(&swap_lock);
   install_page(fe->spte->page, frame, fe->spte->writable);
 
-  lock_acquire(&frame_lock);
+  //*lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
-  lock_release(&frame_lock);
+  //*lock_release(&frame_lock);
   //lock_release(&swap_lock);
 }
 
