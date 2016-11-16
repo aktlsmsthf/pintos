@@ -64,12 +64,12 @@ void swap_in(struct frame_entry *fe, void * frame){
   fe->in_swap = 0;
   fe->swap_where = -1;
   fe->frame = frame;
-  
+  lock_release(&swap_lock);
   install_page(fe->spte->page, frame, fe->spte->writable);
 
   lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
-  lock_release(&swap_lock);
+  //lock_release(&swap_lock);
 }
 
