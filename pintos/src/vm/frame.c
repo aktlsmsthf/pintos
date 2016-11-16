@@ -78,10 +78,12 @@ void* frame_evict(enum palloc_flags flags){
       if(fe->frame != NULL){
         pagedir_set_accessed(fe->t->pagedir ,fe->spte->page, false);
       }
+      list_remove(&frame_elem);
+      list_push_back(&frame_elem);
       frame_elem = frame_elem->next;
-      if(frame_elem->next==NULL){
+      /*if(frame_elem->next==NULL){
         frame_elem = list_front(&frame_table);
-      }
+      }*/
       fe = list_entry(frame_elem, struct frame_entry, elem);
   }
 
