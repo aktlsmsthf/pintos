@@ -27,6 +27,7 @@ void * frame_alloc(void* frame);
 */
 void * frame_spt_alloc(struct hash * spt, void * page, bool writable, enum palloc_flags flags);
 void * frame_evict(enum palloc_flags flags);
+void * frame_evict1(enum palloc_flags flags);
 struct frame_entry* frame_pop(void);
 
 #endif
