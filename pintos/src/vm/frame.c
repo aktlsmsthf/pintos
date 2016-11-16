@@ -14,7 +14,7 @@ void frame_init(void){
 }
 void frame_remove(struct frame_entry *fe, bool pe){
   
-  //lock_acquire(&frame_lock);
+  lock_acquire(&frame_lock);
   
   if(!fe->in_swap){
     list_remove(&fe->elem);
@@ -30,7 +30,7 @@ void frame_remove(struct frame_entry *fe, bool pe){
   pagedir_clear_page(fe->t->pagedir, fe->spte->page);
   free(fe);
   
-  //lock_release(&frame_lock);
+  lock_release(&frame_lock);
   
 }
   
@@ -41,7 +41,7 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
    //
   //lock_acquire(&palloc_lock);
   uint8_t *frame = palloc_get_page(flags);
-  //lock_release(&palloc_lock);
+  lock_release(&palloc_lock);
 //
   while(frame==NULL){
     frame=frame_evict(flags);
@@ -61,7 +61,7 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   fe->spte = spte;
   fe->t = thread_current();
   
-  //*lock_acquire(&frame_lock);
+  lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
   //printf("%x %x fsa\n",fe->frame,spte->page);
@@ -69,7 +69,7 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
 }
 
 void* frame_evict(enum palloc_flags flags){
-  //*lock_acquire(&frame_lock);
+  lock_acquire(&frame_lock);
   void * ret;
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
@@ -88,7 +88,7 @@ void* frame_evict(enum palloc_flags flags){
   }
 
   list_remove(&fe->elem);
-  //*lock_release(&frame_lock);
+  lock_release(&frame_lock);
   //printf("%x %x\n",fe->frame,fe->spte->page);
   ret = swap_out(fe, flags);
  
