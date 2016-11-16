@@ -93,29 +93,3 @@ void* frame_evict(enum palloc_flags flags){
   return ret;
 }
 
-void* frame_evict1(enum palloc_flags flags){
-  lock_acquire(&frame_lock);
-  void * ret;
-  struct list_elem * frame_elem = list_front(&frame_table);
-  struct frame_entry * fe;
-  fe = list_entry(frame_elem, struct frame_entry, elem);
-  while(fe->frame == NULL || pagedir_is_accessed(fe->t->pagedir ,fe->spte->page)){
-      if(fe->frame != NULL){
-        pagedir_set_accessed(fe->t->pagedir ,fe->spte->page, false);
-      }
-      frame_elem = frame_elem->next;
-      if(frame_elem->next==NULL){
-        frame_elem = list_front(&frame_table);
-      }
-      fe = list_entry(frame_elem, struct frame_entry, elem);
-  }
-
-  list_remove(&fe->elem);
-  
-  //printf("%x %x\n",fe->frame,fe->spte->page);
-  ret = swap_out(fe, flags);
-  //lock_release(&frame_lock);
- lock_release(&frame_lock);
-  return ret;
-}
-
