@@ -79,7 +79,7 @@ void* frame_evict(enum palloc_flags flags){
         pagedir_set_accessed(fe->t->pagedir ,fe->spte->page, false);
       }
       list_remove(frame);
-      list_push_back(&frame_table, frame);
+      list_push_back(&frame_table, frame_elem);
       frame_elem = list_front(&frame_table);
       /*if(frame_elem->next==NULL){
         frame_elem = list_front(&frame_table);
