@@ -81,6 +81,7 @@ void* frame_evict(enum palloc_flags flags){
       /*list_remove(frame_elem);
       list_push_back(&frame_table, frame_elem);
       frame_elem = list_front(&frame_table);*/
+      frame_elem = frame_elem->next;
       if(frame_elem->next==NULL){
         frame_elem = list_front(&frame_table);
       }
