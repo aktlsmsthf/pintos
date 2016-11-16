@@ -57,14 +57,14 @@ void swap_in(struct frame_entry *fe, void * frame){
 
   if (bitmap_test(swap_table, index) == 0){printf("1\n"); return;}
   bitmap_flip(swap_table, index);
-  ///lock_release(&swap_lock);
+  lock_release(&swap_lock);
   for(i=0;i<spp;i++){
     disk_read(swap_disk, index*spp+i , (uint8_t *) frame + DISK_SECTOR_SIZE*i);
   }
   fe->in_swap = 0;
   fe->swap_where = -1;
   fe->frame = frame;
-  lock_release(&swap_lock);
+  
   install_page(fe->spte->page, frame, fe->spte->writable);
 
   lock_acquire(&frame_lock);
