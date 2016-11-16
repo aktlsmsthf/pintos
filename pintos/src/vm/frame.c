@@ -35,7 +35,7 @@ void frame_remove(struct frame_entry *fe, bool pe){
 }
   
 void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum palloc_flags flags){
-  lock_acquire(&frame_lock);
+  //lock_acquire(&frame_lock);
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
    //
