@@ -16,7 +16,7 @@ static bool page_less(const struct hash_elem *a, const struct hash_elem *b, void
   return sa->page < sb->page;
 }
 static void page_destroy_func(struct hash_elem *helem, void *aux){
-  lock_acquire(&frame_lock);
+
   struct spt_entry *spte = hash_entry(helem, struct spt_entry,elem);
   
   if(spte->fe->in_swap){
@@ -24,7 +24,7 @@ static void page_destroy_func(struct hash_elem *helem, void *aux){
   frame_remove(spte->fe,*((bool*)aux));
   
   free(spte);
-  lock_release(&frame_lock);
+
 }
 void spt_destroy (struct hash *spt,bool pe){
   spt->aux=&pe;
