@@ -10,7 +10,7 @@
 void frame_init(void){
   list_init(&frame_table);
   lock_init(&frame_lock);
-  //lock_init(&palloc_lock);
+  lock_init(&palloc_lock);
 }
 void frame_remove(struct frame_entry *fe, bool pe){
   
