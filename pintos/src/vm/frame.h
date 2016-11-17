@@ -8,7 +8,6 @@
 
 struct list frame_table;
 struct lock frame_lock;
-struct lock palloc_lock;
 
 struct frame_entry{
   void *frame;
@@ -22,9 +21,7 @@ struct frame_entry{
 
 void frame_init(void);
 void frame_remove(struct frame_entry *fe,bool pe);
-/*
-void * frame_alloc(void* frame);
-*/
+
 void * frame_spt_alloc(struct hash * spt, void * page, bool writable, enum palloc_flags flags);
 void * frame_evict(enum palloc_flags flags);
 void * frame_evict1(enum palloc_flags flags);
