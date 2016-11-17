@@ -19,14 +19,11 @@ void frame_remove(struct frame_entry *fe, bool pe){
   if(!fe->in_swap){
     list_remove(&fe->elem);
   }
-  //printf("%s %x a\n", thread_current()->name, fe->frame);
-  //lock_acquire(&palloc_lock);
-  //printf("%x %x r\n",fe->frame,fe->spte->page);
-  //if(!pe){palloc_free_page(fe->frame);}
+
   if(fe->frame!=NULL){
   palloc_free_page(fe->frame);
   }
-  //lock_release(&palloc_lock);
+
   pagedir_clear_page(fe->t->pagedir, fe->spte->page);
   free(fe);
   
@@ -35,14 +32,12 @@ void frame_remove(struct frame_entry *fe, bool pe){
 }
   
 void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum palloc_flags flags){
-  //lock_acquire(&frame_lock);
+
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   struct frame_entry *fe = malloc(sizeof(struct frame_entry));
-   //
-  //lock_acquire(&palloc_lock);
+
   uint8_t *frame = palloc_get_page(flags);
-  //lock_release(&palloc_lock);
-//
+
   while(frame==NULL){
     frame=frame_evict(flags);
   }
@@ -54,7 +49,6 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   hash_insert(spt ,&spte->elem);
   fe->frame = frame;
   
-  //printf("%x %x\n",fe->frame,spte->page);
   fe->in_swap = 0;
   fe->swap_where = -1;
   fe->is_free = 0;
@@ -64,7 +58,6 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
-  //printf("%x %x fsa\n",fe->frame,spte->page);
   return frame;
 }
 
@@ -81,15 +74,11 @@ void* frame_evict(enum palloc_flags flags){
       list_remove(frame_elem);
       list_push_back(&frame_table, frame_elem);
       frame_elem = list_front(&frame_table);
-      /*if(frame_elem->next==NULL){
-        frame_elem = list_front(&frame_table);
-      }*/
       fe = list_entry(frame_elem, struct frame_entry, elem);
   }
 
   list_remove(&fe->elem);
   
-  //printf("%x %x\n",fe->frame,fe->spte->page);
   ret = swap_out(fe, flags);
  lock_release(&frame_lock);
   return ret;
