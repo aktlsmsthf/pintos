@@ -180,12 +180,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
-      
-      /**if(!user_memory((void *)buffer, 0)){
-        exit(-1);}
-      if(check_bad_ptr(f,(const void *)buffer)){
-        exit(-1);}
-      check_buffer(buffer, size);**/
+
       unsigned buffer_size = size;
       void * buffer_tmp = buffer;
       
@@ -196,21 +191,12 @@ syscall_handler (struct intr_frame *f UNUSED)
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
           if(spte!=NULL){
             if(spte->fe->in_swap){
-	      
-	      //*lock_acquire(&palloc_lock);
-              /////uint8_t *frame = palloc_get_page(spte->flags);
-              //*lock_release(&palloc_lock);
-              /////while(frame==NULL){frame=frame_evict1(spte->flags);}
-	      //uint8_t *frame = frame_evict(spte->flags);
               swap_in(spte->fe, spte->flags);
             }
           }
           else{
             if(buffer_tmp>=f->esp-32){
-              //uint8_t *frame = palloc_get_page(6);
               uint8_t *frame = frame_spt_alloc( &thread_current()->spt,pg_round_down(buffer_tmp), true,6);
-              
-	      //printf("%x\n", frame);
               install_page(pg_round_down(buffer_tmp), frame, true);
             }
           }
@@ -236,12 +222,10 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       int j=0;
       if(fd == 0){
-	 //lock_acquire(&sys_lock);
         for(; j<size; j++){
           *(uint8_t *)(buffer+j)=input_getc();
         }
         f->eax = size;
-	//lock_release(&sys_lock);
       }
       else if(fd ==1){
         f->eax =-1;
@@ -265,11 +249,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       const void *buffer = *((void **)(f->esp)+2);
       unsigned size = *((unsigned *)(f->esp)+3);
-      /**if(!user_memory((void *)buffer, 0)){
-        exit(-1);}
-      if(check_bad_ptr(f,(const void *)buffer)) {
-        exit(-1);}
-      check_buffer(buffer, size);**/
+
       unsigned buffer_size = size;
       void * buffer_tmp = buffer;
       
@@ -280,19 +260,12 @@ syscall_handler (struct intr_frame *f UNUSED)
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
           if(spte!=NULL){
             if(spte->fe->in_swap){
-	      //*lock_acquire(&palloc_lock);
-              /////uint8_t *frame = palloc_get_page(spte->flags);
-	      //*lock_release(&palloc_lock);
-              /////while(frame==NULL){frame=frame_evict1(spte->flags);}
-	      //uint8_t *frame = frame_evict(spte->flags);
               swap_in(spte->fe, spte->flags);
             }
           }
           else{
             if(buffer_tmp>=f->esp-32){
-              //uint8_t *frame = palloc_get_page(6);
               uint8_t *frame = frame_spt_alloc(&thread_current()->spt,pg_round_down(buffer_tmp), true, 6);
-              
               install_page(pg_round_down(buffer_tmp), frame, true);
             }
           }
@@ -313,9 +286,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       
       if(fd==1){
-	//lock_acquire(&sys_lock);
         putbuf(buffer, size);
-	//lock_release(&sys_lock);
         f->eax= size;
       }
       else if(fd == 0){
@@ -385,13 +356,6 @@ syscall_handler (struct intr_frame *f UNUSED)
           ffd->is_closed=1;
           lock_release(&sys_lock);
         }
-        
-        
-        /**if(flm!=NULL)
-           list_remove(flm);
-        
-        if(ffd!=NULL)
-           palloc_free_page(ffd);**/
       } 
       break;
     }
