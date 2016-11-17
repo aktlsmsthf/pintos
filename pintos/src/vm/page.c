@@ -26,21 +26,13 @@ void spt_destroy (struct hash *spt,bool pe){
   spt->aux=&pe;
   hash_destroy (spt, page_destroy_func);
 }
-/*
-void spt_alloc(struct hash * spt, void * page){
-  struct spt_entry *spte = malloc(sizeof(struct spt_entry));
-  spte->page = page;
-  hash_insert(spt ,&spte->elem);
-}
-*/
+
 struct spt_entry * spte_find(void * page){
-  //lock_acquire(&frame_lock);
   struct spt_entry spte;
   struct hash_elem * e;
   spte.page = page;
   e = hash_find(&thread_current()->spt, &spte.elem);
   return e != NULL ? hash_entry(e, struct spt_entry, elem) : NULL;
-  //lock_release(&frame_lock);
 }
 
 void spt_init(struct hash *spt){
