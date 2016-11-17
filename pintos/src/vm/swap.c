@@ -26,7 +26,7 @@ void swap_remove(size_t index){
   
 void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   void* ret;
-  //printf("%x %x\n ",fe, fe->frame);
+
   lock_acquire(&swap_lock);
   size_t index = bitmap_scan_and_flip(swap_table, 0, 1, 0);
   
@@ -38,21 +38,15 @@ void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   fe->swap_where = index;
   fe->in_swap = 1;
 
-  //lock_acquire(&palloc_lock);
   palloc_free_page(fe->frame);
-  //ret =memset (fe->frame, 0, PGSIZE);
   ret = palloc_get_page(flags);
   pagedir_clear_page(fe->t->pagedir, fe->spte->page);
-  //*lock_release(&palloc_lock);
- // printf("%x %x\n", fe->frame,fe->spte->page);
   fe->frame = NULL;
   
   return ret;
 }
 
 void swap_in(struct frame_entry *fe, enum palloc_flags flags){
-  
-  //lock_acquire(&frame_lock);
   void *frame = palloc_get_page(flags);
   while(frame == NULL){ frame = frame_evict(flags);}
   int i;
@@ -74,5 +68,4 @@ void swap_in(struct frame_entry *fe, enum palloc_flags flags){
   lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
-  //lock_release(&frame_lock);
 }
