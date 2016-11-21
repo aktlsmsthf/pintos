@@ -20,10 +20,9 @@ void frame_remove(struct frame_entry *fe, bool pe){
   
   lock_acquire(&frame_lock);
   
-  /*if(!fe->in_swap){
+  if(!fe->in_swap){
     list_remove(&fe->elem);
-  }*/
-  list_remove(&fe->elem);
+  }
   if(fe->frame!=NULL){
   palloc_free_page(fe->frame);
   }
