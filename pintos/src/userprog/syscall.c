@@ -406,38 +406,13 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       return felem;
 }
-/**bool user_memory(void *esp, int n){
+bool user_memory(void *esp, int n){
   int * p;
   p = (int *)esp + n;
   if(!is_user_vaddr((const void *) p)) {return 0;}
   else return 1;
-}**/
-bool user_memory(void *esp, int n){
-  int * p;
-  void * buffer_tmp = esp+n;
-  if(!is_user_vaddr(buffer_tmp)) return false;
-        
-        if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
-          struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
-          if(spte!=NULL){
-    	    if(spte->lazy){
-	      file_frame_alloc(spte);
-	      return true;
-	    }
-            else if(spte->fe->in_swap){
-              swap_in(spte->fe, spte->flags);
-	      return true;
-            }
-          }
-          else{
-            if(buffer_tmp>=f->esp-32){
-              uint8_t *frame = frame_spt_alloc( &thread_current()->spt,pg_round_down(buffer_tmp), true,6);
-              install_page(pg_round_down(buffer_tmp), frame, true);
-	      return true;
-            }
-          }
-		return false;
 }
+
 /**bool user_memory(void *esp, int n){
 	void *buffer_tmp = esp+n;
 	if(!is_user_vaddr(buffer_tmp)) return false;
