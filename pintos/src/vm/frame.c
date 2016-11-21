@@ -105,6 +105,7 @@ bool file_frame_alloc(struct spt_entry * spte){
   
   //lock_acquire(&sys_lock);
   if(file_read_at(spte->file, frame, spte->read_bytes, spte->ofs) != (int) spte->read_bytes){
+    printf("1\n");
     //lock_release(&sys_lock);
     return 0;
   }
