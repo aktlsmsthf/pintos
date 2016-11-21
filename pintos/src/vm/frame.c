@@ -101,8 +101,8 @@ void file_frame_alloc(struct spt_entry * spte){
   if(file_read(spte->file, frame, spte->read_bytes) != (int) spte->read_bytes){
     return NULL;
   }
-  
-  memset(frame+spte->read_bytes, 0, spte->zero_bytes);
+  if(spte->read_bytes<PGSIZE){
+  memset(frame+spte->read_bytes, 0, spte->zero_bytes);}
   install_page(spte->page, frame, spte->writable);
   
   lock_acquire(&frame_lock);
