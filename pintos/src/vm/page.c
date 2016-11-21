@@ -38,3 +38,14 @@ struct spt_entry * spte_find(void * page){
 void spt_init(struct hash *spt){
   hash_init(spt, page_hash, page_less, NULL);
 }
+
+void spt_alloc_lazy(struct hash * spt, void * page, bool writable, enum palloc_flags flags, uint32_t read_bytes, uint32_t zero_bytes){
+  struct spt_entry *spte = malloc(sizeof(struct spt_entry));
+  spte -> page = page;
+  spte -> writable = writable;
+  spte -> flags = flags;
+  spte- > read_bytes = read_bytes;
+  spte -> zero_bytes = zero_bytes;
+  spte -> lazy = 1;
+  hash_insert(spt, &spte->elem);
+}
