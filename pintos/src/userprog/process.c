@@ -128,14 +128,14 @@ start_process (void *f_name)
   if (!success) {
 
     thread_exit ();}
-  /*
+  
   struct file *myself = filesys_open(now);
   if(myself==NULL){
      thread_exit();
   }
   file_deny_write(myself);
   thread_current()->myself = myself;
-   */
+   
    //palloc_free_page (file_name);
    
   i=0;
