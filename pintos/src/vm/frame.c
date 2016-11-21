@@ -6,6 +6,7 @@
 #include "threads/malloc.h"
 #include "userprog/pagedir.h"
 #include "threads/thread.h"
+#include "filesys/file.h"
 
 void frame_init(void){
   list_init(&frame_table);
@@ -47,8 +48,8 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   spte->flags = flags;
   spte->lazy = false;
   hash_insert(spt ,&spte->elem);
-  fe->frame = frame;
   
+  fe->frame = frame;
   fe->in_swap = 0;
   fe->swap_where = -1;
   fe->is_free = 0;
@@ -73,7 +74,7 @@ void* frame_evict(enum palloc_flags flags){
       }
       list_remove(frame_elem);
       list_push_back(&frame_table, frame_elem);
-      frame_elem = list_front(&frame_table);
+      frame_elem = list_front(&frame_table); 
       fe = list_entry(frame_elem, struct frame_entry, elem);
   }
 
@@ -84,3 +85,24 @@ void* frame_evict(enum palloc_flags flags){
   return ret;
 }
 
+void * file_frame_alloc(struct spt_entry * spte){
+  struct frame_entry * fe = malloc(sizeof(struct frame_entry));
+  void * frame = palloc_get_page(stpe->flags);
+  while(frame == NULL){ frame = frame_evict(spte->flags);}
+  
+  fe -> frame = frame;
+  fe -> swap_where = -1;
+  fe -> in_swap = 0;
+  fe -> spte = spte;
+  fe -> t = thraed_current();
+  
+  spte -> fe = fe;
+  spte -> lazy = 0;
+  
+  if(file_read(spte->file, frame, spte->read_bytes) != (int) stpe->read-bytes){
+    return NULL;
+  }
+  
+  memset(frame+spte->read_bytes, 0, ste->zero_bytes);
+  install_page(spte->page, frame, writable);
+}
