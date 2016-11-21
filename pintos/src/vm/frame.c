@@ -104,7 +104,8 @@ bool file_frame_alloc(struct spt_entry * spte){
   spte -> lazy = 0;
   
   lock_acquire(&sys_lock);
-  if(file_read_at(spte->file, frame, spte->read_bytes, spte->ofs) != (int) spte->read_bytes){
+  file_seek(spte->file, spte->ofs);
+  if(file_read(spte->file, frame, spte->read_bytes) != (int) spte->read_bytes){
     lock_release(&sys_lock);
     return 0;
   }
