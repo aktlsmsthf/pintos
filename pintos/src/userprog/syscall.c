@@ -491,8 +491,9 @@ bool check_buffer(void *buffer, unsigned size){
   return 1;
 }bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
   
-    void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
-    return p==NULL;
+    //void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
+    //return p==NULL;
+	return 0;
 }/*
 bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
   void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
