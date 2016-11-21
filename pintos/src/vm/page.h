@@ -3,6 +3,7 @@
 
 #include <hash.h>
 #include "threads/palloc.h"
+#include "filesys/file.h"
 
 struct spt_entry{
   void *page;
@@ -13,6 +14,7 @@ struct spt_entry{
   bool lazy;
   uint32_t read_bytes;
   uint32_t zero_bytes;
+  struct file *file;
 };
 
 void spt_init(struct hash *spt);
