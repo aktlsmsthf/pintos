@@ -45,6 +45,7 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   spte->fe = fe;
   spte->writable = writable;
   spte->flags = flags;
+  spte->lazy = false;
   hash_insert(spt ,&spte->elem);
   fe->frame = frame;
   
