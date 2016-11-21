@@ -190,7 +190,10 @@ syscall_handler (struct intr_frame *f UNUSED)
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
           if(spte!=NULL){
-            if(spte->fe->in_swap){
+    	    if(spte->lazy){
+	      file_frame_alloc(spte);
+	    }
+            else if(spte->fe->in_swap){
               swap_in(spte->fe, spte->flags);
             }
           }
@@ -259,6 +262,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
           if(spte!=NULL){
+	    if(spte->lazy){
+	      file_frame_alloc(spte);
+	    }
             if(spte->fe->in_swap){
               swap_in(spte->fe, spte->flags);
             }
