@@ -166,11 +166,17 @@ page_fault (struct intr_frame *f)
    struct spt_entry *spte = spte_find(pg_round_down(fault_addr));
       
       if(spte!=NULL){
-         if(spte->fe->in_swap ){
+         if(spte->lazy){
+            file_frame_alloc(spte);
+            pass = true;
+         }
+         else if(spte->fe->in_swap ){
             swap_in(spte->fe, spte->flags);
             pass=true;
          }
-      }  
+         else{
+         }
+      }
    }
     if(!pass && not_present && fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
       uint8_t *frame = frame_spt_alloc(&thread_current()->spt,pg_round_down(fault_addr), true, 6);
