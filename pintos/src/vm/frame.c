@@ -8,23 +8,6 @@
 #include "threads/thread.h"
 #include "filesys/file.h"
 #include "userprog/process.h"
-#include <debug.h>
-#include <inttypes.h>
-#include <round.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "userprog/gdt.h"
-#include "userprog/pagedir.h"
-#include "userprog/tss.h"
-#include "filesys/directory.h"
-#include "filesys/filesys.h"
-#include "threads/flags.h"
-#include "threads/init.h"
-#include "threads/interrupt.h"
-#include "threads/thread.h"
-#include "threads/vaddr.h"
-
 #include "userprog/syscall.h"
 
 #include "vm/page.h"
@@ -122,8 +105,7 @@ void file_frame_alloc(struct spt_entry * spte){
   if(file_read(spte->file, frame, spte->read_bytes) != (int) spte->read_bytes){
     return NULL;
   }
-  if(spte->read_bytes<PGSIZE){
-  memset(frame+spte->read_bytes, 0, spte->zero_bytes);}
+  memset(frame+spte->read_bytes, 0, spte->zero_bytes);
   install_page(spte->page, frame, spte->writable);
   
   lock_acquire(&frame_lock);
