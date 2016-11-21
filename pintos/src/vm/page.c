@@ -46,6 +46,6 @@ void spt_alloc_lazy(struct hash * spt, void * page, bool writable, enum palloc_f
   spte -> flags = flags;
   spte- > read_bytes = read_bytes;
   spte -> zero_bytes = zero_bytes;
-  spte -> lazy = 1;
+  spte -> lazy = true;
   hash_insert(spt, &spte->elem);
 }
