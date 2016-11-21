@@ -47,6 +47,7 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   spte->writable = writable;
   spte->flags = flags;
   spte->lazy = false;
+  spte->t = thread_current();
   hash_insert(spt ,&spte->elem);
   
   fe->frame = frame;
@@ -54,7 +55,6 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   fe->swap_where = -1;
   fe->is_free = 0;
   fe->spte = spte;
-  fe->t = thread_current();
   
   lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
@@ -68,7 +68,7 @@ void* frame_evict(enum palloc_flags flags){
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
   fe = list_entry(frame_elem, struct frame_entry, elem);
-  while(fe->frame == NULL || pagedir_is_accessed(fe->t->pagedir ,fe->spte->page)){
+  while(fe->frame == NULL || pagedir_is_accessed(fe->spte->t->pagedir ,fe->spte->page)){
       if(fe->frame != NULL){
         pagedir_set_accessed(fe->t->pagedir ,fe->spte->page, false);
       }
@@ -94,7 +94,6 @@ void file_frame_alloc(struct spt_entry * spte){
   fe -> swap_where = -1;
   fe -> in_swap = 0;
   fe -> spte = spte;
-  fe -> t = thread_current();
   
   spte -> fe = fe;
   spte -> lazy = 0;
