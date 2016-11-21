@@ -10,6 +10,9 @@ struct spt_entry{
   struct frame_entry* fe;
   bool writable;
   enum palloc_flags flags;
+  bool lazy;
+  uint32_t read_bytes;
+  uint32_t zero_bytes;
 };
 
 void spt_init(struct hash *spt);
