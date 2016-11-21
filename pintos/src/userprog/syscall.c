@@ -414,7 +414,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 }**/
 bool user_memory(void *esp, int n){
   int * p;
-  buffer_tmp = esp+n;
+  void * buffer_tmp = esp+n;
   if(!is_user_vaddr(buffer_tmp)) return false;
         
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
