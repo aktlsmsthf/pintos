@@ -90,6 +90,7 @@ void* frame_evict(enum palloc_flags flags){
 }
 
 void file_frame_alloc(struct spt_entry * spte){
+  printf("1\n");
   struct frame_entry * fe = malloc(sizeof(struct frame_entry));
   void * frame = palloc_get_page(spte->flags);
   while(frame == NULL){ frame = frame_evict(spte->flags);}
