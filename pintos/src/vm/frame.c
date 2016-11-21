@@ -7,6 +7,7 @@
 #include "userprog/pagedir.h"
 #include "threads/thread.h"
 #include "filesys/file.h"
+#include "userprog/process.h"
 
 void frame_init(void){
   list_init(&frame_table);
