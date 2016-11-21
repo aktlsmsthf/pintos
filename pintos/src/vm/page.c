@@ -46,7 +46,7 @@ void spt_alloc_lazy(struct hash * spt, void * page, bool writable, enum palloc_f
   spte -> page = page;
   spte -> writable = writable;
   spte -> flags = flags;
-  spte- > read_bytes = read_bytes;
+  spte -> read_bytes = read_bytes;
   spte -> zero_bytes = zero_bytes;
   spte -> lazy = true;
   spte -> file = file;
