@@ -174,8 +174,6 @@ page_fault (struct intr_frame *f)
             swap_in(spte->fe, spte->flags);
             pass=true;
          }
-         else{
-         }
       }
    }
     if(!pass && not_present && fault_addr >= f->esp-32 && is_user_vaddr(fault_addr)){
