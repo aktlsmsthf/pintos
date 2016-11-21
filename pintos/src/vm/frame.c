@@ -105,4 +105,8 @@ void * file_frame_alloc(struct spt_entry * spte){
   
   memset(frame+spte->read_bytes, 0, ste->zero_bytes);
   install_page(spte->page, frame, writable);
+  
+  lock_acquire(&frame_lock);
+  list_push_back(&frame_table, &fe->elem);
+  lock_release(&frame_lock);
 }
