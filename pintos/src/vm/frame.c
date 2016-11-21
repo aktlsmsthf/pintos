@@ -52,6 +52,7 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   spte->flags = flags;
   spte->lazy = false;
   spte->t = thread_current();
+  spte->ofs = 0;
   hash_insert(spt ,&spte->elem);
   
   fe->frame = frame;
