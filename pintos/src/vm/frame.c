@@ -94,7 +94,7 @@ void file_frame_alloc(struct spt_entry * spte){
   fe -> swap_where = -1;
   fe -> in_swap = 0;
   fe -> spte = spte;
-  fe -> t = thraed_current();
+  fe -> t = thread_current();
   
   spte -> fe = fe;
   spte -> lazy = 0;
