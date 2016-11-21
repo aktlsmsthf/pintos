@@ -4,6 +4,7 @@
 #include "threads/thread.h"
 #include "vm/frame.h"
 #include "vm/swap.h"
+#include "filesys/file.h"
 
 static unsigned page_hash(const struct hash_elem *element, void *aux){
   struct spt_entry *spte = hash_entry(element, struct spt_entry, elem);
@@ -39,7 +40,8 @@ void spt_init(struct hash *spt){
   hash_init(spt, page_hash, page_less, NULL);
 }
 
-void spt_alloc_lazy(struct hash * spt, void * page, bool writable, enum palloc_flags flags, uint32_t read_bytes, uint32_t zero_bytes){
+void spt_alloc_lazy(struct hash * spt, void * page, bool writable, enum palloc_flags flags, uint32_t read_bytes, uint32_t zero_bytes
+                    , struct file *file){
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   spte -> page = page;
   spte -> writable = writable;
