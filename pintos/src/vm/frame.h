@@ -15,7 +15,6 @@ struct frame_entry{
   size_t swap_where;
   bool is_free;
   struct spt_entry * spte;
-  struct thread * t;
   struct list_elem elem;
 };
 
