@@ -99,7 +99,7 @@ void file_frame_alloc(struct spt_entry * spte){
   spte -> fe = fe;
   spte -> lazy = 0;
   
-  if(file_read(spte->file, frame, spte->read_bytes) != (int) stpe->read_bytes){
+  if(file_read(spte->file, frame, spte->read_bytes) != (int) spte->read_bytes){
     return NULL;
   }
   
