@@ -5,6 +5,8 @@
 #include "filesys/file.h"
 #include "filesys/filesys.h"
 
+struct lock sys_lock;
+
 void syscall_init (void);
 struct thread* get_child_process(int tid);
 
