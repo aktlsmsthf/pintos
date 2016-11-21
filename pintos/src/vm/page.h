@@ -20,6 +20,8 @@ struct spt_entry{
 void spt_init(struct hash *spt);
 struct spt_entry * spte_find(void *page);
 void spt_destroy (struct hash *spt,bool pe);
+void spt_alloc_lazy(struct hash * spt, void * page, bool writable, enum palloc_flags flags, uint32_t read_bytes, uint32_t zero_bytes
+                    , struct file *file)
 /*
 void spt_alloc(struct hash *spt, void *page);
 */
