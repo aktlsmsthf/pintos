@@ -44,7 +44,6 @@ void spt_init(struct hash *spt){
 
 void spt_alloc_lazy(struct hash * spt, void * page, bool writable, enum palloc_flags flags, uint32_t read_bytes, uint32_t zero_bytes
                     , struct file *file, off_t ofs){
-                    printf("2\n");
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   spte -> page = page;
   spte -> writable = writable;
