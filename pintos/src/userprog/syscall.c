@@ -29,7 +29,7 @@ bool check_buffer(void *, unsigned);
 //bool check_bad_ptr(const void * uaddr);
 bool check_bad_ptr(struct intr_frame *f ,const void * uaddr);
 
-struct lock sys_lock;
+
 int a=0;
 
 void
