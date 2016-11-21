@@ -16,6 +16,7 @@ struct spt_entry{
   uint32_t zero_bytes;
   struct file *file;
   struct thread *t;
+  off_t ofs;
 };
 
 void spt_init(struct hash *spt);
