@@ -87,7 +87,7 @@ void* frame_evict(enum palloc_flags flags){
 
 void file_frame_alloc(struct spt_entry * spte){
   struct frame_entry * fe = malloc(sizeof(struct frame_entry));
-  void * frame = palloc_get_page(stpe->flags);
+  void * frame = palloc_get_page(spte->flags);
   while(frame == NULL){ frame = frame_evict(spte->flags);}
   
   fe -> frame = frame;
@@ -99,12 +99,12 @@ void file_frame_alloc(struct spt_entry * spte){
   spte -> fe = fe;
   spte -> lazy = 0;
   
-  if(file_read(spte->file, frame, spte->read_bytes) != (int) stpe->read-bytes){
+  if(file_read(spte->file, frame, spte->read_bytes) != (int) stpe->read_bytes){
     return NULL;
   }
   
-  memset(frame+spte->read_bytes, 0, ste->zero_bytes);
-  install_page(spte->page, frame, writable);
+  memset(frame+spte->read_bytes, 0, spte->zero_bytes);
+  install_page(spte->page, frame, spte->writable);
   
   lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
