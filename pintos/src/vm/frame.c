@@ -24,7 +24,7 @@ void frame_remove(struct frame_entry *fe, bool pe){
   palloc_free_page(fe->frame);
   }
 
-  pagedir_clear_page(fe->t->pagedir, fe->spte->page);
+  pagedir_clear_page(fe->spte->t->pagedir, fe->spte->page);
   free(fe);
   
   lock_release(&frame_lock);
@@ -70,7 +70,7 @@ void* frame_evict(enum palloc_flags flags){
   fe = list_entry(frame_elem, struct frame_entry, elem);
   while(fe->frame == NULL || pagedir_is_accessed(fe->spte->t->pagedir ,fe->spte->page)){
       if(fe->frame != NULL){
-        pagedir_set_accessed(fe->t->pagedir ,fe->spte->page, false);
+        pagedir_set_accessed(fe->spte->t->pagedir ,fe->spte->page, false);
       }
       list_remove(frame_elem);
       list_push_back(&frame_table, frame_elem);
