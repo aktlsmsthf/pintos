@@ -427,12 +427,6 @@ bool user_memory(void *esp, int n){
               swap_in(spte->fe, spte->flags);
             }
           }
-          else{
-            if(buffer_tmp>=esp-32){
-              uint8_t *frame = frame_spt_alloc( &thread_current()->spt,pg_round_down(buffer_tmp), true,6);
-              install_page(pg_round_down(buffer_tmp), frame, true);
-            }
-          }
 	}
 		return true;
 }
