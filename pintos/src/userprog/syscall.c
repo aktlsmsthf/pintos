@@ -423,9 +423,6 @@ bool user_memory(void *esp, int n){
     	    if(spte->lazy){
 	      file_frame_alloc(spte);
 	    }
-            else if(spte->fe->in_swap){
-              swap_in(spte->fe, spte->flags);
-            }
           }
 	}
 		return true;
