@@ -415,31 +415,24 @@ syscall_handler (struct intr_frame *f UNUSED)
 
 bool user_memory(void *esp, int n){
 	void *buffer_tmp = esp+n;
-	if(!is_user_vaddr(buffer_tmp)) return false;
+	if(!is_user_vaddr(buffer_tmp)) exit(-1);
         
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
           if(spte!=NULL){
-            if(spte->lazy){
-		    file_frame_alloc(spte);
+    	    if(spte->lazy){
+	      file_frame_alloc(spte);
 	    }
-            if(spte->fe->in_swap){
-              uint8_t *frame = palloc_get_page(PAL_USER);
-              if(frame==NULL){frame=frame_evict();}
-              swap_in(spte->fe, frame);
-	      return true;
-	    }	
-          }
-          else{
-            if(buffer_tmp>=esp-32){
-              uint8_t *frame = palloc_get_page(PAL_USER);
-              frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(buffer_tmp), true);
-       
-              install_page(pg_round_down(buffer_tmp), frame, true);
-	      return true;
+            else if(spte->fe->in_swap){
+              swap_in(spte->fe, spte->flags);
             }
           }
-	}
+          else{
+            if(buffer_tmp>=f->esp-32){
+              uint8_t *frame = frame_spt_alloc( &thread_current()->spt,pg_round_down(buffer_tmp), true,6);
+              install_page(pg_round_down(buffer_tmp), frame, true);
+            }
+          }
 		return true;
 }
 /**bool user_memory(void *esp, int n){
