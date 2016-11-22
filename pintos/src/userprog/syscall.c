@@ -406,15 +406,15 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       return felem;
 }
-/**bool user_memory(void *esp, int n){
+bool user_memory(void *esp, int n){
   int * p;
   p = (int *)esp + n;
   if(!is_user_vaddr((const void *) p)) {return 0;}
   else return 1;
-}**/
+}
 
-bool user_memory(void *esp, int n){
-	void *buffer_tmp = esp+n;
+/**bool user_memory(void *esp, int n){
+	void *buffer_tmp = esp;
 	if(!is_user_vaddr(buffer_tmp)) exit(-1);
         
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
@@ -426,7 +426,7 @@ bool user_memory(void *esp, int n){
           }
 	}
 		return true;
-}
+}**/
 /**bool user_memory(void *esp, int n){
   int * p;
   p = (int*)esp +n;
