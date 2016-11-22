@@ -168,7 +168,7 @@ page_fault (struct intr_frame *f)
       if(spte!=NULL){
          if(spte->lazy){
             file_frame_alloc(spte);
-           // printf("ffa\n");
+            printf("ffa\n");
             pass = true;
          }
          else if(spte->fe->in_swap ){
