@@ -128,13 +128,13 @@ start_process (void *f_name)
   if (!success) {
 
     thread_exit ();}
-  
+  /*
   struct file *myself = filesys_open(now);
   if(myself==NULL){
      thread_exit();
   }
   file_deny_write(myself);
-  thread_current()->myself = myself;
+  thread_current()->myself = myself;*/
    
    //palloc_free_page (file_name);
    
@@ -415,7 +415,7 @@ load (const char *file_name, void (**eip) (void), void **esp)
    lock_acquire(&sys_lock);
   /* Open executable file. */
   file = filesys_open (file_name);
-
+  thread_current()->myself = file;
   if (file == NULL) 
     {
       printf ("load: %s: open failed\n", file_name);
@@ -505,7 +505,7 @@ load (const char *file_name, void (**eip) (void), void **esp)
 
  done:
   /* We arrive here whether the load is successful or not. */
-  file_close (file);
+  //file_close (file);
    lock_release(&sys_lock); 
   return success;
 }
