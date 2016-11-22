@@ -412,7 +412,6 @@ load (const char *file_name, void (**eip) (void), void **esp)
   if (t->pagedir == NULL) 
     goto done;
   process_activate ();
-   lock_acquire(&sys_lock);
   /* Open executable file. */
   file = filesys_open (file_name);
   if (file == NULL) 
@@ -508,7 +507,6 @@ load (const char *file_name, void (**eip) (void), void **esp)
   if(file!=NULL){
   thread_current()->myself = file;
   file_deny_write(file);}
-  lock_release(&sys_lock); 
   return success;
 }
 
