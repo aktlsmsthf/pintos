@@ -406,20 +406,23 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       return felem;
 }
-bool user_memory(void *esp, int n){
+/**bool user_memory(void *esp, int n){
   int * p;
   p = (int *)esp + n;
   if(!is_user_vaddr((const void *) p)) {return 0;}
   else return 1;
-}
+}**/
 
-/**bool user_memory(void *esp, int n){
+bool user_memory(void *esp, int n){
 	void *buffer_tmp = esp+n;
 	if(!is_user_vaddr(buffer_tmp)) return false;
         
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
           if(spte!=NULL){
+            if(spte->lazy){
+		    file_frame_alloc(spte);
+	    }
             if(spte->fe->in_swap){
               uint8_t *frame = palloc_get_page(PAL_USER);
               if(frame==NULL){frame=frame_evict();}
@@ -438,7 +441,7 @@ bool user_memory(void *esp, int n){
           }
 	}
 		return false;
-}**/
+}
 /**bool user_memory(void *esp, int n){
   int * p;
   p = (int*)esp +n;
