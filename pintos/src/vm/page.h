@@ -12,8 +12,8 @@ struct spt_entry{
   bool writable;
   enum palloc_flags flags;
   bool lazy;
-  uint32_t read_bytes;
-  uint32_t zero_bytes;
+  size_t read_bytes;
+  size_t zero_bytes;
   struct file *file;
   struct thread *t;
   off_t ofs;
