@@ -131,6 +131,7 @@ start_process (void *f_name)
   
   struct file *myself = filesys_open(now);
   if(myself==NULL){
+     printf("nom\n");
      thread_exit();
   }
   file_deny_write(myself);
