@@ -127,8 +127,7 @@ start_process (void *f_name)
   /* If load failed, quit. */
   if (!success) {
 
-    //thread_exit ();}
-     exit(-1);}
+    thread_exit ();}
   /*
   struct file *myself = filesys_open(now);
   if(myself==NULL){
@@ -506,8 +505,9 @@ load (const char *file_name, void (**eip) (void), void **esp)
  done:
   /* We arrive here whether the load is successful or not. */
   //file_close (file);
+  if(file!=NULL){
   thread_current()->myself = file;
-  file_deny_write(file);
+  file_deny_write(file);}
   lock_release(&sys_lock); 
   return success;
 }
