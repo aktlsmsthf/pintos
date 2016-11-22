@@ -56,5 +56,5 @@ void spt_alloc_lazy(struct hash * spt, void * page, bool writable, enum palloc_f
   spte -> t = thread_current();
   spte -> ofs = ofs;
   hash_insert(spt, &spte->elem);
-  //pagedir_clear_page (spte->t->pagedir,page);
+  pagedir_clear_page (spte->t->pagedir,page);
 }
