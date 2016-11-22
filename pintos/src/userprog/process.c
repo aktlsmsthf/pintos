@@ -415,7 +415,6 @@ load (const char *file_name, void (**eip) (void), void **esp)
    lock_acquire(&sys_lock);
   /* Open executable file. */
   file = filesys_open (file_name);
-  thread_current()->myself = file;
   if (file == NULL) 
     {
       printf ("load: %s: open failed\n", file_name);
@@ -506,7 +505,10 @@ load (const char *file_name, void (**eip) (void), void **esp)
  done:
   /* We arrive here whether the load is successful or not. */
   //file_close (file);
-   lock_release(&sys_lock); 
+   
+  thread_current()->myself = file;
+  file_deny_write(file);
+  lock_release(&sys_lock); 
   return success;
 }
 
