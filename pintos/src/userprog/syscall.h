@@ -25,7 +25,7 @@ struct mmaped{
   struct list_elem elem;
 }
 
-bool check_valid(void* esp, void* addr);
+//bool check_valid(void* esp, void* addr);
 bool check_valid_buffer(void* esp, void* addr, unsigned size);
 
 
