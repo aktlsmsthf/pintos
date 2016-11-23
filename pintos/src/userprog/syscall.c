@@ -406,6 +406,8 @@ syscall_handler (struct intr_frame *f UNUSED)
 	int mfd = *((int *)(f->esp)+1);
 	
     }
+
+  }
 }
 	
 void exit(int status){
