@@ -398,7 +398,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		addr+=PGSIZE;
 	}
 	    
-	struct mapped *m = malloc(sizeof(struct mapped));
+	struct mmapped *m = malloc(sizeof(struct mmapped));
 	m->addr = daddr;
 	m->file = mfile;
 	m->mid = fd;
@@ -414,7 +414,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	int mid = *((int *)(f->esp)+1);
 	
 	struct list_elem *elem = get_elem_from_mid(mid);
-	struct mapped *mapped = list_entry(elem, struct mapped, elem);
+	struct mmapped *mapped = list_entry(elem, struct mmapped, elem);
 	
 	uint32_t write_bytes = 0;
 	void *addr = mapped->addr;
@@ -483,8 +483,8 @@ struct list_elem* get_elem_from_mid(int fd){
          return NULL;
       }
       struct list_elem * felem = list_front(&(thread_current()->mapped_list));
-      struct mapped * ffd;
-      while(list_entry(felem, struct mapped, elem)->fd != fd){
+      struct mmapped * ffd;
+      while(list_entry(felem, struct mmapped, elem)->fd != fd){
           felem = felem->next;
           if(felem->next==NULL){
              return NULL;
