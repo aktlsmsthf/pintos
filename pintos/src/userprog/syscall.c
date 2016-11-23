@@ -419,7 +419,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	uint32_t write_bytes = 0;
 	void *addr = mapped->addr;
 	    
-	while(write_bytes<size+PGSIZE){
+	while(write_bytes<mapped->size+PGSIZE){
 		uint32_t page_write_bytes = 
 		struct spt_entry *spte = spte_find(addr);
 		if(!spte->lazy){
@@ -479,16 +479,16 @@ void exit(int status){
       return felem;
 }
 
-struct list_elem* get_elem_from_mid(int fd){
+struct list_elem* get_elem_from_mid(int mid){
       struct thread * curr=thread_current();
       if(list_empty(&(curr->mapped_list))){
          return NULL;
       }
-      struct list_elem * felem = list_front(&(thread_current()->mapped_list));
-      struct mmapped * ffd;
-      while(list_entry(felem, struct mmapped, elem)->fd != fd){
-          felem = felem->next;
-          if(felem->next==NULL){
+      struct list_elem * melem = list_front(&(thread_current()->mapped_list));
+      struct mmapped * mapped;
+      while(list_entry(felem, struct mmapped, elem)->mid != mid){
+          melem = melem->next;
+          if(melem->next==NULL){
              return NULL;
           }
       }
