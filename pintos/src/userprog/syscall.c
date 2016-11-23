@@ -500,7 +500,6 @@ bool check_buffer(void *buffer, unsigned size){
             }
           }
         }   
-    }
    return pass;
 }/*
 bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
