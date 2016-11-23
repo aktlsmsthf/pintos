@@ -244,6 +244,8 @@ process_exit (void)
    struct file_fd * ffd;
    struct list_elem * celem;
    struct child *c;
+   struct list_elem * melem;
+   struct mmapped * mapped;
    bool parent_exist=1;
    if(curr->parent==NULL){parent_exist=0;}
    
@@ -284,6 +286,29 @@ process_exit (void)
             nextelem = celem->next;
          }
          celem = nextelem;
+      }
+   }
+   if(!list_empty(&curr->mapped_list)){
+      melem = list_front(&curr->mapped_list);
+      while(melem->next!=NULL){
+         struct mmapped *mapped = list_entry(melem, struct mmapped, elem);
+	
+	      uint32_t write_bytes = 0;
+	      void *addr = mapped->addr;
+	    
+	      while(write_bytes<mapped->size){
+		      struct spt_entry *spte = spte_find(addr);
+		      if(!spte->lazy){
+			      if(pagedir_is_dirty(spte->t->pagedir, addr)){
+				      file_write_at(mapped->file, spte->page, spte->read_bytes, spte->ofs);
+			      }
+		      }
+		      addr+=PGSIZE;
+		      write_bytes+=PGSIZE;
+	      }
+	      list_remove(&mapped->elem);
+	      free(mapped);
+         melem = melem->next;
       }
    }
    file_close(curr->myself);
