@@ -96,6 +96,7 @@ struct thread
     bool load_success;
     struct list child_list;
     struct list file_list;
+    struct list mapped_list;
     int num_file;
     struct file *myself;
     /* Shared between thread.c and synch.c. */
