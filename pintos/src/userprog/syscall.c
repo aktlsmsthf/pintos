@@ -428,6 +428,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		}
 		pagedir_clear_page(spte->t, addr);
 		palloc_free_page(spte->fe->frame);
+		spte->fe->frame = NULL;
 		//list_remove(&spte->fe->elem);
 		//free(spte->fe);
 		
