@@ -404,7 +404,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	m->mid = fd;
 	m->size = size;
 	    
-	list_push_front(&thread_current()->mapped_list, m->elem);
+	list_push_front(&thread_current()->mapped_list, &m->elem);
 	f->eax = fd;
 	break;
     }
@@ -427,10 +427,12 @@ syscall_handler (struct intr_frame *f UNUSED)
 				file_write_at(mapped->file, spte->page, spte->read_bytes, spte->ofs);
 			}
 		}
-		free(mapped);
 		free(spte);
 		addr+=PGSIZE;
 	}
+	list_remove(&mapped->elem);
+	free(mapped);
+	
     }
 
   }
