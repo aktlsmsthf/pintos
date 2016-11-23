@@ -372,6 +372,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	int fd = *((int *)(f->esp)+1);
 	void *addr = *((void **)(f->esp)+2);
 	if(addr==NULL){ f->eax = -1; break;}
+	if(addr<f->esp){ f->eax = -1; break;}  
 	
 	struct file *file = get_file_from_fd(fd);
 	if(file==NULL){
