@@ -499,7 +499,10 @@ bool check_buffer(void *buffer, unsigned size){
               pass = false;
             }
           }
-        }   
+        }
+   else{
+	   pass = false;
+   }
    return pass;
 }/*
 bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
