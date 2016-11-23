@@ -496,7 +496,7 @@ bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
             }
           }
           else{
-            if(buffer_tmp>=f->esp-32){
+            if(uaddr>=f->esp-32){
               uint8_t *frame = frame_spt_alloc( &thread_current()->spt,pg_round_down(uaddr), true,6);
               install_page(pg_round_down(uaddr), frame, true);
 	      return false;
