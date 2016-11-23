@@ -128,13 +128,13 @@ start_process (void *f_name)
   if (!success) {
 
     thread_exit ();}
-  /*
+  
   struct file *myself = filesys_open(now);
   if(myself==NULL){
      thread_exit();
   }
   file_deny_write(myself);
-  thread_current()->myself = myself;*/
+  thread_current()->myself = myself;
    
    //palloc_free_page (file_name);
    
@@ -503,11 +503,7 @@ load (const char *file_name, void (**eip) (void), void **esp)
 
  done:
   /* We arrive here whether the load is successful or not. */
-  //file_close (file);
-  if(file!=NULL){
-  thread_current()->myself = file;
-  //file_deny_write(file);
-  }
+  file_close (file);
   return success;
 }
 
