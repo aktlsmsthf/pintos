@@ -403,11 +403,12 @@ syscall_handler (struct intr_frame *f UNUSED)
     
     case SYS_MUNMAP:{
 	if(!user_memory(f->esp, 1)){ exit(-1);}
-	int mfd = *((int *)(f->esp)+1);}
+	int mfd = *((int *)(f->esp)+1);
 	
     }
-  }
-}void exit(int status){
+}
+	
+void exit(int status){
       struct thread * curr=thread_current();
       struct child* chd;
   
