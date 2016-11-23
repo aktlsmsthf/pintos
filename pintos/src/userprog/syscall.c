@@ -368,15 +368,12 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
 		  
     case SYS_MMAP:{
-	 printf("1\n");
-	if(!user_memory(f->esp,2)){printf("2\n");exit(-1);}
+	if(!user_memory(f->esp,2)){exit(-1);}
 	int fd = *((int *)(f->esp)+1);
 	void *addr = *((void **)(f->esp)+2);
-	if(check_bad_ptr(f, addr)){printf("3\n"); exit(-1);}
 	
 	struct file *file = get_file_from_fd(fd);
 	if(file==NULL){
-		printf("4\n");
 		f->eax = -1;
 		break;
 	}
