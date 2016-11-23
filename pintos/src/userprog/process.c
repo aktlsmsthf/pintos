@@ -591,8 +591,8 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
       size_t page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
       size_t page_zero_bytes = PGSIZE - page_read_bytes;
      
-      spt_alloc_lazy(&thread_current()->spt, upage, writable, PAL_USER|PAL_ZERO, page_read_bytes, page_zero_bytes, file, ofs);
-      /*
+      //spt_alloc_lazy(&thread_current()->spt, upage, writable, PAL_USER|PAL_ZERO, page_read_bytes, page_zero_bytes, file, ofs);
+      
       uint8_t *kpage = frame_spt_alloc( &thread_current()->spt, upage, writable, PAL_USER);
       if (kpage == NULL)
         return false;
@@ -607,14 +607,14 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
         {
           palloc_free_page (kpage);
           return false; 
-        }*/
+        }
       /*
      spt_alloc(&thread_current()->spt, upage);
       */
       /* Advance. */
       read_bytes -= page_read_bytes;
       zero_bytes -= page_zero_bytes;
-      ofs += page_read_bytes;
+      //ofs += page_read_bytes;
       upage += PGSIZE;
     }
   
