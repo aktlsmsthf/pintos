@@ -506,7 +506,8 @@ load (const char *file_name, void (**eip) (void), void **esp)
   //file_close (file);
   if(file!=NULL){
   thread_current()->myself = file;
-  file_deny_write(file);}
+  //file_deny_write(file);
+  }
   return success;
 }
 
