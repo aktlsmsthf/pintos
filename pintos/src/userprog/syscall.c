@@ -491,9 +491,9 @@ bool check_buffer(void *buffer, unsigned size){
             }
           }
           else{
-            if(buffer_tmp>=f->esp-32){
-              uint8_t *frame = frame_spt_alloc( &thread_current()->spt,pg_round_down(buffer_tmp), true,6);
-              install_page(pg_round_down(buffer_tmp), frame, true);
+            if(uaddr>=f->esp-32){
+              uint8_t *frame = frame_spt_alloc( &thread_current()->spt,pg_round_down(uaddr), true,6);
+              install_page(pg_round_down(uaddr), frame, true);
             }
           }
           
