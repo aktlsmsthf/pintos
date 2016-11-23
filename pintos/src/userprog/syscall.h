@@ -22,6 +22,7 @@ struct mmaped{
   struct file *file;
   void *addr;
   uint32_t size;
+  struct list_elem elem;
 }
 
 bool check_valid(void* esp, void* addr);
