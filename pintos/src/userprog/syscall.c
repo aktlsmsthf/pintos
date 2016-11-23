@@ -134,6 +134,7 @@ syscall_handler (struct intr_frame *f UNUSED)
     
         char *e = "";
         if(name == NULL || strcmp(name, e)==0) {
+		printf("1\n");
           f->eax = -1;
         }
         else{
@@ -141,12 +142,14 @@ syscall_handler (struct intr_frame *f UNUSED)
           struct file *ff = filesys_open(name);
           lock_release(&sys_lock);
           if(ff==NULL) {
+		  printf("2\n");
             f->eax = -1;
           }
           else{
             struct thread *t = thread_current();
             struct file_fd *ffd = palloc_get_page(0);
             if(ffd==NULL){
+		    printf("3\n");
               f->eax =-1;
             }
             else{
