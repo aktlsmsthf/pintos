@@ -23,10 +23,10 @@ struct mmaped{
   void *addr;
   uint32_t size;
   struct list_elem elem;
-}
+};
 
-//bool check_valid(void* esp, void* addr);
-//bool check_valid_buffer(void* esp, void* addr, unsigned size);
+bool check_valid(void* esp, void* addr);
+bool check_valid_buffer(void* esp, void* addr, unsigned size);
 
 
 
