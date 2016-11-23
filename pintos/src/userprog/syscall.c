@@ -366,13 +366,18 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;
     }
 		  
-    /**case SYS_MMAP:{
+    case SYS_MMAP:{
 	if(!user_memory(f->esp,2)){ exit(-1);}
 	int fd = *((int *)(f->esp)+1);
 	void *addr = *((void **)(f->esp)+2);
 	if(check_bad_ptr(f, addr)){ exit(-1);}
 	
 	struct file *file = get_file_from_fd(fd);
+	if(file==NULL){
+		f->eax = -1;
+		break;
+	}
+	    
 	struct file *mfile = file_reopen(file);
 	uint32_t size = file_length(mfile);
 	uint32_t read_bytes = size;
@@ -385,9 +390,22 @@ syscall_handler (struct intr_frame *f UNUSED)
 		page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
 		page_zero_bytes = PGSIZE - page_read_bytes;
 		
-		spt_alloc_lazy(&thread_current()->spt, upage, writable, PAL_USER|PAL_ZERO, page_read_bytes, page_zero_bytes, mfile, ofs);
+		spt_alloc_lazy(&thread_current()->spt, addr, true, PAL_USER|PAL_ZERO, page_read_bytes, page_zero_bytes, mfile, ofs);
+		
+		read_bytes-=PGSIZE;
+		ofs+=page_read_bytes;
+		addr+=PGSIZE;-
 	}
-    }**/
+	
+	f->eax = fd;
+	break;
+    }
+    
+    case SYS_MUNMAP:{
+	if(!user_memory(f->esp, 1)){ exit(-1);}
+	int mfd = *((int *)(f->esp)+1);
+	
+    }
   }
 }void exit(int status){
       struct thread * curr=thread_current();
