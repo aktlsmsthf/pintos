@@ -365,6 +365,29 @@ syscall_handler (struct intr_frame *f UNUSED)
       } 
       break;
     }
+		  
+    /**case SYS_MMAP:{
+	if(!user_memory(f->esp,2)){ exit(-1);}
+	int fd = *((int *)(f->esp)+1);
+	void *addr = *((void **)(f->esp)+2);
+	if(check_bad_ptr(f, addr)){ exit(-1);}
+	
+	struct file *file = get_file_from_fd(fd);
+	struct file *mfile = file_reopen(file);
+	uint32_t size = file_length(mfile);
+	uint32_t read_bytes = size;
+	uint32_t zero_bytes = size%PGSIZE;
+	uint32_t ofs = 0;
+	uint32_t page_read_bytes;
+	uint32_t page_zero_bytes;
+	
+	while(read_bytes>0){
+		page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
+		page_zero_bytes = PGSIZE - page_read_bytes;
+		
+		spt_alloc_lazy(&thread_current()->spt, upage, writable, PAL_USER|PAL_ZERO, page_read_bytes, page_zero_bytes, mfile, ofs);
+	}
+    }**/
   }
 }void exit(int status){
       struct thread * curr=thread_current();
