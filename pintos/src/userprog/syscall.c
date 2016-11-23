@@ -389,28 +389,22 @@ syscall_handler (struct intr_frame *f UNUSED)
 	while(read_bytes>0){
 		page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
 		page_zero_bytes = PGSIZE - page_read_bytes;
-		printf("c\n");
 		
 		spt_alloc_lazy(&thread_current()->spt, addr, true, PAL_USER|PAL_ZERO, page_read_bytes, page_zero_bytes, mfile, ofs);
-		printf("d\n");
 		
 		read_bytes-=PGSIZE;
 		ofs+=page_read_bytes;
 		addr+=PGSIZE;
 	}
-	    printf("4\n");
 	    
 	struct mmapped *m = malloc(sizeof(struct mmapped));
-	    printf("5\n");
 	m->addr = daddr;
 	m->file = mfile;
 	m->mid = fd;
 	m->size = size;
 	    
-	    printf("6\n");
 	list_push_front(&thread_current()->mapped_list, &m->elem);
 	f->eax = fd;
-	    printf("7\n");
 	break;
     }
     
