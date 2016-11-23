@@ -457,62 +457,7 @@ bool user_memory(void *esp, int n){
   else return 1;
 }
 
-/**bool user_memory(void *esp, int n){
-	void *buffer_tmp = esp;
-	if(!is_user_vaddr(buffer_tmp)) exit(-1);
-        
-        if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
-          struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
-          if(spte!=NULL){
-    	    if(spte->lazy){
-	      file_frame_alloc(spte);
-	    }
-          }
-	}
-		return true;
-}**/
-/**bool user_memory(void *esp, int n){
-  int * p;
-  p = (int*)esp +n;
-  if(is_user_vaddr(p)){
-    struct spt_entry *spte = spte_find(pg_round_down(p));
-      if(spte!=NULL){
-         if(spte->fe->in_swap ){
-            uint8_t *frame = palloc_get_page(PAL_USER);
-            if(frame==NULL){frame=frame_evict();}
-            swap_in(spte->fe, frame);
-            return true;
-         }
-      }
-  }
-  if(is_user_vaddr(p)){
-    uint8_t *frame = palloc_get_page(PAL_USER);
-      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(p), true);
-      install_page(pg_round_down(p), frame, true);
-      return true;
-  }
-  return false;
-}**/
-/**bool check_bad_ptr(struct intr_frame *f, const void* uaddr){
-  if(is_user_vaddr(uaddr)){
-    struct spt_entry *spte = spte_find(pg_round_down(uaddr));
-      if(spte!=NULL){
-         if(spte->fe->in_swap ){
-            uint8_t *frame = palloc_get_page(PAL_USER);
-            if(frame==NULL){frame=frame_evict();}
-            swap_in(spte->fe, frame);
-            return true;
-         }
-      }
-  }
-  if(is_user_vaddr(uaddr) && uaddr>f->esp-32){
-    uint8_t *frame = palloc_get_page(PAL_USER);
-      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
-      install_page(pg_round_down(uaddr), frame, true);
-      return true;
-  }
-  return false;
-}**/
+
 bool check_buffer(void *buffer, unsigned size){
   unsigned i=0;
   char * b = (char *) buffer;
@@ -527,29 +472,3 @@ bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
     void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
     return p==NULL ;
 }
-
-/*
-bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
-  void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
-  struct spt_entry * spte;
-  if(p!=NULL){return false;}
-  else{
-  spte = spte_find(pg_round_down(uaddr));
-  if(spte!=NULL){
-         if(spte->fe->in_swap){
-            uint8_t *frame = palloc_get_page(PAL_USER);
-            if(frame==NULL){frame=frame_evict();}
-            swap_in(spte->fe, frame);
-            install_page(spte->page, frame, spte->writable);
-            
-            return false;
-         }
-   else if(uaddr>= f->esp-32 && is_user_vaddr(uaddr)){
-      uint8_t *frame = palloc_get_page(PAL_USER);
-      frame_spt_alloc(frame,&thread_current()->spt,pg_round_down(uaddr), true);
-      install_page(pg_round_down(uaddr), frame, true);
-     return false;}
-      
-   return true;}
-  }
-}*/
