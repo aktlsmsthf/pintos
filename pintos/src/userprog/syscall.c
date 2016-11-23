@@ -371,7 +371,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	if(!user_memory(f->esp,2)){exit(-1);}
 	int fd = *((int *)(f->esp)+1);
 	void *addr = *((void **)(f->esp)+2);
-	if(addr==NULL || (int)addr%PGSIZE != 0 || pagedir_get_page(addr)!=NULL){ f->eax = -1; break;}
+	if(addr==NULL || (int)addr%PGSIZE != 0 || pagedir_get_page(thread_current()->pagedir, addr)!=NULL){ f->eax = -1; break;}
 	
 	struct file *file = get_file_from_fd(fd);
 	if(file==NULL){
@@ -392,7 +392,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
 		page_zero_bytes = PGSIZE - page_read_bytes;
 		
-		if(pagedir_get_page(addr)!=NULL || spte_find(addr) !=NULL){
+		if(pagedir_get_page(thread_current()->pagedir, addr)!=NULL || spte_find(addr) !=NULL){
 			f->eax = -1;
 			pass = false;
 		}
