@@ -26,7 +26,7 @@ struct mmaped{
 }
 
 //bool check_valid(void* esp, void* addr);
-bool check_valid_buffer(void* esp, void* addr, unsigned size);
+//bool check_valid_buffer(void* esp, void* addr, unsigned size);
 
 
 
