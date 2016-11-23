@@ -167,7 +167,7 @@ page_fault (struct intr_frame *f)
         file_frame_alloc(spte);
         pass = true;
          }
-   if(not_present && is_user_vaddr(fault_addr)){
+   if(!pass && not_present && is_user_vaddr(fault_addr)){
       if(spte!=NULL){/*
          if(spte->lazy){
             file_frame_alloc(spte);
