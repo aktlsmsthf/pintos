@@ -109,7 +109,7 @@ bool file_frame_alloc(struct spt_entry * spte){
   }*/
   //lock_release(&sys_lock);
   //lock_acquire(&sys_lock);
-  file_read_at(spte->t->myself, frame, spte->read_bytes, spte->ofs); 
+  file_read_at(spte->file, frame, spte->read_bytes, spte->ofs); 
   //lock_release(&sys_lock);
   memset(frame+spte->read_bytes, 0, spte->zero_bytes);
   install_page(spte->page, frame, spte->writable);
