@@ -420,7 +420,6 @@ syscall_handler (struct intr_frame *f UNUSED)
 	void *addr = mapped->addr;
 	    
 	while(write_bytes<mapped->size+PGSIZE){
-		uint32_t page_write_bytes = 
 		struct spt_entry *spte = spte_find(addr);
 		if(!spte->lazy){
 			if(pagedir_is_dirty(spte->t->pagedir, addr)){
@@ -492,7 +491,7 @@ struct list_elem* get_elem_from_mid(int mid){
              return NULL;
           }
       }
-      return felem;
+      return melem;
 }
 bool user_memory(void *esp, int n){
   int * p;
