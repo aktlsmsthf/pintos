@@ -389,7 +389,6 @@ syscall_handler (struct intr_frame *f UNUSED)
 	while(read_bytes>0){
 		printf("a\n");
 		page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
-		printf("b\n");
 		page_zero_bytes = PGSIZE - page_read_bytes;
 		printf("c\n");
 		
@@ -397,11 +396,8 @@ syscall_handler (struct intr_frame *f UNUSED)
 		printf("d\n");
 		
 		read_bytes-=PGSIZE;
-		printf("e\n");
 		ofs+=page_read_bytes;
-		printf("f\n");
 		addr+=PGSIZE;
-		printf("g\n");
 	}
 	    printf("4\n");
 	    
