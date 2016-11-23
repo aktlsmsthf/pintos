@@ -478,25 +478,25 @@ bool check_buffer(void *buffer, unsigned size){
   }
   return 1;
 }bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
-    bool pass = false;
+    bool pass = true
     void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
     if(p==NULL){
 	 struct spt_entry *spte = spte_find(pg_round_down(uaddr));
           if(spte!=NULL){
     	    if(spte->lazy){
 	      file_frame_alloc(spte);
-	      pass = true;
+	      pass = false;
 	    }
             else if(spte->fe->in_swap){
               swap_in(spte->fe, spte->flags);
-              pass = true;
+              pass = false;
             }
           }
           else{
             if(uaddr>=f->esp-32){
               uint8_t *frame = frame_spt_alloc( &thread_current()->spt,pg_round_down(uaddr), true,6);
               install_page(pg_round_down(uaddr), frame, true);
-              pass = true;
+              pass = false;
             }
           }
         }   
