@@ -377,7 +377,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		f->eax = -1;
 		break;
 	}
-	    
+	printf("2\n");
 	struct file *mfile = file_reopen(file);
 	uint32_t size = file_length(mfile);
 	uint32_t read_bytes = size;
@@ -387,6 +387,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	uint32_t page_zero_bytes;
 	void* daddr = addr;
 	    
+	    printf("3\n");
 	while(read_bytes>0){
 		page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
 		page_zero_bytes = PGSIZE - page_read_bytes;
@@ -397,15 +398,19 @@ syscall_handler (struct intr_frame *f UNUSED)
 		ofs+=page_read_bytes;
 		addr+=PGSIZE;
 	}
+	    printf("4\n");
 	    
 	struct mmapped *m = malloc(sizeof(struct mmapped));
+	    printf("5\n");
 	m->addr = daddr;
 	m->file = mfile;
 	m->mid = fd;
 	m->size = size;
 	    
+	    printf("6\n");
 	list_push_front(&thread_current()->mapped_list, &m->elem);
 	f->eax = fd;
+	    printf("7\n");
 	break;
     }
     
