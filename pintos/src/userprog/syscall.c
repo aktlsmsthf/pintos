@@ -386,10 +386,16 @@ syscall_handler (struct intr_frame *f UNUSED)
 	uint32_t page_read_bytes;
 	uint32_t page_zero_bytes;
 	void* daddr = addr;
+	bool pass = true;
 	    
 	while(read_bytes>0){
 		page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
 		page_zero_bytes = PGSIZE - page_read_bytes;
+		
+		if(pagedir_get_page(addr)!=NULL || spte_find(addr) !=NULL){
+			f->eax = -1;
+			pass = false;
+		}
 		
 		spt_alloc_lazy(&thread_current()->spt, addr, true, PAL_USER|PAL_ZERO, page_read_bytes, page_zero_bytes, mfile, ofs);
 		
@@ -397,15 +403,19 @@ syscall_handler (struct intr_frame *f UNUSED)
 		ofs+=page_read_bytes;
 		addr+=PGSIZE;
 	}
+	if(pass){
+		struct mmapped *m = malloc(sizeof(struct mmapped));
+		m->addr = daddr;
+		m->file = mfile;
+		m->mid = fd;
+		m->size = size;
 	    
-	struct mmapped *m = malloc(sizeof(struct mmapped));
-	m->addr = daddr;
-	m->file = mfile;
-	m->mid = fd;
-	m->size = size;
-	    
-	list_push_front(&thread_current()->mapped_list, &m->elem);
-	f->eax = fd;
+		list_push_front(&thread_current()->mapped_list, &m->elem);
+		f->eax = fd;
+	}
+	else{
+		f->eax = -1;
+	}
 	break;
     }
     
