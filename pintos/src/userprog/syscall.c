@@ -477,11 +477,37 @@ bool check_buffer(void *buffer, unsigned size){
     b++;
   }
   return 1;
-}bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
+}/**bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
   
     void * p = pagedir_get_page (thread_current()->pagedir, pg_round_down(uaddr));
     return p==NULL;
-}/*
+}**/
+bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
+	if(pagedir_get_page(thread_current()->pagedir, pg_round_down(uaddr))){
+		struct spt_entry *spte = spte_find(pg_round_down(uaddr));
+          if(spte!=NULL){
+    	    if(spte->lazy){
+	      file_frame_alloc(spte);
+	      return false;
+	    }
+            else if(spte->fe->in_swap){
+              swap_in(spte->fe, spte->flags);
+	      return false;
+            }
+          }
+          else{
+            if(buffer_tmp>=f->esp-32){
+              uint8_t *frame = frame_spt_alloc( &thread_current()->spt,pg_round_down(uaddr), true,6);
+              install_page(pg_round_down(uaddr), frame, true);
+	      return false;
+            }
+          }
+          return true;
+	}
+	return false;
+}
+
+/*
 bool check_bad_ptr(struct intr_frame *f, const void * uaddr){
   void * p = pagedir_get_page (thread_current()->pagedir, uaddr);
   struct spt_entry * spte;
