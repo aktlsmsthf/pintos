@@ -221,7 +221,7 @@ process_wait (tid_t child_tid UNUSED)
          thread_current()->wait=1;
          thread_block();
       }
-   printf("1\n");
+   //printf("1\n");
       thread_current()->wait =0;
       intr_set_level(old_level);
       ret = chd->ret;
