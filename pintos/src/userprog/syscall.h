@@ -17,7 +17,7 @@ struct file_fd{
   bool is_closed;
 };
 
-struct mmaped{
+struct mmapped{
   int mid;
   struct file *file;
   void *addr;
