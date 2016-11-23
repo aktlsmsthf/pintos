@@ -428,8 +428,8 @@ syscall_handler (struct intr_frame *f UNUSED)
 		}
 		pagedir_clear_page(spte->t, addr);
 		palloc_free_page(spte->fe->frame);
-		list_remove(&spte->fe->elem);
-		free(spte->fe);
+		//list_remove(&spte->fe->elem);
+		//free(spte->fe);
 		
 		addr+=PGSIZE;
 		write_bytes+=PGSIZE;
