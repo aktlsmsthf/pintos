@@ -377,7 +377,6 @@ syscall_handler (struct intr_frame *f UNUSED)
 		f->eax = -1;
 		break;
 	}
-	printf("2\n");
 	struct file *mfile = file_reopen(file);
 	uint32_t size = file_length(mfile);
 	uint32_t read_bytes = size;
@@ -387,16 +386,22 @@ syscall_handler (struct intr_frame *f UNUSED)
 	uint32_t page_zero_bytes;
 	void* daddr = addr;
 	    
-	    printf("3\n");
 	while(read_bytes>0){
+		printf("a\n");
 		page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
+		printf("b\n");
 		page_zero_bytes = PGSIZE - page_read_bytes;
+		printf("c\n");
 		
 		spt_alloc_lazy(&thread_current()->spt, addr, true, PAL_USER|PAL_ZERO, page_read_bytes, page_zero_bytes, mfile, ofs);
+		printf("d\n");
 		
 		read_bytes-=PGSIZE;
+		printf("e\n");
 		ofs+=page_read_bytes;
+		printf("f\n");
 		addr+=PGSIZE;
+		printf("g\n");
 	}
 	    printf("4\n");
 	    
