@@ -430,6 +430,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		write_bytes+=PGSIZE;
 	}
 	list_remove(&mapped->elem);
+	file_close(mapped->file);  
 	free(mapped);
 	
     }
