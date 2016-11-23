@@ -420,7 +420,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	uint32_t write_bytes = 0;
 	void *addr = mapped->addr;
 	    
-	while(write_bytes<mapped->size+PGSIZE){
+	while(write_bytes<mapped->size){
 		struct spt_entry *spte = spte_find(addr);
 		if(!spte->lazy){
 			if(pagedir_is_dirty(spte->t->pagedir, addr)){
