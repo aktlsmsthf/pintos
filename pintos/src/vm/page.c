@@ -17,13 +17,18 @@ static bool page_less(const struct hash_elem *a, const struct hash_elem *b, void
   return sa->page < sb->page;
 }
 static void page_destroy_func(struct hash_elem *helem, void *aux){
+  printf("1\n");
   struct spt_entry *spte = hash_entry(helem, struct spt_entry,elem);
+  printf("2\n");
   if(spte->fe->in_swap){
     swap_remove(spte->fe->swap_where);}
+  printf("3\n");
   if(!spte->lazy){
      frame_remove(spte->fe,*((bool*)aux));
   }
+  printf("4\n");
   free(spte);
+  printf("5\n");
 }
 void spt_destroy (struct hash *spt,bool pe){
   spt->aux=&pe;
