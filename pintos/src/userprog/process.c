@@ -288,7 +288,7 @@ process_exit (void)
          celem = nextelem;
       }
    }
-   while(!list_empty(&curr->mapped_list)){
+   /**while(!list_empty(&curr->mapped_list)){
       melem = list_front(&curr->mapped_list);
       struct mmapped *mapped = list_entry(melem, struct mmapped, elem);
 	
@@ -307,7 +307,7 @@ process_exit (void)
       }
       list_remove(&mapped->elem);
       free(mapped);
-   }
+   }**/
    file_close(curr->myself);
    
    spt_destroy (&curr->spt,parent_exist);
