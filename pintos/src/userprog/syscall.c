@@ -24,7 +24,7 @@ static void syscall_handler (struct intr_frame *);
 void exit(int);
 struct file* get_file_from_fd(int);
 struct list_elem* get_elem_from_fd(int);
-struct list_elem* get_elem_from_mid(int mid)
+struct list_elem* get_elem_from_mid(int mid);
 bool user_memory(void *, int);
 bool check_buffer(void *, unsigned);
 //bool check_bad_ptr(const void * uaddr);
