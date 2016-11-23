@@ -374,7 +374,6 @@ syscall_handler (struct intr_frame *f UNUSED)
 	
 	struct file *file = get_file_from_fd(fd);
 	if(file==NULL){
-		printf("1\n");
 		f->eax = -1;
 		break;
 	}
