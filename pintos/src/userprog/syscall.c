@@ -387,7 +387,6 @@ syscall_handler (struct intr_frame *f UNUSED)
 	void* daddr = addr;
 	    
 	while(read_bytes>0){
-		printf("a\n");
 		page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
 		page_zero_bytes = PGSIZE - page_read_bytes;
 		printf("c\n");
