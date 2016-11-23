@@ -425,7 +425,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 				file_write_at(mapped->file, spte->page, spte->read_bytes, spte->ofs);
 			}
 		}
-		//free(spte);
+		pagedir_clear_page(spte->t, addr);
 		addr+=PGSIZE;
 		write_bytes+=PGSIZE;
 	}
