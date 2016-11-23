@@ -394,7 +394,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		
 		read_bytes-=PGSIZE;
 		ofs+=page_read_bytes;
-		addr+=PGSIZE;-
+		addr+=PGSIZE;
 	}
 	
 	f->eax = fd;
