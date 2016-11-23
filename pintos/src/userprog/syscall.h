@@ -17,6 +17,13 @@ struct file_fd{
   bool is_closed;
 };
 
+struct mmaped{
+  int mid;
+  struct file *file;
+  void *addr;
+  uint32_t size;
+}
+
 bool check_valid(void* esp, void* addr);
 bool check_valid_buffer(void* esp, void* addr, unsigned size);
 
