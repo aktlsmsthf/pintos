@@ -385,7 +385,8 @@ syscall_handler (struct intr_frame *f UNUSED)
 	uint32_t ofs = 0;
 	uint32_t page_read_bytes;
 	uint32_t page_zero_bytes;
-	
+	void* daddr = addr;
+	    
 	while(read_bytes>0){
 		page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
 		page_zero_bytes = PGSIZE - page_read_bytes;
@@ -396,15 +397,40 @@ syscall_handler (struct intr_frame *f UNUSED)
 		ofs+=page_read_bytes;
 		addr+=PGSIZE;
 	}
-	
+	    
+	struct mapped *m = malloc(sizeof(struct mapped));
+	m->addr = daddr;
+	m->file = mfile;
+	m->mid = fd;
+	m->size = size;
+	    
+	list_push_front(&thread_current()->mapped_list, m->elem);
 	f->eax = fd;
 	break;
     }
     
     case SYS_MUNMAP:{
 	if(!user_memory(f->esp, 1)){ exit(-1);}
-	int mfd = *((int *)(f->esp)+1);
+	int mid = *((int *)(f->esp)+1);
 	
+	struct list_elem *elem = get_elem_from_mid(mid);
+	struct mapped *mapped = list_entry(elem, struct mapped, elem);
+	
+	uint32_t write_bytes = 0;
+	void *addr = mapped->addr;
+	    
+	while(write_bytes<size+PGSIZE){
+		uint32_t page_write_bytes = 
+		struct spt_entry *spte = spte_find(addr);
+		if(!spte->lazy){
+			if(pagedir_is_dirty(spte->t->pagedir, addr)){
+				file_write_at(mapped->file, spte->page, spte->read_bytes, spte->ofs);
+			}
+		}
+		free(mapped);
+		free(spte);
+		addr+=PGSIZE;
+	}
     }
 
   }
@@ -443,6 +469,22 @@ void exit(int status){
       struct list_elem * felem = list_front(&(thread_current()->file_list));
       struct file_fd * ffd;
       while(list_entry(felem, struct file_fd, elem)->fd != fd){
+          felem = felem->next;
+          if(felem->next==NULL){
+             return NULL;
+          }
+      }
+      return felem;
+}
+
+struct list_elem* get_elem_from_mid(int fd){
+      struct thread * curr=thread_current();
+      if(list_empty(&(curr->mapped_list))){
+         return NULL;
+      }
+      struct list_elem * felem = list_front(&(thread_current()->mapped_list));
+      struct mapped * ffd;
+      while(list_entry(felem, struct mapped, elem)->fd != fd){
           felem = felem->next;
           if(felem->next==NULL){
              return NULL;
