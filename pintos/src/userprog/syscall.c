@@ -392,7 +392,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		
 		spt_alloc_lazy(&thread_current()->spt, addr, true, PAL_USER|PAL_ZERO, page_read_bytes, page_zero_bytes, mfile, ofs);
 		
-		read_bytes-=PGSIZE;
+		read_bytes-=page_read_bytes;
 		ofs+=page_read_bytes;
 		addr+=PGSIZE;
 	}
