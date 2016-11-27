@@ -186,9 +186,9 @@ swap in/out 시 사용되는 lock 3개를 이용하여 synchronization을 했습
 >> the page during the eviction process?  How do you avoid a race
 >> between P evicting Q's frame and Q faulting the page back in?
 
-evict를 할 때 swap_out을 한다. evict되는 frame을 쓰던 process에서는 swap_out되는 순간
-page fault가 발생한다. 그러면 swap_in을 한다. 이때 swap_out과 swap_in은 swap_lock으로 인해
-동시해 발생할 수 없어서 race가 발생하지 않는다.
+evict를 할 때 swap_out을 합니다. evict되는 frame을 쓰던 process에서는 swap_out되는 순간
+page fault가 발생합니다. 그러면 swap_in을 합니다. 이때 swap_out과 swap_in은 swap_lock으로 인해
+동시해 발생할 수 없어서 race가 발생하지 않습니다.
 
 >> B7: Suppose a page fault in process P causes a page to be read from
 >> the file system or swap.  How do you ensure that a second process Q
