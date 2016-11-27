@@ -1,7 +1,7 @@
 			+---------------------------+
-			|	      CS 330	    |
-			| PROJECT 3: VIRTUAL MEMORY |
-			|	   DESIGN DOCUMENT  |
+			|	      CS 330			|
+			| PROJECT 3: VIRTUAL MEMORY	|
+			|	   DESIGN DOCUMENT		|
 			+---------------------------+
 
 ---- GROUP ----
@@ -157,7 +157,7 @@ void * frame (physical address)를 NULL로 설정해 놓았습니다.
 >> process Q, how do you adjust the page table (and any other data
 >> structures) to reflect the frame Q no longer has?
 
-딱히 해당 frame이 존재하지 않게 되었음을 표시해주지는 않았습니다.
+특별히 해당 frame이 존재하지 않게 되었음을 표시해주지는 않았습니다.
 다만 swap out하는 과정에서 pagedir_clear_page()함수를 이용해 다시 해당 page에 접근할 경우
 page fault가 일어나서 handler가 해당 작업을 처리하도록 했습니다.
 
@@ -176,6 +176,9 @@ stack growth를 하게 설정하였습니다.
 >> textbook for an explanation of the necessary conditions for
 >> deadlock.)
 
+frame table 에 접근할 때 사용되는 lock,
+system call 에 이용되는 lock
+swap in/out 시 사용되는 lock 3개를 이용하여 synchronization을 했습니다.
 
 
 >> B6: A page fault in process P can cause another process Q's frame
@@ -183,16 +186,25 @@ stack growth를 하게 설정하였습니다.
 >> the page during the eviction process?  How do you avoid a race
 >> between P evicting Q's frame and Q faulting the page back in?
 
+evict를 할 때 swap_out을 한다. evict되는 frame을 쓰던 process에서는 swap_out되는 순간
+page fault가 발생한다. 그러면 swap_in을 한다. 이때 swap_out과 swap_in은 swap_lock으로 인해
+동시해 발생할 수 없어서 race가 발생하지 않는다.
+
 >> B7: Suppose a page fault in process P causes a page to be read from
 >> the file system or swap.  How do you ensure that a second process Q
 >> cannot interfere by e.g. attempting to evict the frame while it is
 >> still being read in?
+
+eviction 과정에서 accessed bit를 체크하여 accessed bit가 0인 frame을 evict하도록 했습니다..
 
 >> B8: Explain how you handle access to paged-out pages that occur
 >> during system calls.  Do you use page faults to bring in pages (as
 >> in user programs), or do you have a mechanism for "locking" frames
 >> into physical memory, or do you use some other design?  How do you
 >> gracefully handle attempted accesses to invalid virtual addresses?
+
+invalid virtual address에 접근할 경우엔
+system call내에서 사용되는 변수의 포인터들을 확인하여 exit(-1)하도록 했습니다.
 
 ---- RATIONALE ----
 
@@ -202,6 +214,12 @@ stack growth를 하게 설정하였습니다.
 >> possibility for deadlock but allows for high parallelism.  Explain
 >> where your design falls along this continuum and why you chose to
 >> design it this way.
+
+위에서 말했듯이 3개의 lock을 사용했습니다. 
+먼저 단 하나의 lock을 사용할 경우 parallelism이 전혀 안되기 때문에,
+둘 이상의 lock이 필요했고, 
+너무 많은 lock을 사용할 경우 각각에 대한 판단이 어렵기 때문에
+3개가 적당하다고 생각했습니다.
 
 			 MEMORY MAPPED FILES
 			 ===================
