@@ -22,7 +22,7 @@ static void page_destroy_func(struct hash_elem *helem, void *aux){
   if(!spte->lazy){
     if(spte->fe->in_swap){
     swap_remove(spte->fe->swap_where);}
-     frame_remove(spte->fe,*((bool*)aux));
+     frame_remove(spte->fe);
   }
   free(spte);
 }
@@ -57,5 +57,4 @@ void spt_alloc_lazy(struct hash * spt, void * page, bool writable, enum palloc_f
   spte -> t = thread_current();
   spte -> ofs = ofs;
   hash_insert(spt, &spte->elem);
-  //pagedir_clear_page (spte->t->pagedir,page);
 }
