@@ -117,8 +117,6 @@ start_process (void *f_name)
   if_.eflags = FLAG_IF | FLAG_MBS;
   now = strtok_r(file_name," ",&save);
 
-  // spt_init(&thread_current()->spt);
-
   success = load (now, &if_.eip, &if_.esp);
    
   thread_current()->child->load_finish=1;
@@ -128,15 +126,6 @@ start_process (void *f_name)
   if (!success) {
 
     thread_exit ();}
-  
-  /*struct file *myself = filesys_open(now);
-  if(myself==NULL){
-     thread_exit();
-  }
-  file_deny_write(myself);
-  thread_current()->myself = myself;*/
-   
-   //palloc_free_page (file_name);
    
   i=0;
   initial_esp=if_.esp; 
@@ -221,7 +210,6 @@ process_wait (tid_t child_tid UNUSED)
          thread_current()->wait=1;
          thread_block();
       }
-   //printf("1\n");
       thread_current()->wait =0;
       intr_set_level(old_level);
       ret = chd->ret;
@@ -246,9 +234,7 @@ process_exit (void)
    struct child *c;
    struct list_elem * melem;
    struct mmapped * mapped;
-   bool parent_exist=1;
-   if(curr->parent==NULL){parent_exist=0;}
-   
+	
    if(curr->child->parent_exited){
       list_remove(&(curr->child->elem));
       palloc_free_page(curr->child);
@@ -310,7 +296,7 @@ process_exit (void)
    }
    file_close(curr->myself);
    
-   spt_destroy (&curr->spt,parent_exist);
+   spt_destroy (&curr->spt);
    
 
    
