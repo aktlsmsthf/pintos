@@ -34,7 +34,7 @@ void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   for(i=0;i<spp;i++){
     disk_write(swap_disk, index*spp+i, (uint8_t *)fe->frame+DISK_SECTOR_SIZE*i);
   }
-  lock_release(&swap_lock);
+  
   fe->swap_where = index;
   fe->in_swap = 1;
 
@@ -42,17 +42,18 @@ void* swap_out(struct frame_entry *fe, enum palloc_flags flags){
   ret = palloc_get_page(flags);
   pagedir_clear_page(fe->spte->t->pagedir, fe->spte->page);
   fe->frame = NULL;
-  
+  lock_release(&swap_lock);
   return ret;
 }
 
 void swap_in(struct frame_entry *fe, enum palloc_flags flags){
+  lock_acquire(&swap_lock);
   void *frame = palloc_get_page(flags);
   while(frame == NULL){ frame = frame_evict(flags);}
   int i;
   size_t index = fe->swap_where;
   
-  lock_acquire(&swap_lock);
+  
   if (bitmap_test(swap_table, index) == 0){printf("1\n"); return;}
   bitmap_flip(swap_table, index);
   
@@ -62,10 +63,11 @@ void swap_in(struct frame_entry *fe, enum palloc_flags flags){
   fe->in_swap = 0;
   fe->swap_where = -1;
   fe->frame = frame;
-  lock_release(&swap_lock);
+  
   install_page(fe->spte->page, frame, fe->spte->writable);
 
   lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
+  lock_release(&swap_lock);
 }
