@@ -30,6 +30,10 @@ struct cache_entry read_to_cache(int sector_idx){
   return c;
 }
 
+struct cache_entry read_ahead(int sector_idx){
+  read_to_cache(sector_idx+1);
+  return read_to_cache(sector_idx);
+}
 
 void write_behind(int sector_idx){
     struct cache_entry *c = find_cache_by_sector(sector_idx);
