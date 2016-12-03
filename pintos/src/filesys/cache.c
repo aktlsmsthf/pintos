@@ -26,14 +26,6 @@ void read_to_cache(int sector_idx){
   list_push_front(&cache_list, &c->elem);
 }
 
-void read_ahead(int sector_idx){
-  if(find_cache_by_sector(sector_idx)){
-    read_to_cache(sector_idx);
-  }
-  if(find_cache_by_sector(sector_idx+1){
-    read_to_cache(sector_idx+1);
-  }
-}
 
 void write_behind(int sector_idx){
     struct cache_entry *c = find_cache_by_sector(sector_idx);
