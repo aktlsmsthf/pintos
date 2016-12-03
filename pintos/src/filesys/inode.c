@@ -222,7 +222,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
 
       if (sector_ofs == 0 && chunk_size == DISK_SECTOR_SIZE) 
         {
-           struct cache_entry *c = read_to_cache(sector_idx);
+           struct cache_entry *c = read_ahead(sector_idx);
            memcpy(buffer+bytes_read, c->cache, chunk_size);
            
            /**default
@@ -232,7 +232,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
         }
       else 
         {
-           struct cache_entry *c = read_to_cache(sector_idx);
+           struct cache_entry *c = read_ahead(sector_idx);
            memcpy(buffer+bytes_read, c->cache+sector_ofs, chunck_size);
            /**default
           Read sector into bounce buffer, then partially copy
