@@ -180,6 +180,8 @@ inode_close (struct inode *inode)
           free_map_release (inode->data.start,
                             bytes_to_sectors (inode->data.length)); 
         }
+       
+       write_back(inode->sector);
 
       free (inode); 
     }
@@ -291,8 +293,10 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
 
       if (sector_ofs == 0 && chunk_size == DISK_SECTOR_SIZE) 
         {
-          /* Write full sector directly to disk. */
-          disk_write (filesys_disk, sector_idx, buffer + bytes_written); 
+           write_to_cache(sector_idx, buffer+bytes_written);
+           /**default
+          /* Write full sector directly to disk. 
+          disk_write (filesys_disk, sector_idx, buffer + bytes_written); **/
         }
       else 
         {
@@ -312,7 +316,12 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
           else
             memset (bounce, 0, DISK_SECTOR_SIZE);
           memcpy (bounce + sector_ofs, buffer + bytes_written, chunk_size);
+           
+           //new
+           write_to_cache(sector_idx, bounce);
+           /**defult
           disk_write (filesys_disk, sector_idx, bounce); 
+          **/
         }
 
       /* Advance. */
