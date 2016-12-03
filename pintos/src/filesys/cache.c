@@ -8,10 +8,11 @@ void cache_init(void){
 struct cache_entry find_cache_by_sector(int sector_idx){
   struct list_elem *elem = list_front(&cache_list);
   
-  while(elem->next = NULL){
+  while(elem->next != NULL){
     if(list_entry(elem, &cache_list, elem)->sector == sector_idx){
       return list_entry(elem, &cache_list, elem)
     }
+    elem = elem->next;
   }
   return NULL;
 }
