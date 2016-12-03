@@ -37,9 +37,9 @@ struct cache_entry read_ahead(int sector_idx){
   return read_to_cache(sector_idx);
 }
 
-void write_to_cache(int sector_idx, void *buffer, int size){
+void write_to_cache(int sector_idx, void *buffer){
   struct cache_entry *c = find_cache_by_sector(sector_idx);
-  memcpy(c->cache, buffer, size);
+  memcpy(c->cache, buffer, DISK_SECTOR_SIZE);
 }
 
 void write_behind(int sector_idx){
