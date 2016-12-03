@@ -16,7 +16,10 @@ struct cache_entry find_cache_by_sector(int sector_idx){
   return NULL;
 }
 
-void read_to_cache(int sector_idx){
+struct cache_entry read_to_cache(int sector_idx){
+  if(find_cache_by_sector(sector_idx)){
+    return find_cache_by_sector(sector_idx);
+  }
   struct cache_entry *c = malloc(sizeof (struct cache_entry));
   c->sector = sector_idx;
   c->cache  = malloc(DISK_SECTOR_SIZE);
@@ -24,6 +27,7 @@ void read_to_cache(int sector_idx){
   
   disk_read(filesys_disk, sector_idx, c->cache);
   list_push_front(&cache_list, &c->elem);
+  return c;
 }
 
 
