@@ -4,6 +4,7 @@
 
 void cache_init(void){
   list_init(&cache_list);
+  count = 0;
 }
 
 struct cache_entry find_cache_by_sector(int sector_idx){
@@ -22,6 +23,9 @@ struct cache_entry read_to_cache(int sector_idx){
   if(find_cache_by_sector(sector_idx)){
     return find_cache_by_sector(sector_idx);
   }
+  if(count==64){
+    cache_evict();
+  }
   struct cache_entry *c = malloc(sizeof (struct cache_entry));
   c->sector = sector_idx;
   c->cache  = malloc(DISK_SECTOR_SIZE);
@@ -29,7 +33,12 @@ struct cache_entry read_to_cache(int sector_idx){
   
   disk_read(filesys_disk, sector_idx, c->cache);
   list_push_front(&cache_list, &c->elem);
+  count++;
   return c;
+}
+
+void cache_evict(void){
+  
 }
 
 struct cache_entry read_ahead(int sector_idx){
@@ -40,6 +49,9 @@ struct cache_entry read_ahead(int sector_idx){
 void write_to_cache(int sector_idx, void *buffer){
   struct cache_entry *c = find_cache_by_sector(sector_idx);
   memcpy(c->cache, buffer, DISK_SECTOR_SIZE);
+  if(!c->dirty){
+    c->dirty = true;
+  }
 }
 
 void write_behind(int sector_idx){
@@ -47,4 +59,7 @@ void write_behind(int sector_idx){
     if(c->dirty){
       disk_write(filesys_disk, sector_idx, c->cache);
     }
+    list_remove(&c->elem);
+  count--;
+  free(c);
 }
