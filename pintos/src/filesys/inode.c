@@ -222,13 +222,21 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
 
       if (sector_ofs == 0 && chunk_size == DISK_SECTOR_SIZE) 
         {
-          /* Read full sector directly into caller's buffer. */
+           struct cache_entry *c = read_to_cache(sector_idx);
+           memcpy(buffer+bytes_read, c->cache, chunk_size);
+           
+           /**default
+          Read full sector directly into caller's buffer.
           disk_read (filesys_disk, sector_idx, buffer + bytes_read); 
+          **/
         }
       else 
         {
-          /* Read sector into bounce buffer, then partially copy
-             into caller's buffer. */
+           struct cache_entry *c = read_to_cache(sector_idx);
+           memcpy(buffer+bytes_read, c->cache+sector_ofs, chunck_size);
+           /**default
+          Read sector into bounce buffer, then partially copy
+             into caller's buffer.
           if (bounce == NULL) 
             {
               bounce = malloc (DISK_SECTOR_SIZE);
@@ -236,7 +244,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
                 break;
             }
           disk_read (filesys_disk, sector_idx, bounce);
-          memcpy (buffer + bytes_read, bounce + sector_ofs, chunk_size);
+          memcpy (buffer + bytes_read, bounce + sector_ofs, chunk_size);**/
         }
       
       /* Advance. */
