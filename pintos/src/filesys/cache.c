@@ -1,5 +1,6 @@
 #include "filesys/cache.h"
 #include <list.h>
+#include "filesys/filesys.h"
 
 void cache_init(void){
   list_init(&cache_list);
@@ -34,6 +35,11 @@ struct cache_entry read_to_cache(int sector_idx){
 struct cache_entry read_ahead(int sector_idx){
   read_to_cache(sector_idx+1);
   return read_to_cache(sector_idx);
+}
+
+void write_to_cache(int sector_idx, void *buffer, int size){
+  struct cache_entry *c = find_cache_by_sector(sector_idx);
+  memcpy(c->cache, buffer, size);
 }
 
 void write_behind(int sector_idx){
