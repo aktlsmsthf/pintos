@@ -181,7 +181,7 @@ inode_close (struct inode *inode)
                             bytes_to_sectors (inode->data.length)); 
         }
        
-       write_back(inode->sector);
+       write_behind(inode->sector);
 
       free (inode); 
     }
