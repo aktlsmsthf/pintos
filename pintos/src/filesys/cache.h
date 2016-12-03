@@ -5,12 +5,12 @@
 #include <bitmap.h>
 
 struct list cache_list;
-struct bitmap *cache_bitmap;
+
 struct cache_entry{
-  int index;
   int sector;
   void *cache;
   bool dirty;
+  struct list_elem elem;
 };
 
 #endif
