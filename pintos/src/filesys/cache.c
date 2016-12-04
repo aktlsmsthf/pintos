@@ -8,7 +8,7 @@
 void cache_init(void){
   list_init(&cache_list);
   lock_init(&cache_lock);
-  //thread_create("Write_behind_periodically", 0, thread_func_write_behind, NULL);
+  thread_create("Write_behind_periodically", 0, thread_func_write_behind, NULL);
   count = 0;
 }
 
@@ -107,7 +107,7 @@ void write_behind_all(void){
 }
 
 void thread_func_write_behind(void *aux){
-  while(false){
+  while(true){
     timer_sleep(1);
     write_behind_all();
   }
