@@ -32,6 +32,7 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
 
 struct cache_entry * read_to_cache(int sector_idx, bool first){
   if(find_cache_by_sector(sector_idx)){
+    printf("a\n");
     return find_cache_by_sector(sector_idx);
   }
   
@@ -84,7 +85,6 @@ void write_to_cache(int sector_idx, void *buffer){
 
 void write_behind(struct cache_entry *c){
     if(c->dirty){
-      printf("a\n");
       disk_write(filesys_disk, c->sector, c->cache);
     }
     list_remove(&c->elem);
