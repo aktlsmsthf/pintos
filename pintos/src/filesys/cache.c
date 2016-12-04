@@ -12,7 +12,7 @@ void cache_init(void){
   count = 0;
 }
 
-struct cache_entry find_cache_by_sector(int sector_idx){
+struct cache_entry * find_cache_by_sector(int sector_idx){
   struct list_elem *elem = list_front(&cache_list);
   
   lock_acquire(&cache_lock);
