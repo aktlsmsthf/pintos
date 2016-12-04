@@ -6,6 +6,7 @@
 
 struct list cache_list;
 struct lock cache_lock;
+int count;
 
 struct cache_entry{
   int sector;
