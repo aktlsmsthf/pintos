@@ -49,9 +49,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   }
   struct cache_entry *c = malloc(sizeof (struct cache_entry));
   c->sector = sector_idx;
-  while(c->cache==NULL){
-    c->cache = malloc(DISK_SECTOR_SIZE);
-  }
+  c->cache = malloc(DISK_SECTOR_SIZE);
   c->dirty = false;
   c->accessed = true;
   
