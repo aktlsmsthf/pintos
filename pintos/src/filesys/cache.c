@@ -50,7 +50,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   }
   struct cache_entry *c = malloc(sizeof (struct cache_entry));
   c->sector = sector_idx;
-  c->cache = malloc(DISK_SECTOR_SIZE);
+  //c->cache = malloc(DISK_SECTOR_SIZE);
   c->dirty = false;
   c->accessed = true;
   
@@ -88,7 +88,7 @@ void write_behind(struct cache_entry *c){
       disk_write(filesys_disk, c->sector, c->cache);
       list_remove(&c->elem);
       count--;
-      free(c->cache);
+      //free(c->cache);
       free(c);
     }
 }
