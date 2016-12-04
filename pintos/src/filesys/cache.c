@@ -67,6 +67,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   disk_read(filesys_disk, sector_idx, c->cache);
   
   count++;
+  printf("%d\n", count);
   //hand = &c->elem;
   lock_release(&cache_lock);
   
