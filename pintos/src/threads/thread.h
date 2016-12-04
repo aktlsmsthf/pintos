@@ -99,6 +99,7 @@ struct thread
     struct list mapped_list;
     int num_file;
     struct file *myself;
+    int ticks;
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
     struct thread *parent;
