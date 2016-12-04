@@ -19,16 +19,16 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
     //lock_release(&cache_lock);
     return NULL;
   }
-  lock_acquire(&cache_lock);
+  //lock_acquire(&cache_lock);
   struct list_elem *elem = list_front(&cache_list);
   while(elem->next != NULL){
     if(list_entry(elem, struct cache_entry, elem)->sector == sector_idx){
-      lock_release(&cache_lock);
+      //lock_release(&cache_lock);
       return list_entry(elem, struct cache_entry, elem);
     }
     elem = elem->next;
   }
-  lock_release(&cache_lock);
+  //lock_release(&cache_lock);
   return NULL;
 }
 
@@ -39,7 +39,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     return c;
   }
   
-  lock_acquire(&cache_lock);
+  //lock_acquire(&cache_lock);
   
   if(count==64){
     struct list_elem *elem = list_front(&cache_list);
@@ -70,7 +70,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   count++;
   //printf("%d\n", count);
   //hand = &c->elem;
-  lock_release(&cache_lock);
+  //lock_release(&cache_lock);
   disk_read(filesys_disk, sector_idx, c->cache);
   /**if(first){
     void *aux = sector_idx+1;
