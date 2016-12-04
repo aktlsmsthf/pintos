@@ -99,6 +99,7 @@ void write_behind_all(void){
   struct cache_entry *c;
   lock_acquire(&cache_lock);
   while(elem->next != NULL){
+    print("1\n");
     c = list_entry(elem, struct cache_entry, elem);
     write_behind(c);
   }
