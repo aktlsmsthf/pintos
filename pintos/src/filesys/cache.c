@@ -35,8 +35,9 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     return find_cache_by_sector(sector_idx);
   }
   
-  lock_acquire(&cache_lock);
+  
   if(count==64){
+    lock_acquire(&cache_lock);
     struct cache_entry *c = list_entry(hand, struct cache_entry, elem);
     while(c->accessed){
       c->accessed = false;
@@ -47,7 +48,9 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     }
     hand = hand->next;
     write_behind(c);
+    lock_acquire(&cache_lock);
   }
+  lock_acquire(&cache_lock);
   struct cache_entry *c = malloc(sizeof (struct cache_entry));
   c->sector = sector_idx;
   c->cache = malloc(DISK_SECTOR_SIZE);
