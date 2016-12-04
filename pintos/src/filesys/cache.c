@@ -38,14 +38,15 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   lock_acquire(&cache_lock);
   struct cache_entry *c;
   if(count==64){
-    c = list_entry(hand, struct cache_entry, elem);
+    struct list_elem *elem = list_front(&cache_list);
+    c = list_entry(elem, struct cache_entry, elem);
     while(c->accessed){
       c->accessed = false;
-      hand = hand->next;
-      if(hand->next == NULL){
-        hand = list_front(&cache_list);
+      elem = elem->next;
+      if(elem->next == NULL){
+        elem = list_front(&cache_list);
       }
-      c = list_entry(hand, struct cache_entry, elem);
+      c = list_entry(elem, struct cache_entry, elem);
     }
     if(c->dirty){
       disk_write(filesys_disk, c->sector, c->cache);
