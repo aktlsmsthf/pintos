@@ -41,7 +41,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   
   lock_acquire(&cache_lock);
   
-  if(count==64){
+  if(count>=64){
     struct list_elem *elem = list_front(&cache_list);
     c = list_entry(elem, struct cache_entry, elem);
     while(c->accessed){
