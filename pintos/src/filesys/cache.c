@@ -14,21 +14,21 @@ void cache_init(void){
 }
 
 struct cache_entry * find_cache_by_sector(int sector_idx){
-  lock_acquire(&cache_lock);
+  //lock_acquire(&cache_lock);
   if(list_empty(&cache_list)){
-    lock_release(&cache_lock);
+    //lock_release(&cache_lock);
     return NULL;
   }
   
   struct list_elem *elem = list_front(&cache_list);
   while(elem->next != NULL){
     if(list_entry(elem, struct cache_entry, elem)->sector == sector_idx){
-      lock_release(&cache_lock);
+      //lock_release(&cache_lock);
       return list_entry(elem, struct cache_entry, elem);
     }
     elem = elem->next;
   }
-  lock_release(&cache_lock);
+  //lock_release(&cache_lock);
   return NULL;
 }
 
