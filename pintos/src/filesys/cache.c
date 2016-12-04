@@ -17,9 +17,9 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
   
   lock_acquire(&cache_lock);
   while(elem->next != NULL){
-    if(list_entry(elem, &cache_list, elem)->sector == sector_idx){
+    if(list_entry(elem, struct cache_entry, elem)->sector == sector_idx){
       lock_release(&cache_lock);
-      return list_entry(elem, &cache_list, elem);
+      return list_entry(elem, struct cache_entry, elem);
     }
     elem = elem->next;
   }
@@ -34,7 +34,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   
   lock_acquire(&cache_lock);
   if(count==64){
-    struct cache_entry *c = list_entry(hand, &cache_list, elem);
+    struct cache_entry *c = list_entry(hand, struct cache_entry, elem);
     while(c->accessed){
       c->accessed = false;
       hand = hand->next;
@@ -82,7 +82,7 @@ void write_to_cache(int sector_idx, void *buffer){
 
 void write_behind(struct cache_entry *c){
     if(c->dirty){
-      disk_write(filesys_disk, sector_idx, c->cache);
+      disk_write(filesys_disk, c->sector, c->cache);
       list_remove(&c->elem);
       count--;
       free(c);
@@ -94,7 +94,7 @@ void write_behind_all(void){
   struct cache_entry *c;
   lock_acquire(&cache_lock);
   while(elem->next != NULL){
-    c = list_entry(elem, &cache_list, elem)
+    c = list_entry(elem, struct cache_entry, elem)
     write_behind(c);
   }
   lock_release(&cache_lock);
