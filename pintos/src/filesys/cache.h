@@ -5,6 +5,7 @@
 #include <bitmap.h>
 
 struct list cache_list;
+struct lock cache_lock;
 
 struct cache_entry{
   int sector;
