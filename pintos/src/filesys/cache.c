@@ -81,13 +81,12 @@ void thread_func_read_ahead(void *aux){
 void write_to_cache(int sector_idx, void *buffer){
   struct cache_entry *c = find_cache_by_sector(sector_idx);
   memcpy(c->cache, buffer, DISK_SECTOR_SIZE);
-  if(!c->dirty){
-    c->dirty = true;
-  }
+  c->dirty = true;
 }
 
 void write_behind(struct cache_entry *c){
     if(c->dirty){
+      printf("1\n");
       disk_write(filesys_disk, c->sector, c->cache);
       list_remove(&c->elem);
       count--;
