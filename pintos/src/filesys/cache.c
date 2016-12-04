@@ -43,16 +43,15 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     c = list_entry(elem, struct cache_entry, elem);
     while(c->accessed){
       c->accessed = false;
-      elem = elem->next;
-      if(elem->next == NULL){
-        elem = list_front(&cache_list);
-      }
+      list_remove(elem);
+      list_push_back(elem);
+      elem = list_front(&cache_list);
       c = list_entry(elem, struct cache_entry, elem);
     }
     if(c->dirty){
       disk_write(filesys_disk, c->sector, c->cache);
-      count--;
     }
+    count--;
     //free(c->cache);
     
   }
