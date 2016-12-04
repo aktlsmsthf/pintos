@@ -18,7 +18,7 @@ struct cache_entry find_cache_by_sector(int sector_idx){
   while(elem->next != NULL){
     if(list_entry(elem, &cache_list, elem)->sector == sector_idx){
       lock_release(&cache_lock);
-      return list_entry(elem, &cache_list, elem)
+      return list_entry(elem, &cache_list, elem);
     }
     elem = elem->next;
   }
