@@ -90,7 +90,7 @@ void write_behind(struct cache_entry *c){
 }
 
 void write_behind_all(void){
-  if(is_empty(&cache_list)){
+  if(list_empty(&cache_list)){
     return;
   }
   struct list_elem *elem = list_front(&cache_list);
