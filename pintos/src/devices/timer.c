@@ -19,7 +19,7 @@
 
 /* Number of timer ticks since OS booted. */
 static int64_t ticks;
-
+static struct list waiting_list;
 /* Number of loops per timer tick.
    Initialized by timer_calibrate(). */
 static unsigned loops_per_tick;
@@ -147,7 +147,28 @@ timer_print_stats (void)
 static void
 timer_interrupt (struct intr_frame *args UNUSED)
 {
+  /*
   ticks++;
+  thread_tick ();
+  */
+    ticks++;
+    if(list_begin(&waiting_list)!=list_end(&waiting_list)){
+      struct list_elem * wle;
+      wle = list_begin(&waiting_list);
+      struct list_elem *tmp;
+    
+      while(wle!=NULL && wle->prev!=NULL && wle->next!=NULL){
+        if(list_entry(wle,struct thread, elem)->ticks<=1){
+          tmp = list_remove(wle);
+          thread_unblock(list_entry(wle,struct thread, elem));
+          wle =tmp;
+        }
+        else{
+          list_entry(wle,struct thread, elem)->ticks--;
+          wle = wle->next;
+        }
+      }
+    }
   thread_tick ();
 }
 
