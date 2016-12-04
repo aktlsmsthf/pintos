@@ -287,9 +287,9 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
 
       struct cache_entry *c = find_cache_by_sector(sector_idx);
        if(!c){
-          c = read_to_cache(sector_idx, first);
+          c = read_to_cache(sector_idx, true);
        }
-       memcpy(c->cache+sector_ofs, buffer_bytes_written, chunk_size);
+       memcpy(c->cache+sector_ofs, buffer+bytes_written, chunk_size);
        /**default
       if (sector_ofs == 0 && chunk_size == DISK_SECTOR_SIZE) 
         {
