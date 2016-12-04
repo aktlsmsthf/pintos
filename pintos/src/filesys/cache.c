@@ -38,7 +38,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     return c;
   }
   
-  lock_acquire(&cache_lock);
+  //lock_acquire(&cache_lock);
   
   if(count==64){
     struct list_elem *elem = list_front(&cache_list);
@@ -71,7 +71,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   count++;
   //printf("%d\n", count);
   //hand = &c->elem;
-  lock_release(&cache_lock);
+  //lock_release(&cache_lock);
   
   /**if(first){
     void *aux = sector_idx+1;
