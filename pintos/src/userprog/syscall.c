@@ -357,11 +357,11 @@ syscall_handler (struct intr_frame *f UNUSED)
           break;
         }
         if(!ffd->is_closed && ffd->file!=NULL){
-          lock_acquire(&sys_lock);
+          //lock_acquire(&sys_lock);
            file_close(ffd->file);
           
           ffd->is_closed=1;
-          lock_release(&sys_lock);
+          //lock_release(&sys_lock);
         }
       } 
       break;
