@@ -51,9 +51,10 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     }
     if(c->dirty){
       disk_write(filesys_disk, c->sector, c->cache);
+      count--;
     }
     //free(c->cache);
-    count--;
+    
   }
   else{
     c = malloc(sizeof (struct cache_entry));
