@@ -13,7 +13,7 @@ int count;
 
 struct cache_entry{
   int sector;
-  char cache[DISK_SECTOR_SIZE];
+  uint8_t cache[DISK_SECTOR_SIZE];
   bool dirty;
   bool accessed;
   struct list_elem elem;
