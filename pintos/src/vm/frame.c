@@ -18,7 +18,7 @@ void frame_init(void){
 }
 void frame_remove(struct frame_entry *fe){
   
-  //lock_acquire(&frame_lock);
+  lock_acquire(&frame_lock);
   
   if(!fe->in_swap){
     list_remove(&fe->elem);
@@ -30,7 +30,7 @@ void frame_remove(struct frame_entry *fe){
   pagedir_clear_page(fe->spte->t->pagedir, fe->spte->page);
   free(fe);
   
-  //lock_release(&frame_lock);
+  lock_release(&frame_lock);
   
 }
   
