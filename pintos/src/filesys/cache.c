@@ -4,6 +4,7 @@
 #include "threads/synch.h"
 #include "threads/thread.h"
 #include "devices/disk.h"
+#include "threads/malloc.h"
 
 void cache_init(void){
   list_init(&cache_list);
