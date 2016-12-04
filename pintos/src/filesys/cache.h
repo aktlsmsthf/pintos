@@ -10,6 +10,7 @@ struct cache_entry{
   int sector;
   void *cache;
   bool dirty;
+  bool accessed;
   struct list_elem elem;
 };
 
