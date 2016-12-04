@@ -48,7 +48,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     }
     hand = hand->next;
     write_behind(c);
-    lock_acquire(&cache_lock);
+    lock_release(&cache_lock);
   }
   lock_acquire(&cache_lock);
   struct cache_entry *c = malloc(sizeof (struct cache_entry));
