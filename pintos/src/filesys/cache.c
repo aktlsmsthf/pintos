@@ -55,6 +55,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   }
   else{
     c = malloc(sizeof (struct cache_entry));
+    list_push_back(&cache_list, &c->elem);
   }
   c->sector = sector_idx;
   c->cache = malloc(DISK_SECTOR_SIZE);
@@ -62,7 +63,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   c->accessed = true;
   
   disk_read(filesys_disk, sector_idx, c->cache);
-  list_push_back(&cache_list, &c->elem);
+  
   count++;
   //hand = &c->elem;
   lock_release(&cache_lock);
