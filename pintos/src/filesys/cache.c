@@ -32,12 +32,14 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
 }
 
 struct cache_entry * read_to_cache(int sector_idx, bool first){
-  if(find_cache_by_sector(sector_idx)!=NULL){
-    return find_cache_by_sector(sector_idx);
+  struct cache_entry *c;
+  c = find_cache_by_sector(sector_idx);
+  if(c!=NULL){
+    return c;
   }
   
   lock_acquire(&cache_lock);
-  struct cache_entry *c;
+  
   if(count==64){
     struct list_elem *elem = list_front(&cache_list);
     c = list_entry(elem, struct cache_entry, elem);
