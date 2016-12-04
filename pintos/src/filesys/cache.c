@@ -40,7 +40,6 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   if(count==64){
     c = list_entry(hand, struct cache_entry, elem);
     while(c->accessed){
-      printf("a\n");
       c->accessed = false;
       hand = hand->next;
       if(hand->next == NULL){
@@ -65,7 +64,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   disk_read(filesys_disk, sector_idx, c->cache);
   list_push_back(&cache_list, &c->elem);
   count++;
-  hand = &c->elem;
+  //hand = &c->elem;
   lock_release(&cache_lock);
   
   /**if(first){
