@@ -37,6 +37,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   lock_acquire(&cache_lock);
   c = find_cache_by_sector(sector_idx);
   if(c!=NULL){
+    c->accessed = true;
     lock_release(&cache_lock);
     return c;
   }
