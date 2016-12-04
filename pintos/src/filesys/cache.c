@@ -106,7 +106,7 @@ void write_behind_all(void){
 }
 
 void thread_func_write_behind(void *aux){
-  while(true){
+  while(false){
     timer_sleep(1);
     write_behind_all();
   }
