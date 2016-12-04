@@ -18,7 +18,7 @@ void frame_init(void){
 }
 void frame_remove(struct frame_entry *fe){
   
-  lock_acquire(&frame_lock);
+  //lock_acquire(&frame_lock);
   
   if(!fe->in_swap){
     list_remove(&fe->elem);
@@ -30,7 +30,7 @@ void frame_remove(struct frame_entry *fe){
   pagedir_clear_page(fe->spte->t->pagedir, fe->spte->page);
   free(fe);
   
-  lock_release(&frame_lock);
+  //lock_release(&frame_lock);
   
 }
   
@@ -105,8 +105,8 @@ bool file_frame_alloc(struct spt_entry * spte){
   memset(frame+spte->read_bytes, 0, spte->zero_bytes);
   install_page(spte->page, frame, spte->writable);
   
-  //lock_acquire(&frame_lock);
+  lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
-  //lock_release(&frame_lock);
+  lock_release(&frame_lock);
   return 1;
 }
