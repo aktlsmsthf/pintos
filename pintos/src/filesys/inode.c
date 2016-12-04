@@ -222,8 +222,10 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
       if (chunk_size <= 0)
         break;
       
+       lock_acquire(&cache_lock);
        struct cache_entry *c = read_to_cache(sector_idx, true);
        memcpy(buffer+bytes_read, c->cache+sector_ofs, chunk_size);
+       lock_release(&cache_lock);
       /** defualt
       if (sector_ofs == 0 && chunk_size == DISK_SECTOR_SIZE) 
         {
@@ -284,13 +286,15 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       int chunk_size = size < min_left ? size : min_left;
       if (chunk_size <= 0)
         break;
-
+       
+      lock_acquire(&cache_lock);
       struct cache_entry *c = find_cache_by_sector(sector_idx);
        if(!c){
           c = read_to_cache(sector_idx, true);
        }
        memcpy(c->cache+sector_ofs, buffer+bytes_written, chunk_size);
        c->dirty = true;
+       lock_release(&cache_lock);
        /**default
       if (sector_ofs == 0 && chunk_size == DISK_SECTOR_SIZE) 
         {
