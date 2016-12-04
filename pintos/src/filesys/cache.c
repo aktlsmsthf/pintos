@@ -3,6 +3,7 @@
 #include "filesys/filesys.h"
 #include "threads/synch.h"
 #include "threads/thread.h"
+#include "devices/disk.h"
 
 void cache_init(void){
   list_init(&cache_list);
@@ -92,7 +93,7 @@ void write_behind_all(void){
   struct list_elem *elem = list_front(&cache_list);
   struct cache_entry *c;
   lock_acquire(&cache_lock);
-  while(elem->next == NULL){
+  while(elem->next != NULL){
     c = list_entry(elem, &cache_list, elem)
     write_behind(c);
   }
