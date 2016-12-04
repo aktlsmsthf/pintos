@@ -220,17 +220,18 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
       int chunk_size = size < min_left ? size : min_left;
       if (chunk_size <= 0)
         break;
-
+      
+       struct cache_entry *c = read_to_cache(sector_idx, true);
+       memcpy(buffer+bytes_read, c->cache+sector_ofs, chunk_size);
+      /** defualt
       if (sector_ofs == 0 && chunk_size == DISK_SECTOR_SIZE) 
         {
-           
           //Read full sector directly into caller's buffer.
           disk_read (filesys_disk, sector_idx, buffer + bytes_read); 
         }
       else 
         {
-          /*Read sector into bounce buffer, then partially copy
-             into caller's buffer.*/
+          //Read sector into bounce buffer, then partially copy into caller's buffer.
           if (bounce == NULL) 
             {
               bounce = malloc (DISK_SECTOR_SIZE);
@@ -239,7 +240,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
             }
           disk_read (filesys_disk, sector_idx, bounce);
           memcpy (buffer + bytes_read, bounce + sector_ofs, chunk_size);
-        }
+        }**/
       
       /* Advance. */
       size -= chunk_size;
@@ -283,24 +284,31 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       if (chunk_size <= 0)
         break;
 
+      struct cache_entry *c = find_cache_by_sector(sector_idx);
+       if(!c){
+          c = read_to_cache(sector_idx, first);
+       }
+       memcpy(c->cache+sector_ofs, buffer_bytes_written, chunk_size);
+       /**default
       if (sector_ofs == 0 && chunk_size == DISK_SECTOR_SIZE) 
         {
-          /* Write full sector directly to disk. */
+          // Write full sector directly to disk. 
           disk_write (filesys_disk, sector_idx, buffer + bytes_written);
         }
       else 
         {
-          /* We need a bounce buffer. */
+          // We need a bounce buffer.
           if (bounce == NULL) 
             {
               bounce = malloc (DISK_SECTOR_SIZE);
               if (bounce == NULL)
                 break;
-            }
+            }**/
 
           /* If the sector contains data before or after the chunk
              we're writing, then we need to read in the sector
              first.  Otherwise we start with a sector of all zeros. */
+       /**default
           if (sector_ofs > 0 || chunk_size < sector_left) 
             disk_read (filesys_disk, sector_idx, bounce);
           else
@@ -310,7 +318,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
         
           disk_write (filesys_disk, sector_idx, bounce); 
           
-        }
+        }**/
 
       /* Advance. */
       size -= chunk_size;
