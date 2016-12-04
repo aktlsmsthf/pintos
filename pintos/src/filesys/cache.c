@@ -84,6 +84,7 @@ void write_to_cache(int sector_idx, void *buffer){
 
 void write_behind(struct cache_entry *c){
     if(c->dirty){
+      printf("a\n");
       disk_write(filesys_disk, c->sector, c->cache);
     }
     list_remove(&c->elem);
