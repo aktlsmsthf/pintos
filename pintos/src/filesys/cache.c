@@ -44,7 +44,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     while(c->accessed){
       c->accessed = false;
       list_remove(elem);
-      list_push_back(elem);
+      list_push_back(&cache_list, elem);
       elem = list_front(&cache_list);
       c = list_entry(elem, struct cache_entry, elem);
     }
