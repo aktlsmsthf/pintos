@@ -52,7 +52,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
       disk_write(filesys_disk, c->sector, c->cache);
     }
     count--;
-    //free(c->cache);
+    free(c->cache);
     
   }
   else{
