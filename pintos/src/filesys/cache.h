@@ -17,4 +17,9 @@ struct cache_entry{
   struct list_elem elem;
 };
 
+void cache_init(void);
+struct cache_entry read_to_cache(int sector_idx, bool first);
+void write_behind(struct cache_entry *c);
+void write_behind_all(void);
+
 #endif
