@@ -38,7 +38,6 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   
   if(count==64){
     lock_acquire(&cache_lock);
-    printf("a\n");
     struct cache_entry *c = list_entry(hand, struct cache_entry, elem);
     while(c->accessed){
       c->accessed = false;
@@ -91,13 +90,12 @@ void write_to_cache(int sector_idx, void *buffer){
 
 void write_behind(struct cache_entry *c){
     if(c->dirty){
-      printf("1\n");
       disk_write(filesys_disk, c->sector, c->cache);
-      list_remove(&c->elem);
-      count--;
-      free(c->cache);
-      free(c);
     }
+    list_remove(&c->elem);
+    count--;
+    free(c->cache);
+    free(c);
 }
 
 void write_behind_all(void){
