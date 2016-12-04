@@ -94,7 +94,7 @@ void write_behind_all(void){
   struct cache_entry *c;
   lock_acquire(&cache_lock);
   while(elem->next != NULL){
-    c = list_entry(elem, struct cache_entry, elem)
+    c = list_entry(elem, struct cache_entry, elem);
     write_behind(c);
   }
   lock_release(&cache_lock);
