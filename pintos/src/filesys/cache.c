@@ -107,13 +107,13 @@ void write_behind_all(void){
   }
   struct list_elem *elem = list_front(&cache_list);
   struct cache_entry *c;
-  lock_acquire(&cache_lock);
+  //lock_acquire(&cache_lock);
   while(elem->next != NULL){
     c = list_entry(elem, struct cache_entry, elem);
     elem = elem->next;
     write_behind(c);
   }
-  lock_release(&cache_lock);
+  //lock_release(&cache_lock);
 }
 
 void thread_func_write_behind(void *aux){
