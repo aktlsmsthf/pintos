@@ -63,7 +63,6 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   disk_read(filesys_disk, sector_idx, c->cache);
   list_push_back(&cache_list, &c->elem);
   count++;
-  printf("%d\n", count);
   if(count ==1){
     hand = &c->elem;
   }
