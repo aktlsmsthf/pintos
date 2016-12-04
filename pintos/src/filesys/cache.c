@@ -88,7 +88,7 @@ void write_behind(struct cache_entry *c){
       disk_write(filesys_disk, c->sector, c->cache);
       list_remove(&c->elem);
       count--;
-      //free(c->cache);
+      free(c->cache);
       free(c);
     }
 }
