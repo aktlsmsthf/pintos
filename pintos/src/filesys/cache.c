@@ -14,7 +14,7 @@ void cache_init(void){
 
 struct cache_entry * find_cache_by_sector(int sector_idx){
   struct list_elem *elem = list_front(&cache_list);
-  if(list_empty(&cache_list){
+  if(list_empty(&cache_list)){
     return NULL;
   }
   lock_acquire(&cache_lock);
