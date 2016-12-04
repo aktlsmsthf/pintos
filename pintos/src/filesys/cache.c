@@ -38,7 +38,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     return c;
   }
   
-  //lock_acquire(&cache_lock);
+  lock_acquire(&cache_lock);
   
   if(count==64){
     struct list_elem *elem = list_front(&cache_list);
@@ -66,13 +66,11 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   c->dirty = false;
   c->accessed = true;
   
-  disk_read(filesys_disk, sector_idx, c->cache);
-  
   count++;
   //printf("%d\n", count);
   //hand = &c->elem;
-  //lock_release(&cache_lock);
-  
+  lock_release(&cache_lock);
+  disk_read(filesys_disk, sector_idx, c->cache);
   /**if(first){
     void *aux = sector_idx+1;
     thread_create("Read_ahead", 0, thread_func_read_ahead, aux);
