@@ -40,6 +40,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   if(count==64){
     c = list_entry(hand, struct cache_entry, elem);
     while(c->accessed){
+      printf("a\n");
       c->accessed = false;
       hand = hand->next;
       if(hand->next == NULL){
