@@ -38,6 +38,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   
   if(count==64){
     lock_acquire(&cache_lock);
+    printf("a\n");
     struct cache_entry *c = list_entry(hand, struct cache_entry, elem);
     while(c->accessed){
       c->accessed = false;
