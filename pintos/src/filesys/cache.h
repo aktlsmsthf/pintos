@@ -4,7 +4,7 @@
 #include <list.h>
 #include <bitmap.h>
 #include "threads/synch.h"
-#include "threads/malloc.h"
+#include "devices/disk.h"
 
 struct list cache_list;
 struct lock cache_lock;
