@@ -32,7 +32,7 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
 }
 
 struct cache_entry * read_to_cache(int sector_idx, bool first){
-  if(find_cache_by_sector(sector_idx)){
+  if(find_cache_by_sector(sector_idx)!=NULL){
     return find_cache_by_sector(sector_idx);
   }
   
