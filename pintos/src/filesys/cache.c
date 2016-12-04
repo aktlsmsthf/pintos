@@ -45,6 +45,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
       if(hand->next == NULL){
         hand = list_front(&cache_list);
       }
+      c = list_entry(hand, struct cache_entry, elem);
     }
     hand = hand->next;
     write_behind(c);
