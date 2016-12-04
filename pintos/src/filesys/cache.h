@@ -6,7 +6,7 @@
 
 struct list cache_list;
 struct lock cache_lock;
-struct list_elem hand;
+struct list_elem *hand;
 int count;
 
 struct cache_entry{
