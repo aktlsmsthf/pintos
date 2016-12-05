@@ -88,10 +88,9 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   return c;
 }
 
-int thread_func_read_ahead(void *aux){
+void thread_func_read_ahead(void *aux){
   int idx = *(int*)aux;
   read_to_cache(idx, false);
-  return 0;
 }
 
 void write_to_cache(int sector_idx, void *buffer){
