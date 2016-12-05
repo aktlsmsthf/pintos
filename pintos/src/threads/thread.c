@@ -264,7 +264,7 @@ thread_unblock (struct thread *t)
   ASSERT (is_thread (t));
 
   old_level = intr_disable ();
-  printf("%d\n", t->status==THREAD_DYING);
+  //printf("%d\n", t->status==THREAD_DYING);
   ASSERT (t->status == THREAD_BLOCKED);
   list_push_back (&ready_list, &t->elem);
   t->status = THREAD_READY;
