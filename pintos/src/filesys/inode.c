@@ -8,6 +8,8 @@
 #include "threads/malloc.h"
 #include "filesys/cache.h"
 
+#include "userprog/syscall.h"
+
 /* Identifies an inode. */
 #define INODE_MAGIC 0x494e4f44
 
