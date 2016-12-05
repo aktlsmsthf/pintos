@@ -26,11 +26,11 @@ void frame_remove(struct frame_entry *fe){
   if(fe->frame!=NULL){
   palloc_free_page(fe->frame);
   }
-  lock_release(&frame_lock);
+  
   pagedir_clear_page(fe->spte->t->pagedir, fe->spte->page);
   free(fe);
   
-  
+  lock_release(&frame_lock);
   
 }
   
