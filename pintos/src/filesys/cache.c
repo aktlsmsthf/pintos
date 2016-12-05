@@ -36,12 +36,10 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
 struct cache_entry * read_to_cache(int sector_idx, bool first){
   struct cache_entry *c;
   //lock_acquire(&cache_lock);
-  //lock_acquire(&sys_lock);
   c = find_cache_by_sector(sector_idx);
   if(c!=NULL){
     c->accessed = true;
     //lock_release(&cache_lock);
-    //lock_release(&sys_lock);
     return c;
   }
   
@@ -55,16 +53,16 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
       elem = list_front(&cache_list);
       c = list_entry(elem, struct cache_entry, elem);
     }
+    lock_acquire(&cache_lock);
     if(c->dirty){
       disk_write(filesys_disk, c->sector, c->cache);
     }
-    lock_acquire(&cache_lock);
     count--;
-    lock_release(&cache_lock);
     free(c->cache);
     
   }
   else{
+    lock_acquire(&cache_lock);
     c = malloc(sizeof (struct cache_entry));
     list_push_back(&cache_list, &c->elem);
   }
@@ -73,15 +71,13 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   c->dirty = false;
   c->accessed = true;
   
-  lock_acquire(&cache_lock);
+  
   count++;
-  lock_release(&cache_lock);
   //printf("%d\n", count);
   //hand = &c->elem;
   
   disk_read(filesys_disk, sector_idx, c->cache);
-  //lock_release(&cache_lock);
-  //lock_release(&sys_lock);
+  lock_release(&cache_lock);
   /**if(first){
     void *aux = sector_idx+1;
     thread_create("Read_ahead", 0, thread_func_read_ahead, aux);
@@ -106,9 +102,7 @@ void write_behind(struct cache_entry *c){
       disk_write(filesys_disk, c->sector, c->cache);
     }
     list_remove(&c->elem);
-    lock_acquire(&cache_lock);
     count--;
-    lock_release(&cache_lock);
     free(c->cache);
     free(c);
 }
@@ -119,17 +113,15 @@ void write_behind_all(void){
   }
   struct list_elem *elem = list_front(&cache_list);
   struct cache_entry *c;
-  //lock_acquire(&cache_lock);
+  lock_acquire(&cache_lock);
   
-  //lock_release(&sys_lock);
   while(elem->next != NULL){
     c = list_entry(elem, struct cache_entry, elem);
     elem = elem->next;
     write_behind(c);
   }
   
-  //lock_release(&sys_lock);
-  //lock_release(&cache_lock);
+  lock_release(&cache_lock);
 }
 
 void thread_func_write_behind(void *aux){
