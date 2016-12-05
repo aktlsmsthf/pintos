@@ -19,6 +19,7 @@
 #include "vm/frame.h"
 #include "vm/swap.h"
 #include "devices/timer.h"
+#include "filesys/cache.h"
 
 static void syscall_handler (struct intr_frame *);
 void exit(int);
