@@ -58,7 +58,9 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     if(c->dirty){
       disk_write(filesys_disk, c->sector, c->cache);
     }
+    lock_acquire(&cache_lock);
     count--;
+    lock_release(&cache_lock);
     free(c->cache);
     
   }
@@ -71,7 +73,9 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   c->dirty = false;
   c->accessed = true;
   
+  lock_acquire(&cache_lock);
   count++;
+  lock_release(&cache_lock);
   //printf("%d\n", count);
   //hand = &c->elem;
   
@@ -102,7 +106,9 @@ void write_behind(struct cache_entry *c){
       disk_write(filesys_disk, c->sector, c->cache);
     }
     list_remove(&c->elem);
+    lock_acquire(&cache_lock);
     count--;
+    lock_release(&cache_lock);
     free(c->cache);
     free(c);
 }
