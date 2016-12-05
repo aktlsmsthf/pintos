@@ -81,7 +81,7 @@ void* frame_evict(enum palloc_flags flags){
       fe = list_entry(frame_elem, struct frame_entry, elem);
   }
 
-  list_remove(&fe->elem);
+  //list_remove(&fe->elem);
   
   lock_release(&frame_lock);
   ret = swap_out(fe, flags);
