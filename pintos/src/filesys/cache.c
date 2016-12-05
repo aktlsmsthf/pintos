@@ -55,9 +55,10 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
       c = list_entry(elem, struct cache_entry, elem);
     }
     if(c->dirty){
-      lock_acquire(&cache_lock);
       disk_write(filesys_disk, c->sector, c->cache);
     }
+    
+    lock_acquire(&cache_lock);
     count--;
     free(c->cache);
     
