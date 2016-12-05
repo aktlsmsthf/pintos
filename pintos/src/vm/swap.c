@@ -55,7 +55,7 @@ void swap_in(struct frame_entry *fe, enum palloc_flags flags){
   size_t index = fe->swap_where;
   
   lock_acquire(&swap_lock);
-  if (bitmap_test(swap_table, index) == 0){printf("1\n"); return;}
+  if (bitmap_test(swap_table, index) == 0){ return;}
   bitmap_flip(swap_table, index);
   
   for(i=0;i<spp;i++){
