@@ -35,12 +35,12 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
 
 struct cache_entry * read_to_cache(int sector_idx, bool first){
   struct cache_entry *c;
-  lock_acquire(&cache_lock);
+  //lock_acquire(&cache_lock);
   //lock_acquire(&sys_lock);
   c = find_cache_by_sector(sector_idx);
   if(c!=NULL){
     c->accessed = true;
-    lock_release(&cache_lock);
+    //lock_release(&cache_lock);
     //lock_release(&sys_lock);
     return c;
   }
@@ -76,7 +76,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   //hand = &c->elem;
   
   disk_read(filesys_disk, sector_idx, c->cache);
-  lock_release(&cache_lock);
+  //lock_release(&cache_lock);
   //lock_release(&sys_lock);
   /**if(first){
     void *aux = sector_idx+1;
@@ -113,7 +113,7 @@ void write_behind_all(void){
   }
   struct list_elem *elem = list_front(&cache_list);
   struct cache_entry *c;
-  lock_acquire(&cache_lock);
+  //lock_acquire(&cache_lock);
   
   //lock_release(&sys_lock);
   while(elem->next != NULL){
@@ -123,7 +123,7 @@ void write_behind_all(void){
   }
   
   //lock_release(&sys_lock);
-  lock_release(&cache_lock);
+  //lock_release(&cache_lock);
 }
 
 void thread_func_write_behind(void *aux){
