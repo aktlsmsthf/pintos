@@ -389,6 +389,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	void* daddr = addr;
 	bool pass = true;
 	    
+	lock_acquire(&sys_lock);    
 	while(read_bytes>0){
 		page_read_bytes = read_bytes < PGSIZE ? read_bytes : PGSIZE;
 		page_zero_bytes = PGSIZE - page_read_bytes;
@@ -417,6 +418,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	else{
 		f->eax = -1;
 	}
+	lock_release(&sys_lock);  
 	break;
     }
     
@@ -429,7 +431,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	
 	uint32_t write_bytes = 0;
 	void *addr = mapped->addr;
-	    
+	lock_acquire(&sys_lock);    
 	while(write_bytes<mapped->size){
 		struct spt_entry *spte = spte_find(addr);
 		if(!spte->lazy){
@@ -448,6 +450,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	}
 	list_remove(&mapped->elem);
 	file_close(mapped->file);  
+	lock_release(&sys_lock);  
 	free(mapped);
 	
     }
