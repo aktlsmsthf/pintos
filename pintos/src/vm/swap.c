@@ -54,6 +54,10 @@ void swap_in(struct frame_entry *fe, enum palloc_flags flags){
   int i;
   size_t index = fe->swap_where;
   
+  lock_acquire(&frame_lock);
+  list_push_back(&frame_table, &fe->elem);
+  lock_release(&frame_lock);
+  
   lock_acquire(&swap_lock);
   if (bitmap_test(swap_table, index) == 0){ return;}
   bitmap_flip(swap_table, index);
@@ -68,8 +72,5 @@ void swap_in(struct frame_entry *fe, enum palloc_flags flags){
   fe->frame = frame;
   install_page(fe->spte->page, frame, fe->spte->writable);
   
-  lock_acquire(&frame_lock);
-  list_push_back(&frame_table, &fe->elem);
-  lock_release(&frame_lock);
   
 }
