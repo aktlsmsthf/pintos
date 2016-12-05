@@ -43,7 +43,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     return c;
   }
   
-  lock_acquire(&cache_lock);
+  
   if(count>=64){
     struct list_elem *elem = list_front(&cache_list);
     c = list_entry(elem, struct cache_entry, elem);
@@ -55,6 +55,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
       c = list_entry(elem, struct cache_entry, elem);
     }
     if(c->dirty){
+      lock_acquire(&cache_lock);
       disk_write(filesys_disk, c->sector, c->cache);
     }
     count--;
@@ -62,6 +63,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     
   }
   else{
+    lock_acquire(&cache_lock);
     c = malloc(sizeof (struct cache_entry));
     list_push_back(&cache_list, &c->elem);
   }
