@@ -175,6 +175,7 @@ inode_create (disk_sector_t sector, off_t length)
         disk_write(filesys_disk, disk_inode->d_indirect_sector, indirects);
      }
       free (disk_inode);
+     success = true;
     }
   return success;
 }
