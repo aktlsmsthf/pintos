@@ -25,6 +25,7 @@ struct inode_disk
     disk_sector_t d_indirect_sector;
     int direct;
     int indirect;
+    int d_indirect;
     uint32_t unused[125];               /* Not used. */
   };
 
@@ -113,6 +114,7 @@ inode_create (disk_sector_t sector, off_t length)
       size_t sectors = bytes_to_sectors (length);
       disk_inode->length = length;
       disk_inode->magic = INODE_MAGIC;
+      /**
       if (free_map_allocate (sectors, &disk_inode->start))
         {
           disk_write (filesys_disk, sector, disk_inode);
@@ -125,7 +127,61 @@ inode_create (disk_sector_t sector, off_t length)
                 disk_write (filesys_disk, disk_inode->start + i, zeros); 
             }
           success = true; 
-        } 
+        } **/
+     int i;
+     disk_inode->direct =0;
+     disk_inode->indirect=0;
+     static car zeros[DISK_SECTOR_SIZE];
+     for(i=0; i<10; i++){
+        free_map_allocate(1, &disk_inode->direct_sector[i]);
+        disk_write(filesys_disk, disk_inode->direct_sector[i], zeros);
+        disk_inode->direct++;
+        if(--sectors==0){
+           break;
+        }
+     }
+     if(sectors>0){
+        int n = sectors/128;
+        for(i=n; i<10; i++){
+           disk_sector_t sectors[128];
+           int j;
+           for(j=0; j<128; j++){
+              free_map_allocate(1, &sectors[j]);
+              disk_write(filesys_disk, sectors[j], zeros);
+              if(--sectors==0){
+                 break;
+              }
+           }
+           disk_inode->indirect++;
+           free_map_allocate(1, &disk_inode[i]);
+           disk_write(filesys_disk, disk_inode[i], sectors);
+           if(sectors==0){
+              break;
+           }
+        }
+     }
+     if(sectors>0{
+        disk_inode->d_indierct++;
+        free_map_allocate(1, &disk_inode->d_indirect_sector);
+        disk_sector_t indirects[128];
+        for(i=0;i<128;i++){
+           free_map_allocate(1, &indirects[i]);
+           disk_sector_t sectors[128];
+           int j;
+           for(j=0;j<128;j++){
+              free_map_allocate(1, &sectors[j]);
+              disk_write(filesys_disk, sectors[j], zeros);
+              if(--sectors==0){
+                 break;
+              }
+           }
+           disk_write(filesys_disk, indirects[i], sectors);
+           if(sectors==0){
+              break;
+           }
+        }
+        disk_write(filesys_disk, disk_inode->d_indirect_sector, indirects);
+     }
       free (disk_inode);
     }
   return success;
