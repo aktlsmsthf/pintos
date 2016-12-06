@@ -7,7 +7,7 @@
 #include "filesys/free-map.h"
 #include "threads/malloc.h"
 #include "filesys/cache.h"
-
+#include "threads/synch.h"
 #include "userprog/syscall.h"
 
 /* Identifies an inode. */
