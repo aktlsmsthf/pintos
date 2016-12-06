@@ -171,6 +171,7 @@ inode_create (disk_sector_t sector, off_t length)
               printf("%d\n", sector[j]);
               disk_write(filesys_disk, sector[j], zeros);
               if(--sectors==0){
+                 printf("a\n");
                  break;
               }
            }
