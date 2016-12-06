@@ -57,9 +57,8 @@ byte_to_sector (const struct inode *inode, off_t pos)
     return inode->data.start + pos / DISK_SECTOR_SIZE;
   else
     return -1;**/
-   int sss[128];
-   printf("%d\n", sizeof sss);
    int sectors = pos/DISK_SECTOR_SIZE;
+   if(pos>=inode->data.length) return -1;
    if(sectors<10){
       return inode->data.direct_sector[sectors];
    }
