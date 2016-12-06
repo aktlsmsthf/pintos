@@ -291,7 +291,7 @@ inode_close (struct inode *inode)
                      break;
                   }
                }
-               free_map_release(indirects[i]);
+               free_map_release(indirects[i], 1);
                if(sectors==0){
                   break;
                }
