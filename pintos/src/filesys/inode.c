@@ -60,7 +60,7 @@ byte_to_sector (const struct inode *inode, off_t pos)
    printf("a\n");
    int sectors = pos/DISK_SECTOR_SIZE;
    if(pos>=inode->data.length){
-      printf("0\n");
+      printf("%d %d\n", pos, inode->data.length);
       return -1;
    }
    if(sectors<10){
