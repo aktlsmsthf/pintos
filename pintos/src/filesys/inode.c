@@ -130,6 +130,7 @@ inode_create (disk_sector_t sector, off_t length)
             }
           success = true; 
         } **/
+     
      int i;
      static char zeros[DISK_SECTOR_SIZE];
      for(i=0; i<10; i++){
@@ -179,6 +180,7 @@ inode_create (disk_sector_t sector, off_t length)
         }
         disk_write(filesys_disk, disk_inode->d_indirect_sector, indirects);
      }
+     disk_write(filesys_disk, sector, disk_inode);
      success = true;
       free (disk_inode);
      
