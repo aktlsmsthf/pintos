@@ -17,13 +17,13 @@
    Must be exactly DISK_SECTOR_SIZE bytes long. */
 struct inode_disk
   {
-    //disk_sector_t start;                /* First data sector. */
+    disk_sector_t start;                /* First data sector. */
     off_t length;                       /* File size in bytes. */
     unsigned magic;                     /* Magic number. */
-    disk_sector_t direct_sector[10];
+    /**disk_sector_t direct_sector[10];
     disk_sector_t indirect_sector[10];
-    disk_sector_t d_indirect_sector;
-    uint32_t unused[105];               /* Not used. */
+    disk_sector_t d_indirect_sector;**/
+    uint32_t unused[125];               /* Not used. */
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
