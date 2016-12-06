@@ -91,6 +91,7 @@ void
 inode_init (void) 
 {
   list_init (&open_inodes);
+  lock_init(&inode_lock);
 }
 
 /* Initializes an inode with LENGTH bytes of data and
@@ -401,6 +402,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
    
    if(size+offset>inode->data.length){
       //printf("tjfak../n");
+      lock_acquire(&inode_lock);
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       static char zeros[DISK_SECTOR_SIZE];
@@ -441,6 +443,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       }
       inode->data.length = size+offset;
    }
+   lock_release(&inode_lock);
   while (size > 0) 
     {
       /* Sector to write, starting byte offset within sector. */
