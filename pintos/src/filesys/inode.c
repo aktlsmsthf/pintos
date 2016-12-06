@@ -148,6 +148,7 @@ inode_create (disk_sector_t sector, off_t length)
            for(j=0; j<128; j++){
               free_map_allocate(1, &sector[j]);
               disk_write(filesys_disk, sector[j], zeros);
+              printf("%d\n", sectors);
               if(--sectors==0){
                  break;
               }
@@ -168,9 +169,8 @@ inode_create (disk_sector_t sector, off_t length)
            int j;
            for(j=0;j<128;j++){
               free_map_allocate(1, &sector[j]);
-              printf("%d\n", sector[j]);
               disk_write(filesys_disk, sector[j], zeros);
-              printf("%d %d\n", j, sectors);
+              printf("%d\n", sectors);
               if(--sectors==0){
                  printf("a\n");
                  break;
