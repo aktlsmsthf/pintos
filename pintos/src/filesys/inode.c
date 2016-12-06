@@ -66,7 +66,7 @@ byte_to_sector (const struct inode *inode, off_t pos)
    if(sectors<10){
       return inode->data.direct_sector[sectors];
    }
-   else if(sectors>1290){
+   else if(sectors>=1290){
       int indirect_sectors[128];
       disk_read(filesys_disk, inode->data.d_indirect_sector, indirect_sectors);
       int i = (sectors-1290)/128;
