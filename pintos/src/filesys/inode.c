@@ -23,7 +23,7 @@ struct inode_disk
     disk_sector_t direct_sector[10];
     disk_sector_t indirect_sector[10];
     disk_sector_t d_indirect_sector;
-    uint32_t unused[114];               /* Not used. */
+    uint32_t unused[105];               /* Not used. */
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
