@@ -23,7 +23,10 @@ struct inode_disk
     disk_sector_t direct_sector[10];
     disk_sector_t indirect_sector[10];
     disk_sector_t d_indirect_sector;
-    uint32_t unused[105];               /* Not used. */
+    int direct;
+    int indirect;
+    int d_indirect;
+    uint32_t unused[102];               /* Not used. */
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
@@ -400,6 +403,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
 
   if (inode->deny_write_cnt)
     return 0;
+   
 
   while (size > 0) 
     {
