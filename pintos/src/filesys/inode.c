@@ -140,21 +140,18 @@ inode_create (disk_sector_t sector, off_t length)
          for(i=0; i<10; i++){
            free_map_allocate(1, &disk_inode->direct_sector[i]);
            disk_write(filesys_disk, disk_inode->direct_sector[i], zeros);
-            printf("a %d\n", disk_inode->direct_sector[i]);
            if(--sectors==0){
             break;
            }
          }
      }
      if(sectors>0){
-        int n = sectors/128;
-        for(i=n; i<10; i++){
+        for(i=0; i<10; i++){
            disk_sector_t sector[128];
            int j;
            for(j=0; j<128; j++){
               free_map_allocate(1, &sector[j]);
               disk_write(filesys_disk, sector[j], zeros);
-              printf("a %d\n", sector[j]);
               if(--sectors==0){
                  break;
               }
@@ -176,7 +173,6 @@ inode_create (disk_sector_t sector, off_t length)
            for(j=0;j<128;j++){
               free_map_allocate(1, &sector[j]);
               disk_write(filesys_disk, sector[j], zeros);
-              printf("a %d\n", sector[j]);
               if(--sectors==0){
                  break;
               }
@@ -358,7 +354,6 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
         break;
       
        //
-     printf("%d\n", sector_idx);
        struct cache_entry *c = read_to_cache(sector_idx, true);
        //lock_acquire(&cache_lock);
        memcpy(buffer+bytes_read, c->cache+sector_ofs, chunk_size);
