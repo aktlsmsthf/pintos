@@ -419,24 +419,24 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
                disk_read(filesys_disk, inode->data.d_indirect_sector, indirects);
             }
             
-            int sector[128];
-            disk_read(filesys_disk, indirects[(sectors-1290)/128], sector);
-            free_map_allocate(1, &sector[(sectors-1290)%128]);
-            disk_write(filesys_disk, sector[(sectors-1290)%128], zeros);
-            disk_write(filesys_disk, indirects[(sectors-1290)/128], sector);
+            int sectordi[128];
+            disk_read(filesys_disk, indirects[(sectors-1290)/128], sectordi);
+            free_map_allocate(1, &sectordi[(sectors-1290)%128]);
+            disk_write(filesys_disk, sectordi[(sectors-1290)%128], zeros);
+            disk_write(filesys_disk, indirects[(sectors-1290)/128], sectordi);
             disk_write(filesys_disk, inode->data.d_indirect_sector, indirects);
          }
          else{
-            int sector[128];
+            int sectori[128];
             if((sectors-10)%128==0){
                free_map_allocate(1, &inode->data.indirect_sector[(sectors-10)/128]);
             }
             else{
-               disk_read(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sector);
+               disk_read(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
             }
-            free_map_allocate(1, &sector[(sectors-10)%128]);
-            disk_write(filesys_disk, sector[(sectors-10)%128], zeros);
-            disk_write(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sector);
+            free_map_allocate(1, &sectori[(sectors-10)%128]);
+            disk_write(filesys_disk, sectori[(sectors-10)%128], zeros);
+            disk_write(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
          }
       }
       inode->data.length = size+offset;
