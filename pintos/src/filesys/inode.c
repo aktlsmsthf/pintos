@@ -68,15 +68,15 @@ byte_to_sector (const struct inode *inode, off_t pos)
       int indirect_sectors[128];
       disk_read(filesys_disk, inode->data.d_indirect_sector, indirect_sectors);
       int i = (sectors-1290)/128;
-      int sectors[128];
-      disk_read(filesys_disk, indirect_sectors[i], sectors);
-      return sectors[(sectors-1290)%128)];
+      int sector[128];
+      disk_read(filesys_disk, indirect_sectors[i], sector);
+      return sectors[(sectors-1290)%128];
    }
    else{
-      int sectors[128];
+      int sector[128];
       int i = (sectors-10)/128;
-      disk_read(filesys_disk, inode->data.indirect_sector[i], sectors);
-      return sectors[(sectors-10)%128)];
+      disk_read(filesys_disk, inode->data.indirect_sector[i], sector);
+      return sectors[(sectors-10)%128];
    }
 }
 
@@ -131,7 +131,7 @@ inode_create (disk_sector_t sector, off_t length)
      int i;
      disk_inode->direct =0;
      disk_inode->indirect=0;
-     static car zeros[DISK_SECTOR_SIZE];
+     static char zeros[DISK_SECTOR_SIZE];
      for(i=0; i<10; i++){
         free_map_allocate(1, &disk_inode->direct_sector[i]);
         disk_write(filesys_disk, disk_inode->direct_sector[i], zeros);
@@ -143,11 +143,11 @@ inode_create (disk_sector_t sector, off_t length)
      if(sectors>0){
         int n = sectors/128;
         for(i=n; i<10; i++){
-           disk_sector_t sectors[128];
+           disk_sector_t sector[128];
            int j;
            for(j=0; j<128; j++){
-              free_map_allocate(1, &sectors[j]);
-              disk_write(filesys_disk, sectors[j], zeros);
+              free_map_allocate(1, &sector[j]);
+              disk_write(filesys_disk, sector[j], zeros);
               if(--sectors==0){
                  break;
               }
@@ -160,17 +160,17 @@ inode_create (disk_sector_t sector, off_t length)
            }
         }
      }
-     if(sectors>0{
+     if(sectors>0){
         disk_inode->d_indierct++;
         free_map_allocate(1, &disk_inode->d_indirect_sector);
         disk_sector_t indirects[128];
         for(i=0;i<128;i++){
            free_map_allocate(1, &indirects[i]);
-           disk_sector_t sectors[128];
+           disk_sector_t sector[128];
            int j;
            for(j=0;j<128;j++){
-              free_map_allocate(1, &sectors[j]);
-              disk_write(filesys_disk, sectors[j], zeros);
+              free_map_allocate(1, &sector[j]);
+              disk_write(filesys_disk, sector[j], zeros);
               if(--sectors==0){
                  break;
               }
