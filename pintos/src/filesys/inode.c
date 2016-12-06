@@ -254,7 +254,7 @@ inode_close (struct inode *inode)
           /**free_map_release (inode->data.start,
                             bytes_to_sectors (inode->data.length)); **/
          int i;
-         int sectors = bytes_to_sector(inode->data.length);
+         int sectors = bytes_to_sectors(inode->data.length);
          for(i=0; i<10; i++){
             free_map_release(inode->data.direct_sector[i], 1);
             if(--sectors==0){
