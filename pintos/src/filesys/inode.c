@@ -170,6 +170,7 @@ inode_create (disk_sector_t sector, off_t length)
               free_map_allocate(1, &sector[j]);
               printf("%d\n", sector[j]);
               disk_write(filesys_disk, sector[j], zeros);
+              printf("%d %d\n", j, sectors);
               if(--sectors==0){
                  printf("a\n");
                  break;
