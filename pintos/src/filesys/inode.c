@@ -256,7 +256,7 @@ inode_close (struct inode *inode)
          int i;
          int sectors = bytes_to_sector(inode->data.length);
          for(i=0; i<10; i++){
-            free_map_release(disk_inode->direct_sector[i], 1);
+            free_map_release(inode->data.direct_sector[i], 1);
             if(--sectors==0){
                break;
             }
@@ -265,7 +265,7 @@ inode_close (struct inode *inode)
             int n = sectors/128;
             for(i=n; i<10; i++){
                disk_sector_t sector[128];
-               disk_read(filesys_disk, disk_inode->indirect_sector[i], sector);
+               disk_read(filesys_disk, inode->data.indirect_sector[i], sector);
                int j;
                for(j=0; j<128; j++){
                   free_map_release(sector[j], 1);
@@ -280,7 +280,7 @@ inode_close (struct inode *inode)
          }
          if(sectors>0){
             disk_sector_t indirects[128];
-            disk_read(filesys_disk, disk_inode->d_indirect_sector, indirects);
+            disk_read(filesys_disk, inode->data.d_indirect_sector, indirects);
             for(i=0;i<128;i++){
                disk_sector_t sector[128];
                int j;
@@ -296,7 +296,7 @@ inode_close (struct inode *inode)
                   break;
                }
             }
-            free_map_release(disk_inode->d_indirect_sector, 1);
+            free_map_release(inode->data.d_indirect_sector, 1);
          }
         }
        
