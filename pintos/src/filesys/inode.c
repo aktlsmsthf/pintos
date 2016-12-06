@@ -400,16 +400,10 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
   if (inode->deny_write_cnt)
     return 0;
    
-   if(size+offset>inode->date.length){
+   if(size+offset>inode->data.length){
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       static char zeros[DISK_SECTOR_SIZE];
-      disk_sector_t d_sector = sectors < 10 ? sectors : 10;
-      disk_sector_t i_sector = sectors <1290 ? (sectors-10)/128 : 10;
-      disk_sector_t i_sector_i = sectors <1290 ? (sectors-10)% 128 : 0;
-      disk_sector_t di_sector = sectors <1290 ? 0 : 1;
-      disk_sector_t di_sector_i = sectors < 1290 ? 0 : (sectors-1290)/128;
-      disk_sector_t di_sector_i_i = sectors <1290 ? 0 : (sectors-1290)%128);
       while(sectors==sectors2){
          sectors++;
          if(sectors<10){
@@ -445,6 +439,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
             disk_write(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sector);
          }
       }
+      inode->data.length = size+offset;
    }
 
   while (size > 0) 
