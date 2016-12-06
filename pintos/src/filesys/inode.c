@@ -17,13 +17,13 @@
    Must be exactly DISK_SECTOR_SIZE bytes long. */
 struct inode_disk
   {
-    disk_sector_t start;                /* First data sector. */
+    //disk_sector_t start;                /* First data sector. */
     off_t length;                       /* File size in bytes. */
     unsigned magic;                     /* Magic number. */
-    /**disk_sector_t direct_sector[10];
+    disk_sector_t direct_sector[10];
     disk_sector_t indirect_sector[10];
-    disk_sector_t d_indirect_sector;**/
-    uint32_t unused[125];               /* Not used. */
+    disk_sector_t d_indirect_sector;
+    uint32_t unused[105];               /* Not used. */
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
@@ -54,11 +54,11 @@ byte_to_sector (const struct inode *inode, off_t pos)
 {
   ASSERT (inode != NULL);
    printf("%d %d\n", pos, inode->data.length);
-  if (pos < inode->data.length)
+  /**if (pos < inode->data.length)
     return inode->data.start + pos / DISK_SECTOR_SIZE;
   else
-    return -1;
-   /**int sectors = pos/DISK_SECTOR_SIZE;
+    return -1;**/
+   int sectors = pos/DISK_SECTOR_SIZE;
    if(pos>=inode->data.length){
       
       return -1;
@@ -79,7 +79,7 @@ byte_to_sector (const struct inode *inode, off_t pos)
       int i = (sectors-10)/128;
       disk_read(filesys_disk, inode->data.indirect_sector[i], sector);
       return sector[(sectors-10)%128];
-   }**/
+   }
 }
 
 /* List of open inodes, so that opening a single inode twice
@@ -117,7 +117,7 @@ inode_create (disk_sector_t sector, off_t length)
       disk_inode->length = length;
       disk_inode->magic = INODE_MAGIC;
       
-      if (free_map_allocate (sectors, &disk_inode->start))
+      /**if (free_map_allocate (sectors, &disk_inode->start))
         {
           disk_write (filesys_disk, sector, disk_inode);
           if (sectors > 0) 
@@ -129,8 +129,8 @@ inode_create (disk_sector_t sector, off_t length)
                 disk_write (filesys_disk, disk_inode->start + i, zeros); 
             }
           success = true; 
-        } 
-     /**int i;
+        } **/
+     int i;
      static char zeros[DISK_SECTOR_SIZE];
      for(i=0; i<10; i++){
         free_map_allocate(1, &disk_inode->direct_sector[i]);
@@ -179,7 +179,7 @@ inode_create (disk_sector_t sector, off_t length)
         }
         disk_write(filesys_disk, disk_inode->d_indirect_sector, indirects);
      }
-     success = true;**/
+     success = true;
       free (disk_inode);
      
     }
@@ -258,9 +258,9 @@ inode_close (struct inode *inode)
       if (inode->removed) 
         {
           free_map_release (inode->sector, 1);
-          free_map_release (inode->data.start,
-                            bytes_to_sectors (inode->data.length)); 
-         /**int i;
+          /**free_map_release (inode->data.start,
+                            bytes_to_sectors (inode->data.length)); **/
+         int i;
          int sectors = bytes_to_sectors(inode->data.length);
          for(i=0; i<10; i++){
             free_map_release(inode->data.direct_sector[i], 1);
@@ -304,7 +304,7 @@ inode_close (struct inode *inode)
                }
             }
             free_map_release(inode->data.d_indirect_sector, 1);
-         }**/
+         }
         }
        
 
