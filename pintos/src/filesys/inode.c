@@ -23,9 +23,6 @@ struct inode_disk
     disk_sector_t direct_sector[10];
     disk_sector_t indirect_sector[10];
     disk_sector_t d_indirect_sector;
-    int direct;
-    int indirect;
-    int d_indirect;
     uint32_t unused[112];               /* Not used. */
   };
 
@@ -129,13 +126,10 @@ inode_create (disk_sector_t sector, off_t length)
           success = true; 
         } **/
      int i;
-     disk_inode->direct =0;
-     disk_inode->indirect=0;
      static char zeros[DISK_SECTOR_SIZE];
      for(i=0; i<10; i++){
         free_map_allocate(1, &disk_inode->direct_sector[i]);
         disk_write(filesys_disk, disk_inode->direct_sector[i], zeros);
-        disk_inode->direct++;
         if(--sectors==0){
            break;
         }
@@ -152,7 +146,6 @@ inode_create (disk_sector_t sector, off_t length)
                  break;
               }
            }
-           disk_inode->indirect++;
            free_map_allocate(1, &disk_inode->indirect_sector[i]);
            disk_write(filesys_disk, disk_inode->indirect_sector[i], sector);
            if(sectors==0){
@@ -161,7 +154,6 @@ inode_create (disk_sector_t sector, off_t length)
         }
      }
      if(sectors>0){
-        disk_inode->d_indirect++;
         free_map_allocate(1, &disk_inode->d_indirect_sector);
         disk_sector_t indirects[128];
         for(i=0;i<128;i++){
@@ -259,8 +251,53 @@ inode_close (struct inode *inode)
       if (inode->removed) 
         {
           free_map_release (inode->sector, 1);
-          free_map_release (inode->data.start,
-                            bytes_to_sectors (inode->data.length)); 
+          /**free_map_release (inode->data.start,
+                            bytes_to_sectors (inode->data.length)); **/
+         int i;
+         int sectors = bytes_to_sector(inode->data.length);
+         for(i=0; i<10; i++){
+            free_map_release(disk_inode->direct_sector[i], 1);
+            if(--sectors==0){
+               break;
+            }
+         }
+         if(sectors>0){
+            int n = sectors/128;
+            for(i=n; i<10; i++){
+               disk_sector_t sector[128];
+               disk_read(filesys_disk, disk_inode->indirect_sector[i], sector);
+               int j;
+               for(j=0; j<128; j++){
+                  free_map_release(sector[j], 1);
+                  if(--sectors==0){
+                     break;
+                  }
+               }
+               if(sectors==0){
+                  break;
+               }
+            }
+         }
+         if(sectors>0){
+            disk_sector_t indirects[128];
+            disk_read(filesys_disk, disk_inode->d_indirect_sector, indirects);
+            for(i=0;i<128;i++){
+               disk_sector_t sector[128];
+               int j;
+               for(j=0;j<128;j++){
+                  disk_read(filesys_disk, indirects[i], sector);
+                  free_map_release(sector[j], 1);
+                  if(--sectors==0){
+                     break;
+                  }
+               }
+               free_map_release(indirects[i]);
+               if(sectors==0){
+                  break;
+               }
+            }
+            free_map_release(disk_inode->d_indirect_sector, 1);
+         }
         }
        
 
