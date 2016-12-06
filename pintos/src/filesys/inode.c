@@ -68,16 +68,16 @@ byte_to_sector (const struct inode *inode, off_t pos)
       return inode->data.direct_sector[sectors];
    }
    else if(sectors>=1290){
-      int indirect_sectors[128];
+      disk_sector_t indirect_sectors[128];
       disk_read(filesys_disk, inode->data.d_indirect_sector, indirect_sectors);
-      int i = (sectors-1290)/128;
-      int sector[128];
+      disk_sector_t i = (sectors-1290)/128;
+      disk_sector_t sector[128];
       disk_read(filesys_disk, indirect_sectors[i], sector);
       return sector[(sectors-1290)%128];
    }
    else{
-      int sector[128];
-      int i = (sectors-10)/128;
+      disk_sector_t sector[128];
+      disk_sector_t i = (sectors-10)/128;
       disk_read(filesys_disk, inode->data.indirect_sector[i], sector);
       return sector[(sectors-10)%128];
    }
@@ -416,7 +416,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
             disk_write(filesys_disk, inode->data.direct_sector[sectors], zeros);
          }
          if(sectors>=1290){
-            int indirects[128];
+            disk_sector_t indirects[128];
             if(sectors==1290){
                free_map_allocate(1, &inode->data.d_indirect_sector);
             }
@@ -424,7 +424,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
                disk_read(filesys_disk, inode->data.d_indirect_sector, indirects);
             }
             
-            int sectordi[128];
+            disk_sector_t sectordi[128];
             disk_read(filesys_disk, indirects[(sectors-1290)/128], sectordi);
             free_map_allocate(1, &sectordi[(sectors-1290)%128]);
             disk_write(filesys_disk, sectordi[(sectors-1290)%128], zeros);
@@ -432,7 +432,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
             disk_write(filesys_disk, inode->data.d_indirect_sector, indirects);
          }
          else{
-            int sectori[128];
+            disk_sector_t sectori[128];
             if((sectors-10)%128==0){
                free_map_allocate(1, &inode->data.indirect_sector[(sectors-10)/128]);
             }
