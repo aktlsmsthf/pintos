@@ -116,7 +116,7 @@ inode_create (disk_sector_t sector, off_t length)
       size_t sectors = bytes_to_sectors (length);
       disk_inode->length = length;
       disk_inode->magic = INODE_MAGIC;
-      
+      printf("%d\n",sectors);
       /**if (free_map_allocate (sectors, &disk_inode->start))
         {
           disk_write (filesys_disk, sector, disk_inode);
