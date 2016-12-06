@@ -53,7 +53,7 @@ static disk_sector_t
 byte_to_sector (const struct inode *inode, off_t pos) 
 {
   ASSERT (inode != NULL);
-   printf("%d %d\n", pos, inode->data.length);
+
   /**if (pos < inode->data.length)
     return inode->data.start + pos / DISK_SECTOR_SIZE;
   else
