@@ -17,9 +17,14 @@
    Must be exactly DISK_SECTOR_SIZE bytes long. */
 struct inode_disk
   {
-    disk_sector_t start;                /* First data sector. */
+    //disk_sector_t start;                /* First data sector. */
     off_t length;                       /* File size in bytes. */
     unsigned magic;                     /* Magic number. */
+    disk_sector_t direct_sector[10];
+    disk_sector_t indirect_sector[10];
+    disk_sector_t d_indirect_sector;
+    int direct;
+    int indirect;
     uint32_t unused[125];               /* Not used. */
   };
 
@@ -50,10 +55,28 @@ static disk_sector_t
 byte_to_sector (const struct inode *inode, off_t pos) 
 {
   ASSERT (inode != NULL);
-  if (pos < inode->data.length)
+  /**if (pos < inode->data.length)
     return inode->data.start + pos / DISK_SECTOR_SIZE;
   else
-    return -1;
+    return -1;**/
+   int sectors = pos/DISK_SECTOR_SIZE;
+   if(sectors<10){
+      return direct_sector[sectors];
+   }
+   else if(sectors>=1290){
+      int indirect_sectors[128];
+      disk_read(filesys_disk, d_indirect_sector, indirect_sectors);
+      int i = (sectors-1290)/128;
+      int sectors[128];
+      disk_read(filesys_disk, indirect_sectors[i], sectors);
+      return sectors[(sectors-1290)%128)];
+   }
+   else{
+      int sectors[128];
+      int i = (sectors-10)/128;
+      disk_read(filesys_disk, i, sectors);
+      return sectors[(sectors-10)%128)];
+   }
 }
 
 /* List of open inodes, so that opening a single inode twice
