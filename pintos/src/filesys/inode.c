@@ -400,7 +400,8 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
   if (inode->deny_write_cnt)
     return 0;
    
-  /** if(size+offset>inode->data.length){
+   if(size+offset>=inode->data.length){
+      printf("a\n");
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       static char zeros[DISK_SECTOR_SIZE];
@@ -440,7 +441,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
          }
       }
       inode->data.length = size+offset;
-   }**/
+   }
 
   while (size > 0) 
     {
