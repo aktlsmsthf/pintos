@@ -140,7 +140,7 @@ inode_create (disk_sector_t sector, off_t length)
          for(i=0; i<10; i++){
            free_map_allocate(1, &disk_inode->direct_sector[i]);
            disk_write(filesys_disk, disk_inode->direct_sector[i], zeros);
-            printf("a %n", sector[j]);
+            printf("a %n", disk_inode->direct_sector[i]);
            if(--sectors==0){
             break;
            }
