@@ -26,7 +26,7 @@ struct inode_disk
     int direct;
     int indirect;
     int d_indirect;
-    uint32_t unused[125];               /* Not used. */
+    uint32_t unused[112];               /* Not used. */
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
