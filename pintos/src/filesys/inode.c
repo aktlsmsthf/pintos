@@ -442,8 +442,9 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
          }
       }
       inode->data.length = size+offset;
+      
+      lock_release(&inode_lock);
    }
-   lock_release(&inode_lock);
   while (size > 0) 
     {
       /* Sector to write, starting byte offset within sector. */
