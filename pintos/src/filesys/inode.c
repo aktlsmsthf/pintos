@@ -70,13 +70,13 @@ byte_to_sector (const struct inode *inode, off_t pos)
       int i = (sectors-1290)/128;
       int sector[128];
       disk_read(filesys_disk, indirect_sectors[i], sector);
-      return sectors[(sectors-1290)%128];
+      return sector[(sectors-1290)%128];
    }
    else{
       int sector[128];
       int i = (sectors-10)/128;
       disk_read(filesys_disk, inode->data.indirect_sector[i], sector);
-      return sectors[(sectors-10)%128];
+      return sector[(sectors-10)%128];
    }
 }
 
@@ -154,14 +154,14 @@ inode_create (disk_sector_t sector, off_t length)
            }
            disk_inode->indirect++;
            free_map_allocate(1, &disk_inode[i]);
-           disk_write(filesys_disk, disk_inode[i], sectors);
+           disk_write(filesys_disk, disk_inode[i], sector);
            if(sectors==0){
               break;
            }
         }
      }
      if(sectors>0){
-        disk_inode->d_indierct++;
+        disk_inode->d_indirect++;
         free_map_allocate(1, &disk_inode->d_indirect_sector);
         disk_sector_t indirects[128];
         for(i=0;i<128;i++){
@@ -175,7 +175,7 @@ inode_create (disk_sector_t sector, off_t length)
                  break;
               }
            }
-           disk_write(filesys_disk, indirects[i], sectors);
+           disk_write(filesys_disk, indirects[i], sector);
            if(sectors==0){
               break;
            }
