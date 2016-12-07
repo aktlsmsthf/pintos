@@ -170,10 +170,11 @@ inode_create (disk_sector_t sector, off_t length)
             disk_write(filesys_disk, disk_inode->indirect_sector[(sectors-DN)/128], sectori);
             
          }
-      }
-     lock_release(&inode_lock);         
+      }   
      disk_write(filesys_disk, sector, disk_inode);
      success = true;
+      
+     lock_release(&inode_lock);       
       free (disk_inode);
      
     }
