@@ -292,10 +292,11 @@ inode_close (struct inode *inode)
             }
             free_map_release(inode->data.d_indirect_sector, 1);
          }
+        
+      free_map_release (inode->sector, 1);   
         }
        
       
-      free_map_release (inode->sector, 1);
       free (inode); 
     }
 }
