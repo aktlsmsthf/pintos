@@ -65,7 +65,7 @@ byte_to_sector (const struct inode *inode, off_t pos)
       return -1;
    }
    if(sectors<10){
-      printf("%d\n", inode->data.direct_sector[secotrs]);
+      printf("%d\n", inode->data.direct_sector[sectors]);
       return inode->data.direct_sector[sectors];
    }
    else if(sectors>=1290){
