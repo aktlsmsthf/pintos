@@ -438,7 +438,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
             }
             else{
                printf("2\n");
-               printf("%d\n", (sectors-10)/128);
+               printf("%d\n", sectors);
                disk_read(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
             }
             printf("3\n");
