@@ -416,8 +416,9 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
          if(sectors<10){
             free_map_allocate(1, &inode->data.direct_sector[sectors]);
             disk_write(filesys_disk, inode->data.direct_sector[sectors], zeros);
+            
          }
-         if(sectors>=1290){
+         else if(sectors>=1290){
             disk_sector_t indirects[128];
             if(sectors==1290){
                free_map_allocate(1, &inode->data.d_indirect_sector);
