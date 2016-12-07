@@ -148,7 +148,7 @@ inode_create (disk_sector_t sector, off_t length)
             free_map_allocate(1, &sectordi[(sectors-1290)%128]);
             disk_write(filesys_disk, sectordi[(sectors-1290)%128], zeros);
             disk_write(filesys_disk, indirects[(sectors-1290)/128], sectordi);
-            disk_write(filesys_disk, inode->data.d_indirect_sector, indirects);
+            disk_write(filesys_disk, disk_inode->d_indirect_sector, indirects);
          }
          else{
             disk_sector_t sectori[128];
