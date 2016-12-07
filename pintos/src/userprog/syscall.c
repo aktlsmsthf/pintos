@@ -72,9 +72,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(check_bad_ptr(f,(const void *)cmd_line)){
         exit(-1);
       }
-      lock_acquire(&sys_lock);
+      //lock_acquire(&sys_lock);
       tid_t pid = process_execute(cmd_line);
-      lock_release(&sys_lock);
+      //lock_release(&sys_lock);
       f->eax = pid;
       break;
     }
@@ -383,7 +383,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		f->eax = -1;
 		break;
 	}
-	lock_acquire(&sys_lock);   
+	//lock_acquire(&sys_lock);   
 	struct file *mfile = file_reopen(file);
 	uint32_t size = file_length(mfile);
 	uint32_t read_bytes = size;
@@ -421,7 +421,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	else{
 		f->eax = -1;
 	} 
-	lock_release(&sys_lock);  
+	//lock_release(&sys_lock);  
 	break;
     }
     
@@ -438,10 +438,10 @@ syscall_handler (struct intr_frame *f UNUSED)
 		if(!spte->lazy){
 			if(pagedir_is_dirty(spte->t->pagedir, addr)){
 				
-				lock_acquire(&sys_lock);  
+				//lock_acquire(&sys_lock);  
 				file_write_at(mapped->file, spte->page, spte->read_bytes, spte->ofs);
 				
-				lock_release(&sys_lock);  
+				//lock_release(&sys_lock);  
 			}
 		}
 		pagedir_clear_page(spte->t, addr);
@@ -454,8 +454,9 @@ syscall_handler (struct intr_frame *f UNUSED)
 		write_bytes+=PGSIZE;
 	}
 	list_remove(&mapped->elem);
-	
+	lock_acquire(&sys_lock);
 	file_close(mapped->file);  
+	lock_release(&sys_lock);  
 	free(mapped);
 	
     }
