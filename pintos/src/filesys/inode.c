@@ -140,6 +140,7 @@ inode_create (disk_sector_t sector, off_t length)
             
          }
          else if(sectors>=1290){
+            printf("1290\n");
             disk_sector_t indirects[128];
             if(sectors==1290){
                free_map_allocate(1, &disk_inode->d_indirect_sector);
@@ -155,6 +156,7 @@ inode_create (disk_sector_t sector, off_t length)
             disk_write(filesys_disk, disk_inode->d_indirect_sector, indirects);
          }
          else{
+            printf("10\n");
             disk_sector_t sectori[128];
             if((sectors-10)%128==0){
                free_map_allocate(1, &disk_inode->indirect_sector[(sectors-10)/128]);
