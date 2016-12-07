@@ -131,7 +131,7 @@ inode_create (disk_sector_t sector, off_t length)
       disk_sector_t sectors2 = bytes_to_sectors(length);
      
       static char zeros[DISK_SECTOR_SIZE];  
-      while(sectors<sectors2){
+      while(sectors!=sectors2){
          sectors++;
          
          if(sectors<9){
