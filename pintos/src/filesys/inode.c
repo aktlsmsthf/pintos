@@ -116,7 +116,6 @@ inode_create (disk_sector_t sector, off_t length)
   if (disk_inode != NULL)
     {
       size_t sectors = bytes_to_sectors (length);
-      printf("%d\n", sectors);
       disk_inode->length = length;
       disk_inode->magic = INODE_MAGIC;
       disk_inode->sector = sector;
@@ -165,6 +164,7 @@ inode_create (disk_sector_t sector, off_t length)
         }
      }
      if(sectors>0){
+        printf("1\n");
         free_map_allocate(1, &disk_inode->d_indirect_sector);
         disk_sector_t indirects[128];
         for(i=0;i<128;i++){
