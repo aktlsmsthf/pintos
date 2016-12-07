@@ -392,6 +392,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       static char zeros[DISK_SECTOR_SIZE];
       while(sectors!=sectors2){
+         printf("a\n");
          sectors++;
          if(sectors<10){
             free_map_allocate(1, &inode->data.direct_sector[sectors]);
