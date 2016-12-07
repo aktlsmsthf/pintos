@@ -158,7 +158,7 @@ inode_create (disk_sector_t sector, off_t length)
          }
          else{
             disk_sector_t sectori[128];
-            if((sectors-10)%128==0){
+            if((sectors-5)%128==0){
                free_map_allocate(1, &disk_inode->indirect_sector[(sectors-5)/128]);
             }
             else{
