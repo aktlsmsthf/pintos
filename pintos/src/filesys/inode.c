@@ -250,7 +250,7 @@ inode_close (struct inode *inode)
       /* Deallocate blocks if removed. */
       if (inode->removed) 
         {
-         lock_acquire(&inode_lock);
+         //lock_acquire(&inode_lock);
          free_map_release (inode->sector, 1);   
           /**free_map_release (inode->data.start,
                             bytes_to_sectors (inode->data.length)); **/
@@ -299,7 +299,7 @@ inode_close (struct inode *inode)
             }
             free_map_release(inode->data.d_indirect_sector, 1);
          }
-         lock_release(&inode_lock); 
+         //lock_release(&inode_lock); 
         }
        
       
