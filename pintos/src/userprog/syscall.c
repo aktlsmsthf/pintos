@@ -58,11 +58,9 @@ syscall_handler (struct intr_frame *f UNUSED)
     
       int status = *((int *)(f->esp)+1);
 	  
-      lock_acquire(&sys_lock);
 	  
       exit(status);
-	  
-      lock_release(&sys_lock);	  
+	    
       break;
     }
       
