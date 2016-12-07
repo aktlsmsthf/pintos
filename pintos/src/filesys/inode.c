@@ -66,9 +66,7 @@ byte_to_sector (const struct inode *inode, off_t pos)
    }
    disk_sector_t ret;
    if(sectors<10){
-      printf("1\n");
       ret = inode->data.direct_sector[sectors];
-      printf("2\n");
    }
    else if(sectors>=1290){
       //printf("1\n");
@@ -129,6 +127,7 @@ inode_create (disk_sector_t sector, off_t length)
      
      disk_sector_t sectors = -1;
      disk_sector_t sectors2 = bytes_to_sectors(length);
+     printf("%d\n", sectors2);
      static char zeros[DISK_SECTOR_SIZE];
       while(sectors!=sectors2){
          sectors++;
