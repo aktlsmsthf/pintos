@@ -134,7 +134,7 @@ inode_create (disk_sector_t sector, off_t length)
       while(sectors!=sectors2){
          sectors++;
          
-         if(sectors<9){
+         if(sectors<10){
             free_map_allocate(1, &disk_inode->direct_sector[sectors]);
             disk_write(filesys_disk, disk_inode->direct_sector[sectors], zeros);
             
@@ -246,7 +246,7 @@ inode_close (struct inode *inode)
       /* Deallocate blocks if removed. */
       if (inode->removed) 
         {
-         lock_acquire(&inode_lock);
+         //lock_acquire(&inode_lock);
          free_map_release (inode->sector, 1);   
           /**free_map_release (inode->data.start,
                             bytes_to_sectors (inode->data.length)); **/
@@ -295,7 +295,7 @@ inode_close (struct inode *inode)
             }
             free_map_release(inode->data.d_indirect_sector, 1);
          }
-         lock_release(&inode_lock); 
+         //lock_release(&inode_lock); 
         }
        
       
