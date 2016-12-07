@@ -66,6 +66,8 @@ byte_to_sector (const struct inode *inode, off_t pos)
       return -1;
    }
    disk_sector_t ret;
+   
+   lock_acquire(&inode_lock); 
    if(sectors<10){
       ret = inode->data.direct_sector[sectors];
    }
@@ -85,7 +87,7 @@ byte_to_sector (const struct inode *inode, off_t pos)
       disk_read(filesys_disk, inode->data.indirect_sector[i], sector);
       ret = sector[(sectors-10)%128];
    }
-
+   lock_release(&inode_lock);
    return ret;
 }
 
