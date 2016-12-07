@@ -404,16 +404,20 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
     return 0;
    
    if(size+offset>inode->data.length){
-      printf("a\n");
-      inode_deny_write (inode); 
+      printf("1\n");
+      //inode_deny_write (inode); 
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       static char zeros[DISK_SECTOR_SIZE];
+      printf("2\n");
       while(sectors!=sectors2){
+         printf("3\n");
          sectors++;
          if(sectors<10){
+            printf("4\n");
             free_map_allocate(1, &inode->data.direct_sector[sectors]);
             disk_write(filesys_disk, inode->data.direct_sector[sectors], zeros);
+            printf("5\n");
          }
          if(sectors>=1290){
             disk_sector_t indirects[128];
@@ -447,8 +451,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
       
-      inode_allow_write (inode);
-      printf("b\n");
+      //inode_allow_write (inode);
    }
    
   while (size > 0) 
