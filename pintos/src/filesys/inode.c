@@ -129,7 +129,7 @@ inode_create (disk_sector_t sector, off_t length)
      
      disk_sector_t sectors = -1;
      disk_sector_t sectors2 = bytes_to_sectors(length);
-     //printf("%d\n", sectors2);
+     printf("%d\n", sectors2);
      static char zeros[DISK_SECTOR_SIZE];
       while(sectors!=sectors2){
          sectors++;
