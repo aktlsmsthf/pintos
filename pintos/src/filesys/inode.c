@@ -64,8 +64,10 @@ byte_to_sector (const struct inode *inode, off_t pos)
       
       return -1;
    }
+   lock_acquire(&inode_lock);
+   disk_sector_t ret;
    if(sectors<10){
-      return inode->data.direct_sector[sectors];
+      ret = inode->data.direct_sector[sectors];
    }
    else if(sectors>=1290){
       //printf("1\n");
@@ -75,14 +77,16 @@ byte_to_sector (const struct inode *inode, off_t pos)
       disk_sector_t sector[128];
       disk_read(filesys_disk, indirect_sectors[i], sector);
       //printf("2\n");
-      return sector[(sectors-1290)%128];
+      ret = sector[(sectors-1290)%128];
    }
    else{
       disk_sector_t sector[128];
       disk_sector_t i = (sectors-10)/128;
       disk_read(filesys_disk, inode->data.indirect_sector[i], sector);
-      return sector[(sectors-10)%128];
+      ret = sector[(sectors-10)%128];
    }
+   lock_release(&inode_lock);
+   return ret;
 }
 
 /* List of open inodes, so that opening a single inode twice
