@@ -64,7 +64,6 @@ byte_to_sector (const struct inode *inode, off_t pos)
       
       return -1;
    }
-   lock_acquire(&inode_lock);
    disk_sector_t ret;
    if(sectors<10){
       ret = inode->data.direct_sector[sectors];
@@ -85,7 +84,6 @@ byte_to_sector (const struct inode *inode, off_t pos)
       disk_read(filesys_disk, inode->data.indirect_sector[i], sector);
       ret = sector[(sectors-10)%128];
    }
-   lock_release(&inode_lock);
    return ret;
 }
 
@@ -381,10 +379,10 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
 
   if (inode->deny_write_cnt)
     return 0;
-   
+   lock_acquire(&inode_lock);
    if(size+offset>inode->data.length){
       //inode_deny_write (inode); 
-      lock_acquire(&inode_lock);
+      
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       static char zeros[DISK_SECTOR_SIZE];
@@ -425,7 +423,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       }
       inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
-      lock_release(&inode_lock);
+      
       //inode_allow_write (inode);
    }
    
@@ -461,6 +459,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       bytes_written += chunk_size;
     }
   free (bounce);
+   lock_release(&inode_lock);
   return bytes_written;
 }
 
