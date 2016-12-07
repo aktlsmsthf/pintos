@@ -131,17 +131,17 @@ inode_create (disk_sector_t sector, off_t length)
       while(sectors!=sectors2){
          sectors++;
          if(sectors<10){
-            free_map_allocate(1, &inode->data.direct_sector[sectors]);
-            disk_write(filesys_disk, inode->data.direct_sector[sectors], zeros);
+            free_map_allocate(1, disk_inode->direct_sector[sectors]);
+            disk_write(filesys_disk, disk_inode->direct_sector[sectors], zeros);
             
          }
          else if(sectors>=1290){
             disk_sector_t indirects[128];
             if(sectors==1290){
-               free_map_allocate(1, &inode->data.d_indirect_sector);
+               free_map_allocate(1, disk_inode->d_indirect_sector);
             }
             else{
-               disk_read(filesys_disk, inode->data.d_indirect_sector, indirects);
+               disk_read(filesys_disk, disk_inode->d_indirect_sector, indirects);
             }
             disk_sector_t sectordi[128];
             disk_read(filesys_disk, indirects[(sectors-1290)/128], sectordi);
@@ -153,14 +153,14 @@ inode_create (disk_sector_t sector, off_t length)
          else{
             disk_sector_t sectori[128];
             if((sectors-10)%128==0){
-               free_map_allocate(1, &inode->data.indirect_sector[(sectors-10)/128]);
+               free_map_allocate(1, disk_inode->indirect_sector[(sectors-10)/128]);
             }
             else{
-               disk_read(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
+               disk_read(filesys_disk, disk_inode->indirect_sector[(sectors-10)/128], sectori);
             }
             free_map_allocate(1, &sectori[(sectors-10)%128]);
             disk_write(filesys_disk, sectori[(sectors-10)%128], zeros);
-            disk_write(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
+            disk_write(filesys_disk, disk_inode->indirect_sector[(sectors-10)/128], sectori);
          }
       }
      disk_write(filesys_disk, sector, disk_inode);
