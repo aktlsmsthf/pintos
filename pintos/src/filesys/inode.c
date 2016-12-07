@@ -127,6 +127,10 @@ inode_create (disk_sector_t sector, off_t length)
      
      int i;
      static char zeros[DISK_SECTOR_SIZE];
+     if(sectors==0){
+        free_map_allocate(1, &disk_inode->direct_sector[i]);
+        disk_write(filesys_disk, disk_inode->direct_sector[i], zeros);
+     }
      if(sectors>0){
          for(i=0; i<10; i++){
            free_map_allocate(1, &disk_inode->direct_sector[i]);
