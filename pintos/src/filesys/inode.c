@@ -404,23 +404,17 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
     return 0;
    
    if(size+offset>inode->data.length){
-      printf("1\n");
       //inode_deny_write (inode); 
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       static char zeros[DISK_SECTOR_SIZE];
-      printf("2\n");
       while(sectors!=sectors2){
-         printf("3\n");
          sectors++;
          if(sectors<10){
-            printf("4\n");
             free_map_allocate(1, &inode->data.direct_sector[sectors]);
             disk_write(filesys_disk, inode->data.direct_sector[sectors], zeros);
-            printf("5\n");
          }
          if(sectors>=1290){
-             printf("6\n"); 
             disk_sector_t indirects[128];
             if(sectors==1290){
                free_map_allocate(1, &inode->data.d_indirect_sector);
@@ -428,26 +422,30 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
             else{
                disk_read(filesys_disk, inode->data.d_indirect_sector, indirects);
             }
-            printf("7\n"); 
             disk_sector_t sectordi[128];
             disk_read(filesys_disk, indirects[(sectors-1290)/128], sectordi);
             free_map_allocate(1, &sectordi[(sectors-1290)%128]);
             disk_write(filesys_disk, sectordi[(sectors-1290)%128], zeros);
             disk_write(filesys_disk, indirects[(sectors-1290)/128], sectordi);
             disk_write(filesys_disk, inode->data.d_indirect_sector, indirects);
-            printf("8\n"); 
          }
          else{
-            printf("9\n"); 
+            printf("1\n"); 
             disk_sector_t sectori[128];
+            printf("2\n"); 
             if((sectors-10)%128==0){
+               printf("3\n"); 
                free_map_allocate(1, &inode->data.indirect_sector[(sectors-10)/128]);
             }
             else{
+               printf("4\n"); 
                disk_read(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
             }
+            printf("5\n"); 
             free_map_allocate(1, &sectori[(sectors-10)%128]);
+            printf("6\n"); 
             disk_write(filesys_disk, sectori[(sectors-10)%128], zeros);
+            printf("7\n"); 
             disk_write(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
             printf("10\n"); 
          }
