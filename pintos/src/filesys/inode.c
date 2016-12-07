@@ -435,11 +435,13 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
                free_map_allocate(1, &inode->data.indirect_sector[(sectors-10)/128]);
             }
             else{
+               printf("2\n");
                if(inode->data.indirect_sector[(sectors-10)/128]==NULL){
                   printf("1\n");
                }
                disk_read(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
             }
+            printf("3\n");
             free_map_allocate(1, &sectori[(sectors-10)%128]);
             disk_write(filesys_disk, sectori[(sectors-10)%128], zeros);
             disk_write(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
