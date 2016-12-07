@@ -65,7 +65,6 @@ byte_to_sector (const struct inode *inode, off_t pos)
       
       return -1;
    }
-   lock_acquire(&inode_lock);
    disk_sector_t ret;
    if(sectors<10){
       ret = inode->data.direct_sector[sectors];
@@ -86,7 +85,7 @@ byte_to_sector (const struct inode *inode, off_t pos)
       disk_read(filesys_disk, inode->data.indirect_sector[i], sector);
       ret = sector[(sectors-10)%128];
    }
-   lock_release(&inode_lock);
+
    return ret;
 }
 
@@ -119,7 +118,6 @@ inode_create (disk_sector_t sector, off_t length)
      one sector in size, and you should fix that. */
   ASSERT (sizeof *disk_inode == DISK_SECTOR_SIZE);
   
-   lock_acquire(&inode_lock);
   disk_inode = calloc (1, sizeof *disk_inode);
   if (disk_inode != NULL)
     {
@@ -173,7 +171,6 @@ inode_create (disk_sector_t sector, off_t length)
       free (disk_inode);
      
     }
-   lock_release(&inode_lock);
   return success;
 }
 
@@ -372,7 +369,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
    
    if(size+offset>inode->data.length){
       //inode_deny_write (inode); 
-      //lock_acquire(&inode_lock);
+      lock_acquire(&inode_lock);
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       static char zeros[DISK_SECTOR_SIZE];
@@ -413,7 +410,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       }
       inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
-      //lock_release(&inode_lock);
+      lock_release(&inode_lock);
       //inode_allow_write (inode);
    }
    
