@@ -131,14 +131,14 @@ inode_create (disk_sector_t sector, off_t length)
       while(sectors!=sectors2){
          sectors++;
          if(sectors<10){
-            free_map_allocate(1, disk_inode->direct_sector[sectors]);
+            free_map_allocate(1, &disk_inode->direct_sector[sectors]);
             disk_write(filesys_disk, disk_inode->direct_sector[sectors], zeros);
             
          }
          else if(sectors>=1290){
             disk_sector_t indirects[128];
             if(sectors==1290){
-               free_map_allocate(1, disk_inode->d_indirect_sector);
+               free_map_allocate(1, &disk_inode->d_indirect_sector);
             }
             else{
                disk_read(filesys_disk, disk_inode->d_indirect_sector, indirects);
@@ -153,7 +153,7 @@ inode_create (disk_sector_t sector, off_t length)
          else{
             disk_sector_t sectori[128];
             if((sectors-10)%128==0){
-               free_map_allocate(1, disk_inode->indirect_sector[(sectors-10)/128]);
+               free_map_allocate(1, &disk_inode->indirect_sector[(sectors-10)/128]);
             }
             else{
                disk_read(filesys_disk, disk_inode->indirect_sector[(sectors-10)/128], sectori);
