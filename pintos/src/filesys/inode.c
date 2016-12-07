@@ -94,7 +94,7 @@ void
 inode_init (void) 
 {
   list_init (&open_inodes);
-  lock_init(inode_lock);
+  lock_init(&inode_lock);
 }
 
 /* Initializes an inode with LENGTH bytes of data and
