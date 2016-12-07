@@ -435,7 +435,9 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
                free_map_allocate(1, &inode->data.indirect_sector[(sectors-10)/128]);
             }
             else{
-               printf("%d\n",inode->data.indirect_sector[(sectors-10)/128] ); 
+               if(inode->data.indirect_sector[(sectors-10)/128]==NULL){
+                  printf("1\n");
+               }
                disk_read(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
             }
             free_map_allocate(1, &sectori[(sectors-10)%128]);
