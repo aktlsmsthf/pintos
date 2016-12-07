@@ -94,6 +94,7 @@ void
 inode_init (void) 
 {
   list_init (&open_inodes);
+  lock_init(inode_lock);
 }
 
 /* Initializes an inode with LENGTH bytes of data and
@@ -112,7 +113,8 @@ inode_create (disk_sector_t sector, off_t length)
   /* If this assertion fails, the inode structure is not exactly
      one sector in size, and you should fix that. */
   ASSERT (sizeof *disk_inode == DISK_SECTOR_SIZE);
-
+  
+  lock_acquire(&inode_lock);
   disk_inode = calloc (1, sizeof *disk_inode);
   if (disk_inode != NULL)
     {
@@ -179,7 +181,7 @@ inode_create (disk_sector_t sector, off_t length)
       free (disk_inode);
      
     }
-   
+   lock_release(&inode_lock);
   return success;
 }
 
