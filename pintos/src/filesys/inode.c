@@ -130,7 +130,8 @@ inode_create (disk_sector_t sector, off_t length)
       disk_sector_t sectors = -1;
       disk_sector_t sectors2 = bytes_to_sectors(length);
      
-      static char zeros[DISK_SECTOR_SIZE];  
+      static char zeros[DISK_SECTOR_SIZE]; 
+      lock_acquire(&inode_lock); 
       while(sectors!=sectors2){
          sectors++;
          
@@ -140,7 +141,6 @@ inode_create (disk_sector_t sector, off_t length)
             
          }
          else if(sectors>=1290){
-            printf("1290\n");
             disk_sector_t indirects[128];
             if(sectors==1290){
                free_map_allocate(1, &disk_inode->d_indirect_sector);
@@ -156,7 +156,6 @@ inode_create (disk_sector_t sector, off_t length)
             disk_write(filesys_disk, disk_inode->d_indirect_sector, indirects);
          }
          else{
-            printf("10\n");
             disk_sector_t sectori[128];
             if((sectors-10)%128==0){
                free_map_allocate(1, &disk_inode->indirect_sector[(sectors-10)/128]);
@@ -172,7 +171,7 @@ inode_create (disk_sector_t sector, off_t length)
      disk_write(filesys_disk, sector, disk_inode);
      success = true;
       free (disk_inode);
-     
+     lock_release(&inode_lock);
     }
   return success;
 }
