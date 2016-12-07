@@ -12,8 +12,8 @@
 
 /* Identifies an inode. */
 #define INODE_MAGIC 0x494e4f44
-#define DN
-#define IDN
+#define DN 10
+#define IDN 10
 /* On-disk inode.
    Must be exactly DISK_SECTOR_SIZE bytes long. */
 struct inode_disk
@@ -25,7 +25,7 @@ struct inode_disk
     disk_sector_t indirect_sector[IDN];
     disk_sector_t d_indirect_sector;
     disk_sector_t  sector;
-    uint32_t unused[109];               /* Not used. */
+    uint32_t unused[124-DN-IDN];               /* Not used. */
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
