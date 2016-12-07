@@ -168,10 +168,11 @@ inode_create (disk_sector_t sector, off_t length)
             disk_write(filesys_disk, disk_inode->indirect_sector[(sectors-10)/128], sectori);
          }
       }
+     
+     lock_release(&inode_lock);  
      disk_write(filesys_disk, sector, disk_inode);
      success = true;
       free (disk_inode);
-     lock_release(&inode_lock);
     }
   return success;
 }
