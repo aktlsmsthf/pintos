@@ -409,8 +409,6 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       static char zeros[DISK_SECTOR_SIZE];
-      printf("%d\n", sectors);
-      printf("%d\n", sectors2);
       while(sectors!=sectors2){
          sectors++;
          if(sectors<10){
