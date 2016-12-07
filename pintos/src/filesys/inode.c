@@ -420,6 +420,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
             printf("5\n");
          }
          if(sectors>=1290){
+             printf("6\n"); 
             disk_sector_t indirects[128];
             if(sectors==1290){
                free_map_allocate(1, &inode->data.d_indirect_sector);
@@ -427,15 +428,17 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
             else{
                disk_read(filesys_disk, inode->data.d_indirect_sector, indirects);
             }
-            
+            printf("7\n"); 
             disk_sector_t sectordi[128];
             disk_read(filesys_disk, indirects[(sectors-1290)/128], sectordi);
             free_map_allocate(1, &sectordi[(sectors-1290)%128]);
             disk_write(filesys_disk, sectordi[(sectors-1290)%128], zeros);
             disk_write(filesys_disk, indirects[(sectors-1290)/128], sectordi);
             disk_write(filesys_disk, inode->data.d_indirect_sector, indirects);
+            printf("8\n"); 
          }
          else{
+            printf("9\n"); 
             disk_sector_t sectori[128];
             if((sectors-10)%128==0){
                free_map_allocate(1, &inode->data.indirect_sector[(sectors-10)/128]);
@@ -446,6 +449,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
             free_map_allocate(1, &sectori[(sectors-10)%128]);
             disk_write(filesys_disk, sectori[(sectors-10)%128], zeros);
             disk_write(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
+            printf("10\n"); 
          }
       }
       inode->data.length = size+offset;
