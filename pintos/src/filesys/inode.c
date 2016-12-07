@@ -65,11 +65,10 @@ byte_to_sector (const struct inode *inode, off_t pos)
       return -1;
    }
    if(sectors<10){
-      printf("a\n");
+      printf("%d\n", inode->data.direct_sector[secotrs]);
       return inode->data.direct_sector[sectors];
    }
    else if(sectors>=1290){
-      printf("b\n");
       disk_sector_t indirect_sectors[128];
       disk_read(filesys_disk, inode->data.d_indirect_sector, indirect_sectors);
       disk_sector_t i = (sectors-1290)/128;
@@ -78,7 +77,6 @@ byte_to_sector (const struct inode *inode, off_t pos)
       return sector[(sectors-1290)%128];
    }
    else{
-      printf("c\n");
       disk_sector_t sector[128];
       disk_sector_t i = (sectors-10)/128;
       disk_read(filesys_disk, inode->data.indirect_sector[i], sector);
