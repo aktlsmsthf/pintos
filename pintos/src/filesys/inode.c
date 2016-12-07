@@ -78,7 +78,7 @@ byte_to_sector (const struct inode *inode, off_t pos)
       disk_sector_t sector[128];
       disk_read(filesys_disk, indirect_sectors[i], sector);
       //printf("2\n");
-      ret = sector[(sectors-1290)%128];
+      ret = sector[(sectors-1285)%128];
    }
    else{
       disk_sector_t sector[128];
