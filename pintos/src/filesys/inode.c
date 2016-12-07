@@ -430,24 +430,17 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
             disk_write(filesys_disk, inode->data.d_indirect_sector, indirects);
          }
          else{
-            printf("1\n"); 
             disk_sector_t sectori[128];
-            printf("2\n"); 
             if((sectors-10)%128==0){
-               printf("3\n"); 
                free_map_allocate(1, &inode->data.indirect_sector[(sectors-10)/128]);
             }
             else{
-               printf("4\n"); 
+               printf("%d\n",inode->data.indirect_sector[(sectors-10)/128] ); 
                disk_read(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
             }
-            printf("5\n"); 
             free_map_allocate(1, &sectori[(sectors-10)%128]);
-            printf("6\n"); 
             disk_write(filesys_disk, sectori[(sectors-10)%128], zeros);
-            printf("7\n"); 
             disk_write(filesys_disk, inode->data.indirect_sector[(sectors-10)/128], sectori);
-            printf("10\n"); 
          }
       }
       inode->data.length = size+offset;
