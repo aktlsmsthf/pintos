@@ -4,6 +4,7 @@
 #include <list.h>
 #include "filesys/file.h"
 #include "filesys/filesys.h"
+#include "filesys/directory.h"
 
 struct lock sys_lock;
 
@@ -14,6 +15,8 @@ struct file_fd{
   int fd;
   struct file *file;
   struct list_elem elem;
+  struct dir *dir;
+  bool is_dir;
   bool is_closed;
 };
 
