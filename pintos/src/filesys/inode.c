@@ -133,8 +133,6 @@ inode_create (disk_sector_t sector, off_t length)
       
       lock_acquire(&inode_lock);
       
-      free_map_allocate(1, &disk_inode->sector);  
-      disk_write(filesys_disk, sector, disk_inode);
       static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
          sectors++;
@@ -174,9 +172,9 @@ inode_create (disk_sector_t sector, off_t length)
             
          }
       }   
-     //disk_write(filesys_disk, sector, disk_inode);
+     disk_write(filesys_disk, sector, disk_inode);
      success = true;
-      
+     
      lock_release(&inode_lock);       
       free (disk_inode);
      
