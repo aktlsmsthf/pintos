@@ -244,9 +244,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
-          lock_acquire(&sys_lock);
+          //lock_acquire(&sys_lock);
           int r = (int) file_read(ff, buffer, size);
-          lock_release(&sys_lock);
+          //lock_release(&sys_lock);
           f->eax = r;
         }
       }
@@ -311,9 +311,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
-          lock_acquire(&sys_lock);
+          //lock_acquire(&sys_lock);
           int r = (int) file_write(ff, buffer, size);
-          lock_release(&sys_lock);
+          //lock_release(&sys_lock);
           f->eax = r;
         }
       }
@@ -440,10 +440,10 @@ syscall_handler (struct intr_frame *f UNUSED)
 		if(!spte->lazy){
 			if(pagedir_is_dirty(spte->t->pagedir, addr)){
 				
-				lock_acquire(&sys_lock);  
+				//lock_acquire(&sys_lock);  
 				file_write_at(mapped->file, spte->page, spte->read_bytes, spte->ofs);
 				
-				lock_release(&sys_lock);  
+				//lock_release(&sys_lock);  
 			}
 		}
 		pagedir_clear_page(spte->t, addr);
