@@ -50,7 +50,8 @@ bool
 filesys_create (const char *name, off_t initial_size) 
 {
   disk_sector_t inode_sector = 0;
-  struct dir *dir = dir_open_root ();
+  //struct dir *dir = dir_open_root ();
+  char *dir_name;
   bool success = (dir != NULL
                   && free_map_allocate (1, &inode_sector)
                   && inode_create (inode_sector, initial_size)
@@ -106,16 +107,40 @@ do_format (void)
   printf ("done.\n");
 }
 
-struct dir * lowest_dir(char *name){
+struct dir * lowest_dir(char *name, char **dir_name){
    char *save;
    char *token;
-   char slash = "/";
+   token =name;
    struct dir *dir;
-   if(name[0] == slash){
+   if(name[0] == "/"){
       dir = dir_open_root();
+      token = strtok_r(name, "/", &save);
    }
    else{
       dir = dir_reopen(thread_current()->current_dir);
    }
-   
+   token = strtok_r(token, "/", &save);
+   while(token!=NULL){
+      if(token == NULL || token = "."){
+         token = strtok_r(NULL, "/", &save);
+         continue;
+      }
+      else if(token = ".."){
+         struct inode_disk *disk_inode = malloc(sizeof (struct inode_disk));
+         dir = dir_open(inode_open(disk->inode.data->parent));
+      }
+      else{
+         struct inode *inode;
+         if(!dir_lookup(dir, token, &inode)){
+            dir = NULL;
+            return dir;
+         }
+         else{
+            dir = dir_open(inode);
+         }
+      }
+      *dir_name = token;
+      token = strtok_r(NULL, "/", &save);
+   }
+   return dir;
 }
