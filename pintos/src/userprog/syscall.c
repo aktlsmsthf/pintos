@@ -462,9 +462,35 @@ syscall_handler (struct intr_frame *f UNUSED)
 	file_close(mapped->file);  
 	lock_release(&sys_lock);  
 	free(mapped);
-	
+        break;
     }
-
+    case SYS_CHDIR:{
+      if(!user_memory(f->esp, 1)){ exit(-1);} 
+      char * dir = *((char **)(f->esp)+1);
+      
+      break;	  
+    }
+    case SYS_MKDIR:{      
+      if(!user_memory(f->esp, 1)){ exit(-1);}
+      char * dir = *((char **)(f->esp)+1);	  	  
+      break;
+    }
+    case SYS_READDIR:{
+      if(!user_memory(f->esp, 2)){ exit(-1);}
+      int fd = *((int *)(f->esp)+1);
+      char * name = *((char **)(f->esp)+2);	  
+      break;
+    }
+    case SYS_ISDIR:{	  
+      if(!user_memory(f->esp, 1)){ exit(-1);}
+      int fd = *((int *)(f->esp)+1);
+      break;
+    }
+    case SYS_INUMBER:{	  
+      if(!user_memory(f->esp, 1)){ exit(-1);}
+      int fd = *((int *)(f->esp)+1);
+      break;
+    }		  
   }
 }
 	
