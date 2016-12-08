@@ -347,9 +347,9 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
       
        //
        struct cache_entry *c = read_to_cache(sector_idx, true);
-       //lock_acquire(&cache_lock);
+       lock_acquire(&cache_lock);
        memcpy(buffer+bytes_read, c->cache+sector_ofs, chunk_size);
-       //lock_release(&cache_lock);
+       lock_release(&cache_lock);
       
       /* Advance. */
       size -= chunk_size;
@@ -446,11 +446,11 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
        if(!c){
           c = read_to_cache(sector_idx, true);
        }
-       //lock_acquire(&cache_lock);
+       lock_acquire(&cache_lock);
        
        memcpy(c->cache+sector_ofs, buffer+bytes_written, chunk_size);
        c->dirty = true;
-       //lock_release(&cache_lock);
+       lock_release(&cache_lock);
        
       /* Advance. */
       size -= chunk_size;
