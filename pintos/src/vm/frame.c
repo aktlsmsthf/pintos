@@ -45,7 +45,6 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
     frame=frame_evict(flags);
   }
   
-  lock_acquire(&frame_lock);
   spte->page = page;
   spte->fe = fe;
   spte->writable = writable;
@@ -60,6 +59,7 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   fe->swap_where = -1;
   fe->spte = spte;
   
+  lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
   return frame;
