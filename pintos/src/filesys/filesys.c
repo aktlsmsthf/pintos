@@ -94,7 +94,7 @@ filesys_open (const char *name, bool is_dir)
      real_name = name;
   }
   if (dir != NULL)
-    dir_lookup (dir, name, &inode);
+    dir_lookup (dir, real_name, &inode);
   dir_close (dir);
   
   if(is_dir)
@@ -110,8 +110,11 @@ filesys_open (const char *name, bool is_dir)
 bool
 filesys_remove (const char *name) 
 {
-  struct dir *dir = dir_open_root ();
-  bool success = dir != NULL && dir_remove (dir, name);
+  //struct dir *dir = dir_open_root ();
+  char * real_name;
+  struct dir *dir = lowest_dir(name, &real_name);
+   
+  bool success = dir != NULL && dir_remove (dir, real_name);
   dir_close (dir); 
 
   return success;
