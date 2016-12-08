@@ -26,6 +26,7 @@ struct inode_disk
     disk_sector_t d_indirect_sector;
     disk_sector_t  sector;
     int is_dir;
+    disk_sector_t parent;
     uint32_t unused[123-DN-IDN];               /* Not used. */
   };
 
