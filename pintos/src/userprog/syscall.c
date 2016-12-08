@@ -101,9 +101,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax =-1;
       }
       else{
-        //lock_acquire(&sys_lock);
+        lock_acquire(&sys_lock);
         f->eax = filesys_create (file,initial_size);
-        //lock_release(&sys_lock);
+        lock_release(&sys_lock);
       }
       break;
     }
@@ -114,9 +114,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       const char *file = *((char **)(f->esp)+1);
       if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
-      //lock_acquire(&sys_lock);
+      lock_acquire(&sys_lock);
       f->eax = filesys_remove (file);
-      //lock_release(&sys_lock);
+      lock_release(&sys_lock);
       break;
      }
       
@@ -142,9 +142,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
-          //lock_acquire(&sys_lock);
+          lock_acquire(&sys_lock);
           struct file *ff = filesys_open(name);
-          //lock_release(&sys_lock);
+          lock_release(&sys_lock);
           if(ff==NULL) {
             f->eax = -1;
           }
@@ -328,9 +328,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
       struct file *ff = get_file_from_fd(fd);
-      //lock_acquire(&sys_lock);
+      lock_acquire(&sys_lock);
       file_seek(ff, position);
-      //lock_release(&sys_lock);
+      lock_release(&sys_lock);
       break;
     }
       
@@ -343,9 +343,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = -1;
       }
       else{
-        //lock_acquire(&sys_lock);
+        lock_acquire(&sys_lock);
         f->eax = file_tell(ff);
-        //lock_release(&sys_lock);
+        lock_release(&sys_lock);
       }
       break;
     }
@@ -363,11 +363,11 @@ syscall_handler (struct intr_frame *f UNUSED)
           break;
         }
         if(!ffd->is_closed && ffd->file!=NULL){
-          //lock_acquire(&sys_lock);
+          lock_acquire(&sys_lock);
            file_close(ffd->file);
           
           ffd->is_closed=1;
-          //lock_release(&sys_lock);
+          lock_release(&sys_lock);
         }
       } 
       break;
@@ -417,9 +417,9 @@ syscall_handler (struct intr_frame *f UNUSED)
 		m->file = mfile;
 		m->mid = fd;
 		m->size = size;
-	        //lock_acquire(&sys_lock);
+	        lock_acquire(&sys_lock);
 		list_push_front(&thread_current()->mapped_list, &m->elem);
-		//lock_release(&sys_lock);
+		lock_release(&sys_lock);
 		f->eax = fd;
 	}
 	else{
@@ -457,10 +457,10 @@ syscall_handler (struct intr_frame *f UNUSED)
 		write_bytes+=PGSIZE;
 	}
 	  
-	//lock_acquire(&sys_lock);
+	lock_acquire(&sys_lock);
 	list_remove(&mapped->elem);
 	file_close(mapped->file);  
-	//lock_release(&sys_lock);  
+	lock_release(&sys_lock);  
 	free(mapped);
 	
     }
