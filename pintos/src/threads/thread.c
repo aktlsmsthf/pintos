@@ -101,7 +101,7 @@ thread_init (void)
   init_thread (initial_thread, "main", PRI_DEFAULT);
   initial_thread->status = THREAD_RUNNING;
   initial_thread->tid = allocate_tid ();
-  initial_thread->current_dir = dir_open_root();
+  initial_thread->current_dir = NULL;
 }
 
 /* Starts preemptive thread scheduling by enabling interrupts.
@@ -217,7 +217,12 @@ thread_create (const char *name, int priority,
   list_push_front(&(thread_current()->child_list), &chd->elem);
   t->child=chd;
    t->num_file = 0;
-   t->current_dir = dir_reopen(thread_current()->current_dir);
+  if(thread_current()->current_dir ==NULL){
+     t->current_dir == NULL;
+  }
+   else{
+      t->current_dir = dir_reopen(thread_current()->current_dir);
+   }
    
    t->parent = thread_current();
    t->wait=0;
