@@ -196,9 +196,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
           if(spte!=NULL){
     	    if(spte->lazy){
-	      lock_acquire(&sys_lock);
-	      file_frame_alloc(spte);
-		lock_release(&sys_lock);    
+	      file_frame_alloc(spte);   
 	    }
             else if(spte->fe->in_swap){
               swap_in(spte->fe, spte->flags);
@@ -270,9 +268,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
           if(spte!=NULL){
 	    if(spte->lazy){
-		lock_acquire(&sys_lock);    
 	      file_frame_alloc(spte);
-		lock_release(&sys_lock);
 	    }
             if(spte->fe->in_swap){
               swap_in(spte->fe, spte->flags);
