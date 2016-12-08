@@ -131,7 +131,7 @@ inode_create (disk_sector_t sector, off_t length)
       disk_sector_t sectors = -1;
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
-      lock_acquire(&inode_lock);
+      //lock_acquire(&inode_lock);
       
       static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
@@ -174,7 +174,7 @@ inode_create (disk_sector_t sector, off_t length)
      disk_write(filesys_disk, sector, disk_inode);
      success = true;
      
-     lock_release(&inode_lock);       
+     //lock_release(&inode_lock);       
       free (disk_inode);
      
     }
@@ -190,7 +190,7 @@ inode_open (disk_sector_t sector)
   struct list_elem *e;
   struct inode *inode;
   
-  lock_acquire(&inode_lock);
+  //lock_acquire(&inode_lock);
   /* Check whether this inode is already open. */
   for (e = list_begin (&open_inodes); e != list_end (&open_inodes);
        e = list_next (e)) 
@@ -216,7 +216,7 @@ inode_open (disk_sector_t sector)
   inode->removed = false;
   disk_read (filesys_disk, inode->sector, &inode->data);
   
-  lock_release(&inode_lock); 
+  //lock_release(&inode_lock); 
   return inode;
 }
 
@@ -255,7 +255,7 @@ inode_close (struct inode *inode)
       /* Deallocate blocks if removed. */
       if (inode->removed) 
         {
-         lock_acquire(&inode_lock);
+         //lock_acquire(&inode_lock);
          free_map_release (inode->sector, 1);   
           /**free_map_release (inode->data.start,
                             bytes_to_sectors (inode->data.length)); **/
@@ -304,7 +304,7 @@ inode_close (struct inode *inode)
             }
             free_map_release(inode->data.d_indirect_sector, 1);
          }
-         lock_release(&inode_lock); 
+         //lock_release(&inode_lock); 
         }
        
       
@@ -381,7 +381,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
    
    if(size+offset>inode->data.length){
       //inode_deny_write (inode); 
-      lock_acquire(&inode_lock);
+      //lock_acquire(&inode_lock);
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       static char zeros[DISK_SECTOR_SIZE];
@@ -422,7 +422,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       }
       inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
-      lock_release(&inode_lock);
+      //lock_release(&inode_lock);
       //inode_allow_write (inode);
    }
    
