@@ -475,7 +475,8 @@ void exit(int status){
       chd=curr->child;
       chd->ret =status;
       chd->exit_called =1;
-      
+      lock_acquire(&sys_lock);
+      lock_release(&sys_lock);
       printf("%s: exit(%d)\n",curr->name,chd->ret);
       thread_exit();
 }struct file* get_file_from_fd(int fd){
