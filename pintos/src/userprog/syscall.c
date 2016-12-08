@@ -508,12 +508,14 @@ syscall_handler (struct intr_frame *f UNUSED)
 	dir_lookup(dir, dir_name, &inode);
 	dir_close(dir);
 	dir = dir_open(inode);
-	if(!dir){
+	if(dir!=NULL){
 		dir_close(thread_current()->current_dir);
 		thread_current()->current_dir = dir;
-		return true;
+		f->eax = true;
 	}
-	 return false;
+	else{
+		f->eax = false;
+	}
       break;	  
     }
     case SYS_MKDIR:{      
