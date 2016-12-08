@@ -385,6 +385,8 @@ syscall_handler (struct intr_frame *f UNUSED)
 	}
 	lock_acquire(&sys_lock);   
 	struct file *mfile = file_reopen(file);
+	
+	lock_release(&sys_lock);   
 	uint32_t size = file_length(mfile);
 	uint32_t read_bytes = size;
 	uint32_t zero_bytes = size%PGSIZE;
@@ -420,8 +422,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	}
 	else{
 		f->eax = -1;
-	} 
-	lock_release(&sys_lock);  
+	}  
 	break;
     }
     
