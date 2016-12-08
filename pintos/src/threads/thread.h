@@ -104,6 +104,8 @@ struct thread
     struct list_elem elem;              /* List element. */
     struct thread *parent;
     bool wait;
+  
+    char current_dir[256];
     
     struct hash spt;
 
