@@ -63,7 +63,7 @@ filesys_create (const char *name, off_t initial_size, bool is_dir)
    else{
        bool success = (dir != NULL
                   && free_map_allocate (1, &inode_sector)
-                  && inode_create (inode_sector, initial_size)
+                  && inode_create (inode_sector, initial_size, false)
                   && dir_add (dir, name, inode_sector));
    }
   if (!success && inode_sector != 0) 
@@ -79,15 +79,27 @@ filesys_create (const char *name, off_t initial_size, bool is_dir)
    Fails if no file named NAME exists,
    or if an internal memory allocation fails. */
 struct file *
-filesys_open (const char *name)
+filesys_open (const char *name, bool is_dir)
 {
-  struct dir *dir = dir_open_root ();
+  //struct dir *dir = dir_open_root ();
+  
   struct inode *inode = NULL;
-
+  char *real_name;
+  struct dir *dir;
+  if(is_dir){
+     dir = lowest_dir(name, &real_name);
+  }
+  else{
+     dir = thread_current()->current_dir;
+     real_name = name;
+  }
   if (dir != NULL)
     dir_lookup (dir, name, &inode);
   dir_close (dir);
-
+  
+  if(is_dir)
+     return dir_open(inode);
+   
   return file_open (inode);
 }
 
