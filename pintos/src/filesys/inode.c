@@ -424,13 +424,14 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       //inode_allow_write (inode);
    }
    
-       lock_acquire(&inode_lock);
   while (size > 0) 
     {
+      
+      lock_acquire(&inode_lock); 
       /* Sector to write, starting byte offset within sector. */
       disk_sector_t sector_idx = byte_to_sector (inode, offset);
       int sector_ofs = offset % DISK_SECTOR_SIZE;
-
+      
       /* Bytes left in inode, bytes left in sector, lesser of the two. */
       off_t inode_left = inode_length (inode) - offset;
       int sector_left = DISK_SECTOR_SIZE - sector_ofs;
@@ -451,13 +452,13 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
        memcpy(c->cache+sector_ofs, buffer+bytes_written, chunk_size);
        c->dirty = true;
        //lock_release(&cache_lock);
-
+       
+      lock_release(&inode_lock);
       /* Advance. */
       size -= chunk_size;
       offset += chunk_size;
       bytes_written += chunk_size;
     }
-   lock_release(&inode_lock);
   free (bounce);
    
   return bytes_written;
