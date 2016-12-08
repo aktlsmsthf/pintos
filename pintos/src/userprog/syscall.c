@@ -383,10 +383,10 @@ syscall_handler (struct intr_frame *f UNUSED)
 		f->eax = -1;
 		break;
 	}
-	lock_acquire(&sys_lock);   
+	//lock_acquire(&sys_lock);   
 	struct file *mfile = file_reopen(file);
 	
-	lock_release(&sys_lock);   
+	//lock_release(&sys_lock);   
 	uint32_t size = file_length(mfile);
 	uint32_t read_bytes = size;
 	uint32_t zero_bytes = size%PGSIZE;
@@ -455,9 +455,9 @@ syscall_handler (struct intr_frame *f UNUSED)
 		write_bytes+=PGSIZE;
 	}
 	list_remove(&mapped->elem);
-	lock_acquire(&sys_lock);
+	//lock_acquire(&sys_lock);
 	file_close(mapped->file);  
-	lock_release(&sys_lock);  
+	//lock_release(&sys_lock);  
 	free(mapped);
 	
     }
