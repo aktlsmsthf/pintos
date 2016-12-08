@@ -249,7 +249,12 @@ process_exit (void)
         felem=list_front(&(curr->file_list));
         ffd=list_entry(felem, struct file_fd, elem);
         if(!ffd->is_closed){
-         file_close(ffd->file);
+		if(ffd->is_dir){
+			dir_close(ffd->dir);
+		}
+		else{
+         		file_close(ffd->file);
+		}
         }
 
         list_remove(felem);
