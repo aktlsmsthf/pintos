@@ -129,12 +129,12 @@ inode_create (disk_sector_t sector, off_t length)
 
      
       disk_sector_t sectors = 0;
-      disk_sector_t sectors2 = bytes_to_sectors(length)+1;
+      disk_sector_t sectors2 = bytes_to_sectors(length);
       
       lock_acquire(&inode_lock);
       
       static char zeros[DISK_SECTOR_SIZE];  
-      while(sectors!=sectors2){
+      while(sectors!=sectors2 || sectors==0){
          sectors++;
          
          if(sectors<DN){
