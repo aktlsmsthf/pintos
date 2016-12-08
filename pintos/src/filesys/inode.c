@@ -45,7 +45,7 @@ struct inode
     bool removed;                       /* True if deleted, false otherwise. */
     int deny_write_cnt;                 /* 0: writes ok, >0: deny writes. */
     struct inode_disk data;             /* Inode content. */
-    struct lock ilock; 
+    //struct lock ilock; 
   };
 
 /* Returns the disk sector that contains byte offset POS within
@@ -214,7 +214,7 @@ inode_open (disk_sector_t sector)
   inode->open_cnt = 1;
   inode->deny_write_cnt = 0;
   inode->removed = false;
-  lock_init(&inode->ilock);
+  //lock_init(&inode->ilock);
   disk_read (filesys_disk, inode->sector, &inode->data);
   
   return inode;
@@ -255,7 +255,7 @@ inode_close (struct inode *inode)
       /* Deallocate blocks if removed. */
       if (inode->removed) 
         {
-         lock_acquire(&inode->ilock);
+         //lock_acquire(&inode->ilock);
          free_map_release (inode->sector, 1);   
           /**free_map_release (inode->data.start,
                             bytes_to_sectors (inode->data.length)); **/
@@ -304,7 +304,7 @@ inode_close (struct inode *inode)
             }
             free_map_release(inode->data.d_indirect_sector, 1);
          }
-         lock_release(&inode->ilock); 
+         //lock_release(&inode->ilock); 
         }
        
       
@@ -424,7 +424,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       //lock_release(&inode->ilock);
       //inode_allow_write (inode);
    }
-   lock_acquire(&inode->ilock);
+   //lock_acquire(&inode->ilock);
   while (size > 0) 
     {
       
@@ -458,7 +458,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       offset += chunk_size;
       bytes_written += chunk_size;
     }
-   lock_release(&inode->ilock);
+   //lock_release(&inode->ilock);
   free (bounce);
    
   return bytes_written;
