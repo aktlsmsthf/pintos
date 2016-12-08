@@ -128,7 +128,7 @@ inode_create (disk_sector_t sector, off_t length)
       disk_inode->sector = sector;
 
      
-      disk_sector_t sectors = 0;
+      disk_sector_t sectors = -1;
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
       lock_acquire(&inode_lock);
