@@ -8,6 +8,7 @@
 #include "filesys/directory.h"
 #include "devices/disk.h"
 #include "filesys/cache.h"
+#include "threads/thread.h"
 
 /* The disk that contains the file system. */
 struct disk *filesys_disk;
@@ -106,5 +107,15 @@ do_format (void)
 }
 
 struct dir * lowest_dir(char *name){
+   char *save;
+   char *token;
+   char slash = "/";
+   struct dir *dir;
+   if(name[0] == slash){
+      dir = dir_open_root();
+   }
+   else{
+      dir = dir_reopen(thread_current()->current_dir);
+   }
    
 }
