@@ -90,9 +90,6 @@ filesys_open (const char *name)
   if (dir != NULL)
     dir_lookup (dir, real_name, &inode);
   dir_close (dir);
-  
-  if(inode->data.is_dir)
-     return dir_open(inode);
    
   return file_open (inode);
 }
