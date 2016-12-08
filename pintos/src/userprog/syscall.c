@@ -20,6 +20,7 @@
 #include "vm/swap.h"
 #include "devices/timer.h"
 #include "filesys/cache.h"
+#include "filesys/directory.h"
 
 static void syscall_handler (struct intr_frame *);
 void exit(int);
@@ -467,12 +468,22 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_CHDIR:{
       if(!user_memory(f->esp, 1)){ exit(-1);} 
       char * dir = *((char **)(f->esp)+1);
+      if(check_bad_ptr(f, dir)) exit(-1);
+      if(dir==NULL){
+	      f->eax = -1;
+	      break;
+      }
       
       break;	  
     }
     case SYS_MKDIR:{      
       if(!user_memory(f->esp, 1)){ exit(-1);}
-      char * dir = *((char **)(f->esp)+1);	  	  
+      char * dir = *((char **)(f->esp)+1);	
+      if(check_bad_ptr(f, dir)) exit(-1);
+      if(dir==NULL){
+	      f->eax = -1;
+	      break;
+      }
       break;
     }
     case SYS_READDIR:{
