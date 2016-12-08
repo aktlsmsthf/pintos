@@ -103,7 +103,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       else{
         lock_acquire(&sys_lock);
-        f->eax = filesys_create (file,initial_size, flase);
+        f->eax = filesys_create (file,initial_size, false);
         lock_release(&sys_lock);
       }
       break;
@@ -151,7 +151,7 @@ syscall_handler (struct intr_frame *f UNUSED)
   	  if (dir != NULL)
     	     dir_lookup (dir, real_name, &inode);
   	  dir_close (dir);
-  	  struct dir *dir;
+  	  
 	  struct file *file;
   	  if(inode->data.is_dir){
      	     dir = dir_open(inode);
@@ -392,7 +392,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           ffd->is_closed=1;
           lock_release(&sys_lock);
         }
-	if(!ffd->is_closed && ffd->dir!=NULL{
+	if(!ffd->is_closed && ffd->dir!=NULL){
 	   lock_acquire(&sys_lock);
            dir_close(ffd->dir);
           
@@ -496,14 +496,14 @@ syscall_handler (struct intr_frame *f UNUSED)
     }
     case SYS_CHDIR:{
       if(!user_memory(f->esp, 1)){ exit(-1);} 
-      char * dir = *((char **)(f->esp)+1);
-      if(check_bad_ptr(f, dir)) exit(-1);
-      if(dir==NULL){
+      char * dirn = *((char **)(f->esp)+1);
+      if(check_bad_ptr(f, dirn)) exit(-1);
+      if(dirn==NULL){
 	      f->eax = -1;
 	      break;
       }
       char *dir_name;
-      struct dir *dir = lowest_dir(dir, &dir_name);
+      struct dir *dir = lowest_dir(dirn, &dir_name);
       struct inode *inode;
 	dir_lookup(dir, dir_name, &inode);
 	dir_close(dir);
@@ -533,7 +533,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(!user_memory(f->esp, 2)){ exit(-1);}
       int fd = *((int *)(f->esp)+1);
       char * name = *((char **)(f->esp)+2);	  
-	struct file_fd *ffd = list_entry(get_elem_from_fd(fd), struct fild_fd, elem);
+	struct file_fd *ffd = list_entry(get_elem_from_fd(fd), struct file_fd, elem);
 	if(ffd->is_dir){
 		f->eax = dir_readdir(ffd->dir, name);
 		break;
@@ -544,14 +544,14 @@ syscall_handler (struct intr_frame *f UNUSED)
     case SYS_ISDIR:{	  
       if(!user_memory(f->esp, 1)){ exit(-1);}
       int fd = *((int *)(f->esp)+1);
-	struct file_fd *ffd = list_entry(get_elem_from_fd(fd), struct fild_fd, elem);
+	struct file_fd *ffd = list_entry(get_elem_from_fd(fd), struct file_fd, elem);
 	f->eax = ffd->is_dir;
       break;
     }
     case SYS_INUMBER:{	  
       if(!user_memory(f->esp, 1)){ exit(-1);}
       int fd = *((int *)(f->esp)+1);
-	struct file_fd *ffd = list_entry(get_elem_from_fd(fd), struct fild_fd, elem);
+	struct file_fd *ffd = list_entry(get_elem_from_fd(fd), struct file_fd, elem);
 	f->eax = ffd->dir->inode.data->sector;
       break;
     }		  
