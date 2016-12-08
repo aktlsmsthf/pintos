@@ -45,6 +45,7 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
     frame=frame_evict(flags);
   }
   
+  lock_acquire(&frame_lock);
   spte->page = page;
   spte->fe = fe;
   spte->writable = writable;
@@ -59,7 +60,6 @@ void * frame_spt_alloc( struct hash * spt, void * page, bool writable, enum pall
   fe->swap_where = -1;
   fe->spte = spte;
   
-  lock_acquire(&frame_lock);
   list_push_back(&frame_table, &fe->elem);
   lock_release(&frame_lock);
   return frame;
@@ -104,10 +104,8 @@ bool file_frame_alloc(struct spt_entry * spte){
   spte -> lazy = 0;
   
   lock_acquire(&frame_lock);
-  lock_acquire(&sys_lock);
   file_read_at(spte->file, frame, spte->read_bytes, spte->ofs); 
   
-  lock_release(&sys_lock);
   memset(frame+spte->read_bytes, 0, spte->zero_bytes);
   install_page(spte->page, frame, spte->writable);
   
