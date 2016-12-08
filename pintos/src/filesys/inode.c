@@ -139,7 +139,6 @@ inode_create (disk_sector_t sector, off_t length)
          
          if(sectors<DN){
             free_map_allocate(1, &disk_inode->direct_sector[sectors]);
-            
             disk_write(filesys_disk, disk_inode->direct_sector[sectors], zeros);
             
          }
