@@ -191,7 +191,6 @@ inode_open (disk_sector_t sector)
   struct list_elem *e;
   struct inode *inode;
   
-  lock_acquire(&inode_lock);
   /* Check whether this inode is already open. */
   for (e = list_begin (&open_inodes); e != list_end (&open_inodes);
        e = list_next (e)) 
@@ -218,7 +217,6 @@ inode_open (disk_sector_t sector)
   lock_init(&inode->ilock);
   disk_read (filesys_disk, inode->sector, &inode->data);
   
-  lock_release(&inode_lock); 
   return inode;
 }
 
