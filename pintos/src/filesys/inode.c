@@ -27,7 +27,7 @@ struct inode_disk
     disk_sector_t  sector;
     int is_dir;
     disk_sector_t parent;
-    uint32_t unused[123-DN-IDN];               /* Not used. */
+    uint32_t unused[122-DN-IDN];               /* Not used. */
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
