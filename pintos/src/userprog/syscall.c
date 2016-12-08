@@ -416,8 +416,9 @@ syscall_handler (struct intr_frame *f UNUSED)
 		m->file = mfile;
 		m->mid = fd;
 		m->size = size;
-	    
+	        lock_acquire(&sys_lock);
 		list_push_front(&thread_current()->mapped_list, &m->elem);
+		lock_release(&sys_lock);
 		f->eax = fd;
 	}
 	else{
@@ -454,10 +455,11 @@ syscall_handler (struct intr_frame *f UNUSED)
 		addr+=PGSIZE;
 		write_bytes+=PGSIZE;
 	}
+	
+	lock_acquire(&sys_lock);  
 	list_remove(&mapped->elem);
-	//lock_acquire(&sys_lock);
 	file_close(mapped->file);  
-	//lock_release(&sys_lock);  
+	lock_release(&sys_lock);  
 	free(mapped);
 	
     }
