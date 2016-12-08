@@ -217,6 +217,7 @@ thread_create (const char *name, int priority,
   list_push_front(&(thread_current()->child_list), &chd->elem);
   t->child=chd;
    t->num_file = 0;
+   t->current_dir = NULL;
    
    t->parent = thread_current();
    t->wait=0;
