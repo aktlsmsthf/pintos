@@ -105,7 +105,7 @@ struct thread
     struct thread *parent;
     bool wait;
   
-    char current_dir[256];
+    
     
     struct hash spt;
 
