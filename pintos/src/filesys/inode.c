@@ -25,7 +25,7 @@ struct inode_disk
     disk_sector_t indirect_sector[IDN];
     disk_sector_t d_indirect_sector;
     disk_sector_t  sector;
-    int is_dir;
+    bool is_dir;
     disk_sector_t parent;
     uint32_t unused[122-DN-IDN];               /* Not used. */
   };
@@ -111,7 +111,7 @@ inode_init (void)
    Returns true if successful.
    Returns false if memory or disk allocation fails. */
 bool
-inode_create (disk_sector_t sector, off_t length)
+inode_create (disk_sector_t sector, off_t length, bool is_dir)
 {
   struct inode_disk *disk_inode = NULL;
   bool success = false;
@@ -129,7 +129,7 @@ inode_create (disk_sector_t sector, off_t length)
       disk_inode->length = length;
       disk_inode->magic = INODE_MAGIC;
       disk_inode->sector = sector;
-
+      disk_inode->is_dir = is_dir;
      
       disk_sector_t sectors = -1;
       disk_sector_t sectors2 = bytes_to_sectors(length);
