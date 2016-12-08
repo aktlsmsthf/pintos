@@ -286,9 +286,7 @@ process_exit (void)
       struct spt_entry *spte = spte_find(addr);
           if(!spte->lazy){
 		if(pagedir_is_dirty(spte->t->pagedir, addr)){
-		   lock_acquire(&sys_lock);	
 	       	   file_write_at(mapped->file, spte->page, spte->read_bytes, spte->ofs);
-		   lock_release(&sys_lock);	
 	  	}
          }
       	 addr+=PGSIZE;
