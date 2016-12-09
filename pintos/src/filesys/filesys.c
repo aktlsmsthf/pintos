@@ -106,9 +106,9 @@ filesys_open (const char *name)
     dir_lookup (dir, real_name, &inode);
   dir_close (dir);
   
+   printf("%d\n", dir_lookup(dir, real_name, &inode);
    
   if(inode == NULL || inode_is_dir(inode)){
-     printf("1\n");
      return NULL;
   }
       
