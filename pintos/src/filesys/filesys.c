@@ -197,6 +197,7 @@ filesys_remove (const char *name)
    }
    else{
       printf("12\n");
+      printf("%d\n", get_sector_dir(rdir));
       if(get_sector_dir(rdir)==get_sector_dir(thread_current()->current_dir)){
          printf("13\n");
          success = false;
