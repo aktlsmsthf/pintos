@@ -152,10 +152,13 @@ filesys_remove (const char *name)
 {
   //struct dir *dir = dir_open_root ();
   char * real_name;
-   struct inode *inode = NULL;
-  struct dir *dir = lowest_dir(name, &real_name);
-   struct dir *rdir;
-   bool success = true; 
+  char * name_copy = malloc (strlen (name) + 1);
+  memcpy (name_copy, name, strlen (name) + 1);
+  struct inode *inode = NULL;
+  struct dir *dir = lowest_dir(name_copy, &real_name);
+  struct dir *rdir;
+  bool success = true; 
+   
   if (dir != NULL){
      if(real_name ==NULL){
         rdir = dir;
