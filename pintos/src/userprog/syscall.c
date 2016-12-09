@@ -145,14 +145,21 @@ syscall_handler (struct intr_frame *f UNUSED)
         else{
 		
 	    lock_acquire(&sys_lock);
+	    struct inode *inode = NULL;
+  	    char *real_name;
+  	    struct dir *dir;
+  	    dir = lowest_dir(name, &real_name);
+  	    if (dir != NULL){
+            	dir_lookup (dir, real_name, &inode);}	    
+		    /*
             struct file *file = filesys_open(name);
 	    struct dir *dir = filesys_open_dir(name);
-            lock_release(&sys_lock);
-	    	
+            
 	    if(dir==NULL && file==NULL){
 		    f->eax = -1;
 		    break;
-	    }
+	    }*/
+		    
             struct thread *t = thread_current();
             struct file_fd *ffd = palloc_get_page(0);
             if(ffd==NULL){
@@ -160,8 +167,16 @@ syscall_handler (struct intr_frame *f UNUSED)
             }
             else{
               ffd -> fd = t->num_file+2;
-              ffd -> file = file;
-	      ffd -> dir = dir;
+	      lock_acquire(&sys_lock);
+	      if(inode_is_dir(inode)){
+		      ffd->file = NULL;
+		      ffd->dir = dir_open(inode);}
+	      else{
+		      ffd->file =file_open(inode);
+		      ffd->dir = NULL;}
+	      lock_release(&sys_lock);	    
+              //ffd -> file = file;
+	      //ffd -> dir = dir;
 	      ffd -> is_dir = file==NULL;
               ffd -> is_closed=0;
               list_push_front(&(t->file_list),&ffd->elem);
