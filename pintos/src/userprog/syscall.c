@@ -152,7 +152,10 @@ syscall_handler (struct intr_frame *f UNUSED)
   	    if (dir != NULL){
 		 if(real_name ==NULL){exit(-1);}
     		if(strcmp(real_name, ".") ==0 || strcmp(real_name, "..")==0 ){exit(-1);}
-            	dir_lookup (dir, real_name, &inode);}	    
+            	dir_lookup (dir, real_name, &inode);
+	    
+  	    	dir_close (dir);
+	    }	    
 		    /*
             struct file *file = filesys_open(name);
 	    struct dir *dir = filesys_open_dir(name);
