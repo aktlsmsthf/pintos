@@ -108,6 +108,7 @@ filesys_open (const char *name)
   
    
   if(inode == NULL || inode_is_dir(inode)){
+     printf("1\n");
      return NULL;
   }
       
