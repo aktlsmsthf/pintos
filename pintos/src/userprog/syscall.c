@@ -100,7 +100,7 @@ syscall_handler (struct intr_frame *f UNUSED)
         exit(-1);}
       if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
       if(file==NULL || strcmp(file, "")==0){
-        f->eax =-1;
+        f->eax = false;
       }
       else{
         lock_acquire(&sys_lock);
