@@ -186,6 +186,7 @@ filesys_remove (const char *name)
    
    if(thread_current()->current_dir ==NULL){
       if(get_sector_dir(rdir)==ROOT_DIR_SECTOR){
+         printf("2\n");
          success = false;
       }
    }
