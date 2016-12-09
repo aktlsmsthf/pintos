@@ -118,6 +118,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
       lock_acquire(&sys_lock);
       f->eax = filesys_remove (file);
+	  printf("1\n");
       lock_release(&sys_lock);
       break;
      }
