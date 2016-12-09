@@ -101,7 +101,11 @@ filesys_open (const char *name)
   
   dir = lowest_dir(name, &real_name);
   if (dir != NULL){
-     if(real_name ==NULL || strcmp(real_name, ".") ==0 || strcmp(real_name, "..")==0){
+     if(real_name ==NULL){
+        dir_close(dir);
+        return NULL;
+     }
+     if(strcmp(real_name, ".") ==0 || strcmp(real_name, "..")==0){
        dir_close(dir);
         return NULL;
     }
@@ -122,7 +126,10 @@ filesys_open_dir(const char *name){
   struct dir *dir;
   dir = lowest_dir(name, &real_name);
   if (dir != NULL){
-    if(strcmp(real_name, ".") ==0 || strcmp(real_name, "..")==0 || real_name ==NULL){
+    if(real_name ==NULL){
+      return dir;
+    }
+    if(strcmp(real_name, ".") ==0 || strcmp(real_name, "..")==0 ){
        return dir;
     }
     dir_lookup (dir, real_name, &inode);
