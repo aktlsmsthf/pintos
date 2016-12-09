@@ -166,6 +166,7 @@ filesys_remove (const char *name)
         dir = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
      }
      else{
+        printf("1\n");
         dir_lookup (dir, real_name, &inode);
      }
   }
