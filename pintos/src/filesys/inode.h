@@ -6,6 +6,11 @@
 #include "devices/disk.h"
 #include "threads/synch.h"
 
+/* Identifies an inode. */
+#define INODE_MAGIC 0x494e4f44
+#define DN 10
+#define IDN 10
+
 struct inode_disk
   {
     //disk_sector_t start;                /* First data sector. */
