@@ -287,6 +287,11 @@ struct dir * lowest_dir(char *name, char **dir_name){
       //token = strtok_r(NULL, "/", &save);
    }
   *dir_name = token;
+  if(strcmp(dir_name, "..") ==0){
+    temp = dir_open(inode_open(inode_parent(dir->inode)));
+    dir_close(dir);
+    dir = temp;
+  }
    return dir;
 }
 
