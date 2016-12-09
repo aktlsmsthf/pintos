@@ -104,7 +104,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       }
       else{
         lock_acquire(&sys_lock);
-        f->eax = filesys_create (file,initial_size, false);
+        f->eax = filesys_create (file,initial_size);
         lock_release(&sys_lock);
       }
       break;
@@ -506,7 +506,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	      break;
       } 
 	lock_acquire(&sys_lock);
-	filesys_create(dir, 0, true);
+	filesys_create_dir(dir);
 	lock_release(&sys_lock);
       break;
     }
