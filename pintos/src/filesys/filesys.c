@@ -206,6 +206,7 @@ filesys_remove (const char *name)
       printf("14\n");
       success = dir!=NULL && dir_remove(dir, real_name);
    }
+   printf("15\n");
    dir_close(dir);
    dir_close(rdir);
 
