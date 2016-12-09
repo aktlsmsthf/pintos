@@ -139,7 +139,9 @@ filesys_remove (const char *name)
    printf("1\n");
   struct dir *dir = lowest_dir(name, &real_name);
           printf("2\n");
-  
+  if(thread_current()->current_dir == NULL){
+     thread_current()->current_dir = dir_open_root();
+  }
   if(get_sector_dir(dir)==get_sector_dir(thread_current()->current_dir)){
      return false;
   }
