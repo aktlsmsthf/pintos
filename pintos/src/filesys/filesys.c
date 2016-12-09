@@ -146,11 +146,13 @@ filesys_remove (const char *name)
   if(thread_current()->current_dir==NULL){
      struct dir *root = dir_open_root();
      if(get_sector_dir(root) == get_sector_dir(rdir)) {
+        printf("1\n");
         success = false;
      }
      dir_close(root);
   }
    else if(get_sector_dir(rdir) == get_sector_dir(thread_current()->current_dir)) {
+      printf("2\n");
       success = false;
    }
    else{
