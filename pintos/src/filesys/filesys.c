@@ -100,13 +100,13 @@ filesys_open (const char *name)
   struct dir *dir;
   
   dir = lowest_dir(name, &real_name);
-   printf("1\n");
-  if (dir != NULL)
+  if (dir != NULL){
      if(strcmp(real_name, ".") ==0 || strcmp(real_name, "..")==0 || real_name ==NULL){
        dir_close(dir);
         return NULL;
     }
     dir_lookup (dir, real_name, &inode);
+  }
   dir_close (dir);
   if(inode == NULL || inode_is_dir(inode)){
      return NULL;
