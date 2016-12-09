@@ -480,7 +480,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       char * dirn = *((char **)(f->esp)+1);
       if(check_bad_ptr(f, dirn)) exit(-1);
       if(dirn==NULL){
-	      f->eax = -1;
+	      f->eax = false;
 	      break;
       }
       char *dir_name;
@@ -504,11 +504,11 @@ syscall_handler (struct intr_frame *f UNUSED)
       char * dir = *((char **)(f->esp)+1);	
       if(check_bad_ptr(f, dir)) exit(-1);
       if(dir==NULL){
-	      f->eax = -1;
+	      f->eax = false;
 	      break;
       } 
 	lock_acquire(&sys_lock);
-	filesys_create_dir(dir);
+	f->eax = filesys_create_dir(dir);
 	lock_release(&sys_lock);
       break;
     }
