@@ -239,7 +239,8 @@ dir_readdir (struct dir *dir, char name[NAME_MAX + 1])
 
 struct dir * lowest_dir(char *name, char **dir_name){
    char *save;
-   char *token;
+   char *token  = malloc(strlen(name)+1);
+  memcpy (token, name, strlen(name)+1);
    struct dir *dir;
    struct dir *temp;
    *dir_name = name;
@@ -253,9 +254,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
    }
    printf("%s\n", name);
   
-  char *s = "a";
-  printf("%s\n", strtok_r(s, "/", &save));
-   token = strtok_r(name, "/", &save);
+   token = strtok_r(token, "/", &save);
   printf("2\n");
    while(strtok_r(NULL, "/", &save)!=NULL){
       if(token == NULL || token == "."){
