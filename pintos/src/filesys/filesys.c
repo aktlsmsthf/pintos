@@ -84,7 +84,7 @@ filesys_create_dir (const char *name)
   if (!success && inode_sector != 0) 
     free_map_release (inode_sector, 1);
   dir_close (dir);
-   printf("%s %d\n", real_name, get_sector_dir(dir)));
+   printf("%s %d\n", real_name, get_sector_dir(dir));
   return success;
 }
 
