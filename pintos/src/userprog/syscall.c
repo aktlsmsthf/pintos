@@ -248,12 +248,12 @@ syscall_handler (struct intr_frame *f UNUSED)
 		f->eax == -1;
 		break;
 	}
-	struct file_fd ffd = list_entry(elem, struct file_fd, elem);
+	struct file_fd *ffd = list_entry(elem, struct file_fd, elem);
 	if(ffd->is_dir){
 		f->eax == -1;
 		break;
 	}
-	struct file ff = ffd->file;
+	struct file *ff = ffd->file;
         if(ff==NULL){
           f->eax = -1;
         }
@@ -326,12 +326,12 @@ syscall_handler (struct intr_frame *f UNUSED)
 		f->eax == -1;
 		break;
 	}
-	struct file_fd ffd = list_entry(elem, struct file_fd, elem);
+	struct file_fd *ffd = list_entry(elem, struct file_fd, elem);
 	if(ffd->is_dir){
 		f->eax == -1;
 		break;
 	}
-	struct file ff = ffd->file;
+	struct file *ff = ffd->file;
         if(ff==NULL){ 
           f->eax = -1;
         }
