@@ -155,22 +155,18 @@ filesys_remove (const char *name)
    struct inode *inode = NULL;
   struct dir *dir = lowest_dir(name, &real_name);
    struct dir *rdir;
-   printf("1\n");
    bool success = true; 
   if (dir != NULL){
-     printf("2\n");
      if(real_name ==NULL){
-        printf("3\n");
         rdir = dir;
         dir = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
      }
      else if(strcmp(real_name, ".")==0 || strcmp(real_name, "..")==0){
-        printf("4\n");
         rdir = dir;
         dir = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
      }
      else{
-        printf("5\n");
+        printf("%s %d\n", real_name, get_sector_dir(dir));
         dir_lookup (dir, real_name, &inode);
      }
   }
