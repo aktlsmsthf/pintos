@@ -53,7 +53,6 @@ filesys_create (const char *name, off_t initial_size)
   //struct dir *dir = dir_open_root ();
   char *real_name;
   struct dir *dir = lowest_dir(name, &real_name);
-   printf("%s\n", real_name);
 
        bool success = (dir != NULL
                   && free_map_allocate (1, &inode_sector)
