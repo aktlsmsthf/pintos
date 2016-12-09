@@ -110,11 +110,15 @@ filesys_open (const char *name)
         return NULL;
     }
     dir_lookup (dir, real_name, &inode);
+     
   }
+  
+  dir_close (dir); 
   if(inode == NULL || inode_is_dir(inode)){
      return NULL;
   }
       
+   
   return file_open (inode);
 }
 
@@ -135,7 +139,6 @@ filesys_open_dir(const char *name){
     
   }
   
-  dir_close (dir);
   if(inode == NULL || !inode_is_dir(inode)){
      //printf("%d %s\n", get_sector_dir(dir), real_name);
      return NULL;
