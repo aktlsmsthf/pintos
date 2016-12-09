@@ -112,9 +112,10 @@ filesys_open (const char *name)
   dir_close (dir);
   
   if(inode_is_dir(inode)){
+     printf("10\n");
      return NULL;
   }
-      printf("10\n");
+      
   return file_open (inode);
 }
 
