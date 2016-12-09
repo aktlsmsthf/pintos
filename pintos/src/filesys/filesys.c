@@ -138,7 +138,7 @@ filesys_open_dir(const char *name){
   
   if(inode == NULL || !inode_is_dir(inode)){
      printf("%s\n", real_name);
-     printf("%d\n", get_sector_dir(dir);
+     printf("%d\n", get_sector_dir(dir));
      return NULL;
   }
    
