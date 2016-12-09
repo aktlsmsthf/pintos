@@ -278,6 +278,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
       *dir_name = token;
       token = strtok_r(NULL, "/", &save);
    }
+  printf("%s\n", *dir_name);
    return dir;
 }
 
