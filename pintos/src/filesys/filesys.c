@@ -144,40 +144,26 @@ filesys_remove (const char *name)
     dir_lookup (dir, real_name, &inode);
    
    if(!inode_is_dir(inode)){
-      printf("1\n");
       success = dir != NULL && dir_remove (dir, real_name);
-      printf("2\n");
    }
    else{
-      printf("3\n");
       struct dir *rdir = dir_open(inode);
-      printf("4\n");
 
       if(thread_current()->current_dir==NULL){
-         printf("5\n");
          struct dir *root = dir_open_root();
-         printf("6\n");
          if(get_sector_dir(root) == get_sector_dir(rdir)) {
-            printf("7\n");
             success = false;
          }
-         printf("8\n");
          dir_close(root);
-         printf("9\n");
       }
-      if(success){
-         printf("10\n");
-            if(get_sector_dir(rdir) == get_sector_dir(thread_current()->current_dir)) {
-               printf("11\n");
+      else{
+         if(get_sector_dir(rdir) == get_sector_dir(thread_current()->current_dir)) {
                success = false;
             }
-            else{
-               printf("12\n");
-               success = dir != NULL && dir_remove (dir, real_name);
-               printf("13\n");
-            }
       }
-      printf("14\n");
+      if(success){
+         success = dir != NULL && dir_remove (dir, real_name);
+      }
       dir_close(rdir);
    }
    
