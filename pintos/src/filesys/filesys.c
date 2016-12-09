@@ -194,7 +194,7 @@ filesys_remove (const char *name)
          success = false;
       }
    }
-   if(!success){
+   if(success){
       success = dir!=NULL && dir_remove(dir, real_name);
    }
    dir_close(dir);
