@@ -156,7 +156,7 @@ filesys_remove (const char *name)
    bool success = true; 
   if (dir != NULL)
     dir_lookup (dir, real_name, &inode);
-   printf("%d\n", get_sector_dir(dir));
+ 
    if(!inode_is_dir(inode)){
       success = dir != NULL && dir_remove (dir, real_name);
    }
