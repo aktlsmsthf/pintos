@@ -6,10 +6,7 @@
 #include "devices/disk.h"
 #include "threads/synch.h"
 
-/* Identifies an inode. */
-#define INODE_MAGIC 0x494e4f44
-#define DN 10
-#define IDN 10
+
 
 
 
