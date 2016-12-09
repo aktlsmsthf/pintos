@@ -128,13 +128,14 @@ syscall_handler (struct intr_frame *f UNUSED)
         exit(-1);
         break;
       }
-      
+      printf("a\n");
       const char *name= *((char **)(f->esp)+1);
       
-      if(!user_memory((void *)name, 0)) {exit(-1);break;}
+      if(!user_memory((void *)name, 0)) {printf("b\n");exit(-1);break;}
       if(!is_user_vaddr(name)) {f->eax = -1;break;}
       else{
         if(check_bad_ptr(f,(const void *)name)){
+		printf("c\n");
           exit(-1);
           break;
         }
