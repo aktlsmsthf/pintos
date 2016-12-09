@@ -170,14 +170,16 @@ syscall_handler (struct intr_frame *f UNUSED)
 	      lock_acquire(&sys_lock);
 	      if(inode_is_dir(inode)){
 		      ffd->file = NULL;
-		      ffd->dir = dir_open(inode);}
+		      ffd->dir = dir_open(inode);
+	      	      ffd-> is_dir = 1;}
 	      else{
 		      ffd->file =file_open(inode);
-		      ffd->dir = NULL;}
+		      ffd->dir = NULL;
+	      		ffd->is_dir = 0;}
 	      lock_release(&sys_lock);	    
               //ffd -> file = file;
 	      //ffd -> dir = dir;
-	      ffd -> is_dir = file==NULL;
+	      //ffd -> is_dir = file==NULL;
               ffd -> is_closed=0;
               list_push_front(&(t->file_list),&ffd->elem);
               t->num_file++;
