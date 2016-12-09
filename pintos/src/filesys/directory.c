@@ -292,9 +292,6 @@ struct dir * lowest_dir(char *name, char **dir_name){
     dir_close(dir);
     dir = temp;
   }
-  if(*dir_name==NULL){
-    printf("1\n");
-  }
    return dir;
 }
 
