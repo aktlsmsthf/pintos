@@ -195,6 +195,7 @@ filesys_remove (const char *name)
       dir_close(parent);
    }
    if(success){
+      printf("1\n");
       success = dir!=NULL && dir_remove(dir, real_name);
    }
    dir_close(dir);
