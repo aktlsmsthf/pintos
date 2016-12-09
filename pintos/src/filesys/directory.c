@@ -269,11 +269,12 @@ struct dir * lowest_dir(char *name, char **dir_name){
       else{
          struct inode *inode;
          if(!dir_lookup(dir, token, &inode)){
+           printf("c\n");
             dir = NULL;
             return dir;
          }
          else{
-           printf("c\n");
+           
             temp = dir_open(inode);
             dir_close(dir);
             dir = temp;
