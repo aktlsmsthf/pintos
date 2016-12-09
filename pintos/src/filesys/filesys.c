@@ -153,15 +153,36 @@ filesys_remove (const char *name)
   char * real_name;
    struct inode *inode = NULL;
   struct dir *dir = lowest_dir(name, &real_name);
+   struct dir *rdir;
    bool success = true; 
-  if (dir != NULL)
-    dir_lookup (dir, real_name, &inode);
- 
-   if(!inode_is_dir(inode)){
-      success = dir != NULL && dir_remove (dir, real_name);
+  if (dir != NULL){
+     if(real_name ==NULL){
+        rdir = dir;
+        dir = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
+     }
+     else if(strcmp(real_name, "."){
+        rdir = dir;
+        dir = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
+     }
+     else if(strcmp(real_name, "..")){
+        rdir = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
+        dir_close(dir);
+        dir = dir_open(inode_open(inode_parent(dir_get_inode(rdir))));
+     }
+     else{
+        dir_lookup (dir, real_name, &inode);
+     }
+  }
+   if(inode!=NULL){
+        if(!inode_is_dir(inode)){
+            success = dir != NULL && dir_remove (dir, real_name);
+           dir_close(dir);
+           return success;
+         }
+        else{
+           rdir = dir_open(inode);
+        }
    }
-   else{
-      struct dir *rdir = dir_open(inode);
 
       if(thread_current()->current_dir==NULL){
          struct dir *root = dir_open_root();
@@ -178,7 +199,7 @@ filesys_remove (const char *name)
          success = dir != NULL && dir_remove (dir, real_name);
       }
       dir_close(rdir);
-   }
+ 
    
   dir_close (dir); 
 
