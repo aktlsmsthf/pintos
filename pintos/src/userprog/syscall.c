@@ -21,6 +21,7 @@
 #include "devices/timer.h"
 #include "filesys/cache.h"
 #include "filesys/directory.h"
+#include "filesys/inode.h"
 
 static void syscall_handler (struct intr_frame *);
 void exit(int);
