@@ -117,8 +117,8 @@ syscall_handler (struct intr_frame *f UNUSED)
       const char *file = *((char **)(f->esp)+1);
       if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
       lock_acquire(&sys_lock);
+	  	  printf("1\n");
       f->eax = filesys_remove (file);
-	  printf("1\n");
       lock_release(&sys_lock);
       break;
      }
