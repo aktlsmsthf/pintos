@@ -202,7 +202,7 @@ filesys_remove (const char *name)
    }
    dir_close(dir);
    dir_close(rdir);
-
+  free(name_copy);
   return success;
 }
 
