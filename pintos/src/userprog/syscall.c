@@ -99,7 +99,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(!user_memory((void *)file, 0)){
         exit(-1);}
       if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
-      if(file==NULL){
+      if(file==NULL || strcmp(file, "")==0){
         f->eax =-1;
       }
       else{
