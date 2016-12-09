@@ -71,7 +71,7 @@ filesys_create (const char *name, off_t initial_size)
 }
 
 bool
-filesys_create_dir (const char *name, off_t initial_size) 
+filesys_create_dir (const char *name) 
 {
   disk_sector_t inode_sector = 0;
   //struct dir *dir = dir_open_root ();
