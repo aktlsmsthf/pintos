@@ -174,7 +174,7 @@ dir_add (struct dir *dir, const char *name, disk_sector_t inode_sector)
   e.inode_sector = inode_sector;
   struct inode_disk *disk_inode = malloc(sizeof (struct inode_disk));
   disk_read(filesys_disk, inode_sector, disk_inode);
-  disk_inode->parent = dir->inode.sector;
+  disk_inode->parent = dir->inode->data.sector;
   disk_write(filesys_disk, inode_sector, disk_inode);
   free(disk_inode);
   success = inode_write_at (dir->inode, &e, sizeof e, ofs) == sizeof e;
@@ -245,6 +245,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
    char *token;
    token =name;
    struct dir *dir;
+   struct dir *temp;
    if(name[0] == "/"){
       dir = dir_open_root();
       token = strtok_r(name, "/", &save);
@@ -254,13 +255,14 @@ struct dir * lowest_dir(char *name, char **dir_name){
    }
    token = strtok_r(token, "/", &save);
    while(token!=NULL){
-      if(token == NULL || token = "."){
+      if(token == NULL || token == "."){
          token = strtok_r(NULL, "/", &save);
          continue;
       }
       else if(token = ".."){
-         struct inode_disk *disk_inode = malloc(sizeof (struct inode_disk));
-         dir = dir_open(inode_open(disk->inode.data->parent));
+         temp = dir_open(inode_open(dir->inode.data->parent));
+         dir_close(dir);
+         dir = temp;
       }
       else{
          struct inode *inode;
@@ -269,7 +271,9 @@ struct dir * lowest_dir(char *name, char **dir_name){
             return dir;
          }
          else{
-            dir = dir_open(inode);
+            temp = dir_open(inode);
+            dir_close(dir);
+            dir = temp;
          }
       }
       *dir_name = token;
@@ -279,5 +283,5 @@ struct dir * lowest_dir(char *name, char **dir_name){
 }
 
 disk_sector_t get_sector_dir(struct dir *dir){
-  return dir->inode.data->sector;
+  return dir->inode->data.sector;
 }
