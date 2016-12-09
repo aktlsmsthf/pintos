@@ -167,7 +167,7 @@ syscall_handler (struct intr_frame *f UNUSED)
               f->eax = ffd->fd;
             }
         }
-      }}
+      }
       break;
      }
       
