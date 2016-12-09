@@ -124,7 +124,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       
     case SYS_OPEN:{
       if(!user_memory(f->esp,1)){
-        printf("e\n");
+        
         exit(-1);
         break;
       }
@@ -139,7 +139,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           exit(-1);
           break;
         }
-    
+    printf("e\n");
         char *e = "";
         if(name == NULL || strcmp(name, e)==0) {
           f->eax = -1;
