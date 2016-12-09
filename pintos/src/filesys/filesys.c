@@ -154,17 +154,20 @@ filesys_remove (const char *name)
    struct inode *inode = NULL;
   struct dir *dir = lowest_dir(name, &real_name);
    bool success = true; 
-   
+   printf("1\n");
   if (dir != NULL)
     dir_lookup (dir, real_name, &inode);
-   
+   printf("2\n");
    if(!inode_is_dir(inode)){
+      printf("3\n");
       success = dir != NULL && dir_remove (dir, real_name);
    }
    else{
+      printf("4\n");
       struct dir *rdir = dir_open(inode);
 
       if(thread_current()->current_dir==NULL){
+         printf("5\n");
          struct dir *root = dir_open_root();
          if(get_sector_dir(root) == get_sector_dir(rdir)) {
             success = false;
@@ -172,13 +175,17 @@ filesys_remove (const char *name)
          dir_close(root);
       }
       else{
+         printf("6\n");
          if(get_sector_dir(rdir) == get_sector_dir(thread_current()->current_dir)) {
+               printf("7\n");
                success = false;
             }
       }
       if(success){
+         printf("8\n");
          success = dir != NULL && dir_remove (dir, real_name);
       }
+      printf("9\n");
       dir_close(rdir);
    }
    
