@@ -512,7 +512,7 @@ void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector){
   struct inode_disk *disk_inode = malloc(sizeof (struct inode_disk));
   disk_read(filesys_disk, child_sector, disk_inode);
   disk_inode->parent = parent_sector;
-  disk_write(filesys_disk, inode_sector, disk_inode);
+  disk_write(filesys_disk, child_sector, disk_inode);
   free(disk_inode);
 }
 
