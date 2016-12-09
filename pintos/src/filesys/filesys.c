@@ -134,7 +134,6 @@ filesys_open_dir(const char *name){
     }
     dir_lookup (dir, real_name, &inode);
     
-  dir_close (dir);
   }
   
   if(inode == NULL || !inode_is_dir(inode)){
@@ -198,8 +197,8 @@ filesys_remove (const char *name)
    if(success){
       success = dir!=NULL && dir_remove(dir, real_name);
    }
-   dir_close(dir);
-   dir_close(rdir);
+   //dir_close(dir);
+   //dir_close(rdir);
   return success;
 }
 
