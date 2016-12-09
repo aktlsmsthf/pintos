@@ -261,7 +261,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
          continue;
       }
       else if(token = ".."){
-         temp = dir_open(inode_open(dir->inode.data->parent));
+         temp = dir_open(inode_open(inode_parent(dir->inode));
          dir_close(dir);
          dir = temp;
       }
@@ -284,5 +284,5 @@ struct dir * lowest_dir(char *name, char **dir_name){
 }
 
 disk_sector_t get_sector_dir(struct dir *dir){
-  return dir->inode->data.sector;
+  return inode_disk_sector(dir->inode);
 }
