@@ -157,7 +157,6 @@ filesys_remove (const char *name)
   struct dir *dir = lowest_dir(name, &real_name);
   struct dir *rdir;
   bool success = true;
-  printf("%s\n",real_name);
   if (dir != NULL){
      if(real_name ==NULL){
         rdir = dir;
