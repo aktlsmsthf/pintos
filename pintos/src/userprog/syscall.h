@@ -8,6 +8,7 @@
 
 struct lock sys_lock;
 
+struct inode;
 void syscall_init (void);
 struct thread* get_child_process(int tid);
 
