@@ -185,7 +185,7 @@ filesys_remove (const char *name)
       }
    }
    else{
-      if(get_sector_dir(rdir)==get_sector_dir(thread_current()->current_dir){
+      if(get_sector_dir(rdir)==get_sector_dir(thread_current()->current_dir)){
          success = false;
       }
       struct dir *parent = dir_open(inode_open(inode_parent(dir_get_inode(thread_current()->current_dir))));
