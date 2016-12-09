@@ -497,6 +497,7 @@ inode_length (const struct inode *inode)
 }
 
 bool inode_is_dir(struct inode *inode){
+   printf("1\n");
    return inode->data.is_dir;
 }
 
