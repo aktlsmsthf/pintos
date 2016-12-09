@@ -273,6 +273,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
             return dir;
          }
          else{
+           printf("c\n");
             temp = dir_open(inode);
             dir_close(dir);
             dir = temp;
