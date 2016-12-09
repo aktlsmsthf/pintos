@@ -144,7 +144,6 @@ syscall_handler (struct intr_frame *f UNUSED)
         }
         else{
 		
-	    lock_acquire(&sys_lock);
 	    struct inode *inode = NULL;
   	    char *real_name;
   	    struct dir *dir;
