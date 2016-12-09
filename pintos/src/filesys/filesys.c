@@ -101,7 +101,6 @@ struct file *
 filesys_open (const char *name)
 {
   //struct dir *dir = dir_open_root ();
-  printf("%s\n", name);
   struct inode *inode = NULL;
   char *real_name;
   struct dir *dir;
