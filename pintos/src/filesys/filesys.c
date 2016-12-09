@@ -162,7 +162,7 @@ filesys_remove (const char *name)
         rdir = dir;
         dir = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
      }
-     else if(strcmp(real_name, ".") || strcmp(real_name, "..")){
+     else if(strcmp(real_name, ".")==0 || strcmp(real_name, "..")==0){
         rdir = dir;
         dir = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
      }
