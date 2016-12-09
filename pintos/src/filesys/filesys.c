@@ -183,25 +183,22 @@ filesys_remove (const char *name)
            rdir = dir_open(inode);
         }
    }
-
-      if(thread_current()->current_dir==NULL){
-         struct dir *root = dir_open_root();
-         if(get_sector_dir(root) == get_sector_dir(rdir)) {
-            success = false;
-         }
-         dir_close(root);
-      }
-      else{
-         if(get_sector_dir(rdir) == get_sector_dir(thread_current()->current_dir)) {
-            }
-      }
-      if(success){
-         success = dir != NULL && dir_remove (dir, real_name);
-      }
-      dir_close(rdir);
- 
    
-  dir_close (dir); 
+   if(thread_current()->current_dir ==NULL){
+      if(get_sector_dir(rdir)==ROOT_DIR_SECTOR){
+         success = false;
+      }
+   }
+   else{
+      if(get_sector_dir(rdir)==get_sector_dir(thread_current()->current_dir)){
+         success = false;
+      }
+   }
+   if(!success){
+      success = dir!=NULL && dir_remove(dir, real_name);
+   }
+   dir_close(dir);
+   dir_close(rdir);
 
   return success;
 }
