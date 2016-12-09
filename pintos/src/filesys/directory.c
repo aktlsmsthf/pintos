@@ -283,6 +283,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
       
       //token = strtok_r(NULL, "/", &save);
    }
+  printf("%d\n", get_sector_dir(dir));
   *dir_name = token;
    return dir;
 }
