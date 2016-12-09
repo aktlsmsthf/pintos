@@ -240,7 +240,6 @@ dir_readdir (struct dir *dir, char name[NAME_MAX + 1])
 struct dir * lowest_dir(char *name, char **dir_name){
    char *save;
    char *token;
-   token =name;
    struct dir *dir;
    struct dir *temp;
    *dir_name = name;
