@@ -258,12 +258,12 @@ struct dir * lowest_dir(char *name, char **dir_name){
    real_name = strtok_r(NULL, "/", &save);
    while(real_name!=NULL){
      
-      if(token == NULL || token == "."){
+      if(token == NULL || strcmp(token, ".")==0){
         printf("c\n");
          token = strtok_r(NULL, "/", &save);
          continue;
       }
-      else if(token = ".."){
+      else if(strcmp(token, "..") ==0){
         printf("d\n");
          temp = dir_open(inode_open(inode_parent(dir->inode)));
          dir_close(dir);
