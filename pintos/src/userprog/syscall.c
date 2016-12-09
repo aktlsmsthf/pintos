@@ -523,8 +523,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(!user_memory(f->esp, 1)){ exit(-1);}
       char * dir = *((char **)(f->esp)+1);	
       if(check_bad_ptr(f, dir)) exit(-1);
+      char *e = ""
 	  printf("%s\n", dir);
-      if(dir==NULL || dir ==""){
+      if(dir==NULL || strcmp(dir,"")==0){
 	      printf("1\n");
 	      f->eax = false;
 	      break;
