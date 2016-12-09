@@ -90,10 +90,30 @@ filesys_open (const char *name)
   if (dir != NULL)
     dir_lookup (dir, real_name, &inode);
   dir_close (dir);
+  
+  if(inode->data.is_dir){
+     return NULL;
+  }
    
   return file_open (inode);
 }
 
+struct dir*
+filesys_open_dir(const char *name){
+   struct inode *inode = NULL;
+  char *real_name;
+  struct dir *dir;
+  dir = lowest_dir(name, &real_name);
+  if (dir != NULL)
+    dir_lookup (dir, real_name, &inode);
+  dir_close (dir);
+  
+  if(!inode->data.is_dir){
+     return NULL;
+  }
+   
+  return dir_open (inode);
+}
 /* Deletes the file named NAME.
    Returns true if successful, false on failure.
    Fails if no file named NAME exists,
