@@ -136,7 +136,7 @@ filesys_remove (const char *name)
 {
   //struct dir *dir = dir_open_root ();
   char * real_name;
-   printf("1\");
+   printf("1\n");
   struct dir *dir = lowest_dir(name, &real_name);
           printf("2\n");
   
