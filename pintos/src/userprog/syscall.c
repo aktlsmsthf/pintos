@@ -243,11 +243,22 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax =-1;
       }
       else{
-        struct file * ff = get_file_from_fd(fd);
+        struct list_elem * elem = get_elem_from_fd(fd);
+	if(elem ==NULL){
+		f->eax == -1;
+		break;
+	}
+	struct file_fd ffd = list_entry(elem, struct file_fe, elem);
+	if(ffd->is_dir){
+		f->eax == -1;
+		break;
+	}
+	struct file = ffd->file;
         if(ff==NULL){
           f->eax = -1;
         }
         else{
+	  if(
           lock_acquire(&sys_lock);
           int r = (int) file_read(ff, buffer, size);
           lock_release(&sys_lock);
@@ -311,7 +322,17 @@ syscall_handler (struct intr_frame *f UNUSED)
       else{
         if(!user_memory(f->esp, 3)){
           exit(-1);}
-        struct file *ff = get_file_from_fd(fd);
+        struct list_elem * elem = get_elem_from_fd(fd);
+	if(elem ==NULL){
+		f->eax == -1;
+		break;
+	}
+	struct file_fd ffd = list_entry(elem, struct file_fe, elem);
+	if(ffd->is_dir){
+		f->eax == -1;
+		break;
+	}
+	struct file = ffd->file;
         if(ff==NULL){ 
           f->eax = -1;
         }
