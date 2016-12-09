@@ -190,12 +190,12 @@ filesys_remove (const char *name)
       }
       struct dir *parent = dir_open(inode_open(inode_parent(dir_get_inode(thread_current()->current_dir))));
       if(get_sector_dir(rdir)==get_sector_dir(parent)){
+         printf("1\n");
          success = false;
       }
       dir_close(parent);
    }
    if(success){
-      printf("1\n");
       success = dir!=NULL && dir_remove(dir, real_name);
    }
    dir_close(dir);
