@@ -185,8 +185,6 @@ syscall_handler (struct intr_frame *f UNUSED)
               t->num_file++;
               f->eax = ffd->fd;
             }
-          
-          
         }
       }
       break;
