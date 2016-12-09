@@ -330,9 +330,10 @@ syscall_handler (struct intr_frame *f UNUSED)
 	struct file_fd *ffd = list_entry(elem, struct file_fd, elem);
 	if(ffd->is_dir){
 		printf("1\n");
-		f->eax == -1;
+		f->eax = -1;
 		break;
 	}
+	      printf("2\n");
 	struct file *ff = ffd->file;
         if(ff==NULL){ 
           f->eax = -1;
