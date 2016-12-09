@@ -30,5 +30,6 @@ off_t inode_length (const struct inode *);
 bool inode_is_dir(struct inode *);
 disk_sector_t inode_disk_sector(struct inode *);
 disk_sector_t inode_parent(struct inode)*;
+void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector);
 
 #endif /* filesys/inode.h */
