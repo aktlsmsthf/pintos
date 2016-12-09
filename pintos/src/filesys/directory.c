@@ -248,6 +248,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
       dir = dir_open_root();
       //token = strtok_r(name, "/", &save);
    }
+  printf("1\n");
    else{
       dir = dir_reopen(thread_current()->current_dir);
    }
@@ -265,7 +266,6 @@ struct dir * lowest_dir(char *name, char **dir_name){
       else{
          struct inode *inode;
          if(!dir_lookup(dir, token, &inode)){
-           printf("1\n");
             dir = NULL;
             return dir;
          }
