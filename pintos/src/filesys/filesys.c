@@ -117,7 +117,7 @@ filesys_open_dir(const char *name){
   char *real_name;
   struct dir *dir;
   dir = lowest_dir(name, &real_name);
-  printf("%s\n", real_name);
+  printf("%s\n", name);
   if (dir != NULL)
     dir_lookup (dir, real_name, &inode);
   dir_close (dir);
