@@ -141,7 +141,7 @@ filesys_remove (const char *name)
   if (dir != NULL)
     dir_lookup (dir, real_name, &inode);
   struct dir *rdir = dir_open(inode);
-  bool success; 
+  bool success = true; 
    
   if(thread_current()->current_dir==NULL){
      struct dir *root = dir_open_root();
@@ -150,13 +150,14 @@ filesys_remove (const char *name)
      }
      dir_close(root);
   }
-   else if(get_sector_dir(rdir) == get_sector_dir(thread_current()->current_dir)) {
-      success = false;
-   }
-   else{
-      printf("1\n");
-      success = dir != NULL && dir_remove (dir, real_name);
-   }
+  if(success){
+      if(get_sector_dir(rdir) == get_sector_dir(thread_current()->current_dir)) {
+         success = false;
+      }
+      else{
+         success = dir != NULL && dir_remove (dir, real_name);
+      }
+  }
    dir_close(rdir);
   dir_close (dir); 
 
