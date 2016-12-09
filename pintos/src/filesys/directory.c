@@ -278,3 +278,6 @@ struct dir * lowest_dir(char *name, char **dir_name){
    return dir;
 }
 
+disk_sector_t get_sector_dir(struct dir *dir){
+  return dir->inode.data->sector;
+}
