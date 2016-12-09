@@ -499,7 +499,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(!user_memory(f->esp, 1)){ exit(-1);} 
       char * dirn = *((char **)(f->esp)+1);
       if(check_bad_ptr(f, dirn)) exit(-1);
-      if(dirn==NULL || strcmp(dir, "")){
+      if(dirn==NULL || strcmp(dirn, "")){
 	      f->eax = false;
 	      break;
       }
