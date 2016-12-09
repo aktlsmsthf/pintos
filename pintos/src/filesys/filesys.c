@@ -137,8 +137,6 @@ filesys_open_dir(const char *name){
   dir_close (dir);
   
   if(inode == NULL || !inode_is_dir(inode)){
-     printf("%s\n", real_name);
-     printf("%d\n", get_sector_dir(dir));
      return NULL;
   }
    
@@ -197,6 +195,7 @@ filesys_remove (const char *name)
       }
    }
    if(success){
+      printf("1\n");
       success = dir!=NULL && dir_remove(dir, real_name);
    }
    dir_close(dir);
