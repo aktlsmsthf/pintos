@@ -104,19 +104,17 @@ filesys_open (const char *name)
   struct inode *inode = NULL;
   char *real_name;
   struct dir *dir;
-   printf("10\n");
+
   dir = lowest_dir(name, &real_name);
-   printf("11\n");
   //printf("%s\n", real_name);
   if (dir != NULL)
     dir_lookup (dir, real_name, &inode);
   dir_close (dir);
-   printf("12\n");
   
   if(inode_is_dir(inode)){
      return NULL;
   }
-   
+      printf("10\n");
   return file_open (inode);
 }
 
