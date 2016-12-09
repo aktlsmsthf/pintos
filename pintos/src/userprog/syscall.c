@@ -143,10 +143,12 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
+		
 	    lock_acquire(&sys_lock);
             struct file *file = filesys_open(name);
 	    struct dir *dir = filesys_open(dir);
 	    if(dir==NULL && file==NULL){
+		    printf("1\n");
 		    f->eax = -1;
 		    lock_release(&sys_lock);
 		    break;
