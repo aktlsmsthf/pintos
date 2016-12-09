@@ -144,6 +144,7 @@ filesys_remove (const char *name)
   bool success = true; 
    
   if(thread_current()->current_dir==NULL){
+     printf("1\n");
      struct dir *root = dir_open_root();
      if(get_sector_dir(root) == get_sector_dir(rdir)) {
         success = false;
@@ -155,6 +156,7 @@ filesys_remove (const char *name)
          success = false;
       }
       else{
+         printf("2\n");
          success = dir != NULL && dir_remove (dir, real_name);
       }
   }
