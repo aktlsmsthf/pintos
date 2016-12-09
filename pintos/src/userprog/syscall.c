@@ -153,6 +153,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	    }
 	    if(dir==NULL && file==NULL){
 		    f->eax = -1;
+		    lock_release(&sys_lock);
 		    break;
 	    }
             lock_release(&sys_lock);
