@@ -16,19 +16,7 @@
 #define IDN 10
 /* On-disk inode.
    Must be exactly DISK_SECTOR_SIZE bytes long. */
-struct inode_disk
-  {
-    //disk_sector_t start;                /* First data sector. */
-    off_t length;                       /* File size in bytes. */
-    unsigned magic;                     /* Magic number. */
-    disk_sector_t direct_sector[DN];
-    disk_sector_t indirect_sector[IDN];
-    disk_sector_t d_indirect_sector;
-    disk_sector_t  sector;
-    bool is_dir;
-    disk_sector_t parent;
-    uint32_t unused[122-DN-IDN];               /* Not used. */
-  };
+
 
 /* Returns the number of sectors to allocate for an inode SIZE
    bytes long. */
@@ -38,17 +26,7 @@ bytes_to_sectors (off_t size)
   return DIV_ROUND_UP (size, DISK_SECTOR_SIZE);
 }
 
-/* In-memory inode. */
-struct inode 
-  {
-    struct list_elem elem;              /* Element in inode list. */
-    disk_sector_t sector;               /* Sector number of disk location. */
-    int open_cnt;                       /* Number of openers. */
-    bool removed;                       /* True if deleted, false otherwise. */
-    int deny_write_cnt;                 /* 0: writes ok, >0: deny writes. */
-    struct inode_disk data;             /* Inode content. */
-    //struct lock ilock; 
-  };
+
 
 /* Returns the disk sector that contains byte offset POS within
    INODE.
