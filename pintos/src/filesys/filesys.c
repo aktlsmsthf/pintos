@@ -77,13 +77,13 @@ filesys_create_dir (const char *name)
   //struct dir *dir = dir_open_root ();
   char *real_name;
   struct dir *dir = lowest_dir(name, &real_name);
-  bool success = false;
-  if(is_dir){
+  bool success;
+
      success= (dir!=NULL
                     && free_map_allocate(1, &inode_sector)
                     && dir_create(inode_sector, 16)
                     && dir_add(dir, real_name, inode_sector));
-  }
+  
 
   if (!success && inode_sector != 0) 
     free_map_release (inode_sector, 1);
