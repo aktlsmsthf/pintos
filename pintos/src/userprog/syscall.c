@@ -131,7 +131,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       const char *name= *((char **)(f->esp)+1);
       
       if(!user_memory((void *)name, 0)) {exit(-1);break;}
-      if(!is_user_vaddr(name)) {f->eax = -1;break;}
+      if(!is_user_vaddr(name)) {exit(-1);break;}
       else{
         if(check_bad_ptr(f,(const void *)name)){
           exit(-1);
@@ -140,7 +140,8 @@ syscall_handler (struct intr_frame *f UNUSED)
     
         char *e = "";
         if(name == NULL || strcmp(name, e)==0) {
-          f->eax = -1;
+          exit(-1);
+	  break;
         }
         else{
 		
@@ -149,6 +150,8 @@ syscall_handler (struct intr_frame *f UNUSED)
   	    struct dir *dir;
   	    dir = lowest_dir(name, &real_name);
   	    if (dir != NULL){
+		 if(real_name ==NULL){exit(-1);}
+    		if(strcmp(real_name, ".") ==0 || strcmp(real_name, "..")==0 ){exit(-1);}
             	dir_lookup (dir, real_name, &inode);}	    
 		    /*
             struct file *file = filesys_open(name);
