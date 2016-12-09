@@ -151,7 +151,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	    if(file==NULL){
 		    dir = filesys_open_dir(name);
 	    }
-	    if(dir==NULL){
+	    if(dir==NULL && file==NULL){
 		    f->eax = -1;
 		    break;
 	    }
