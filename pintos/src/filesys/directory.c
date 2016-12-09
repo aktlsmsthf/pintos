@@ -243,7 +243,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
    token =name;
    struct dir *dir;
    struct dir *temp;
-   if(name[0] == "/"){
+   if(name[0] == "/" || thread_current()->current_dir==NULL){
       dir = dir_open_root();
       token = strtok_r(name, "/", &save);
    }
