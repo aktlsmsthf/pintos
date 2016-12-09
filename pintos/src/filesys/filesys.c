@@ -100,9 +100,10 @@ filesys_open (const char *name)
   struct dir *dir;
 
   dir = lowest_dir(name, &real_name);
-  //printf("%s\n", real_name);
+  printf("%s\n", real_name);
   if (dir != NULL)
      if(strcmp(real_name, ".") ==0 || strcmp(real_name, "..")==0 || real_name ==NULL){
+        printf("1\n");
        dir_close(dir);
         return NULL;
     }
