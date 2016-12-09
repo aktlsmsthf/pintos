@@ -146,13 +146,16 @@ syscall_handler (struct intr_frame *f UNUSED)
         else{
 	    lock_acquire(&sys_lock);
             struct file *file = filesys_open(name);
+		printf("3\n");
 	    struct dir *dir = filesys_open(dir);
+		printf("2\n");
 	    if(dir==NULL && file==NULL){
 		    printf("1\n");
 		    f->eax = -1;
 		    lock_release(&sys_lock);
 		    break;
 	    }
+		printf("4\n");
             lock_release(&sys_lock);
             struct thread *t = thread_current();
             struct file_fd *ffd = palloc_get_page(0);
