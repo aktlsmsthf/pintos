@@ -252,8 +252,9 @@ struct dir * lowest_dir(char *name, char **dir_name){
       dir = dir_reopen(thread_current()->current_dir);
    }
    printf("%s\n", name);
-
-  printf("%s\n", strtok_r("a/n", "/", &save));
+  
+  char *s = "a/b"
+  printf("%s\n", strtok_r(s, "/", &save));
    token = strtok_r(name, "/", &save);
   printf("2\n");
    while(strtok_r(NULL, "/", &save)!=NULL){
