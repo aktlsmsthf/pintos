@@ -65,7 +65,7 @@ make_tar_archive (const char *archive_name, char *files[], size_t file_cnt)
       printf ("%s: open failed\n", archive_name);
       return false;
     }
-
+printf("1\n");
   for (i = 0; i < file_cnt; i++) 
     {
       char file_name[128];
