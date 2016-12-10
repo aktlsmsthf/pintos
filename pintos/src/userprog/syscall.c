@@ -414,8 +414,9 @@ syscall_handler (struct intr_frame *f UNUSED)
 		  palloc_free_page(ffd);
 	  }
 	}
+	    break;
       } 
-      break;
+      
     }
 		  
     case SYS_MMAP:{
