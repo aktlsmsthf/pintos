@@ -175,7 +175,6 @@ filesys_remove (const char *name)
    if(inode!=NULL){
         if(!inode_is_dir(inode)){
             success = dir != NULL && dir_remove (dir, real_name);
-           dir_close(rdir);
            dir_close(dir);
            return success;
          }
