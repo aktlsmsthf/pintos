@@ -88,14 +88,14 @@ make_tar_archive (const char *archive_name, char *files[], size_t file_cnt)
 static bool
 archive_file (char file_name[], size_t file_name_size,
               int archive_fd, bool *write_error) 
-{printf("1\n");
+{
   int file_fd = open (file_name);
   if (file_fd >= 0) 
     {
       bool success;
 
       if (inumber (file_fd) != inumber (archive_fd)) 
-        {
+        {printf("1\n");
           if (!isdir (file_fd))
             success = archive_ordinary_file (file_name, file_fd,
                                              archive_fd, write_error);
