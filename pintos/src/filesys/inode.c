@@ -179,7 +179,6 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
             disk_write(filesys_disk, disk_inode->indirect_sector[(sectors-DN)/128], sectori);
             
          }
-         printf("%d\n", success);
       }   
      disk_write(filesys_disk, sector, disk_inode);
      
