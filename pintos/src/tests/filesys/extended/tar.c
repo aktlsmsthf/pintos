@@ -93,9 +93,9 @@ archive_file (char file_name[], size_t file_name_size,
   if (file_fd >= 0) 
     {
       bool success;
-
+printf("1\n");
       if (inumber (file_fd) != inumber (archive_fd)) 
-        {printf("1\n");
+        {
           if (!isdir (file_fd))
             success = archive_ordinary_file (file_name, file_fd,
                                              archive_fd, write_error);
