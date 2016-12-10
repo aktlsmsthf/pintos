@@ -257,7 +257,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
    token = strtok_r(token, "/", &save);
    real_name = strtok_r(NULL, "/", &save);
   if(strcmp(name, "..")==0){
-    printf("%s\n", token);
+    printf("1\n");
   }
    while(real_name!=NULL){
       if(token == NULL || strcmp(token, ".")==0){
