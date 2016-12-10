@@ -126,7 +126,6 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
      one sector in size, and you should fix that. */
   ASSERT (sizeof *disk_inode == DISK_SECTOR_SIZE);
   
-  printf("a %d\n", disk_size(filesys_disk));
   disk_inode = calloc (1, sizeof *disk_inode);
   if (disk_inode != NULL)
     {
