@@ -206,7 +206,7 @@ filesys_remove (const char *name)
    dir_close(rdir);
   return success;
 }
-
+
 /* Formats the file system. */
 static void
 do_format (void)
