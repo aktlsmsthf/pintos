@@ -197,12 +197,11 @@ filesys_remove (const char *name)
          dir_close(parent);
       }
    }
-   printf("2\n");
    if(inode_is_open(dir_get_inode(rdir))){
       success = false;
    }
-   printf("3\n");
    if(success){
+      printf("1\n");
       success = dir!=NULL && dir_remove(dir, real_name);
    }
    dir_close(dir);
