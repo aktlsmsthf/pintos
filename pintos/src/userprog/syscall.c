@@ -506,9 +506,11 @@ syscall_handler (struct intr_frame *f UNUSED)
       char *dir_name;
       struct dir *dir = lowest_dir(dirn, &dir_name);
       struct inode *inode;
-	dir_lookup(dir, dir_name, &inode);
-	dir_close(dir);
-	dir = dir_open(inode);
+	if(dir_name != NULL && strcmp(dir_name, ".")!=0 && strcmp(dir_name, "..")!=0){
+		dir_lookup(dir, dir_name, &inode);
+		dir_close(dir);
+		dir = dir_open(inode);
+	}
 	if(dir!=NULL){
 		dir_close(thread_current()->current_dir);
 		thread_current()->current_dir = dir;
