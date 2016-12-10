@@ -245,11 +245,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
    struct dir *dir;
    struct dir *temp;
    
-   if(name[0] == "/" ){
-      dir = dir_open_root();
-      strtok_r(name, "/", &save);
-   }
-   else if(thread_current()->current_dir==NULL){
+   if(name[0] == "/" || thread_current()->current_dir == NULL ){
       dir = dir_open_root();
    }
    else{
@@ -301,6 +297,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
     dir_close(dir);
     dir = temp;
   }
+  printf("%d\n", get_sector_dir(dir));
    return dir;
 }
 
