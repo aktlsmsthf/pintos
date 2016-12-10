@@ -247,17 +247,16 @@ struct dir * lowest_dir(char *name, char **dir_name){
    
    if(name[0] == "/" || thread_current()->current_dir==NULL){
       dir = dir_open_root();
-      //token = strtok_r(name, "/", &save);
+      strtok_r(name, "/", &save);
    }
   
    else{
       dir = dir_reopen(thread_current()->current_dir);
    }
   *dir_name = token;
-   token = strtok_r(token, "/", &save);
+   token = strtok_r(NULL, "/", &save);
    real_name = strtok_r(NULL, "/", &save);
   char *s;
-  printf("%s\n", strtok_r("/a", "/", &s));
    while(real_name!=NULL){
       if(token == NULL || strcmp(token, ".")==0){
          //token = strtok_r(NULL, "/", &save);
