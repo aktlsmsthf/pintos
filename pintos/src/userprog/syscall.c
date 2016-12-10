@@ -525,6 +525,11 @@ syscall_handler (struct intr_frame *f UNUSED)
 		dir_close(dir);
 		dir = dir_open(inode);
 	}
+	if(strcmp(dir_name, "..") ==0){
+		struct dir *temp = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
+		dir_close(dir);
+		dir = temp;
+	}
 	if(dir!=NULL){
 		dir_close(thread_current()->current_dir);
 		thread_current()->current_dir = dir;
