@@ -183,7 +183,7 @@ filesys_remove (const char *name)
         }
    }
    if(get_sector_dir(rdir) == ROOT_DIR_SECTOR){
-      success == false;
+      success = false;
       printf("%d\n", success);
    }
    else{
