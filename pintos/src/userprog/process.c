@@ -248,14 +248,14 @@ process_exit (void)
    while(!list_empty(&(curr->file_list))){
         felem=list_front(&(curr->file_list));
         ffd=list_entry(felem, struct file_fd, elem);
-        if(!ffd->is_closed){
+        i//f(!ffd->is_closed){
 		if(ffd->is_dir){
 			dir_close(ffd->dir);
 		}
 		else{
          		file_close(ffd->file);
 		}
-        }
+        //}
 
         list_remove(felem);
         palloc_free_page(ffd);
