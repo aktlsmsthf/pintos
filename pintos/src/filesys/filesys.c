@@ -112,7 +112,7 @@ filesys_open (const char *name)
     dir_lookup (dir, real_name, &inode);
      
   }
-   printf("%d\n", get_sector_dir(dir));
+   printf("%d\n", inode_open_cnt(dir_get_inode(dir)));
   dir_close (dir); 
   if(inode == NULL || inode_is_dir(inode)){
      return NULL;
