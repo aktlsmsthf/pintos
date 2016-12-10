@@ -46,7 +46,6 @@ syscall_init (void)
 static void
 syscall_handler (struct intr_frame *f UNUSED) 
 {  
-	//printf("%s %d\n",thread_current()->name, *((int *)(f->esp)));
   if(!is_user_vaddr((const void *)f->esp)){exit(-1);}
   if(check_bad_ptr(f,f->esp)){exit(-1);}
   switch(*((int *)(f->esp))){
@@ -570,7 +569,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;
     }
     case SYS_INUMBER:{	  
-      if(!user_memory(f->esp, 1)){ printf("1\n");exit(-1);}
+      if(!user_memory(f->esp, 1)){exit(-1);}
       int fd = *((int *)(f->esp)+1);
 	struct file_fd *ffd = list_entry(get_elem_from_fd(fd), struct file_fd, elem);
 	if(ffd->is_dir){
