@@ -157,6 +157,7 @@ filesys_remove (const char *name)
   struct dir *dir = lowest_dir(name, &real_name);
   struct dir *rdir;
   bool success = true;
+   printf("1\n");
   if (dir != NULL){
      if(real_name ==NULL){
         rdir = dir;
@@ -170,6 +171,7 @@ filesys_remove (const char *name)
         dir_lookup (dir, real_name, &inode);
      }
   }
+   printf("2\n");
    if(inode!=NULL){
         if(!inode_is_dir(inode)){
             success = dir != NULL && dir_remove (dir, real_name);
@@ -195,9 +197,11 @@ filesys_remove (const char *name)
          dir_close(parent);
       }
    }
+   printf("3\n");
    if(success && inode_open_cnt(dir_get_inode(rdir))>1){
       success = false;
    }
+   printf("4\n");
    if(success){
       success = dir!=NULL && dir_remove(dir, real_name);
    }
