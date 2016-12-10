@@ -141,7 +141,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       
       lock_acquire(&inode_lock);
      
-      
+      printf("%d\n", sectors2);
       static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
          sectors++;
@@ -152,7 +152,6 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
             
          }
          else if(sectors>=(DN+(IDN*128))){
-            printf("1\n");
             disk_sector_t indirects[128];
             if(sectors==(DN+(IDN*128))){
                success = free_map_allocate(1, &disk_inode->d_indirect_sector);
@@ -168,7 +167,6 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
             disk_write(filesys_disk, disk_inode->d_indirect_sector, indirects);
          }
          else{
-            printf("2\n");
             disk_sector_t sectori[128];
             if((sectors-DN)%128==0){
                success = free_map_allocate(1, &disk_inode->indirect_sector[(sectors-DN)/128]);
