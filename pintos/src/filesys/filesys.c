@@ -187,11 +187,13 @@ filesys_remove (const char *name)
    }
    else{
       if(thread_current()->current_dir ==NULL){
+         printf("2\n");
          if(get_sector_dir(rdir)==get_sector_dir(thread_current()->current_dir)){
             success = false;
          }
       }
       else{
+         printf("1\n");
          struct dir *parent = dir_open(inode_open(inode_parent(dir_get_inode(thread_current()->current_dir))));
          if(get_sector_dir(rdir)==get_sector_dir(parent)){
             printf("x\n");
