@@ -182,6 +182,7 @@ filesys_remove (const char *name)
            rdir = dir_open(inode);
         }
    }
+   printf("%d\n", get_sector_dir(rdir));
    if(get_sector_dir(rdir) == ROOT_DIR_SECTOR){
       printf("1\n");
       success == false;
