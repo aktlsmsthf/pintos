@@ -247,11 +247,9 @@ struct dir * lowest_dir(char *name, char **dir_name){
    char *slash = "/";
 
    if(*name == *slash || thread_current()->current_dir == NULL ){
-     printf("a\n");
       dir = dir_open_root();
    }
    else{
-     printf("b\n");
       dir = dir_reopen(thread_current()->current_dir);
    }
   *dir_name = token;
@@ -267,6 +265,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
          continue;
       }
       else if(strcmp(token, "..") ==0){
+          printf("a\n");
           if(inode_parent(dir->inode)==ROOT_DIR_SECTOR){
             token = real_name;
             real_name = strtok_r(NULL, "/", &save);
