@@ -508,6 +508,9 @@ disk_sector_t inode_parent(struct inode *inode){
    return inode->data.parent;
 }
 
+bool inode_is_open(struct inode *inode){
+   return inode->open_cnt>0;
+}
 void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector){
   struct inode_disk *disk_inode = malloc(sizeof (struct inode_disk));
   disk_read(filesys_disk, child_sector, disk_inode);
