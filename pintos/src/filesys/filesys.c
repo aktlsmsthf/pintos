@@ -186,7 +186,7 @@ filesys_remove (const char *name)
       success == false;
    }
    else{
-      if(thread_current()->current_dir !=NULL){
+      if(thread_current()->current_dir ==NULL){
          if(get_sector_dir(rdir)==get_sector_dir(thread_current()->current_dir)){
             success = false;
          }
