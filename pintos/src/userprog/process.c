@@ -258,7 +258,7 @@ process_exit (void)
         }
 
         list_remove(felem);
-        free(ffd);
+        palloc_free_page(ffd);
       }
    
    if(!list_empty(&(curr->child_list))){
