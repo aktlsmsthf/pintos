@@ -149,12 +149,15 @@ syscall_handler (struct intr_frame *f UNUSED)
 	    struct dir *dir = filesys_open_dir(name);
             lock_release(&sys_lock);
 	    if(dir==NULL && file==NULL){
+		    printf("1\n");
 		    f->eax = -1;
-		    break;}
+		    break;
+	    }
 		    
             struct thread *t = thread_current();
             struct file_fd *ffd = palloc_get_page(0);
             if(ffd==NULL){
+		    printf("2\n");
               f->eax =-1;
             }
             else{
