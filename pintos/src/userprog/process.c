@@ -246,6 +246,7 @@ process_exit (void)
    }
    
    while(!list_empty(&(curr->file_list))){
+	   printf("1\n");
         felem=list_front(&(curr->file_list));
         ffd=list_entry(felem, struct file_fd, elem);
         //if(!ffd->is_closed){
