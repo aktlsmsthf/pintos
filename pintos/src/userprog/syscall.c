@@ -411,6 +411,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 			  file_close(ffd->file);
 			  lock_release(&sys_lock);
 		  }
+		  list_remove(ffd->elem);
 		  palloc_free_page(ffd);
 	  }
 	}
