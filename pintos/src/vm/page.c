@@ -44,7 +44,7 @@ void spt_init(struct hash *spt){
 
 void spt_alloc_lazy(struct hash * spt, void * page, bool writable, enum palloc_flags flags, uint32_t read_bytes, uint32_t zero_bytes
                     , struct file *file, off_t ofs){
-  lock_acquire(&frame_lock);                 
+  //lock_acquire(&frame_lock);                 
   struct spt_entry *spte = malloc(sizeof(struct spt_entry));
   spte -> page = page;
   spte -> writable = writable;
@@ -56,5 +56,5 @@ void spt_alloc_lazy(struct hash * spt, void * page, bool writable, enum palloc_f
   spte -> t = thread_current();
   spte -> ofs = ofs;
   hash_insert(spt, &spte->elem);
-  lock_release(&frame_lock);
+  //lock_release(&frame_lock);
 }
