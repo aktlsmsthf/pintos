@@ -175,7 +175,7 @@ filesys_remove (const char *name)
    if(inode!=NULL){
         if(!inode_is_dir(inode)){
             success = dir != NULL && dir_remove (dir, real_name);
-           dis_close(rdir);
+           dir_close(rdir);
            dir_close(dir);
            return success;
          }
@@ -199,7 +199,7 @@ filesys_remove (const char *name)
       }
    }
    if(success && inode_open_cnt(dir_get_inode(rdir))>1){
-      printf("%d\n", inode_open_cnt(dir_get_inode(rdir)));
+      //printf("%d\n", inode_open_cnt(dir_get_inode(rdir)));
       success = false;
    }
    if(success){
