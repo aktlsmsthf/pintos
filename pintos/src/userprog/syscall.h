@@ -18,7 +18,7 @@ struct file_fd{
   struct list_elem elem;
   struct dir *dir;
   bool is_dir;
-  bool is_closed;
+  //bool is_closed;
 };
 
 struct mmapped{
