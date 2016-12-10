@@ -117,7 +117,7 @@ bool
 inode_create (disk_sector_t sector, off_t length, bool is_dir)
 {
   struct inode_disk *disk_inode = NULL;
-  bool success = false;
+  bool success = true;
 
   ASSERT (length >= 0);
 
@@ -125,9 +125,11 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
      one sector in size, and you should fix that. */
   ASSERT (sizeof *disk_inode == DISK_SECTOR_SIZE);
   
+  
   disk_inode = calloc (1, sizeof *disk_inode);
   if (disk_inode != NULL)
     {
+      success = true;
       //size_t sectors = bytes_to_sectors (length);
       disk_inode->length = length;
       disk_inode->magic = INODE_MAGIC;
@@ -138,27 +140,28 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
       lock_acquire(&inode_lock);
+     
       
       static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
          sectors++;
          
          if(sectors<DN){
-            free_map_allocate(1, &disk_inode->direct_sector[sectors]);
+            success = free_map_allocate(1, &disk_inode->direct_sector[sectors]);
             disk_write(filesys_disk, disk_inode->direct_sector[sectors], zeros);
             
          }
          else if(sectors>=(DN+(IDN*128))){
             disk_sector_t indirects[128];
             if(sectors==(DN+(IDN*128))){
-               free_map_allocate(1, &disk_inode->d_indirect_sector);
+               success = free_map_allocate(1, &disk_inode->d_indirect_sector);
             }
             else{
                disk_read(filesys_disk, disk_inode->d_indirect_sector, indirects);
             }
             disk_sector_t sectordi[128];
             disk_read(filesys_disk, indirects[(sectors-(DN+(IDN*128)))/128], sectordi);
-            free_map_allocate(1, &sectordi[(sectors-(DN+(IDN*128)))%128]);
+            success = free_map_allocate(1, &sectordi[(sectors-(DN+(IDN*128)))%128]);
             disk_write(filesys_disk, sectordi[(sectors-(DN+(IDN*128)))%128], zeros);
             disk_write(filesys_disk, indirects[(sectors-(DN+(IDN*128)))/128], sectordi);
             disk_write(filesys_disk, disk_inode->d_indirect_sector, indirects);
@@ -166,19 +169,18 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
          else{
             disk_sector_t sectori[128];
             if((sectors-DN)%128==0){
-               free_map_allocate(1, &disk_inode->indirect_sector[(sectors-DN)/128]);
+               success = free_map_allocate(1, &disk_inode->indirect_sector[(sectors-DN)/128]);
             }
             else{
                disk_read(filesys_disk, disk_inode->indirect_sector[(sectors-DN)/128], sectori);
             }
-            free_map_allocate(1, &sectori[(sectors-DN)%128]);
+            success = free_map_allocate(1, &sectori[(sectors-DN)%128]);
             disk_write(filesys_disk, sectori[(sectors-DN)%128], zeros);
             disk_write(filesys_disk, disk_inode->indirect_sector[(sectors-DN)/128], sectori);
             
          }
       }   
      disk_write(filesys_disk, sector, disk_inode);
-     success = true;
      
      lock_release(&inode_lock);       
       free (disk_inode);
