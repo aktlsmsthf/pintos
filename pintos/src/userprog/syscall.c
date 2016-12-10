@@ -560,7 +560,12 @@ syscall_handler (struct intr_frame *f UNUSED)
       if(!user_memory(f->esp, 1)){ printf("1\n");exit(-1);}
       int fd = *((int *)(f->esp)+1);
 	struct file_fd *ffd = list_entry(get_elem_from_fd(fd), struct file_fd, elem);
-	f->eax = get_sector_dir(ffd->dir);
+	if(ffd->is_dir){
+		f->eax = get_sector_dir(ffd->dir);
+	}
+	else{
+		f->eax = get_sector_file(ffd->file);
+	}
       break;
     }		  
   }
