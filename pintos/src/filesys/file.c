@@ -168,6 +168,6 @@ file_tell (struct file *file)
   return file->pos;
 }
 
-disk_sector_t get_sector_file(struct *file file){
+disk_sector_t get_sector_file(struct file *file){
   return inode_disk_sector(file->inode);
 }
