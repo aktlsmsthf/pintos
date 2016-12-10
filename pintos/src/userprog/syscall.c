@@ -511,7 +511,6 @@ syscall_handler (struct intr_frame *f UNUSED)
         break;
     }
     case SYS_CHDIR:{
-	    printf("1\n");
       if(!user_memory(f->esp, 1)){ exit(-1);} 
       char * dirn = *((char **)(f->esp)+1);
       if(check_bad_ptr(f, dirn)) exit(-1);
@@ -522,13 +521,11 @@ syscall_handler (struct intr_frame *f UNUSED)
       char *dir_name;
       struct dir *dir = lowest_dir(dirn, &dir_name);
       struct inode *inode;
-	    printf("2\n");
 	if(dir_name != NULL && strcmp(dir_name, ".")!=0 && strcmp(dir_name, "..")!=0){
 		dir_lookup(dir, dir_name, &inode);
 		dir_close(dir);
 		dir = dir_open(inode);
 	}
-	    printf("3\n");
 	if(dir!=NULL){
 		dir_close(thread_current()->current_dir);
 		thread_current()->current_dir = dir;
