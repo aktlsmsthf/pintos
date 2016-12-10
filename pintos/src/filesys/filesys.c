@@ -198,7 +198,7 @@ filesys_remove (const char *name)
       }
    }
    if(success && inode_open_cnt(dir_get_inode(rdir))>1){
-      //printf("%d\n", inode_open_cnt(dir_get_inode(rdir)));
+      printf("%d\n", get_sector_dir(rdir));
       success = false;
    }
    if(success){
