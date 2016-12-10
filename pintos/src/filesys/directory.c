@@ -266,7 +266,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
       }
       else if(strcmp(token, "..") ==0){
           printf("a\n");
-          if(inode_parent(dir->inode)==ROOT_DIR_SECTOR){
+          if(get_sector_dir(dir)==ROOT_DIR_SECTOR){
             token = real_name;
             real_name = strtok_r(NULL, "/", &save);
             continue;
