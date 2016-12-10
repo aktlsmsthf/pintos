@@ -195,6 +195,7 @@ filesys_remove (const char *name)
             success = false;
          }
          dir_close(parent);
+      }
    }
    if(inode_is_open(dir_get_inode(rdir))){
       success = false;
