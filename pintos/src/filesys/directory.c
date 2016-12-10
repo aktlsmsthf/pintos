@@ -295,7 +295,6 @@ struct dir * lowest_dir(char *name, char **dir_name){
    }
   *dir_name = token;
   if(strcmp(dir_name, "..") ==0){
-    printf("1\n");
     temp = dir_open(inode_open(inode_parent(dir->inode)));
     dir_close(dir);
     dir = temp;
