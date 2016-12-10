@@ -244,8 +244,8 @@ struct dir * lowest_dir(char *name, char **dir_name){
   memcpy (token, name, strlen(name)+1);
    struct dir *dir;
    struct dir *temp;
-   
-  printf("%d\n", memcpy(name, "/", 1)==0);
+   char *slash = "/";
+  printf("%d\n", *name==*slash);
    if(name[0] == "/" || thread_current()->current_dir == NULL ){
      printf("a\n");
       dir = dir_open_root();
