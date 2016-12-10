@@ -154,9 +154,8 @@ syscall_handler (struct intr_frame *f UNUSED)
 	    }
 		    
             struct thread *t = thread_current();
-            struct file_fd *ffd = palloc_get_page(0);
+            struct file_fd *ffd = malloc(sizeof (struct file_fd));
             if(ffd==NULL){
-	      printf("2\n");
               f->eax =-1;
             }
             else{
