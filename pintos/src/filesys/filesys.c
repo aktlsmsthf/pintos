@@ -136,7 +136,7 @@ filesys_open_dir(const char *name){
     }
     if(strcmp(real_name, "..") ==0){
        struct dir *ret;
-       ret = ddir_open(inode_open(inode_parent(dir_get_inode(dir))));
+       ret = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
        dir_close(dir);
        return ret;
     }
