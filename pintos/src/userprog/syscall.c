@@ -527,6 +527,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		dir = dir_open(inode);
 	}
 	if(dir!=NULL){
+		get_sector_dir(dir);
 		dir_close(thread_current()->current_dir);
 		thread_current()->current_dir = dir;
 		f->eax = true;
