@@ -112,7 +112,6 @@ filesys_open (const char *name)
     dir_lookup (dir, real_name, &inode);
      
   }
-   printf("%d\n", inode_open_cnt(dir_get_inode(dir)));
   dir_close (dir); 
   if(inode == NULL || inode_is_dir(inode)){
      return NULL;
@@ -159,6 +158,7 @@ filesys_remove (const char *name)
   struct dir *dir = lowest_dir(name, &real_name);
   struct dir *rdir;
   bool success = true;
+   printf("%d %d\n", get_sector_dir(dir), inode_open_cnt(dir_get_inode(dir)));
   if (dir != NULL){
      if(real_name ==NULL){
         rdir = dir;
