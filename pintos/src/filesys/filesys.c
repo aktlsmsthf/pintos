@@ -131,7 +131,7 @@ filesys_open_dir(const char *name){
     if(real_name ==NULL){
       return dir;
     }
-    if(strcmp(real_name, ".") ==0)){
+    if(strcmp(real_name, ".") ==0){
        return dir;
     }
     if(strcmp(real_name, "..") ==0){
