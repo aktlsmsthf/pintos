@@ -182,14 +182,14 @@ filesys_remove (const char *name)
            rdir = dir_open(inode);
         }
    }
-   if(thread_current()->current_dir ==NULL){
-      if(get_sector_dir(rdir)==ROOT_DIR_SECTOR){
-         success = false;
-      }
+   if(get_sector_dir(rdir) == ROOT_DIR_SECTOR){
+      success == false;
    }
    else{
-      if(get_sector_dir(rdir)==get_sector_dir(thread_current()->current_dir)){
-         success = false;
+      if(thread_current()->current_dir !=NULL){
+         if(get_sector_dir(rdir)==get_sector_dir(thread_current()->current_dir)){
+            success = false;
+         }
       }
       struct dir *parent = dir_open(inode_open(inode_parent(dir_get_inode(thread_current()->current_dir))));
       if(get_sector_dir(rdir)==get_sector_dir(parent)){
