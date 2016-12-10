@@ -158,7 +158,6 @@ filesys_remove (const char *name)
   struct dir *dir = lowest_dir(name, &real_name);
   struct dir *rdir;
   bool success = true;
-   printf("%d %d\n", get_sector_dir(dir), inode_open_cnt(dir_get_inode(dir)));
   if (dir != NULL){
      if(real_name ==NULL){
         rdir = dir;
@@ -198,7 +197,6 @@ filesys_remove (const char *name)
       }
    }
    if(success && inode_open_cnt(dir_get_inode(rdir))>1){
-      printf("%d\n", get_sector_dir(rdir));
       success = false;
    }
    if(success){
