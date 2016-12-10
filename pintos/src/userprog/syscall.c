@@ -381,8 +381,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
         struct list_elem *flm = get_elem_from_fd(fd);
-        struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
-        
+        /**struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
         
         if(ffd->is_closed){
           break;
@@ -399,7 +398,20 @@ syscall_handler (struct intr_frame *f UNUSED)
            dir_close(ffd->dir);
           
           ffd->is_closed=1;
-          lock_release(&sys_lock);
+          lock_release(&sys_lock);**/
+	  if(flm!=NULL){
+		  struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
+		  if(ffd->is_dir){
+			  lock_acquire(&sys_lock);
+			  dir_close(ffd->dir);
+			  lock_release(&sys_lock);
+		  }
+		  else{
+			  lock_acquire(&sys_lock);
+			  file_close(ffd->file);
+			  lock_release(&sys_lock);
+		  }
+	  }
 	}
       } 
       break;
