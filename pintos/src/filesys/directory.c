@@ -245,8 +245,8 @@ struct dir * lowest_dir(char *name, char **dir_name){
    struct dir *dir;
    struct dir *temp;
    char *slash = "/";
-  printf("%d\n", *name=="/");
-   if(name[0] == "/" || thread_current()->current_dir == NULL ){
+
+   if(*name == *slash || thread_current()->current_dir == NULL ){
      printf("a\n");
       dir = dir_open_root();
    }
