@@ -536,7 +536,6 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;
     }
     case SYS_READDIR:{
-	    printf("1\n");
       if(!user_memory(f->esp, 2)){ exit(-1);}
       int fd = *((int *)(f->esp)+1);
       char * name = *((char **)(f->esp)+2);	  
