@@ -556,7 +556,6 @@ syscall_handler (struct intr_frame *f UNUSED)
       break;
     }
     case SYS_INUMBER:{	  
-	    printf("2\n");
       if(!user_memory(f->esp, 1)){ printf("1\n");exit(-1);}
       int fd = *((int *)(f->esp)+1);
 	struct file_fd *ffd = list_entry(get_elem_from_fd(fd), struct file_fd, elem);
