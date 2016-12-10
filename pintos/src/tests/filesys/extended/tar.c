@@ -93,7 +93,7 @@ archive_file (char file_name[], size_t file_name_size,
   if (file_fd >= 0) 
     {
       bool success;
-printf("1\n");
+
       if (inumber (file_fd) != inumber (archive_fd)) 
         {
           if (!isdir (file_fd))
