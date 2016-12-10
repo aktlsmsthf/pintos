@@ -186,21 +186,16 @@ filesys_remove (const char *name)
       success == false;
    }
    else{
-      if(thread_current()->current_dir ==NULL){
+      if(thread_current()->current_dir !=NULL){
          if(get_sector_dir(rdir)==get_sector_dir(thread_current()->current_dir)){
-            printf("1\n");
             success = false;
          }
-      }
-      else{
          struct dir *parent = dir_open(inode_open(inode_parent(dir_get_inode(thread_current()->current_dir))));
          if(get_sector_dir(rdir)==get_sector_dir(parent)){
             success = false;
          }
          dir_close(parent);
-      }
    }
-   printf("2\n");
    if(inode_is_open(dir_get_inode(rdir))){
       success = false;
    }
