@@ -131,8 +131,14 @@ filesys_open_dir(const char *name){
     if(real_name ==NULL){
       return dir;
     }
-    if(strcmp(real_name, ".") ==0 || strcmp(real_name, "..")==0 ){
+    if(strcmp(real_name, ".") ==0)){
        return dir;
+    }
+    if(strcmp(real_name, "..") ==0){
+       struct dir *ret;
+       ret = ddir_open(inode_open(inode_parent(dir_get_inode(dir))));
+       dir_close(dir);
+       return ret;
     }
     dir_lookup (dir, real_name, &inode);
     
@@ -163,9 +169,14 @@ filesys_remove (const char *name)
         rdir = dir;
         dir = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
      }
-     else if(strcmp(real_name, ".")==0 || strcmp(real_name, "..")==0){
+     else if(strcmp(real_name, ".")==0){
         rdir = dir;
         dir = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
+     }
+     else if(strcmp(real_name, "..")==0){
+        rdir = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
+        dir_close(dir);
+        dir = dir_open(inode_open(inode_parent(dir_get_inode(rdir))));
      }
      else{
         dir_lookup (dir, real_name, &inode);
