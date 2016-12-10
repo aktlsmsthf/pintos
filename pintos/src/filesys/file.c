@@ -167,3 +167,7 @@ file_tell (struct file *file)
   ASSERT (file != NULL);
   return file->pos;
 }
+
+disk_sector_t get_sector_file(struct *file file){
+  return inode_disk_sector(file->inode);
+}
