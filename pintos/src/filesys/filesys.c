@@ -182,9 +182,7 @@ filesys_remove (const char *name)
            rdir = dir_open(inode);
         }
    }
-   printf("%d\n", get_sector_dir(rdir));
    if(get_sector_dir(rdir) == ROOT_DIR_SECTOR){
-      printf("1\n");
       success == false;
    }
    else{
@@ -199,7 +197,7 @@ filesys_remove (const char *name)
          dir_close(parent);
       }
    }
-   if(inode_open_cnt(dir_get_inode(rdir))>1){
+   if(success && inode_open_cnt(dir_get_inode(rdir))>1){
       success = false;
    }
    if(success){
