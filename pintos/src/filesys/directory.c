@@ -254,7 +254,6 @@ struct dir * lowest_dir(char *name, char **dir_name){
    }
   *dir_name = token;
   char *s;
-  printf("%s\n", strtok_r("a", "/", &s));
    token = strtok_r(token, "/", &save);
    real_name = strtok_r(NULL, "/", &save);
    while(real_name!=NULL){
@@ -299,6 +298,7 @@ struct dir * lowest_dir(char *name, char **dir_name){
     dir_close(dir);
     dir = temp;
   }
+  printf("%s %d\n", *dir_name, get_sector_dir(dir));
    return dir;
 }
 
