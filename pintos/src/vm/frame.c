@@ -102,9 +102,10 @@ bool file_frame_alloc(struct spt_entry * spte){
   
   spte -> fe = fe;
   spte -> lazy = 0;
-  lock_acquire(&frame_lock);
   
   file_read_at(spte->file, frame, spte->read_bytes, spte->ofs);
+  
+  lock_acquire(&frame_lock);
   memset(frame+spte->read_bytes, 0, spte->zero_bytes);
   install_page(spte->page, frame, spte->writable);
   
