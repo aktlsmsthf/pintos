@@ -102,17 +102,19 @@ filesys_open (const char *name)
   dir = lowest_dir(name, &real_name);
   if (dir != NULL){
      if(real_name ==NULL){
+        printf("1\n");
         dir_close(dir);
         return NULL;
      }
      if(strcmp(real_name, ".") ==0 || strcmp(real_name, "..")==0){
+        printf("2\n");
        dir_close(dir);
         return NULL;
     }
     dir_lookup (dir, real_name, &inode);
      
   }
-  
+  printf("3\n");
   dir_close (dir); 
   if(inode == NULL || inode_is_dir(inode)){
      return NULL;
