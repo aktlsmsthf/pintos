@@ -9,6 +9,7 @@
 #include "filesys/cache.h"
 #include "threads/synch.h"
 #include "userprog/syscall.h"
+#include "devices/disk.h"
 
 /* Identifies an inode. */
 #define INODE_MAGIC 0x494e4f44
