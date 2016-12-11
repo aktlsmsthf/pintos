@@ -543,7 +543,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		printf("%d\n", get_sector_dir(dir));
 	}
 	if(dir!=NULL){
-		printf("c %d %d\n",get_sector_dir(thread_current()->current_dir), inode_open_cnt(dir_get_inode(thread_current()->current_dir)));
+		//printf("c %d %d\n",get_sector_dir(thread_current()->current_dir), inode_open_cnt(dir_get_inode(thread_current()->current_dir)));
 		dir_close(thread_current()->current_dir);
 		thread_current()->current_dir = dir;
 		f->eax = true;
