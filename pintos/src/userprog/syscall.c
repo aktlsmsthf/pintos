@@ -162,7 +162,7 @@ syscall_handler (struct intr_frame *f UNUSED)
               ffd -> fd = t->num_file+2;
               ffd -> file = file;
 	      ffd -> dir = dir;
-	      ffd -> is_dir = file==NULL;
+	      ffd -> is_dir = dir!=NULL;
               //ffd -> is_closed=0;
               list_push_front(&(t->file_list),&ffd->elem);
               t->num_file++;
