@@ -78,9 +78,9 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   count++;
   //printf("%d\n", count);
   //hand = &c->elem;
-  lock_release(&cache_lock);
-  disk_read(filesys_disk, sector_idx, c->cache);
   
+  disk_read(filesys_disk, sector_idx, c->cache);
+  lock_release(&cache_lock);
   /**if(first){
     void *aux = sector_idx+1;
     thread_create("Read_ahead", 0, thread_func_read_ahead, aux);
