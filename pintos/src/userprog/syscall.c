@@ -463,14 +463,15 @@ syscall_handler (struct intr_frame *f UNUSED)
 		addr+=PGSIZE;
 	}
 	if(pass){
+		lock_acquire(&sys_lock);
 		struct mmapped *m = malloc(sizeof(struct mmapped));
 		m->addr = daddr;
 		m->file = mfile;
 		m->mid = fd;
 		m->size = size;
-	        //lock_acquire(&sys_lock);
+	        
 		list_push_front(&thread_current()->mapped_list, &m->elem);
-		//lock_release(&sys_lock);
+		lock_release(&sys_lock);
 		f->eax = fd;
 	}
 	else{
