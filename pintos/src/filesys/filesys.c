@@ -180,6 +180,7 @@ filesys_remove (const char *name)
      }
      else{
         dir_lookup (dir, real_name, &inode);
+        if(inode==NULL){
            dir_close(dir);
            return false;
         }
