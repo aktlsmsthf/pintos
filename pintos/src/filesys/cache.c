@@ -101,7 +101,7 @@ void write_to_cache(int sector_idx, void *buffer){
 }
 
 void write_behind(struct cache_entry *c){
-    lock_acquire(&inode_lock);
+    //lock_acquire(&inode_lock);
     if(c->dirty){
       disk_write(filesys_disk, c->sector, c->cache);
     }
@@ -109,7 +109,7 @@ void write_behind(struct cache_entry *c){
     count--;
     free(c->cache);
     free(c);
-    lock_release(&inode_lock);
+    //lock_release(&inode_lock);
 }
 
 void write_behind_all(void){
