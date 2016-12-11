@@ -41,7 +41,7 @@ struct inode
     bool removed;                       /* True if deleted, false otherwise. */
     int deny_write_cnt;                 /* 0: writes ok, >0: deny writes. */
     struct inode_disk data;             /* Inode content. */
-    struct lock ilock; 
+    //struct lock ilock; 
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
@@ -220,7 +220,7 @@ inode_open (disk_sector_t sector)
   inode->open_cnt = 1;
   inode->deny_write_cnt = 0;
   inode->removed = false;
-  lock_init(&inode->ilock);
+  //lock_init(&inode->ilock);
   disk_read (filesys_disk, inode->sector, &inode->data);
   
   return inode;
@@ -388,7 +388,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       //inode_deny_write (inode); 
       //lock_acquire(&inode_lock);
       if(!inode->data.is_dir){
-         lock_acquire(&inode->ilock);
+         lock_acquire(&inode_lock);
       }
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
@@ -431,7 +431,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
       if(!inode->data.is_dir){
-         lock_release(&inode->ilock);
+         lock_release(&inode_lock);
       }
       //lock_release(&inode_lock);
       //inode_allow_write (inode);
@@ -518,12 +518,12 @@ disk_sector_t inode_parent(struct inode *inode){
 int inode_open_cnt(struct inode *inode){
    return inode->open_cnt;
 }
-void ilock_acquire(struct inode *inode){
+/**void ilock_acquire(struct inode *inode){
    lock_acquire(&inode->ilock);
 }
 void ilock_release(struct inode *inode){
    lock_release(&inode->ilock);
-}
+}**/
 void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector){
   struct inode_disk *disk_inode = malloc(sizeof (struct inode_disk));
   disk_read(filesys_disk, child_sector, disk_inode);
