@@ -29,5 +29,7 @@ disk_sector_t inode_disk_sector(struct inode *);
 disk_sector_t inode_parent(struct inode*);
 int inode_open_cnt(struct inode*);
 void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector);
+void ilock_acquire(struct inode*);
+void ilock_release(struct inode*);
 
 #endif /* filesys/inode.h */
