@@ -350,9 +350,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       unsigned position = *((unsigned *)(f->esp)+2);
       struct file *ff = get_file_from_fd(fd);
-      lock_acquire(&sys_lock);
+      //lock_acquire(&sys_lock);
       file_seek(ff, position);
-      lock_release(&sys_lock);
+      //lock_release(&sys_lock);
       break;
     }
       
@@ -378,26 +378,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
         struct list_elem *flm = get_elem_from_fd(fd);
-        /**struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
-        
-        if(ffd->is_closed){
-          break;
-        }
-        if(!ffd->is_closed && ffd->file!=NULL){
-          lock_acquire(&sys_lock);
-           file_close(ffd->file);
-          
-          ffd->is_closed=1;
-          lock_release(&sys_lock);
-        }
-	if(!ffd->is_closed && ffd->dir!=NULL){
-	   lock_acquire(&sys_lock);
-           dir_close(ffd->dir);
-	
-          ffd->is_closed=1;
-          lock_release(&sys_lock);
-	}**/
-	  //lock_acquire(&sys_lock);    
+
 	  if(flm!=NULL){
 		  struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
 		  
