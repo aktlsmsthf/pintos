@@ -102,9 +102,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = false;
       }
       else{
-        lock_acquire(&sys_lock);
+        //lock_acquire(&sys_lock);
         f->eax = filesys_create (file,initial_size);
-        lock_release(&sys_lock);
+        //lock_release(&sys_lock);
       }
       break;
     }
