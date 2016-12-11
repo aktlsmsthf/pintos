@@ -530,18 +530,20 @@ syscall_handler (struct intr_frame *f UNUSED)
       struct dir *temp;
       struct inode *inode;
 	if(dir_name != NULL && strcmp(dir_name, ".")!=0 && strcmp(dir_name, "..")!=0){
+		printf("a %d %d\n",get_sector_dir(dir), inode_open_cnt(dir_get_inode(dir)));
 		dir_lookup(dir, dir_name, &inode);
 		dir_close(dir);
 		dir = dir_open(inode);
 	}
 	if(dir_name != NULL && strcmp(dir_name, "..") ==0){
-		printf("%d\n", inode_open_cnt(dir_get_inode(dir)));
+		printf("b %d %d\n",get_sector_dir(dir), inode_open_cnt(dir_get_inode(dir)));
 		temp = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
 		dir_close(dir);
 		dir = temp;
 		printf("%d\n", get_sector_dir(dir));
 	}
 	if(dir!=NULL){
+		printf("c %d %d\n",get_sector_dir(thread_current()->current_dir), inode_open_cnt(dir_get_inode(thread_current()->current_dir)));
 		dir_close(thread_current()->current_dir);
 		thread_current()->current_dir = dir;
 		f->eax = true;
