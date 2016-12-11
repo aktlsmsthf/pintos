@@ -387,7 +387,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
    if(size+offset>inode->data.length){
       //inode_deny_write (inode); 
       //lock_acquire(&inode_lock);
-      if(!inode.data->is_dir){
+      if(!inode->data.is_dir){
          lock_acquire(&inode->ilock);
       }
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
