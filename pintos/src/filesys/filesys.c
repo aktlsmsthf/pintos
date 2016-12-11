@@ -212,11 +212,11 @@ filesys_remove (const char *name)
       }
    }
    if(success && inode_open_cnt(dir_get_inode(rdir))>1){
-      printf("1\n");
+      printf("%d\n", get_sector_dir(dir));
       success = false;
    }
    if(success){
-      printf("%d\n", get_sector_dir(dir));
+      
       success = dir!=NULL && dir_remove(dir, real_name);
    }
    dir_close(dir);
