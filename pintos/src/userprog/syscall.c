@@ -537,7 +537,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		struct dir *temp = dir_open(inode_open(inode_parent(dir_get_inode(dir))));
 		dir_close(dir);
 		dir = temp;
-		pritnf("%d\n", get_sector_dir(dir));
+		printf("%d\n", get_sector_dir(dir));
 	}
 	if(dir!=NULL){
 		dir_close(thread_current()->current_dir);
