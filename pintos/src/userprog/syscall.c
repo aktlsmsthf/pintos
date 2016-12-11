@@ -256,9 +256,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
-          //lock_acquire(&sys_lock);
+          lock_acquire(&sys_lock);
           int r = (int) file_read(ff, buffer, size);
-          //lock_release(&sys_lock);
+          lock_release(&sys_lock);
           f->eax = r;
         }
       }
@@ -334,9 +334,9 @@ syscall_handler (struct intr_frame *f UNUSED)
           f->eax = -1;
         }
         else{
-          //lock_acquire(&sys_lock);
+          lock_acquire(&sys_lock);
           int r = (int) file_write(ff, buffer, size);
-          //lock_release(&sys_lock);
+          lock_release(&sys_lock);
           f->eax = r;
         }
       }
