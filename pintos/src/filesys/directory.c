@@ -107,7 +107,6 @@ lookup (const struct dir *dir, const char *name,
           *ep = e;
         if (ofsp != NULL)
           *ofsp = ofs;
-        lock_release(&inode_lock);
         return true;
       }
   return false;
