@@ -215,7 +215,7 @@ filesys_remove (const char *name)
       success = false;
    }
    if(success){
-      printf("%d\n", ge_sector_dir(dir));
+      printf("%d\n", get_sector_dir(dir));
       success = dir!=NULL && dir_remove(dir, real_name);
    }
    dir_close(dir);
