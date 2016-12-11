@@ -123,7 +123,9 @@ void write_behind_all(void){
   while(elem->next != NULL){
     c = list_entry(elem, struct cache_entry, elem);
     elem = elem->next;
+    lock_acquire(&inode_lock);
     write_behind(c);
+    lock_release(&inode_lock);
   }
   
   //lock_release(&cache_lock);
