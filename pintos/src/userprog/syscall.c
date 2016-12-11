@@ -399,6 +399,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           ffd->is_closed=1;
           lock_release(&sys_lock);
 	}**/
+	  lock_acquire(&sys_lock);    
 	  if(flm!=NULL){
 		  struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
 		  
@@ -416,6 +417,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		  palloc_free_page(ffd);
 		  
 	  }
+	  lock_release(&sys_lock);    
 	}
 	    break;
       
