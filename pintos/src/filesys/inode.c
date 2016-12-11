@@ -41,7 +41,7 @@ struct inode
     bool removed;                       /* True if deleted, false otherwise. */
     int deny_write_cnt;                 /* 0: writes ok, >0: deny writes. */
     struct inode_disk data;             /* Inode content. */
-    //struct lock ilock; 
+    struct lock ilock; 
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
@@ -137,7 +137,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       disk_sector_t sectors = -1;
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
-      lock_acquire(&inode_lock);
+      //lock_acquire(&inode_lock);
      
       static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
@@ -179,7 +179,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       }   
      disk_write(filesys_disk, sector, disk_inode);
      
-     lock_release(&inode_lock);       
+     //lock_release(&inode_lock);       
       free (disk_inode);
      
     }
@@ -218,7 +218,7 @@ inode_open (disk_sector_t sector)
   inode->open_cnt = 1;
   inode->deny_write_cnt = 0;
   inode->removed = false;
-  //lock_init(&inode->ilock);
+  lock_init(&inode->ilock);
   disk_read (filesys_disk, inode->sector, &inode->data);
   
   return inode;
@@ -385,8 +385,8 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
    
    if(size+offset>inode->data.length){
       //inode_deny_write (inode); 
-      lock_acquire(&inode_lock);
-      //lock_acquire(&inode->ilock);
+      //lock_acquire(&inode_lock);
+      lock_acquire(&inode->ilock);
       
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
@@ -428,9 +428,9 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       }
       inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
-      //lock_release(&inode->ilock);
+      lock_release(&inode->ilock);
       
-      lock_release(&inode_lock);
+      //lock_release(&inode_lock);
       //inode_allow_write (inode);
    }
    //lock_acquire(&inode->ilock);
