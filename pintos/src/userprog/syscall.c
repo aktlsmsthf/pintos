@@ -143,10 +143,10 @@ syscall_handler (struct intr_frame *f UNUSED)
 	  break;
         }
         else{   
-            lock_acquire(&sys_lock);
+            //lock_acquire(&sys_lock);
             struct file *file = filesys_open(name);
 	    struct dir *dir = filesys_open_dir(name);
-            lock_release(&sys_lock);
+            //lock_release(&sys_lock);
 	    if(dir==NULL && file==NULL){
 		    f->eax = -1;
 		    break;
@@ -399,7 +399,7 @@ syscall_handler (struct intr_frame *f UNUSED)
           ffd->is_closed=1;
           lock_release(&sys_lock);
 	}**/
-	  lock_acquire(&sys_lock);    
+	  //lock_acquire(&sys_lock);    
 	  if(flm!=NULL){
 		  struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
 		  
@@ -417,7 +417,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		  palloc_free_page(ffd);
 		  
 	  }
-	  lock_release(&sys_lock);    
+	  //lock_release(&sys_lock);    
 	}
 	    break;
       
