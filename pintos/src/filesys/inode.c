@@ -41,7 +41,7 @@ struct inode
     bool removed;                       /* True if deleted, false otherwise. */
     int deny_write_cnt;                 /* 0: writes ok, >0: deny writes. */
     struct inode_disk data;             /* Inode content. */
-    struct lock ilock; 
+    //struct lock ilock; 
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
@@ -219,7 +219,7 @@ inode_open (disk_sector_t sector)
   inode->open_cnt = 1;
   inode->deny_write_cnt = 0;
   inode->removed = false;
-  lock_init(&inode->ilock);
+  //lock_init(&inode->ilock);
   disk_read (filesys_disk, inode->sector, &inode->data);
   
   return inode;
