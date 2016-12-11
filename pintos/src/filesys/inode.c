@@ -41,7 +41,7 @@ struct inode
     bool removed;                       /* True if deleted, false otherwise. */
     int deny_write_cnt;                 /* 0: writes ok, >0: deny writes. */
     struct inode_disk data;             /* Inode content. */
-    //struct lock ilock; 
+    struct lock ilock; 
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
@@ -139,7 +139,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       disk_sector_t sectors = -1;
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
-      lock_acquire(&inode_lock);
+      //lock_acquire(&inode_lock);
      
       static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
@@ -181,7 +181,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       }   
      disk_write(filesys_disk, sector, disk_inode);
      
-     lock_release(&inode_lock);       
+     //lock_release(&inode_lock);       
       free (disk_inode);
      
     }
@@ -386,7 +386,8 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
    
    if(size+offset>inode->data.length){
       //inode_deny_write (inode); 
-      lock_acquire(&inode_lock);
+      //lock_acquire(&inode_lock);
+      lock_acquire(&inode->ilock);
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       static char zeros[DISK_SECTOR_SIZE];
@@ -427,7 +428,8 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       }
       inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
-      lock_release(&inode_lock);
+      lock_release(&lnode->ilock);
+      //lock_release(&inode_lock);
       //inode_allow_write (inode);
    }
    //lock_acquire(&inode->ilock);
@@ -511,6 +513,12 @@ disk_sector_t inode_parent(struct inode *inode){
 
 int inode_open_cnt(struct inode *inode){
    return inode->open_cnt;
+}
+void ilock_acquire(struct inode *inode){
+   lock_acquire(&inode->ilock);
+}
+void ilock_release(struct inode *inode){
+   lock_release(&inode->ilock);
 }
 void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector){
   struct inode_disk *disk_inode = malloc(sizeof (struct inode_disk));
