@@ -383,14 +383,14 @@ syscall_handler (struct intr_frame *f UNUSED)
 		  struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
 		  
 		  if(ffd->is_dir){
-			  lock_acquire(&sys_lock);
+			  //lock_acquire(&sys_lock);
 			  dir_close(ffd->dir);
-			  lock_release(&sys_lock);
+			  //lock_release(&sys_lock);
 		  }
 		  else{
-			  lock_acquire(&sys_lock);
+			  //lock_acquire(&sys_lock);
 			  file_close(ffd->file);
-			  lock_release(&sys_lock);
+			  //lock_release(&sys_lock);
 		  }
 		  list_remove(&ffd->elem);
 		  palloc_free_page(ffd);
@@ -488,11 +488,11 @@ syscall_handler (struct intr_frame *f UNUSED)
 		write_bytes+=PGSIZE;
 	}
 	  
-	lock_acquire(&sys_lock);
+	//lock_acquire(&sys_lock);
 	list_remove(&mapped->elem);
 	    
 	file_close(mapped->file);
-	 lock_release(&sys_lock);
+	 //lock_release(&sys_lock);
 	free(mapped);
         break;
     }
