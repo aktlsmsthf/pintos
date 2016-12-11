@@ -100,9 +100,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = false;
       }
       else{
-        lock_acquire(&sys_lock);
+        //lock_acquire(&sys_lock);
         f->eax = filesys_create (file,initial_size);
-        lock_release(&sys_lock);
+        //lock_release(&sys_lock);
       }
       break;
     }
@@ -113,9 +113,9 @@ syscall_handler (struct intr_frame *f UNUSED)
       
       const char *file = *((char **)(f->esp)+1);
       if(check_bad_ptr(f,(const void *)file)) {exit(-1);}
-      lock_acquire(&sys_lock);
+      //lock_acquire(&sys_lock);
       f->eax = filesys_remove (file);
-      lock_release(&sys_lock);
+      //lock_release(&sys_lock);
       break;
      }
       
