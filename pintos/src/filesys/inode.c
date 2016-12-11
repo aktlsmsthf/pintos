@@ -69,11 +69,11 @@ byte_to_sector (const struct inode *inode, off_t pos)
     return -1;**/
    
    off_t sectors = pos/DISK_SECTOR_SIZE;
-   /*
-   if(pos>=inode->data.length){
+   
+   if(pos>inode->data.length){
       
       return -1;
-   }*/
+   }
    disk_sector_t ret;
    
    if(sectors<DN){
