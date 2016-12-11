@@ -386,7 +386,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
    if(size+offset>inode->data.length){
       //inode_deny_write (inode); 
       //lock_acquire(&inode_lock);
-      lock_acquire(&inode->ilock);
+      //lock_acquire(&inode->ilock);
       
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
@@ -428,7 +428,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       }
       inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
-      lock_release(&inode->ilock);
+      //lock_release(&inode->ilock);
       
       //lock_release(&inode_lock);
       //inode_allow_write (inode);
