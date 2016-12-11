@@ -538,9 +538,9 @@ syscall_handler (struct intr_frame *f UNUSED)
 	      f->eax = false;
 	      break;
       } 
-	lock_acquire(&sys_lock);
+	//lock_acquire(&sys_lock);
 	f->eax = filesys_create_dir(dir);
-	lock_release(&sys_lock);
+	//lock_release(&sys_lock);
       break;
     }
     case SYS_READDIR:{
