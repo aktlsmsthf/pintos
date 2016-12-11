@@ -160,7 +160,6 @@ filesys_remove (const char *name)
   //struct dir *dir = dir_open_root ();
   char * real_name;
   struct inode *inode = NULL;
-   struct dir *test = lowest_dir("..", &real_name);
   struct dir *dir = lowest_dir(name, &real_name);
   struct dir *rdir;
   bool success = true;
