@@ -302,7 +302,7 @@ process_exit (void)
       list_remove(&mapped->elem);
       free(mapped);
    }
-   
+   file_allow_write (curr->myself);
    file_close(curr->myself);
    spt_destroy (&curr->spt);
    
