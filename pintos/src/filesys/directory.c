@@ -237,7 +237,7 @@ dir_readdir (struct dir *dir, char name[NAME_MAX + 1])
       if (e.in_use)
         {
           strlcpy (name, e.name, NAME_MAX + 1);
-          //ilock_release(dir_get_inode(dir));
+          ilock_release(dir_get_inode(dir));
           return true;
         } 
     }
