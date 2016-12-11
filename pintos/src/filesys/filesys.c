@@ -188,6 +188,7 @@ filesys_remove (const char *name)
   }
    if(inode!=NULL){
         if(!inode_is_dir(inode)){
+           printf("a %d %d", get_sector_dir(dir), inode_open_cnt(dir_get_inode(dir)));
             success = dir != NULL && dir_remove (dir, real_name);
            dir_close(dir);
            return success;
