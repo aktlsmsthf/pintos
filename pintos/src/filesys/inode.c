@@ -79,13 +79,11 @@ byte_to_sector (const struct inode *inode, off_t pos)
       ret = inode->data.direct_sector[sectors];
    }
    else if(sectors>=(DN+(IDN*128))){
-      //printf("1\n");
       disk_sector_t indirect_sectors[128];
       disk_read(filesys_disk, inode->data.d_indirect_sector, indirect_sectors);
       disk_sector_t i = (sectors-(DN+(IDN*128)))/128;
       disk_sector_t sector[128];
       disk_read(filesys_disk, indirect_sectors[i], sector);
-      //printf("2\n");
       ret = sector[(sectors-(DN+(IDN*128)))%128];
    }
    else{
@@ -139,7 +137,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       disk_sector_t sectors = -1;
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
-      lock_acquire(&inode_lock);
+      //lock_acquire(&inode_lock);
      
       static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
@@ -181,7 +179,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       }   
      disk_write(filesys_disk, sector, disk_inode);
      
-     lock_release(&inode_lock);       
+     //lock_release(&inode_lock);       
       free (disk_inode);
      
     }
@@ -251,7 +249,7 @@ inode_close (struct inode *inode)
   /* Ignore null pointer. */
   if (inode == NULL)
     return;
-
+   
   /* Release resources if this was the last opener. */
   if (--inode->open_cnt == 0)
     {
@@ -388,7 +386,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
    if(size+offset>inode->data.length){
       //inode_deny_write (inode); 
       //lock_acquire(&inode_lock);
-      lock_acquire(&inode_lock);
+      lock_acquire(&inode->ilock);
       
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
@@ -430,7 +428,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       }
       inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
-      lock_release(&inode_lock);
+      lock_release(&inode->ilock);
       
       //lock_release(&inode_lock);
       //inode_allow_write (inode);
@@ -517,12 +515,12 @@ disk_sector_t inode_parent(struct inode *inode){
 int inode_open_cnt(struct inode *inode){
    return inode->open_cnt;
 }
-/**void ilock_acquire(struct inode *inode){
+void ilock_acquire(struct inode *inode){
    lock_acquire(&inode->ilock);
 }
 void ilock_release(struct inode *inode){
    lock_release(&inode->ilock);
-}**/
+}
 void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector){
   struct inode_disk *disk_inode = malloc(sizeof (struct inode_disk));
   disk_read(filesys_disk, child_sector, disk_inode);
