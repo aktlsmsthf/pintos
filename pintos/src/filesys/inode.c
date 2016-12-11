@@ -336,7 +336,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
   uint8_t *buffer = buffer_;
   off_t bytes_read = 0;
   uint8_t *bounce = NULL;
-   lock_acquire(&inode->ilock);
+   
   while (size > 0) 
     {
       /* Disk sector to read, starting byte offset within sector. */
@@ -364,7 +364,6 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
       offset += chunk_size;
       bytes_read += chunk_size;
     }
-   lock_release(&inode->ilock);
   free (bounce);
 
   return bytes_read;
