@@ -515,12 +515,13 @@ disk_sector_t inode_parent(struct inode *inode){
 int inode_open_cnt(struct inode *inode){
    return inode->open_cnt;
 }
+/*
 void ilock_acquire(struct inode *inode){
    lock_acquire(&inode->ilock);
 }
 void ilock_release(struct inode *inode){
    lock_release(&inode->ilock);
-}
+}*/
 void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector){
   struct inode_disk *disk_inode = malloc(sizeof (struct inode_disk));
   disk_read(filesys_disk, child_sector, disk_inode);
