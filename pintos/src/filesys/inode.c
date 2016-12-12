@@ -138,7 +138,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
       lock_acquire(&inode_lock);
-      success = inode_extension(&disk_inode, sectors, sectors2);
+      success = inode_extension(&disk_inode, sectors, sectors2, &success);
       /**static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
          sectors++;
@@ -389,7 +389,8 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
-      inode->data = *inode_extension(&inode->data, sectors, sectors2);
+      bool success = true;
+      inode->data = *inode_extension(&inode->data, sectors, sectors2, &success);
       /**static char zeros[DISK_SECTOR_SIZE];
       while(sectors!=sectors2){
          sectors++;
@@ -529,7 +530,7 @@ void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector){
   free(disk_inode);
 }
 
-struct disk_inode * inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_sector_t sectors2, bool *success){
+struct inode_disk * inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_sector_t sectors2, bool *success){
      
       static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
@@ -558,7 +559,7 @@ struct disk_inode * inode_extension(struct inode_disk *disk_inode, disk_sector_t
          else{
             disk_sector_t sectori[128];
             if((sectors-DN)%128==0){
-               *success = free_map_allocate(1, &(*disk_inode)->indirect_sector[(sectors-DN)/128]);
+               *success = free_map_allocate(1, &disk_inode->indirect_sector[(sectors-DN)/128]);
             }
             else{
                disk_read(filesys_disk, disk_inode->indirect_sector[(sectors-DN)/128], sectori);
@@ -569,7 +570,7 @@ struct disk_inode * inode_extension(struct inode_disk *disk_inode, disk_sector_t
             
          }
       }   
-     disk_write(filesys_disk, disk_inode->sector, (*disk_inode));
+     disk_write(filesys_disk, disk_inode->sector, disk_inode);
    return disk_inode;
 }
 
