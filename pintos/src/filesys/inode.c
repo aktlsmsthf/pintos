@@ -452,12 +452,12 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
         break;
        
       
-      /*struct cache_entry *c = find_cache_by_sector(sector_idx);
+      struct cache_entry *c = find_cache_by_sector(sector_idx);
        if(!c){
           c = read_to_cache(sector_idx, true);
-       }*/
+       }
        //lock_acquire(&cache_lock);
-       struct cache_entry *c =  read_to_cache(sector_idx, true);
+       //struct cache_entry *c =  read_to_cache(sector_idx, true);
        memcpy(c->cache+sector_ofs, buffer+bytes_written, chunk_size);
        c->dirty = true;
        //lock_release(&cache_lock);
