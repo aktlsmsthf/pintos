@@ -521,7 +521,9 @@ syscall_handler (struct intr_frame *f UNUSED)
 	}
 	if(dir!=NULL){
 		dir_close(thread_current()->current_dir);
+		lock_acquire(&sys_lock);
 		thread_current()->current_dir = dir;
+		lock_release(&sys_lock);
 		f->eax = true;
 	}
 	else{
