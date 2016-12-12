@@ -35,7 +35,6 @@ test_main (void)
         break;
       CHECK ((fd = open (file_name)) > 1, "open \"%s\"", file_name);
       snprintf (contents, sizeof contents, "contents %d\n", i);
-     printf("1\n");
       if (write (fd, contents, strlen (contents)) != (int) strlen (contents)) 
         {
           CHECK (remove (file_name), "remove \"%s\"", file_name);
