@@ -392,9 +392,9 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       bool success = true;
-      inode_extension(&inode->data, sectors, sectors2);
-      printf("%d\n", inode->data.test);
-      /**static char zeros[DISK_SECTOR_SIZE];
+      //inode_extension(&inode->data, sectors, sectors2);
+      //printf("%d\n", inode->data.test);
+      static char zeros[DISK_SECTOR_SIZE];
       while(sectors!=sectors2){
          sectors++;
          if(sectors<DN){
@@ -431,7 +431,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
          }
       }
       
-      disk_write(filesys_disk, inode->data.sector, &inode->data);**/
+      disk_write(filesys_disk, inode->data.sector, &inode->data);
       //lock_release(&inode->ilock);
       inode->data.length = size+offset;
       lock_release(&inode_lock);
