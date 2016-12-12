@@ -36,16 +36,14 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
 
 struct cache_entry * read_to_cache(int sector_idx, bool first){
   struct cache_entry *c;
-  lock_acquire(&cache_lock);
+  //lock_acquire(&cache_lock);
   c = find_cache_by_sector(sector_idx);
   if(c!=NULL){
     c->accessed = true;
-    lock_release(&cache_lock);
+    //lock_release(&cache_lock);
     return c;
   }
   
-  
-  //lock_acquire(&cache_lock);
   if(count>=64){
     struct list_elem *elem = list_front(&cache_list);
     c = list_entry(elem, struct cache_entry, elem);
@@ -56,8 +54,6 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
       elem = list_front(&cache_list);
       c = list_entry(elem, struct cache_entry, elem);
     }
-    
-    //lock_acquire(&cache_lock);
     if(c->dirty){
       disk_write(filesys_disk, c->sector, c->cache);
     }
@@ -66,7 +62,6 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     
   }
   else{
-    //lock_acquire(&cache_lock);
     c = malloc(sizeof (struct cache_entry));
     list_push_back(&cache_list, &c->elem);
   }
@@ -74,14 +69,12 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   c->cache = malloc(DISK_SECTOR_SIZE);
   c->dirty = false;
   c->accessed = true;
-  
+  lock_init(&c->clock);
   
   count++;
-  //printf("%d\n", count);
-  //hand = &c->elem;
   
   disk_read(filesys_disk, sector_idx, c->cache);
-  lock_release(&cache_lock);
+  //lock_release(&cache_lock);
   
   /**int aux;
   if(first){
