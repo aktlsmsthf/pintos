@@ -18,7 +18,6 @@ void cache_init(void){
 struct cache_entry * find_cache_by_sector(int sector_idx){
   
   if(list_empty(&cache_list)){
-    //lock_release(&cache_lock);
     return NULL;
   }
   //lock_acquire(&cache_lock);
@@ -36,11 +35,11 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
 
 struct cache_entry * read_to_cache(int sector_idx, bool first){
   struct cache_entry *c;
-  //lock_acquire(&cache_lock);
+  lock_acquire(&cache_lock);
   c = find_cache_by_sector(sector_idx);
   if(c!=NULL){
     c->accessed = true;
-    //lock_release(&cache_lock);
+    lock_release(&cache_lock);
     return c;
   }
   
@@ -69,12 +68,11 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   c->cache = malloc(DISK_SECTOR_SIZE);
   c->dirty = false;
   c->accessed = true;
-  lock_init(&c->clock);
   
   count++;
   
   disk_read(filesys_disk, sector_idx, c->cache);
-  //lock_release(&cache_lock);
+  lock_release(&cache_lock);
   
   /**int aux;
   if(first){
