@@ -183,7 +183,6 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       free (disk_inode);
      
     }
-   printf("%d\n", success);
   return success;
 }
 
@@ -572,6 +571,7 @@ bool inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_
          }
       }   
      disk_write(filesys_disk, disk_inode->sector, disk_inode);
+   printf("1\n");
    return success;
 }
 
