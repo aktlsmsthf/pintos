@@ -81,7 +81,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   //hand = &c->elem;
   
   disk_read(filesys_disk, sector_idx, c->cache);
-  lock_release(&cache_lock);
+  
   int aux;
   if(first){
     aux = sector_idx+1;
@@ -89,10 +89,12 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     thread_create("Read_ahead", 0, thread_func_read_ahead, &aux);
   }
   
+  
   return c;
 }
 
 void thread_func_read_ahead(void *aux){
+  lock_release(&cache_lock);
   int idx = *(int *)aux;
   printf("b %d\n", idx);
   read_to_cache(idx, false);
