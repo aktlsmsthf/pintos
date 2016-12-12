@@ -146,7 +146,6 @@ syscall_handler (struct intr_frame *f UNUSED)
 	    struct dir *dir = filesys_open_dir(name);
             lock_release(&sys_lock);
 	    if(dir==NULL && file==NULL){
-		    lock_release(&sys_lock);
 		    f->eax = -1;
 		    break;
 	    }
@@ -167,7 +166,6 @@ syscall_handler (struct intr_frame *f UNUSED)
               t->num_file++;
               f->eax = ffd->fd;
             }
-		
         }
       }
       break;
@@ -276,7 +274,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       void * buffer_tmp = buffer;
       
       while(buffer_tmp!=NULL){
-        if(!is_user_vaddr(buffer_tmp)) {exit(-1);}
+        if(!is_user_vaddr(buffer_tmp)) exit(-1);
         
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
@@ -397,11 +395,12 @@ syscall_handler (struct intr_frame *f UNUSED)
 		  list_remove(&ffd->elem);
 		  palloc_free_page(ffd);
 		  
-	  } 
-	   //lock_release(&sys_lock); 
+	  }
+	  //lock_release(&sys_lock);    
 	}
-	    
-	  break;
+	    break;
+      
+      
     }
 		  
     case SYS_MMAP:{
