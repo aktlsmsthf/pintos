@@ -52,7 +52,7 @@ bytes_to_sectors (off_t size)
   return DIV_ROUND_UP (size, DISK_SECTOR_SIZE);
 }
 
-bool inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_sector_t sectors2);
+bool inode_extension(struct inode_disk **disk_inode, disk_sector_t sectors, disk_sector_t sectors2);
 
 /* Returns the disk sector that contains byte offset POS within
    INODE.
@@ -389,7 +389,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
-      inode_extension(&&inode->data, sectors, sectors2);
+      inode_extension(&(&inode->data), sectors, sectors2);
       /**static char zeros[DISK_SECTOR_SIZE];
       while(sectors!=sectors2){
          sectors++;
@@ -537,7 +537,7 @@ bool inode_extension(struct inode_disk **disk_inode, disk_sector_t sectors, disk
          
          if(sectors<DN){
             success = free_map_allocate(1, &(*disk_inode)->direct_sector[sectors]);
-            disk_write(filesys_disk, disk_inode->direct_sector[sectors], zeros);
+            disk_write(filesys_disk, (*disk_inode)->direct_sector[sectors], zeros);
             
          }
          else if(sectors>=(DN+(IDN*128))){
