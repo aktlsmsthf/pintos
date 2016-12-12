@@ -278,11 +278,10 @@ process_exit (void)
          celem = nextelem;
       }
    }
-   	
    bool mm = false;
-   if(!list_empty(&curr->mapped_list)){
-      lock_acquire(&sys_lock);
-      mm = true;
+   if(!list_empty(&curr->mapped_list)) {
+	   mm = true;
+	   lock_acquire(&sys_lock);
    }
    while(!list_empty(&curr->mapped_list)){
       melem = list_front(&curr->mapped_list);
@@ -307,6 +306,7 @@ process_exit (void)
       free(mapped);
    }
    if(mm) lock_release(&sys_lock);
+	
    if(curr->myself!=NULL){file_allow_write (curr->myself);
    file_close(curr->myself);}
    spt_destroy (&curr->spt);
