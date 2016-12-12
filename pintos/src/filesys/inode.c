@@ -571,6 +571,7 @@ struct inode_disk * inode_extension(struct inode_disk *disk_inode, disk_sector_t
             
          }
       }   
+   printf("%d\n", disk_inode->sector);
      disk_write(filesys_disk, disk_inode->sector, disk_inode);
    return disk_inode;
 }
