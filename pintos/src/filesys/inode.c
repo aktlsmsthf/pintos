@@ -120,9 +120,6 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
 
   ASSERT (length >= 0);
    int i=0;
-  while(i<100){
-     i++;
-  }
   /* If this assertion fails, the inode structure is not exactly
      one sector in size, and you should fix that. */
   ASSERT (sizeof *disk_inode == DISK_SECTOR_SIZE);
