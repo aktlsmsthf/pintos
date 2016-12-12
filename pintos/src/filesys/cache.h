@@ -17,6 +17,7 @@ struct cache_entry{
   bool dirty;
   bool accessed;
   struct list_elem elem;
+  struct lock clock;
 };
 
 void cache_init(void);
