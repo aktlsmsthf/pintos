@@ -92,7 +92,6 @@ byte_to_sector (const struct inode *inode, off_t pos)
       disk_read(filesys_disk, inode->data.indirect_sector[i], sector);
       ret = sector[(sectors-DN)%128];
    }
-   if(ret==FREE_MAP_SECTOR)return -1;
    return ret;
 }
 
