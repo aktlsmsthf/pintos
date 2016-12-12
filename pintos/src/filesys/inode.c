@@ -388,7 +388,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
        }
        //lock_acquire(&cache_lock);
        //struct cache_entry *c =  read_to_cache(sector_idx, true);
-       lock_acqurie(&c->clock);
+       lock_acquire(&c->clock);
        memcpy(c->cache+sector_ofs, buffer+bytes_written, chunk_size);
        lock_release(&c->clock);
        c->dirty = true;
