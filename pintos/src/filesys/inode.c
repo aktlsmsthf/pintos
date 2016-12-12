@@ -136,12 +136,12 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       disk_sector_t sectors = -1;
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
-      //lock_acquire(&inode_lock);
+      lock_acquire(&inode_lock);
      
       success =  inode_extension(disk_inode, sectors, sectors2);
      disk_write(filesys_disk, sector, disk_inode);
      
-     //lock_release(&inode_lock);       
+      lock_release(&inode_lock);       
       free (disk_inode);
      
     }
@@ -180,7 +180,7 @@ inode_open (disk_sector_t sector)
   inode->open_cnt = 1;
   inode->deny_write_cnt = 0;
   inode->removed = false;
-  lock_init(&inode->ilock);
+  //lock_init(&inode->ilock);
   disk_read (filesys_disk, inode->sector, &inode->data);
   
   return inode;
@@ -346,9 +346,8 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
    
    if(size+offset>inode->data.length){
 
-      if(!inode->data.is_dir)
-         lock_acquire(&inode->ilock);
-      //lock_acquire(&inode_lock);
+     
+      lock_acquire(&inode_lock);
       
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
@@ -357,10 +356,8 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
 
       inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
-      if(!inode->data.is_dir)
-           lock_release(&inode->ilock);
       
-      //lock_release(&inode_lock);
+      lock_release(&inode_lock);
 
    }
 
@@ -388,9 +385,9 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
        }
        //lock_acquire(&cache_lock);
        //struct cache_entry *c =  read_to_cache(sector_idx, true);
-       lock_acquire(&c->clock);
+
        memcpy(c->cache+sector_ofs, buffer+bytes_written, chunk_size);
-       lock_release(&c->clock);
+
        c->dirty = true;
        //lock_release(&cache_lock);
        
