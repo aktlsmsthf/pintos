@@ -260,7 +260,7 @@ inode_close (struct inode *inode)
       /* Deallocate blocks if removed. */
       if (inode->removed) 
         {
-         lock_acquire(&inode_lock);
+         //lock_acquire(&inode_lock);
          free_map_release (inode->sector, 1);   
          
          int i;
@@ -308,7 +308,7 @@ inode_close (struct inode *inode)
             }
             free_map_release(inode->data.d_indirect_sector, 1);
          }
-         lock_release(&inode_lock); 
+         //lock_release(&inode_lock); 
         }
       free (inode); 
     }
@@ -332,7 +332,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
   uint8_t *buffer = buffer_;
   off_t bytes_read = 0;
   uint8_t *bounce = NULL;
-  lock_acquire(&inode_lock);
+  //lock_acquire(&inode_lock);
   while (size > 0) 
     {
       /* Disk sector to read, starting byte offset within sector. */
@@ -360,7 +360,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
       offset += chunk_size;
       bytes_read += chunk_size;
     }
-  lock_release(&inode_lock);
+  //lock_release(&inode_lock);
   free (bounce);
 
   return bytes_read;
