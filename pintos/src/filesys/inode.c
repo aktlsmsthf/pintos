@@ -381,13 +381,13 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
   const uint8_t *buffer = buffer_;
   off_t bytes_written = 0;
   uint8_t *bounce = NULL;
-
+  
+      lock_acquire(&inode_lock);
   if (inode->deny_write_cnt)
     return 0;
    
    if(size+offset>inode->data.length){
       //inode_deny_write (inode); 
-      lock_acquire(&inode_lock);
       //lock_acquire(&inode->ilock);
       
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
@@ -435,7 +435,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       lock_release(&inode_lock);
       //inode_allow_write (inode);
    }
-   lock_acquire(&inode_lock);
+   //lock_acquire(&inode_lock);
   while (size > 0) 
     {
       
