@@ -279,7 +279,7 @@ process_exit (void)
       }
    }
    bool mm = false;
-   if(!list_empty(&curr->mmap_list)) {
+   if(!list_empty(&curr->mapped_list)) {
 	   mm = true;
 	   lock_acquire(&sys_lock);
    }
