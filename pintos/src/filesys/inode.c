@@ -29,7 +29,8 @@ struct inode_disk
     disk_sector_t  sector;
     bool is_dir;
     disk_sector_t parent;
-    uint32_t unused[122-DN-IDN];               /* Not used. */
+    int tests;
+    uint32_t unused[121-DN-IDN];               /* Not used. */
   };
 
 /* In-memory inode. */
@@ -133,7 +134,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       disk_inode->magic = INODE_MAGIC;
       disk_inode->sector = sector;
       disk_inode->is_dir = is_dir;
-     
+      disk_inode->tests = 1;
       disk_sector_t sectors = -1;
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
@@ -391,7 +392,8 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
       bool success = true;
-     inode_extension(&inode->data, sectors, sectors2);
+      inode_extension(&inode->data, sectors, sectors2);
+      printf("%d\n", inode->data.test);
       /**static char zeros[DISK_SECTOR_SIZE];
       while(sectors!=sectors2){
          sectors++;
@@ -572,6 +574,7 @@ bool inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_
          }
       }   
      disk_write(filesys_disk, disk_inode->sector, disk_inode);
+     disk_inode->test = 0;
    return success;
 }
 
