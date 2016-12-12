@@ -138,7 +138,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
       lock_acquire(&inode_lock);
-      inode_extension(disk_inode, sectors, sectors2);
+      success = inode_extension(disk_inode, sectors, sectors2);
       /**static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
          sectors++;
@@ -530,8 +530,9 @@ void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector){
   free(disk_inode);
 }
 
-void inode_extension(struct inode_disk *disk_inode, disk_sector_t secotrs, disk_sector_t sectors2){
-      /static char zeros[DISK_SECTOR_SIZE];  
+bool inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_sector_t sectors2){
+     bool success = true;
+      static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
          sectors++;
          
@@ -570,5 +571,6 @@ void inode_extension(struct inode_disk *disk_inode, disk_sector_t secotrs, disk_
          }
       }   
      disk_write(filesys_disk, sector, disk_inode);
+   return success;
 }
 
