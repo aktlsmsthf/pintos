@@ -283,6 +283,7 @@ process_exit (void)
 	   mm = true;
 	   lock_acquire(&sys_lock);
    }
+	
    while(!list_empty(&curr->mapped_list)){
       melem = list_front(&curr->mapped_list);
       struct mmapped *mapped = list_entry(melem, struct mmapped, elem);
