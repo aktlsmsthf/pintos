@@ -469,7 +469,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
     }
    //lock_release(&inode_lock);
   free (bounce);
-   
+   printf("%d\n", bytes_written);
   return bytes_written;
 }
 
@@ -571,7 +571,6 @@ bool inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_
          }
       }   
      disk_write(filesys_disk, disk_inode->sector, disk_inode);
-   printf("1\n");
    return success;
 }
 
