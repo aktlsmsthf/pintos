@@ -469,7 +469,6 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
     }
    //lock_release(&inode_lock);
   free (bounce);
-   printf("%d\n", bytes_written);
   return bytes_written;
 }
 
