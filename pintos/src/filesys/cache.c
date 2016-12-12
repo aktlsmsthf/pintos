@@ -21,31 +21,31 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
     //lock_release(&cache_lock);
     return NULL;
   }
-  lock_acquire(&cache_lock);
+  //lock_acquire(&cache_lock);
   struct list_elem *elem = list_front(&cache_list);
   while(elem->next != NULL){
     if(list_entry(elem, struct cache_entry, elem)->sector == sector_idx){
-      lock_release(&cache_lock);
+      //lock_release(&cache_lock);
       return list_entry(elem, struct cache_entry, elem);
     }
     elem = elem->next;
   }
-  lock_release(&cache_lock);
+  //lock_release(&cache_lock);
   return NULL;
 }
 
 struct cache_entry * read_to_cache(int sector_idx, bool first){
   struct cache_entry *c;
-  //lock_acquire(&cache_lock);
+  lock_acquire(&cache_lock);
   c = find_cache_by_sector(sector_idx);
   if(c!=NULL){
     c->accessed = true;
-    //lock_release(&cache_lock);
+    lock_release(&cache_lock);
     return c;
   }
   
   
-  lock_acquire(&cache_lock);
+  //lock_acquire(&cache_lock);
   if(count>=64){
     struct list_elem *elem = list_front(&cache_list);
     c = list_entry(elem, struct cache_entry, elem);
@@ -102,7 +102,7 @@ void write_to_cache(int sector_idx, void *buffer){
 }
 
 void write_behind(struct cache_entry *c){
-    //lock_acquire(&inode_lock);
+    lock_acquire(&inode_lock);
     if(c->dirty){
       disk_write(filesys_disk, c->sector, c->cache);
     }
@@ -110,7 +110,7 @@ void write_behind(struct cache_entry *c){
     count--;
     free(c->cache);
     free(c);
-    //lock_release(&inode_lock);
+    lock_release(&inode_lock);
 }
 
 void write_behind_all(void){
@@ -124,9 +124,9 @@ void write_behind_all(void){
   while(elem->next != NULL){
     c = list_entry(elem, struct cache_entry, elem);
     elem = elem->next;
-    lock_acquire(&inode_lock);
+    //lock_acquire(&inode_lock);
     write_behind(c);
-    lock_release(&inode_lock);
+    //lock_release(&inode_lock);
   }
   
   //lock_release(&cache_lock);
