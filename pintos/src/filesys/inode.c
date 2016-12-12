@@ -138,6 +138,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
       lock_acquire(&inode_lock);
+     printf("%d\n", sector);
       success = inode_extension(&disk_inode, sectors, sectors2, &success);
       /**static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
