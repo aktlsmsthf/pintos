@@ -84,7 +84,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   lock_release(&cache_lock);
   if(first){
     int aux = sector_idx+1;
-    printf("%d\n", aux);
+    printf("a %d\n", aux);
     thread_create("Read_ahead", 0, thread_func_read_ahead, &aux);
   }
   
@@ -93,7 +93,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
 
 void thread_func_read_ahead(void *aux){
   int *idx = aux;
-  printf("%d\n", *idx);
+  printf("%b d\n", *idx);
   read_to_cache(*idx, false);
 }
 
