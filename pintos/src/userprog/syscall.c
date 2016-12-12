@@ -144,7 +144,7 @@ syscall_handler (struct intr_frame *f UNUSED)
             lock_acquire(&sys_lock);
             struct file *file = filesys_open(name);
 	    struct dir *dir = filesys_open_dir(name);
-            
+            lock_release(&sys_lock);
 	    if(dir==NULL && file==NULL){
 		    lock_release(&sys_lock);
 		    f->eax = -1;
@@ -167,7 +167,7 @@ syscall_handler (struct intr_frame *f UNUSED)
               t->num_file++;
               f->eax = ffd->fd;
             }
-		lock_release(&sys_lock);
+		
         }
       }
       break;
