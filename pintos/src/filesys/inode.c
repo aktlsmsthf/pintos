@@ -531,7 +531,7 @@ void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector){
   free(disk_inode);
 }
 
-struct inode_disk * inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_sector_t sectors2){
+bool inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_sector_t sectors2){
       bool success = true;
       static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
