@@ -378,7 +378,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       int fd = *((int *)(f->esp)+1);
       if(fd>1){
         struct list_elem *flm = get_elem_from_fd(fd);
-	  lock_acquire(&sys_lock);
+	  //lock_acquire(&sys_lock);
 	  if(flm!=NULL){
 		  struct file_fd *ffd = list_entry(flm, struct file_fd, elem);
 		  
@@ -396,7 +396,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		  palloc_free_page(ffd);
 		  
 	  }
-	  lock_release(&sys_lock);    
+	  //lock_release(&sys_lock);    
 	}
 	    break;
       
