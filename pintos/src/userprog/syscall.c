@@ -415,7 +415,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		break;
 	}
 	lock_acquire(&sys_lock);   
-	struct file *mfile = file_open(file);
+	struct file *mfile = file_reopen(file);
 	
 	lock_release(&sys_lock);   
 	uint32_t size = file_length(mfile);
