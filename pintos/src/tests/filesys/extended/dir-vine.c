@@ -41,6 +41,7 @@ test_main (void)
           close (fd);
           break;
         }
+     for(;;);
       close (fd);
       
       /* Create directory. */
