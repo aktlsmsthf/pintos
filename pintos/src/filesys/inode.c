@@ -41,7 +41,7 @@ struct inode
     bool removed;                       /* True if deleted, false otherwise. */
     int deny_write_cnt;                 /* 0: writes ok, >0: deny writes. */
     struct inode_disk data;             /* Inode content. */
-    //struct lock ilock; 
+    struct lock ilock; 
   };
 
 /* Returns the number of sectors to allocate for an inode SIZE
@@ -136,50 +136,12 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       disk_sector_t sectors = -1;
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
-      lock_acquire(&inode_lock);
+      //lock_acquire(&inode_lock);
      
       success =  inode_extension(disk_inode, sectors, sectors2);
-      /**static char zeros[DISK_SECTOR_SIZE];  
-      while(sectors!=sectors2){
-         sectors++;
-         
-         if(sectors<DN){
-            success = free_map_allocate(1, &disk_inode->direct_sector[sectors]);
-            disk_write(filesys_disk, disk_inode->direct_sector[sectors], zeros);
-            
-         }
-         else if(sectors>=(DN+(IDN*128))){
-            disk_sector_t indirects[128];
-            if(sectors==(DN+(IDN*128))){
-               success = free_map_allocate(1, &disk_inode->d_indirect_sector);
-            }
-            else{
-               disk_read(filesys_disk, disk_inode->d_indirect_sector, indirects);
-            }
-            disk_sector_t sectordi[128];
-            disk_read(filesys_disk, indirects[(sectors-(DN+(IDN*128)))/128], sectordi);
-            success = free_map_allocate(1, &sectordi[(sectors-(DN+(IDN*128)))%128]);
-            disk_write(filesys_disk, sectordi[(sectors-(DN+(IDN*128)))%128], zeros);
-            disk_write(filesys_disk, indirects[(sectors-(DN+(IDN*128)))/128], sectordi);
-            disk_write(filesys_disk, disk_inode->d_indirect_sector, indirects);
-         }
-         else{
-            disk_sector_t sectori[128];
-            if((sectors-DN)%128==0){
-               success = free_map_allocate(1, &disk_inode->indirect_sector[(sectors-DN)/128]);
-            }
-            else{
-               disk_read(filesys_disk, disk_inode->indirect_sector[(sectors-DN)/128], sectori);
-            }
-            success = free_map_allocate(1, &sectori[(sectors-DN)%128]);
-            disk_write(filesys_disk, sectori[(sectors-DN)%128], zeros);
-            disk_write(filesys_disk, disk_inode->indirect_sector[(sectors-DN)/128], sectori);
-            
-         }
-      }   **/
      disk_write(filesys_disk, sector, disk_inode);
      
-     lock_release(&inode_lock);       
+     //lock_release(&inode_lock);       
       free (disk_inode);
      
     }
@@ -218,7 +180,7 @@ inode_open (disk_sector_t sector)
   inode->open_cnt = 1;
   inode->deny_write_cnt = 0;
   inode->removed = false;
-  //lock_init(&inode->ilock);
+  lock_init(&inode->ilock);
   disk_read (filesys_disk, inode->sector, &inode->data);
   
   return inode;
@@ -384,8 +346,8 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
    
    if(size+offset>inode->data.length){
       //inode_deny_write (inode); 
-      //lock_acquire(&inode->ilock);
-      lock_acquire(&inode_lock);
+     /lock_acquire(&inode->ilock);
+      //lock_acquire(&inode_lock);
       
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
@@ -430,9 +392,9 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       }**/
       inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
-      //lock_release(&inode->ilock);
+      lock_release(&inode->ilock);
       
-      lock_release(&inode_lock);
+      //lock_release(&inode_lock);
       //inode_allow_write (inode);
    }
    //lock_acquire(&inode_lock);
