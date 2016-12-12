@@ -274,7 +274,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       void * buffer_tmp = buffer;
       
       while(buffer_tmp!=NULL){
-        if(!is_user_vaddr(buffer_tmp)) {printf("1\n");exit(-1);}
+        if(!is_user_vaddr(buffer_tmp)) {exit(-1);}
         
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
