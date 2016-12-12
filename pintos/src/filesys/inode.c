@@ -525,11 +525,13 @@ void ilock_release(struct inode *inode){
    lock_release(&inode->ilock);
 }*/
 void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector){
+  lock_acquire(&inode_lock);
   struct inode_disk *disk_inode = malloc(sizeof (struct inode_disk));
   disk_read(filesys_disk, child_sector, disk_inode);
   disk_inode->parent = parent_sector;
   disk_write(filesys_disk, child_sector, disk_inode);
   free(disk_inode);
+  lock_release(&inode_lock);
 }
 
 bool inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_sector_t sectors2){
