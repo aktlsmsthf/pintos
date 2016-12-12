@@ -140,8 +140,8 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       
       lock_acquire(&inode_lock);
      
-      success =  inode_extension(disk_inode, sectors, sectors2);
-      /**static char zeros[DISK_SECTOR_SIZE];  
+      //success =  inode_extension(disk_inode, sectors, sectors2);
+      static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
          sectors++;
          
@@ -179,7 +179,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
             
          }
       }   
-     disk_write(filesys_disk, sector, disk_inode);**/
+     disk_write(filesys_disk, sector, disk_inode);
      
      lock_release(&inode_lock);       
       free (disk_inode);
