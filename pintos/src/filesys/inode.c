@@ -430,10 +430,10 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
             disk_write(filesys_disk, inode->data.indirect_sector[(sectors-DN)/128], sectori);
          }
       }
-      
+      inode->data.length = size+offset;
       disk_write(filesys_disk, inode->data.sector, &inode->data);
       //lock_release(&inode->ilock);
-      inode->data.length = size+offset;
+      
       lock_release(&inode_lock);
       //inode_allow_write (inode);
    }
