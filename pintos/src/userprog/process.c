@@ -279,8 +279,11 @@ process_exit (void)
          celem = nextelem;
       }
    }
-   	
-   
+   bool mm = false;
+   if(!list_empty(&curr->mmap_list)) {
+	   mm = true;
+	   lock_acquire(&sys_lock);
+   }
    while(!list_empty(&curr->mapped_list)){
       melem = list_front(&curr->mapped_list);
       struct mmapped *mapped = list_entry(melem, struct mmapped, elem);
@@ -292,9 +295,9 @@ process_exit (void)
       struct spt_entry *spte = spte_find(addr);
           if(!spte->lazy){
 		if(pagedir_is_dirty(spte->t->pagedir, addr)){
-		   lock_acquire(&sys_lock);
+		   //lock_acquire(&sys_lock);
 	       	   file_write_at(mapped->file, spte->page, spte->read_bytes, spte->ofs);
-		   lock_release(&sys_lock);
+		   //lock_release(&sys_lock);
 	  	}
          }
       	 addr+=PGSIZE;
@@ -303,7 +306,8 @@ process_exit (void)
       list_remove(&mapped->elem);
       free(mapped);
    }
-   
+   if(mm) lock_release(&sys_lock);
+	
    if(curr->myself!=NULL){file_allow_write (curr->myself);
    file_close(curr->myself);}
    spt_destroy (&curr->spt);
