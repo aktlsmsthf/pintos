@@ -571,7 +571,7 @@ bool inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_
             
          }
       }   
-     disk_inode->length = sectors2;
+     //disk_inode->length = sectors2;
      disk_write(filesys_disk, disk_inode->sector, disk_inode);
      
    return success;
