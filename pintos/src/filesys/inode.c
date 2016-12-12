@@ -134,7 +134,7 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
       disk_inode->magic = INODE_MAGIC;
       disk_inode->sector = sector;
       disk_inode->is_dir = is_dir;
-      disk_inode->tests = 1;
+      disk_inode->test = 1;
       disk_sector_t sectors = -1;
       disk_sector_t sectors2 = bytes_to_sectors(length);
       
