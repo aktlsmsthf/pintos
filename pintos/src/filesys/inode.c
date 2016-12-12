@@ -176,8 +176,8 @@ inode_create (disk_sector_t sector, off_t length, bool is_dir)
             disk_write(filesys_disk, disk_inode->indirect_sector[(sectors-DN)/128], sectori);
             
          }
-      }   
-     disk_write(filesys_disk, sector, disk_inode);**/
+      }   **/
+     disk_write(filesys_disk, sector, disk_inode);
      
      lock_release(&inode_lock);       
       free (disk_inode);
@@ -427,9 +427,9 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
             disk_write(filesys_disk, sectori[(sectors-DN)%128], zeros);
             disk_write(filesys_disk, inode->data.indirect_sector[(sectors-DN)/128], sectori);
          }
-      }
+      }**/
       inode->data.length = size+offset;
-      disk_write(filesys_disk, inode->data.sector, &inode->data);**/
+      disk_write(filesys_disk, inode->data.sector, &inode->data);
       //lock_release(&inode->ilock);
       
       lock_release(&inode_lock);
@@ -572,7 +572,7 @@ bool inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_
          }
       }   
      //disk_inode->length = sectors2;
-     disk_write(filesys_disk, disk_inode->sector, disk_inode);
+     //disk_write(filesys_disk, disk_inode->sector, disk_inode);
      
    return success;
 }
