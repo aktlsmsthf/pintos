@@ -1,20 +1,3 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Gist
- @aktlsmsthf
- Watch 0
-  Star 0
-  Fork 1 aktlsmsthf/pintos
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Pulse  Graphs  Settings
-Tree: f777bd85f4 Find file Copy pathpintos/pintos/src/userprog/syscall.c
-f777bd8  an hour ago
-@aktlsmsthf aktlsmsthf Update syscall.c
-1 contributor
-RawBlameHistory     
-660 lines (588 sloc)  16.2 KB
 #include "userprog/syscall.h"
 #include <stdio.h>
 #include <syscall-nr.h>
