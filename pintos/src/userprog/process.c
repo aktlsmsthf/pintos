@@ -308,9 +308,7 @@ process_exit (void)
    }
    if(mm) lock_release(&sys_lock);
    if(curr->myself!=NULL){file_allow_write (curr->myself);
-   lock_acquire(&sys_lock);
-   file_close(curr->myself);
-   lock_release(&sys_lock);}
+   file_close(curr->myself);}
    spt_destroy (&curr->spt);
    
 
