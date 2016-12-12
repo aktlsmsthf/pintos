@@ -209,7 +209,7 @@ inode_open (disk_sector_t sector)
 
   /* Allocate memory. */
   inode = malloc (sizeof *inode);
-  if (inode == NULL){printf("1\n");
+  if (inode == NULL){
     return NULL;
   }
 
