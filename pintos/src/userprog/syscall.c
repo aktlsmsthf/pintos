@@ -365,9 +365,9 @@ syscall_handler (struct intr_frame *f UNUSED)
         f->eax = -1;
       }
       else{
-        //lock_acquire(&sys_lock);
+        lock_acquire(&sys_lock);
         f->eax = file_tell(ff);
-        //lock_release(&sys_lock);
+        lock_release(&sys_lock);
       }
       break;
     }
