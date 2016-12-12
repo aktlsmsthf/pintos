@@ -82,7 +82,7 @@ filesys_create_dir (const char *name)
 
   if (!success && inode_sector != 0) 
     free_map_release (inode_sector, 1);
-  //dir_close (dir);
+  dir_close (dir);
   return success;
 }
 
