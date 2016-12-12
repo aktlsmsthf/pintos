@@ -176,7 +176,6 @@ start_process (void *f_name)
    child of the calling process, or if process_wait() has already
    been successfully called for the given TID, returns -1
    immediately, without waiting.
-
    This function will be implemented in problem 2-2.  For now, it
    does nothing. */
 int
@@ -280,7 +279,7 @@ process_exit (void)
       }
    }
    bool mm = false;
-   if(!list_empty(&curr->mapped_list)) {
+   if(!list_empty(&curr->mmap_list)) {
 	   mm = true;
 	   lock_acquire(&sys_lock);
    }
@@ -590,15 +589,11 @@ validate_segment (const struct Elf32_Phdr *phdr, struct file *file)
 /* Loads a segment starting at offset OFS in FILE at address
    UPAGE.  In total, READ_BYTES + ZERO_BYTES bytes of virtual
    memory are initialized, as follows:
-
         - READ_BYTES bytes at UPAGE must be read from FILE
           starting at offset OFS.
-
         - ZERO_BYTES bytes at UPAGE + READ_BYTES must be zeroed.
-
    The pages initialized by this function must be writable by the
    user process if WRITABLE is true, read-only otherwise.
-
    Return true if successful, false if a memory allocation error
    or disk read error occurs. */
 static bool
@@ -630,7 +625,6 @@ load_segment (struct file *file, off_t ofs, uint8_t *upage,
           return false; 
         }
       memset (kpage + page_read_bytes, 0, page_zero_bytes);
-
       if (!install_page (upage, kpage, writable)) 
         {
           palloc_free_page (kpage);
