@@ -389,7 +389,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
-      inod_extension(&inode->data, sectors, sectors2);
+      inode_extension(&inode->data, sectors, sectors2);
       /**static char zeros[DISK_SECTOR_SIZE];
       while(sectors!=sectors2){
          sectors++;
