@@ -16,21 +16,21 @@ void cache_init(void){
 }
 
 struct cache_entry * find_cache_by_sector(int sector_idx){
-  //lock_acquire(&cache_lock);
+  
   if(list_empty(&cache_list)){
     //lock_release(&cache_lock);
     return NULL;
   }
-  
+  lock_acquire(&cache_lock);
   struct list_elem *elem = list_front(&cache_list);
   while(elem->next != NULL){
     if(list_entry(elem, struct cache_entry, elem)->sector == sector_idx){
-      //lock_release(&cache_lock);
+      lock_release(&cache_lock);
       return list_entry(elem, struct cache_entry, elem);
     }
     elem = elem->next;
   }
-  //lock_release(&cache_lock);
+  lock_release(&cache_lock);
   return NULL;
 }
 
@@ -50,11 +50,9 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     c = list_entry(elem, struct cache_entry, elem);
     while(c->accessed){
       c->accessed = false;
-      //list_remove(elem);
-      //list_push_back(&cache_list, elem);
-      //elem = list_front(&cache_list);
-      elem = elem->next;
-      if(elem->next==NULL){elem=list_front(&cache_list);}
+      list_remove(elem);
+      list_push_back(&cache_list, elem);
+      elem = list_front(&cache_list);
       c = list_entry(elem, struct cache_entry, elem);
     }
     
