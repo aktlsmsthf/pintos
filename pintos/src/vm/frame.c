@@ -71,8 +71,8 @@ void* frame_evict(enum palloc_flags flags){
   struct list_elem * frame_elem = list_front(&frame_table);
   struct frame_entry * fe;
   fe = list_entry(frame_elem, struct frame_entry, elem);
-  while(/* fe->frame == NULL 
-        ||*/ pagedir_is_accessed(fe->spte->t->pagedir ,fe->spte->page)){
+  while( fe->frame == NULL 
+        || pagedir_is_accessed(fe->spte->t->pagedir ,fe->spte->page)){
       if(fe->frame != NULL){
         pagedir_set_accessed(fe->spte->t->pagedir ,fe->spte->page, false);
       }
