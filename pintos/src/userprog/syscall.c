@@ -274,7 +274,7 @@ syscall_handler (struct intr_frame *f UNUSED)
       void * buffer_tmp = buffer;
       
       while(buffer_tmp!=NULL){
-        if(!is_user_vaddr(buffer_tmp)) exit(-1);
+        if(!is_user_vaddr(buffer_tmp)) {exit(-1);}
         
         if(pagedir_get_page(thread_current()->pagedir, buffer_tmp)==NULL){
           struct spt_entry *spte = spte_find(pg_round_down(buffer_tmp));
@@ -417,6 +417,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 	lock_acquire(&sys_lock);   
 	struct file *mfile = file_reopen(file);
 	
+	//lock_release(&sys_lock);   
 	uint32_t size = file_length(mfile);
 	uint32_t read_bytes = size;
 	uint32_t zero_bytes = size%PGSIZE;
@@ -441,6 +442,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		addr+=PGSIZE;
 	}
 	if(pass){
+		//lock_acquire(&sys_lock);
 		struct mmapped *m = malloc(sizeof(struct mmapped));
 		m->addr = daddr;
 		m->file = mfile;
@@ -448,6 +450,7 @@ syscall_handler (struct intr_frame *f UNUSED)
 		m->size = size;
 	        
 		list_push_front(&thread_current()->mapped_list, &m->elem);
+		//lock_release(&sys_lock);
 		f->eax = fd;
 	}
 	else{
