@@ -386,10 +386,11 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       //inode_deny_write (inode); 
       //lock_acquire(&inode->ilock);
       lock_acquire(&inode_lock);
-      inod_extension(&inode->data, sectors, sectors2);
-      /**disk_sector_t sectors = bytes_to_sectors(inode->data.length);
+      
+      disk_sector_t sectors = bytes_to_sectors(inode->data.length);
       disk_sector_t sectors2 = bytes_to_sectors(size+offset);
-      static char zeros[DISK_SECTOR_SIZE];
+      inod_extension(&inode->data, sectors, sectors2);
+      /**static char zeros[DISK_SECTOR_SIZE];
       while(sectors!=sectors2){
          sectors++;
          if(sectors<DN){
@@ -529,7 +530,7 @@ void set_parent(disk_sector_t parent_sector, disk_sector_t child_sector){
   free(disk_inode);
 }
 
-void inode_extension(struct inode_disk *disk_inode, disk_sector_t secotrs, disk_sector_t secotrs2){
+void inode_extension(struct inode_disk *disk_inode, disk_sector_t secotrs, disk_sector_t sectors2){
       /static char zeros[DISK_SECTOR_SIZE];  
       while(sectors!=sectors2){
          sectors++;
