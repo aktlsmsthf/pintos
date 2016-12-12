@@ -52,7 +52,7 @@ bytes_to_sectors (off_t size)
   return DIV_ROUND_UP (size, DISK_SECTOR_SIZE);
 }
 
-bool inode_extension(struct *inode_disk disk_inode, disk_sector_t sectors, disk_sector_t sectors2);
+bool inode_extension(struct inode_disk *disk_inode, disk_sector_t sectors, disk_sector_t sectors2);
 
 /* Returns the disk sector that contains byte offset POS within
    INODE.
