@@ -29,7 +29,7 @@ struct inode_disk
     disk_sector_t  sector;
     bool is_dir;
     disk_sector_t parent;
-    int tests;
+    int test;
     uint32_t unused[121-DN-IDN];               /* Not used. */
   };
 
