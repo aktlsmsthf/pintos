@@ -282,7 +282,7 @@ process_exit (void)
    bool mm = false;
    if(!list_empty(&curr->mapped_list)) {
 	   mm = true;
-	   lock_acquire(&sys_lock);
+	   //lock_acquire(&sys_lock);
    }
    while(!list_empty(&curr->mapped_list)){
       melem = list_front(&curr->mapped_list);
@@ -306,7 +306,7 @@ process_exit (void)
       list_remove(&mapped->elem);
       free(mapped);
    }
-   if(mm) lock_release(&sys_lock);
+   //if(mm) lock_release(&sys_lock);
 	
    if(curr->myself!=NULL){file_allow_write (curr->myself);
    file_close(curr->myself);}
