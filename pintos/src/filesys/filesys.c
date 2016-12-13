@@ -25,8 +25,9 @@ filesys_init (bool format)
     PANIC ("hd0:1 (hdb) not present, file system initialization failed");
 
   inode_init ();
+  cache_init();
   free_map_init ();
-
+  
   if (format) 
     do_format ();
 
