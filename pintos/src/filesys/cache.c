@@ -99,15 +99,8 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
 }
 
 void thread_func_read_ahead(void *aux){
-  struct sector_data *sd = aux;
-  printf("a %d\n", sd->next_sector);
-  read_to_cache(sd->next_sector, false);
-}
-
-void thread_func_read(void *aux){
   while(true){
     if(ahead){
-      printf("1\n");
       read_to_cache(next, false);
       ahead = false;
     }
