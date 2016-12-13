@@ -16,6 +16,10 @@ void cache_init(void){
   count = 0;
 }
 
+void cache_finish(void){
+  finish = true;
+}
+
 struct cache_entry * find_cache_by_sector(int sector_idx){
   if(list_empty(&cache_list)){
     //lock_release(&cache_lock);
@@ -99,7 +103,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
 }
 
 void thread_func_read_ahead(void *aux){
-  while(true){
+  while(!finish){
     if(ahead){
       read_to_cache(next, false);
       ahead = false;
