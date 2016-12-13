@@ -27,7 +27,7 @@ struct sector_data{
 };
 
 void cache_init(void);
-struct cache_entry * read_to_cache(int sector_idx, bool first);
+struct cache_entry * read_to_cache(disk_sector_t sector_idx, disk_sector_t next_sector, bool first);
 struct cache_entry * find_cache_by_sector(int sector_idx);
 void write_behind(struct cache_entry *c);
 void write_behind_all(void);
