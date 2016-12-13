@@ -40,6 +40,7 @@ filesys_done (void)
 {
   write_behind_all();
   free_map_close ();
+   cache_finish();
 }
 
 /* Creates a file named NAME with the given INITIAL_SIZE.
