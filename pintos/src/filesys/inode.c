@@ -354,7 +354,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
        struct cache_entry *c = read_to_cache(sector_idx, true);
        if(offset+DISK_SECTOR_SIZE<inode->data.length){
           struct sector_data sd;
-          sd.next_sector = byte_to_sector(offset+DISK_SECTOR_SIZE);
+          sd.next_sector = byte_to_sector(inode, offset+DISK_SECTOR_SIZE);
           thread_create("read_ahead", 0, thread_func_read_ahead, &sd);
        }
        //lock_acquire(&cache_lock);
