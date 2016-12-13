@@ -19,6 +19,10 @@ struct cache_entry{
   struct list_elem elem;
 };
 
+struct sector_data{
+  int next_sector;
+};
+
 void cache_init(void);
 struct cache_entry * read_to_cache(int sector_idx, bool first);
 struct cache_entry * find_cache_by_sector(int sector_idx);
