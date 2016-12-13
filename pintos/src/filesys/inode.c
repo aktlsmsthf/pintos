@@ -352,7 +352,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
       
        //
        struct cache_entry *c = read_to_cache(sector_idx, true);
-       thread_create("Read_ahead", 0, thread_func_read_ahead, &enxt_sector);
+       thread_create("Read_ahead", 0, thread_func_read_ahead, &next_sector);
        //lock_acquire(&cache_lock);
        memcpy(buffer+bytes_read, c->cache+sector_ofs, chunk_size);
        //lock_release(&cache_lock);
