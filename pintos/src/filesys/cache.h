@@ -12,6 +12,7 @@ struct list_elem *hand;
 int count;
 int next;
 bool ahead;
+bool finish;
 
 struct cache_entry{
   int sector;
