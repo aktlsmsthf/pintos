@@ -1,0 +1,276 @@
+			+---------------------------+
+			|			CS 330			|
+			| PROJECT 4: FILE SYSTEMS	|
+			|	   DESIGN DOCUMENT		|
+			+---------------------------+
+
+---- GROUP ----
+
+>> Fill in the names and email addresses of your group members.
+
+이창훈
+이승호 konglsh@kaist.ac.kr
+
+
+
+---- PRELIMINARIES ----
+
+>> If you have any preliminary comments on your submission, notes for the
+>> TAs, or extra credit, please give them here.
+
+>> Please cite any offline or online sources you consulted while
+>> preparing your submission, other than the Pintos documentation, course
+>> text, lecture notes, and course staff.
+
+		     INDEXED AND EXTENSIBLE FILES
+		     ============================
+
+---- DATA STRUCTURES ----
+
+>> A1: Copy here the declaration of each new or changed `struct' or
+>> `struct' member, global or static variable, `typedef', or
+>> enumeration.  Identify the purpose of each in 25 words or less.
+
+#define DN 10
+#define IDN 10
+struct inode_disk
+  {
+    //disk_sector_t start;                /* First data sector. */
+    off_t length;                       /* File size in bytes. */
+    unsigned magic;                     /* Magic number. */
+    disk_sector_t direct_sector[DN];     //sectors used directly
+    disk_sector_t indirect_sector[IDN];  //sectors used indirectly  
+    disk_sector_t d_indirect_sector;     //sectors used doublely indirectly
+    disk_sector_t  sector;               //sector where inode_disk saved
+    bool is_dir;                         //check if the inode is directory or not
+    disk_sector_t parent;                //sector number indexing parent directory's inode
+    uint32_t unused[122-DN-IDN];               /* Not used. */
+  };
+
+
+>> A2: What is the maximum size of a file supported by your inode
+>> structure?  Show your work.
+
+direct sector 10개 + indirect_sector 10개 * 128 + doubley indirect sector 1개(128 * 128)
+=10 + 1280 + 16384 개의 sector
+=17674 * 512byte 
+=약 8.63MB
+
+---- SYNCHRONIZATION ----
+
+>> A3: Explain how your code avoids a race if two processes attempt to
+>> extend a file at the same time.
+
+file extension을 수행하는 inode_extension()함수가 호출되기 전에
+항상 lock(inode_lock)을 걸어서 race를 방지했습니다.
+
+>> A4: Suppose processes A and B both have file F open, both
+>> positioned at end-of-file.  If A reads and B writes F at the same
+>> time, A may read all, part, or none of what B writes.  However, A
+>> may not read data other than what B writes, e.g. if B writes
+>> nonzero data, A is not allowed to see all zeros.  Explain how your
+>> code avoids this race.
+
+lock을 걸어서 방지했습니다.
+
+
+>> A5: Explain how your synchronization design provides "fairness".
+>> File access is "fair" if readers cannot indefinitely block writers
+>> or vice versa.  That is, many processes reading from a file cannot
+>> prevent forever another process from writing the file, and many
+>> processes writing to a file cannot prevent another process forever
+>> from reading the file.
+
+syscall level에서 read나 write에 같은 lock(sys_lock)을 사용했기 때문에
+read나 write가 indefinitely block되는일은 없을것으로 예상됩니다.
+
+
+---- RATIONALE ----
+
+>> A6: Is your inode structure a multilevel index?  If so, why did you
+>> choose this particular combination of direct, indirect, and doubly
+>> indirect blocks?  If not, why did you choose an alternative inode
+>> structure, and what advantages and disadvantages does your
+>> structure have, compared to a multilevel index?
+
+multilevel index를 사용했습니다.
+inode_disk structure는 512바이트로 그 크기가 한정되어있으므로
+512바이트 안에 10000개가 넘는(file size가 MB단위만큼 클 경우)
+sector number를 저장하기 위해서는 multi-level index가 필수적이었습니다. 
+
+			    SUBDIRECTORIES
+			    ==============
+
+---- DATA STRUCTURES ----
+
+>> B1: Copy here the declaration of each new or changed `struct' or
+>> `struct' member, global or static variable, `typedef', or
+>> enumeration.  Identify the purpose of each in 25 words or less.
+struct thread{
+  ...
+  
+  struct dir * current_dir; //current directory where thread stay 
+
+  ...
+
+}
+
+struct file_fd{
+  int fd;
+  struct file *file;
+  struct list_elem elem;
+  struct dir *dir;
+  bool is_dir;
+};
+기존에 사용되던 dir structure는 수정하지 않았습니다.
+대신 system call에서 각 process에 저장하던 file_list의 entry인
+file_fd structure를 수정하였습니다.
+열린 inode가 file일 경우 file에 dir일 경우에는 dir에 
+해당 inode의 정보를 저장하고 다른 하나는 NULL로 설정해 놓았습니다.
+그리고 그 file이 directory일 경우엔 is_dir를 1로 set하였습니다.
+
+위(A1)의 inode structure에 parent를 추가하였습니다.
+
+
+---- ALGORITHMS ----
+
+>> B2: Describe your code for traversing a user-specified path.  How
+>> do traversals of absolute and relative paths differ?
+
+thread에 현재의 directory를 저장했습니다.
+그리고 path의 앞부분이 '/'일 경우(absolute)에는 root부터
+아닐 경우(relative)에는 thread의 current_dir부터 탐색하도록 했습니다.
+
+---- SYNCHRONIZATION ----
+
+>> B4: How do you prevent races on directory entries?  For example,
+>> only one of two simultaneous attempts to remove a single file
+>> should succeed, as should only one of two simultaneous attempts to
+>> create a file with the same name, and so on.
+
+create나 remove(close)할 때
+inode_close(), inode_create()함수에 lock(inode_lock)을 사용하여
+race condition을 피했습니다.
+
+>> B5: Does your implementation allow a directory to be removed if it
+>> is open by a process or if it is in use as a process's current
+>> working directory?  If so, what happens to that process's future
+>> file system operations?  If not, how do you prevent it?
+
+inode가 close될 때(inode_close()함수가 호출될때)
+open count를 확인하고, remove될 file인지 확인한 후 inode가 remove되기 때문에 
+다른 process에서 사용하고 있는 inode는 제거 되지 않습니다.
+
+---- RATIONALE ----
+
+>> B6: Explain why you chose to represent the current directory of a
+>> process the way you did.
+
+current_dir는 struct * dir 형태로 thread에 저장했습니다.
+포인터 형태로 저장해놓는 것이 찾기가 쉽다고 생각했습니다.
+
+또한 생각했던 다른 방법인 directory의 name을 저장하는 방법은
+name의 길이를 특정하기 힘들고, name을 통해 inode를 한번 더 찾아야하기 때문에
+번거롭다고 생각하여 택하지 않았습니다. 
+
+			     BUFFER CACHE
+			     ============
+
+---- DATA STRUCTURES ----
+
+>> C1: Copy here the declaration of each new or changed `struct' or
+>> `struct' member, global or static variable, `typedef', or
+>> enumeration.  Identify the purpose of each in 25 words or less.
+
+struct cache_entry{
+  int sector;            //sector number indexing where data saved
+  void *cache;           //pointer of memory where data copied
+  bool dirty;            //check if cache data changed or not
+  bool accessed;         //check if cache data accessed or not
+  struct list_elem elem; 
+};
+
+struct list cache_list;  //list of cache
+
+---- ALGORITHMS ----
+
+>> C2: Describe how your cache replacement algorithm chooses a cache
+>> block to evict.
+
+second chance algotithm.
+cache의 accessed를 확인한후 true일 경우 false로 바꾼뒤 
+다음 entry를 순회합니다.
+accessed가 false인 cache를 evict합니다.
+
+>> C3: Describe your implementation of write-behind.
+
+read_to_cache를 할 때 만약 count가 64이면 한 개의 cache_entry가 evict
+되도록 하였습니다. evict를 할 때 dirty bit가 1이면
+ 원래 disk에 쓰도록 하였습니다. 또한 filesys_done을 할 때 
+모든 cache_entry가 dirty bit가 1이면 disk에 쓰도록 하였습니다.
+
+periodically write behind하는 것은 cache_init를 할 때 write behind를
+하는 thread를 생성하여 하도록 시도해보았습니다. 그 thread는 무한 루프를
+돌며 일정시간 timer_sleep을 한 후 cache list에서 dirty bit들을 check하여
+write behind를 하게 만들어 보았으나 알 수 없는 에러가 생겨 구현하지 못
+하였습니다.
+
+>> C4: Describe your implementation of read-ahead.
+
+read_ahead 역시 read_to_cache를 시행하는 thread를 만들어보았습니다. 
+first가 true면 그 thread를 생성하고 false면 thread를 생성하지 않도록 하여
+read-ahead가 되도록 해보았으나 역시 에러가 발생하였습니다.
+
+다른 방법으로 global 변수 int next, bool ahead를 생성해 read_to_cache를 할 때
+first가 true면 ahead를 true로 set하고 next에 다음에 읽을 sector를 set해 줍니다.
+그리고 cache_init을 할 때 무한루프를 도는 thread를 생성하여 그 루프 안에서
+ahead가 true면 next sector를 read_to_cache하는 방법도 시도해 보았으나
+역시 에러가 발생하여 구현하지 못하였습니다.
+
+---- SYNCHRONIZATION ----
+
+>> C5: When one process is actively reading or writing data in a
+>> buffer cache block, how are other processes prevented from evicting
+>> that block?
+
+evict하기전 accessed를 check했습니다. 
+
+>> C6: During the eviction of a block from the cache, how are other
+>> processes prevented from attempting to access the block?
+
+eviction을 진행할 때는 lock(cache_lock)을 사용합니다.
+
+
+---- RATIONALE ----
+
+>> C7: Describe a file workload likely to benefit from buffer caching,
+>> and workloads likely to benefit from read-ahead and write-behind.
+
+disk에 접근하는데 걸리는 time cost는 kernel memory에 접근하는 cost보다
+크기 때문에, 한 번 사용할 때 cache에 복사하여 사용하면
+time cost를 많이 줄일 수 있다고 생각합니다.
+
+
+			   SURVEY QUESTIONS
+			   ================
+
+Answering these questions is optional, but it will help us improve the
+course in future quarters.  Feel free to tell us anything you
+want--these questions are just to spur your thoughts.  You may also
+choose to respond anonymously in the course evaluations at the end of
+the quarter.
+
+>> In your opinion, was this assignment, or any one of the three problems
+>> in it, too easy or too hard?  Did it take too long or too little time?
+
+>> Did you find that working on a particular part of the assignment gave
+>> you greater insight into some aspect of OS design?
+
+>> Is there some particular fact or hint we should give students in
+>> future quarters to help them solve the problems?  Conversely, did you
+>> find any of our guidance to be misleading?
+
+>> Do you have any suggestions for the TAs to more effectively assist
+>> students in future quarters?
+
+>> Any other comments?
