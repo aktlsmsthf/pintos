@@ -12,18 +12,11 @@ void cache_init(void){
   list_init(&cache_list);
   lock_init(&cache_lock);
   //thread_create("Write_behind_periodically", 0, thread_func_write_behind, NULL);
-  
-  finish = false;
-  ahead = false;
-  next = 0;
   count = 0;
 }
 
-void cache_finish(void){
-  finish = true;
-}
-
 struct cache_entry * find_cache_by_sector(int sector_idx){
+  
   if(list_empty(&cache_list)){
     //lock_release(&cache_lock);
     return NULL;
@@ -41,7 +34,7 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
   return NULL;
 }
 
-struct cache_entry * read_to_cache(disk_sector_t sector_idx, disk_sector_t next_sector, bool first){
+struct cache_entry * read_to_cache(int sector_idx, bool first){
   struct cache_entry *c;
   lock_acquire(&cache_lock);
   c = find_cache_by_sector(sector_idx);
@@ -88,26 +81,20 @@ struct cache_entry * read_to_cache(disk_sector_t sector_idx, disk_sector_t next_
   //hand = &c->elem;
   
   disk_read(filesys_disk, sector_idx, c->cache);
-  
+  lock_release(&cache_lock);
   
   /**int aux;
   if(first){
     aux = sector_idx+1;
-    printf("%d\n", aux);
-    thread_create("Read_ahead", 0, thread_func_read_ahead, &aux);
+    thread_create("Read_ahead", 0, thread_func_read_ahead, &sector_idx);
   }**/
-  
-  /*if(first && next_sector != -1){
-    next = next_sector;
-    thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
-  }*/
-  lock_release(&cache_lock);
   
   return c;
 }
 
 void thread_func_read_ahead(void *aux){
-  read_to_cache(next,0, false);
+  int *idx = (int *)aux;
+  read_to_cache(*idx+1, false);
 }
 
 void write_to_cache(int sector_idx, void *buffer){
@@ -117,7 +104,7 @@ void write_to_cache(int sector_idx, void *buffer){
 }
 
 void write_behind(struct cache_entry *c){
-    lock_acquire(&cache_lock);
+    lock_acquire(&inode_lock);
     if(c->dirty){
       disk_write(filesys_disk, c->sector, c->cache);
     }
@@ -125,7 +112,7 @@ void write_behind(struct cache_entry *c){
     count--;
     free(c->cache);
     free(c);
-    lock_release(&cache_lock);
+    lock_release(&inode_lock);
 }
 
 void write_behind_all(void){

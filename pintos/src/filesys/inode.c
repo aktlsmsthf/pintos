@@ -333,12 +333,10 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
   off_t bytes_read = 0;
   uint8_t *bounce = NULL;
   //lock_acquire(&inode_lock);
-  off_t nexts = size+offset;
   while (size > 0) 
     {
       /* Disk sector to read, starting byte offset within sector. */
       disk_sector_t sector_idx = byte_to_sector (inode, offset);
-      disk_sector_t next_sector = byte_to_sector(inode, offset+DISK_SECTOR_SIZE);
       int sector_ofs = offset % DISK_SECTOR_SIZE;
 
       /* Bytes left in inode, bytes left in sector, lesser of the two. */
@@ -352,8 +350,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
         break;
       
        //
-       struct cache_entry *c = read_to_cache(sector_idx, next_sector, true);
-       
+       struct cache_entry *c = read_to_cache(sector_idx, true);
        //lock_acquire(&cache_lock);
        memcpy(buffer+bytes_read, c->cache+sector_ofs, chunk_size);
        //lock_release(&cache_lock);
@@ -389,7 +386,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
    if(size+offset>inode->data.length){
       //inode_deny_write (inode); 
       //lock_acquire(&inode->ilock);
-      //if(size+offset>FILESIZE_MAX){return 0;}
+      if(size+offset>FILESIZE_MAX){return 0;}
       lock_acquire(&inode_lock);
       
       disk_sector_t sectors = bytes_to_sectors(inode->data.length);
@@ -446,7 +443,6 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       
       /* Sector to write, starting byte offset within sector. */
       disk_sector_t sector_idx = byte_to_sector (inode, offset);
-      disk_sector_t next_sector = byte_to_sector(inode, offset+DISK_SECTOR_SIZE);
       int sector_ofs = offset % DISK_SECTOR_SIZE;
       
       /* Bytes left in inode, bytes left in sector, lesser of the two. */
@@ -462,7 +458,7 @@ inode_write_at (struct inode *inode, const void *buffer_, off_t size,
       
       struct cache_entry *c = find_cache_by_sector(sector_idx);
        if(!c){
-          c = read_to_cache(sector_idx, next_sector, true);
+          c = read_to_cache(sector_idx, true);
        }
        //lock_acquire(&cache_lock);
        //struct cache_entry *c =  read_to_cache(sector_idx, true);
