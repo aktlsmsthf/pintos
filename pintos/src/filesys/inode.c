@@ -333,7 +333,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
   off_t bytes_read = 0;
   uint8_t *bounce = NULL;
   //lock_acquire(&inode_lock);
-  off_t next = size+offset;
+  off_t nexts = size+offset;
   while (size > 0) 
     {
       /* Disk sector to read, starting byte offset within sector. */
@@ -363,6 +363,10 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
       offset += chunk_size;
       bytes_read += chunk_size;
     }
+   if(byte_to_sector(nexts)!=-1){
+      next = byte_to_sector(nexts);
+      thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
+   }
   //lock_release(&inode_lock);
   free (bounce);
 
