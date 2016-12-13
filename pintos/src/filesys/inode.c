@@ -337,7 +337,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
     {
       /* Disk sector to read, starting byte offset within sector. */
       disk_sector_t sector_idx = byte_to_sector (inode, offset);
-      
+      disk_sector_t next_sector = byte_to_sector (inode, offset+DISK_SECTOR_SIZE);
       int sector_ofs = offset % DISK_SECTOR_SIZE;
 
       /* Bytes left in inode, bytes left in sector, lesser of the two. */
@@ -352,13 +352,9 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
       
        //
        struct cache_entry *c = read_to_cache(sector_idx, true);
-       /**if(offset+DISK_SECTOR_SIZE<inode->data.length){
-         disk_sector_t next_sector = byte_to_sector (inode, offset+DISK_SECTOR_SIZE);
-
-       struct sector_data sd;
-     
-       sd.next_sector = next_sector;
-       thread_create("Read_ahead", 0, thread_func_read_ahead, &sd);}**/
+       printf("%d\n", next_sector);
+       printf("%d\n", *(&next_sector));
+       thread_create("Read_ahead", 0, thread_func_read_ahead, &next_sector);
        //lock_acquire(&cache_lock);
        memcpy(buffer+bytes_read, c->cache+sector_ofs, chunk_size);
        //lock_release(&cache_lock);
