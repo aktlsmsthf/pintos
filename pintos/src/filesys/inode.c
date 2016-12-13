@@ -364,6 +364,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
       bytes_read += chunk_size;
     }
    if(byte_to_sector(inode+DISK_SECTOR_SIZE, nexts)!=-1){
+      printf("1\n");
       next = byte_to_sector(inode, nexts+DISK_SECTOR_SIZE);
       thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
    }
