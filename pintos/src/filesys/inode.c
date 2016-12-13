@@ -352,7 +352,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
       
        //
        struct cache_entry *c = read_to_cache(sector_idx, true);
-       if(offset+DISK_SECTOR_SIZE<=inode->data.length){
+       if(offset+DISK_SECTOR_SIZE<inode->data.length){
          disk_sector_t next_sector = byte_to_sector (inode, offset+DISK_SECTOR_SIZE);
 
        struct sector_data sd;
