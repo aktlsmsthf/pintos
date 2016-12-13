@@ -17,7 +17,6 @@ void cache_init(void){
   ahead = false;
   next = 0;
   count = 0;
-  
 }
 
 void cache_finish(void){
@@ -100,7 +99,7 @@ struct cache_entry * read_to_cache(disk_sector_t sector_idx, disk_sector_t next_
   
   if(first && next_sector != -1){
     next = next_sector;
-    thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
+    thread_create("read_ahead", 1, thread_func_read_ahead, NULL);
   }
   
   lock_release(&cache_lock);
