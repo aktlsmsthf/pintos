@@ -10,6 +10,8 @@ struct list cache_list;
 struct lock cache_lock;
 struct list_elem *hand;
 int count;
+int next;
+bool ahead;
 
 struct cache_entry{
   int sector;
