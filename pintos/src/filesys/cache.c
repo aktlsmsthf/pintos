@@ -96,19 +96,18 @@ struct cache_entry * read_to_cache(disk_sector_t sector_idx, disk_sector_t next_
     printf("%d\n", aux);
     thread_create("Read_ahead", 0, thread_func_read_ahead, &aux);
   }**/
-  lock_release(&cache_lock);
-  if(first && next_sector != -1){
-    next = next_sector;
-    thread_create("read_ahead", 1, thread_func_read_ahead, NULL);
-  }
   
+  /*if(first && next_sector != -1){
+    next = next_sector;
+    thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
+  }*/
+  lock_release(&cache_lock);
   
   return c;
 }
 
 void thread_func_read_ahead(void *aux){
   read_to_cache(next,0, false);
-  thread_exit();
 }
 
 void write_to_cache(int sector_idx, void *buffer){
