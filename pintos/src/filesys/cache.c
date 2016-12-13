@@ -107,6 +107,7 @@ void thread_func_read_ahead(void *aux){
 void thread_func_read(void *aux){
   while(true){
     if(ahead){
+      printf("1\n");
       read_to_cache(next, false);
       ahead = false;
     }
