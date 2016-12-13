@@ -363,8 +363,8 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
       offset += chunk_size;
       bytes_read += chunk_size;
     }
-   if(byte_to_sector(nexts)!=-1){
-      next = byte_to_sector(nexts);
+   if(byte_to_sector(inode, nexts)!=-1){
+      next = byte_to_sector(inode, nexts);
       thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
    }
   //lock_release(&inode_lock);
