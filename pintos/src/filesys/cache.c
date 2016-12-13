@@ -98,10 +98,10 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     thread_create("Read_ahead", 0, thread_func_read_ahead, &aux);
   }**/
   
-  if(first){
+  /*if(first){
     next = sector_idx+1;
-    //thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
-  }
+    thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
+  }*/
   
   lock_release(&cache_lock);
   return c;
