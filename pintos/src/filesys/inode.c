@@ -365,7 +365,7 @@ inode_read_at (struct inode *inode, void *buffer_, off_t size, off_t offset)
     }
     if(next+DISK_SECTOR_SIZE<inode->data.length){
        struct sector_data sd;
-       sd.next_sector = byte_to_sector(next+DISK_SECTOR_SIZE);
+       sd.next_sector = byte_to_sector(inode, next+DISK_SECTOR_SIZE);
        thread_create("read_ahead", 0, thread_func_read_ahead, &sd);
     }
   //lock_release(&inode_lock);
