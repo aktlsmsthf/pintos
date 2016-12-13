@@ -94,7 +94,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   return c;
 }
 
-void thread_func_read_ahead(void *idx){
+void thread_func_read_ahead(void *aux){
   disk_sector_t *idx = aux;
   printf("%d\n", idx);
   read_to_cache(*idx, false);
