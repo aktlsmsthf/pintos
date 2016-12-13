@@ -32,5 +32,6 @@ void write_behind(struct cache_entry *c);
 void write_behind_all(void);
 void thread_func_write_behind(void *aux);
 void thread_func_read_ahead(void *aux);
+void thread_fun_read(void *aux);
 
 #endif
