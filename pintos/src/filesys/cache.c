@@ -43,6 +43,7 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
 }
 
 struct cache_entry * read_to_cache(int sector_idx, bool first){
+  printf("2\n");
   struct cache_entry *c;
   lock_acquire(&cache_lock);
   c = find_cache_by_sector(sector_idx);
@@ -107,8 +108,8 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
 }
 
 void thread_func_read_ahead(void *aux){
-      read_to_cache(next, false);
-      ahead = false;
+  printf("1\n");
+  read_to_cache(next, false);
 }
 
 void write_to_cache(int sector_idx, void *buffer){
