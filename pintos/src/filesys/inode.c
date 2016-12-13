@@ -13,8 +13,8 @@
 
 /* Identifies an inode. */
 #define INODE_MAGIC 0x494e4f44
-#define DN 10
-#define IDN 10
+#define DN 5
+#define IDN 5
 
 /* On-disk inode.
    Must be exactly DISK_SECTOR_SIZE bytes long. */
