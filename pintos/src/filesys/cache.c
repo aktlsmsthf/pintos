@@ -107,9 +107,13 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
 }
 
 void thread_func_read_ahead(void *aux){
+  printf("1\n");
   while(!finish){
+    printf("2\n");
     if(ahead){
+      printf("3\n");
       read_to_cache(next, false);
+      printf("4\n");
       ahead = false;
     }
   }
