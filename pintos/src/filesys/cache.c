@@ -42,7 +42,7 @@ struct cache_entry * find_cache_by_sector(int sector_idx){
   return NULL;
 }
 
-struct cache_entry * read_to_cache(int sector_idx, bool first){
+struct cache_entry * read_to_cache(disk_sector_t sector_idx, disk_sector_t next_sector, bool first){
   struct cache_entry *c;
   lock_acquire(&cache_lock);
   c = find_cache_by_sector(sector_idx);
@@ -98,17 +98,17 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     thread_create("Read_ahead", 0, thread_func_read_ahead, &aux);
   }**/
   
-  /*if(first){
-    next = sector_idx+1;
+  if(first && next_sector != -1){
+    next = next_sector;
     thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
-  }*/
+  }
   
   lock_release(&cache_lock);
   return c;
 }
 
 void thread_func_read_ahead(void *aux){
-  read_to_cache(next, false);
+  read_to_cache(next,0, false);
 }
 
 void write_to_cache(int sector_idx, void *buffer){
