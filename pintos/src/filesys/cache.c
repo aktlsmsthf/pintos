@@ -109,6 +109,7 @@ struct cache_entry * read_to_cache(disk_sector_t sector_idx, disk_sector_t next_
 
 void thread_func_read_ahead(void *aux){
   read_to_cache(next,0, false);
+  thread_exit();
 }
 
 void write_to_cache(int sector_idx, void *buffer){
