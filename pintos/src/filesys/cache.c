@@ -17,7 +17,7 @@ void cache_init(void){
   ahead = false;
   next = 0;
   count = 0;
-  thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
+  
 }
 
 void cache_finish(void){
@@ -99,7 +99,7 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
   }**/
   if(first){
     next = sector_idx+1;
-    ahead = true;
+    thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
   }
   lock_release(&cache_lock);
   
@@ -107,16 +107,8 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
 }
 
 void thread_func_read_ahead(void *aux){
-  printf("1\n");
-  while(!finish){
-    printf("2\n");
-    if(ahead){
-      printf("3\n");
       read_to_cache(next, false);
-      printf("4\n");
       ahead = false;
-    }
-  }
 }
 
 void write_to_cache(int sector_idx, void *buffer){
