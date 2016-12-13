@@ -89,7 +89,7 @@ struct thread
     char name[16];                      /* Name (for debugging purposes). */
     uint8_t *stack;                     /* Saved stack pointer. */
     int priority;                       /* Priority. */
-    
+    int64_t ticks;
     struct child * child;
     
     bool load_finish;

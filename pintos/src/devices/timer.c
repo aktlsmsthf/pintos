@@ -3,6 +3,7 @@
 #include <inttypes.h>
 #include <round.h>
 #include <stdio.h>
+#include <list.h>
 #include "threads/interrupt.h"
 #include "threads/io.h"
 #include "threads/synch.h"
@@ -20,6 +21,7 @@
 /* Number of timer ticks since OS booted. */
 static int64_t ticks;
 static struct list waiting_list;
+
 /* Number of loops per timer tick.
    Initialized by timer_calibrate(). */
 static unsigned loops_per_tick;
@@ -42,6 +44,8 @@ timer_init (void)
   outb (0x43, 0x34);    /* CW: counter 0, LSB then MSB, mode 2, binary. */
   outb (0x40, count & 0xff);
   outb (0x40, count >> 8);
+  
+  list_init(&waiting_list);
 
   intr_register_ext (0x20, timer_interrupt, "8254 Timer");
 }
@@ -97,12 +101,6 @@ void
 timer_sleep (int64_t ticks) 
 {
   int64_t start = timer_ticks ();
-
-  ASSERT (intr_get_level () == INTR_ON);
-  
-  while (timer_elapsed (start) < ticks) 
-    thread_yield ();
- /* int64_t start = timer_ticks ();
   ASSERT (intr_get_level () == INTR_ON);
   
   enum intr_level old_level;
@@ -113,7 +111,7 @@ timer_sleep (int64_t ticks)
 
   thread_block();
   
-  intr_set_level(old_level);*/
+  intr_set_level(old_level);
 }
 
 /* Suspends execution for approximately MS milliseconds. */
@@ -143,16 +141,12 @@ timer_print_stats (void)
 {
   printf ("Timer: %"PRId64" ticks\n", timer_ticks ());
 }
-
+
 /* Timer interrupt handler. */
 static void
 timer_interrupt (struct intr_frame *args UNUSED)
 {
-  
   ticks++;
-  thread_tick ();
-  
-    /*ticks++;
     if(list_begin(&waiting_list)!=list_end(&waiting_list)){
       struct list_elem * wle;
       wle = list_begin(&waiting_list);
@@ -170,7 +164,7 @@ timer_interrupt (struct intr_frame *args UNUSED)
         }
       }
     }
-  thread_tick ();*/
+  thread_tick ();
 }
 
 /* Returns true if LOOPS iterations waits for more than one timer
@@ -194,7 +188,6 @@ too_many_loops (unsigned loops)
 
 /* Iterates through a simple loop LOOPS times, for implementing
    brief delays.
-
    Marked NO_INLINE because code alignment can significantly
    affect timings, so that if this function was inlined
    differently in different places the results would be difficult
@@ -235,4 +228,3 @@ real_time_sleep (int64_t num, int32_t denom)
       busy_wait (loops_per_tick * num / 1000 * TIMER_FREQ / (denom / 1000)); 
     }
 }
-
