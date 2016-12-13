@@ -12,7 +12,7 @@ void cache_init(void){
   list_init(&cache_list);
   lock_init(&cache_lock);
   //thread_create("Write_behind_periodically", 0, thread_func_write_behind, NULL);
-  thread_create("read_ahead", 0, thread_func_read, NULL);
+  thread_create("read_ahead", 0, thread_func_read_ahead, NULL);
   count = 0;
 }
 
