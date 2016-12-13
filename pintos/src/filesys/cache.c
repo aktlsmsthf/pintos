@@ -12,11 +12,11 @@ void cache_init(void){
   list_init(&cache_list);
   lock_init(&cache_lock);
   //thread_create("Write_behind_periodically", 0, thread_func_write_behind, NULL);
+  thread_create("read_ahead", 0, thread_func_read, NULL);
   count = 0;
 }
 
 struct cache_entry * find_cache_by_sector(int sector_idx){
-  
   if(list_empty(&cache_list)){
     //lock_release(&cache_lock);
     return NULL;
@@ -89,6 +89,10 @@ struct cache_entry * read_to_cache(int sector_idx, bool first){
     printf("%d\n", aux);
     thread_create("Read_ahead", 0, thread_func_read_ahead, &aux);
   }**/
+  if(first){
+    next = sector_idx+1;
+    ahead = true;
+  }
   lock_release(&cache_lock);
   
   return c;
@@ -98,6 +102,15 @@ void thread_func_read_ahead(void *aux){
   struct sector_data *sd = aux;
   printf("a %d\n", sd->next_sector);
   read_to_cache(sd->next_sector, false);
+}
+
+void thread_func_read(void *aux){
+  while(true){
+    if(ahead){
+      read_to_cache(next, false);
+      ahead = false;
+    }
+  }
 }
 
 void write_to_cache(int sector_idx, void *buffer){
